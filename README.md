@@ -28,7 +28,7 @@
 - chore: Tareas de rutina, mantenimiento, o de cambios en el proceso de construcción.
 
 ### Cuando completes el objetivo por el que fue creada la branch, vas a tener que pushear el código y generar la pull request.
-> En la pull request intenta explicar brevemente que es lo que añade/remueve/cambia de tu branch. Sigo el ejemplo con la "conexionBaseDeDatos", tendría que añadir una descripción tipo: "Conexión con base de datos PostgreSQL, datos de la conexión en las propiedades de la aplicación, conexión utilizando la dependencia de JPA."
+> En la pull request intenta explicar brevemente que es lo que añade/remueve/cambia de tu branch. Sigo el ejemplo con la "conexionBaseDeDatos", tendría que añadir una descripción tipo: "Conexión con base de datos PostgreSQL, datos de la conexión en las propiedades de la aplicación, conexión utilizando la dependencia de JPA". La pull request necesitará la revisión de otro miembro del grupo antes de poder ser mergeada.
 
 > [!IMPORTANT]
 > Antes de ponerte a trabajar en una funcionalidad: Asignate la tarea en el Trello del grupo. Al terminar de trabajar en un problema: Haz referencia al Issue en el nombre de la pull request y cierra el Issue una vez solucionado. 
