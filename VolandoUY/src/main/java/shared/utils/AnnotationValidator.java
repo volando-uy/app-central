@@ -11,10 +11,10 @@ import java.lang.reflect.Field;
 public class AnnotationValidator {
 
     public static void validateRequiredFields(Object dto) {
-        Class<?> clazz = dto.getClass();
+        Class<?> dtoClass = dto.getClass();
 
-        while (clazz != null) {
-            for (Field field : clazz.getDeclaredFields()) {
+        while (dtoClass != null) {
+            for (Field field : dtoClass.getDeclaredFields()) {
                 Required annotation = field.getAnnotation(Required.class);
                 if (annotation != null) {
                     field.setAccessible(true);
@@ -33,7 +33,7 @@ public class AnnotationValidator {
                     }
                 }
             }
-            clazz = clazz.getSuperclass(); // sube un nivel en la jerarquía, para recorrer tambien al padre
+            dtoClass = dtoClass.getSuperclass(); // sube un nivel en la jerarquía, para recorrer tambien al padre
         }
     }
 }
