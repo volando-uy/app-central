@@ -2,13 +2,18 @@ package domain.dtos.user;
 
 import domain.models.user.Cliente;
 import domain.models.user.enums.EnumTipoDocumento;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import shared.annotations.Required;
 import shared.constants.CTCliente;
 
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClienteDTO extends UsuarioDTO {
 
     @Required(label = CTCliente.CT_APELLIDO)
