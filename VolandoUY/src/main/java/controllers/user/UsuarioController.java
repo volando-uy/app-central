@@ -1,10 +1,9 @@
 package controllers.user;
 
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
-
 import domain.dtos.user.UsuarioDTO;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.mapper.UsuarioMapper;
@@ -33,10 +32,10 @@ public class UsuarioController  implements IUsuarioController{
     }
 
     @Override
-    public void altaAereolinea(AereolineaDTO aereolineaDTO) {
-        AnnotationValidator.validateRequiredFields(aereolineaDTO);
-        Aereolinea aereolinea = modelMapper.map(aereolineaDTO, Aereolinea.class);
-        usuarioService.altaAereolinea(aereolinea);
+    public void altaAerolinea(AerolineaDTO aerolineaDTO) {
+        AnnotationValidator.validateRequiredFields(aerolineaDTO);
+        Aerolinea aerolinea = modelMapper.map(aerolineaDTO, Aerolinea.class);
+        usuarioService.altaAerolinea(aerolinea);
     }
 
     @Override

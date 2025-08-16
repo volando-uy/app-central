@@ -5,7 +5,7 @@ import controllers.user.UsuarioController;
 import domain.dtos.user.AereolineaDTO;
 import domain.dtos.user.ClienteDTO;
 import domain.dtos.user.UsuarioDTO;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -98,16 +98,16 @@ public class ModificarDatosUsuarioTest {
     }
 
     @Test
-    public void modificarDatosAereolinea() {
+    public void modificarDatosAerolinea() {
         // Paso 1: Crear una aerolínea original y darla de alta
-        AereolineaDTO original = new AereolineaDTO();
+        AerolineaDTO original = new AerolineaDTO();
         original.setNickname("FlyTest");
         original.setMail("a@gmail.com");
         original.setNombre("NombreOriginal");
         original.setWeb("webOriginal.com");
         original.setDescripcion("Descripcion original");
 
-        usuarioController.altaAereolinea(original);
+        usuarioController.altaAerolinea(original);
 
         // Paso 2: Obtener el usuario original
         List<String> nicknames = usuarioController.obtenerTodosLosNicknames();
@@ -119,7 +119,7 @@ public class ModificarDatosUsuarioTest {
         System.out.println("Original: " + usuarioOriginalDTO);
 
         // Paso 3: Crear versión temporal modificada
-        AereolineaDTO modificada = new AereolineaDTO();
+        AerolineaDTO modificada = new AerolineaDTO();
         modificada.setNickname(usuarioOriginalDTO.getNickname()); // campo inmutable
         modificada.setMail(usuarioOriginalDTO.getMail());         // campo inmutable
         modificada.setNombre("NombreTEMP");
@@ -134,7 +134,7 @@ public class ModificarDatosUsuarioTest {
         usuarioController.modificarDatosUsuario(nickname, temporal);
 
         // Paso 5: Verificar cambios
-        AereolineaDTO finalDTO = (AereolineaDTO) usuarioController.obtenerUsuarioPorNickname(nickname);
+        AerolineaDTO finalDTO = (AerolineaDTO) usuarioController.obtenerUsuarioPorNickname(nickname);
         System.out.println("Final: " + finalDTO);
 
         assertEquals("NombreTEMP", finalDTO.getNombre());
@@ -144,6 +144,55 @@ public class ModificarDatosUsuarioTest {
         // Verificar campos inmutables
         assertEquals("FlyTest", finalDTO.getNickname());
         assertEquals("a@gmail.com", finalDTO.getMail());
+
+    public void modificarDatosAerolinea() {
+        Aerolinea aerolinea = crearAerolinea("test");
+
+        //Given
+        Aerolinea aerolineaTemp = new Aerolinea();
+        aerolineaTemp.setNickname(aerolinea.getNickname());
+        aerolineaTemp.setMail(aerolinea.getMail());
+
+
+        //When
+        when(modelMapper.map(aerolineaTemp, Aerolinea.class)).thenReturn(aerolineaTemp);
+        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(aerolinea));
+        when(usuarioService.obtenerUsuarioPorNickname(aerolinea.getNickname())).thenReturn(aerolinea);
+
+        //Then
+        // Ya es seguro modificar AerolineTemp
+        aerolineaTemp.setNombre("NombreTEMP");
+        aerolineaTemp.setWeb("webTEMP");
+        aerolineaTemp.setDescripcion("descripcionTEMP");
+
+        System.out.println("Aerolinea " + aerolinea);
+        System.out.println("AerolineaTemp " + aerolineaTemp);
+        //Supongamos que desea confirmar
+        aerolinea.actualizarDatosDesde(aerolineaTemp);
+        assertEquals(aerolineaTemp, aerolinea);
+        aerolineaTemp=null;
+    }
+
+    Cliente crearCliente(String nick) {
+        Cliente c = new Cliente();
+        c.setNickname(nick);
+        c.setNombre("Juan");
+        c.setApellido("Pérez");
+        c.setMail("juan@example.com");
+        c.setNumDocumento("123");
+        c.setFechaNacimiento(LocalDate.of(1990, 1, 1));
+        c.setTipoDocumento(EnumTipoDocumento.CI);
+        return c;
+    }
+
+    Aerolinea crearAerolinea(String nick) {
+        Aerolinea a = new Aerolinea();
+        a.setNickname(nick);
+        a.setNombre("Juan");
+        a.setWeb("www.google.com");
+        a.setDescripcion("desc");
+        a.setMail("a@gmail.com");
+        return a;
     }
 
 

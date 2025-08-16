@@ -1,6 +1,6 @@
 package domain.services.user;
 
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import org.modelmapper.ModelMapper;
@@ -26,8 +26,8 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public void altaAereolinea(Aereolinea aereolinea) {
-        usuarios.add(aereolinea);
+    public void altaAerolinea(Aerolinea aerolinea) {
+        usuarios.add(aerolinea);
     }
 
     @Override

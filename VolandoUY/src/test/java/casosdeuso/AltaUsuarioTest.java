@@ -2,9 +2,9 @@ package casosdeuso;
 
 import controllers.user.IUsuarioController;
 import controllers.user.UsuarioController;
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UsuarioMapper;
@@ -73,23 +73,23 @@ public class AltaUsuarioTest {
     }
 
     @Test
-    @DisplayName("Debe llamar a altaAereolinea y mapear correctamente el DTO")
-    void altaAereolinea_deberiaLlamarAlServiceConEntidadMapeada() {
-        AereolineaDTO dto = new AereolineaDTO();
+    @DisplayName("Debe llamar a altaAerolinea y mapear correctamente el DTO")
+    void altaAerolinea_deberiaLlamarAlServiceConEntidadMapeada() {
+        AerolineaDTO dto = new AerolineaDTO();
         dto.setNickname("flyuy");
         dto.setNombre("FlyUY");
         dto.setMail("flyuy@correo.com");
         dto.setDescripcion("Low cost desde el cielo");
 
-        Aereolinea aereolineaMock = new Aereolinea();
-        aereolineaMock.setNickname("flyuy");
+        Aerolinea aerolineaMock = new Aerolinea();
+        aerolineaMock.setNickname("flyuy");
 
-        when(modelMapper.map(dto, Aereolinea.class)).thenReturn(aereolineaMock);
+        when(modelMapper.map(dto, Aerolinea.class)).thenReturn(aerolineaMock);
 
-        usuarioController.altaAereolinea(dto);
+        usuarioController.altaAerolinea(dto);
 
-        verify(modelMapper).map(dto, Aereolinea.class);
-        verify(usuarioService).altaAereolinea(aereolineaMock);
+        verify(modelMapper).map(dto, Aerolinea.class);
+        verify(usuarioService).altaAerolinea(aerolineaMock);
     }
 
 }
