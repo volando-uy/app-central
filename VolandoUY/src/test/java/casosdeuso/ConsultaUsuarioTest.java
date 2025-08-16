@@ -1,7 +1,7 @@
 package casosdeuso;
 
 import controllers.user.UsuarioController;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -53,7 +53,7 @@ public class ConsultaUsuarioTest {
         assertEquals("cliente", usuarioSeleccionado.getNickname());
 
         //pa que se rompa porque tengo que hacer lops paquetes t-t
-        System.out.println(usuarioSeleccionado instanceof Aereolinea);
+        System.out.println(usuarioSeleccionado instanceof Aerolinea);
 
     }
 
