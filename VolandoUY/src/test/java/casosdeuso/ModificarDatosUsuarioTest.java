@@ -2,7 +2,7 @@ package casosdeuso;
 
 import controllers.user.IUsuarioController;
 import controllers.user.UsuarioController;
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
 import domain.dtos.user.UsuarioDTO;
 import domain.models.user.Aerolinea;
