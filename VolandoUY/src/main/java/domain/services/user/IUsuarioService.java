@@ -1,6 +1,5 @@
 package domain.services.user;
 
-import domain.dtos.user.UsuarioDTO;
 import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
@@ -15,5 +14,6 @@ public interface IUsuarioService {
     List<String> obtenerTodosLosNicknames();
     Usuario obtenerUsuarioPorNickname(String nickname);
     Usuario modificarDatosUsuarioTemporal(Usuario usuario);
+    void modificarDatosUsuario(String nickname, Usuario usuario);
 
 }

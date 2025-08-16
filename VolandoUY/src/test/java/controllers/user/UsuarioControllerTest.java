@@ -6,7 +6,10 @@ import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.user.mapper.UsuarioMapper;
 import domain.services.user.IUsuarioService;
+import factory.ControllerFactory;
+import factory.UsuarioFactoryMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +26,15 @@ class UsuarioControllerTest {
 
     private IUsuarioService usuarioService;
     private ModelMapper modelMapper;
-    private UsuarioController usuarioController;
+    private UsuarioMapper usuarioMapper;
+    private IUsuarioController usuarioController;
 
     @BeforeEach
     void setUp() {
         usuarioService = mock(IUsuarioService.class);
         modelMapper = mock(ModelMapper.class);
-        usuarioController = new UsuarioController(usuarioService, modelMapper);
+        usuarioMapper = mock(UsuarioMapper.class);
+        usuarioController = ControllerFactory.crearUsuarioController();
     }
 
     @Test
