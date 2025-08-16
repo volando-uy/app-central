@@ -1,7 +1,7 @@
 package domain.dtos.user;
 
 
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import jdk.jfr.Label;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import shared.annotations.Required;
 import shared.constants.CTCliente;
 
 @Data
-public class AereolineaDTO extends UsuarioDTO {
+public class AerolineaDTO extends UsuarioDTO {
     @Required(label = CTCliente.CT_DESCRIPCION)
     private String descripcion;
 

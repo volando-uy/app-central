@@ -1,6 +1,6 @@
 package controllers.user;
 
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
 import domain.models.user.Usuario;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public interface IUsuarioController {
     void altaCliente(ClienteDTO dto);
 
-    void altaAereolinea(AereolineaDTO dto);
+    void altaAerolinea(AerolineaDTO dto);
 
     List<Usuario> obtenerTodosLosUsuarios();
 

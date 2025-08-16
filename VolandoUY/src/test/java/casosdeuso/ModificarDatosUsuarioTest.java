@@ -1,5 +1,5 @@
 package casosdeuso;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -62,33 +62,34 @@ public class ModificarDatosUsuarioTest {
         clienteTemp=null;
     }
     @Test
-    public void modificarDatosAereolinea() {
-        Aereolinea aereolinea = crearAereolinea("test");
+    public void modificarDatosAerolinea() {
+        Aerolinea aerolinea = crearAerolinea("test");
 
         //Given
-        Aereolinea aereolineaTemp = new Aereolinea();
-        aereolineaTemp.setNickname(aereolinea.getNickname());
-        aereolineaTemp.setMail(aereolinea.getMail());
+        Aerolinea aerolineaTemp = new Aerolinea();
+        aerolineaTemp.setNickname(aerolinea.getNickname());
+        aerolineaTemp.setMail(aerolinea.getMail());
 
 
         //When
-        when(modelMapper.map(aereolineaTemp, Aereolinea.class)).thenReturn(aereolineaTemp);
-        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(aereolinea));
-        when(usuarioService.obtenerUsuarioPorNickname(aereolinea.getNickname())).thenReturn(aereolinea);
+        when(modelMapper.map(aerolineaTemp, Aerolinea.class)).thenReturn(aerolineaTemp);
+        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(aerolinea));
+        when(usuarioService.obtenerUsuarioPorNickname(aerolinea.getNickname())).thenReturn(aerolinea);
 
         //Then
-        // Ya es seguro modificar AereolineTemp
-        aereolineaTemp.setNombre("NombreTEMP");
-        aereolineaTemp.setWeb("webTEMP");
-        aereolineaTemp.setDescripcion("descripcionTEMP");
+        // Ya es seguro modificar AerolineTemp
+        aerolineaTemp.setNombre("NombreTEMP");
+        aerolineaTemp.setWeb("webTEMP");
+        aerolineaTemp.setDescripcion("descripcionTEMP");
 
-        System.out.println("Aereolinea " + aereolinea);
-        System.out.println("AereolineaTemp " + aereolineaTemp);
+        System.out.println("Aerolinea " + aerolinea);
+        System.out.println("AerolineaTemp " + aerolineaTemp);
         //Supongamos que desea confirmar
-        aereolinea.actualizarDatosDesde(aereolineaTemp);
-        assertEquals(aereolineaTemp, aereolinea);
-        aereolineaTemp=null;
+        aerolinea.actualizarDatosDesde(aerolineaTemp);
+        assertEquals(aerolineaTemp, aerolinea);
+        aerolineaTemp=null;
     }
+
     Cliente crearCliente(String nick) {
         Cliente c = new Cliente();
         c.setNickname(nick);
@@ -100,8 +101,9 @@ public class ModificarDatosUsuarioTest {
         c.setTipoDocumento(EnumTipoDocumento.CI);
         return c;
     }
-    Aereolinea crearAereolinea(String nick) {
-        Aereolinea a = new Aereolinea();
+
+    Aerolinea crearAerolinea(String nick) {
+        Aerolinea a = new Aerolinea();
         a.setNickname(nick);
         a.setNombre("Juan");
         a.setWeb("www.google.com");

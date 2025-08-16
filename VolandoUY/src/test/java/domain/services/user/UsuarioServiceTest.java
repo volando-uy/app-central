@@ -1,6 +1,6 @@
 package domain.services.user;
 
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -37,11 +37,11 @@ class UsuarioServiceTest {
         return c;
     }
 
-    Aereolinea crearAereolinea(String nick) {
-        Aereolinea a = new Aereolinea();
+    Aerolinea crearAerolinea(String nick) {
+        Aerolinea a = new Aerolinea();
         a.setNickname(nick);
         a.setNombre("Air Gyabisito");
-        a.setMail("aereolinea@gyabisito.com");
+        a.setMail("aerolinea@gyabisito.com");
         a.setDescripcion("9999");
         a.setWeb("www.google.com");
         return a;
@@ -77,14 +77,14 @@ class UsuarioServiceTest {
     }
 
     @Nested
-    @DisplayName("altaAereolinea()")
-    class AltaAereolinea {
+    @DisplayName("altaAerolinea()")
+    class AltaAerolinea {
 
         @Test
         @DisplayName("Debe agregar una aerolínea correctamente")
-        void agregaAereolinea() {
-            Aereolinea aereolinea = crearAereolinea("skyline");
-            usuarioService.altaAereolinea(aereolinea);
+        void agregaAerolinea() {
+            Aerolinea aerolinea = crearAerolinea("skyline");
+            usuarioService.altaAerolinea(aerolinea);
 
             List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
             assertEquals(1, usuarios.size());
@@ -107,7 +107,7 @@ class UsuarioServiceTest {
         @DisplayName("Debe retornar todos los usuarios agregados")
         void retornaUsuariosCreados() {
             usuarioService.altaCliente(crearCliente("uno"));
-            usuarioService.altaAereolinea(crearAereolinea("dos"));
+            usuarioService.altaAerolinea(crearAerolinea("dos"));
 
             List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
             assertEquals(2, usuarios.size());
