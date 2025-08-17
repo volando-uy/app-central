@@ -8,38 +8,20 @@ import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
 import factory.ControllerFactory;
+import gui.VentanaPrincipal;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.List;
 
 public class VolandoApp {
 
     public static void main(String[] args) {
+        IUsuarioController usuarioController = ControllerFactory.crearUsuarioController();
 
-        System.out.println("Punto de inicio");
-        LocalDate fechaNacimiento = LocalDate.now();
-
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setNickname("gyabisito");
-        clienteDTO.setNombre("Jose");
-        clienteDTO.setApellido("Gabriel");
-        clienteDTO.setFechaNacimiento(fechaNacimiento);
-        clienteDTO.setNacionalidad("Uruguay");
-        clienteDTO.setMail("josecitohernandez5@gmail.com");
-        clienteDTO.setTipoDocumento(EnumTipoDocumento.CI);
-        clienteDTO.setNumDocumento("55906938");
-
-        IUsuarioController usuarioController = ControllerFactory.getUsuarioController();
-        usuarioController.altaCliente(clienteDTO);
-
-        AerolineaDTO aerolineaDTO = new AerolineaDTO();
-        aerolineaDTO.setNickname("gyabisito2");
-        aerolineaDTO.setNombre("Nombre");
-        aerolineaDTO.setMail("mail@a.com");
-        aerolineaDTO.setDescripcion("Descrip");
-        aerolineaDTO.setWeb("Web");
-
-        usuarioController.altaAerolinea(aerolineaDTO);
-        usuarioController.obtenerTodosLosUsuarios().stream().forEach(usuario -> System.out.println(usuario.getNickname()));
+        SwingUtilities.invokeLater(() -> {
+            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal(usuarioController);
+            ventanaPrincipal.setVisible(true);
+        });
     }
 }
