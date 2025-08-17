@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Aereolinea extends Usuario{
+public class Aerolinea extends Usuario{
     private String descripcion;
     private String web;
 
     @Override
     public void actualizarDatosDesde(Usuario nuevosDatos) {
-        if (!(nuevosDatos instanceof Aereolinea nuevo)) return;
+        if (!(nuevosDatos instanceof Aerolinea nuevo)) return;
 
         this.setNombre(nuevo.getNombre());
         this.setDescripcion(nuevo.getDescripcion());

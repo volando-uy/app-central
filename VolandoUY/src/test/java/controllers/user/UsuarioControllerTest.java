@@ -1,12 +1,15 @@
 package controllers.user;
 
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
 import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.user.mapper.UsuarioMapper;
 import domain.services.user.IUsuarioService;
+import factory.ControllerFactory;
+import factory.UsuarioFactoryMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +26,15 @@ class UsuarioControllerTest {
 
     private IUsuarioService usuarioService;
     private ModelMapper modelMapper;
-    private UsuarioController usuarioController;
+    private UsuarioMapper usuarioMapper;
+    private IUsuarioController usuarioController;
 
     @BeforeEach
     void setUp() {
         usuarioService = mock(IUsuarioService.class);
         modelMapper = mock(ModelMapper.class);
-        usuarioController = new UsuarioController(usuarioService, modelMapper);
+        usuarioMapper = mock(UsuarioMapper.class);
+        usuarioController = ControllerFactory.crearUsuarioController();
     }
 
     @Test
@@ -57,23 +62,23 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("Debe llamar a altaAereolinea y mapear correctamente el DTO")
-    void altaAereolinea_deberiaLlamarAlServiceConEntidadMapeada() {
-        AereolineaDTO dto = new AereolineaDTO();
+    @DisplayName("Debe llamar a altaAerolinea y mapear correctamente el DTO")
+    void altaAerolinea_deberiaLlamarAlServiceConEntidadMapeada() {
+        AerolineaDTO dto = new AerolineaDTO();
         dto.setNickname("flyuy");
         dto.setNombre("FlyUY");
         dto.setMail("flyuy@correo.com");
         dto.setDescripcion("Low cost desde el cielo");
 
-        Aereolinea aereolineaMock = new Aereolinea();
-        aereolineaMock.setNickname("flyuy");
+        Aerolinea aerolineaMock = new Aerolinea();
+        aerolineaMock.setNickname("flyuy");
 
-        when(modelMapper.map(dto, Aereolinea.class)).thenReturn(aereolineaMock);
+        when(modelMapper.map(dto, Aerolinea.class)).thenReturn(aerolineaMock);
 
-        usuarioController.altaAereolinea(dto);
+        usuarioController.altaAerolinea(dto);
 
-        verify(modelMapper).map(dto, Aereolinea.class);
-        verify(usuarioService).altaAereolinea(aereolineaMock);
+        verify(modelMapper).map(dto, Aerolinea.class);
+        verify(usuarioService).altaAerolinea(aerolineaMock);
     }
 
 

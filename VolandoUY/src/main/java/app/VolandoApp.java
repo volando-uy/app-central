@@ -2,7 +2,7 @@ package app;
 
 import controllers.user.IUsuarioController;
 import controllers.user.UsuarioController;
-import domain.dtos.user.AereolineaDTO;
+import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
@@ -32,14 +32,14 @@ public class VolandoApp {
         IUsuarioController usuarioController = ControllerFactory.getUsuarioController();
         usuarioController.altaCliente(clienteDTO);
 
-        AereolineaDTO aereolineaDTO = new AereolineaDTO();
-        aereolineaDTO.setNombre("Nombre");
-        aereolineaDTO.setNickname("gyabisito");
-        aereolineaDTO.setMail("mail@a.com");
-        aereolineaDTO.setDescripcion("Descrip");
-        aereolineaDTO.setWeb("Web");
+        AerolineaDTO aerolineaDTO = new AerolineaDTO();
+        aerolineaDTO.setNombre("Nombre");
+        aerolineaDTO.setNickname("gyabisito");
+        aerolineaDTO.setMail("mail@a.com");
+        aerolineaDTO.setDescripcion("Descrip");
+        aerolineaDTO.setWeb("Web");
 
-        usuarioController.altaAereolinea(aereolineaDTO);
+        usuarioController.altaAerolinea(aerolineaDTO);
         usuarioController.obtenerTodosLosUsuarios().stream().forEach(usuario -> System.out.println(usuario.getNickname()));
     }
 }

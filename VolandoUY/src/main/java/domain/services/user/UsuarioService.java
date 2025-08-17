@@ -1,21 +1,21 @@
 package domain.services.user;
 
-import domain.models.user.Aereolinea;
+import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
+import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class UsuarioService implements IUsuarioService {
     //Supongamos que tenemos el UserRepository
-    LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
+    private LinkedList<Usuario> usuarios = new LinkedList<>();
+    private Map<String, Usuario> usuariosTemporales = new HashMap<>();
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public void altaCliente(Cliente cliente) {
@@ -26,8 +26,8 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public void altaAereolinea(Aereolinea aereolinea) {
-        usuarios.add(aereolinea);
+    public void altaAerolinea(Aerolinea aerolinea) {
+        usuarios.add(aerolinea);
     }
 
     @Override
@@ -44,10 +44,34 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario modificarDatosUsuarioTemporal(Usuario usuario) {
+    public Usuario modificarDatosUsuarioTemporal(Usuario nuevosDatos) {
+        Usuario original = obtenerUsuarioPorNickname(nuevosDatos.getNickname());
 
-        return null;
+        if (original == null) {
+            throw new IllegalArgumentException("Usuario no encontrado: " + nuevosDatos.getNickname());
+        }
+
+        Usuario temporal = usuariosTemporales.get(nuevosDatos.getNickname());
+        if (temporal == null) {
+            temporal = modelMapper.map(nuevosDatos, Usuario.class);
+        }
+        temporal.actualizarDatosDesde(nuevosDatos);
+        usuariosTemporales.put(nuevosDatos.getNickname(), temporal);
+
+        return temporal;
     }
+
+    @Override
+    public void modificarDatosUsuario(String nickname, Usuario usuarioTemp) {
+        Usuario original = obtenerUsuarioPorNickname(nickname);
+        if (original == null) return;
+
+
+        original.actualizarDatosDesde(usuarioTemp);
+
+        usuariosTemporales.remove(nickname);
+    }
+
 
     //Func helper para que no hayan 2 usaurios con el mismo nickname
     private boolean existeUsuario(Usuario usuario) {
