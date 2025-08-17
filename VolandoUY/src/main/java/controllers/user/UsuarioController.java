@@ -3,9 +3,6 @@ package controllers.user;
 import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
 import domain.dtos.user.UsuarioDTO;
-import domain.models.user.Aerolinea;
-import domain.models.user.Cliente;
-import domain.models.user.Usuario;
 import domain.models.user.mapper.UsuarioMapper;
 import domain.services.user.IUsuarioService;
 import domain.services.user.UsuarioService;
@@ -27,19 +24,17 @@ public class UsuarioController  implements IUsuarioController{
     @Override
     public void altaCliente(ClienteDTO clienteDTO) {
         AnnotationValidator.validateRequiredFields(clienteDTO);
-        Cliente cliente=modelMapper.map(clienteDTO, Cliente.class);
-        usuarioService.altaCliente(cliente);
+        usuarioService.altaCliente(clienteDTO);
     }
 
     @Override
     public void altaAerolinea(AerolineaDTO aerolineaDTO) {
         AnnotationValidator.validateRequiredFields(aerolineaDTO);
-        Aerolinea aerolinea = modelMapper.map(aerolineaDTO, Aerolinea.class);
-        usuarioService.altaAerolinea(aerolinea);
+        usuarioService.altaAerolinea(aerolineaDTO);
     }
 
     @Override
-    public List<Usuario> obtenerTodosLosUsuarios() {
+    public List<UsuarioDTO> obtenerTodosLosUsuarios() {
         return usuarioService.obtenerTodosLosUsuarios();
     }
 
@@ -52,25 +47,23 @@ public class UsuarioController  implements IUsuarioController{
 
     @Override
     public UsuarioDTO obtenerUsuarioPorNickname(String nickname) {
-        Usuario usuario = usuarioService.obtenerUsuarioPorNickname(nickname);
-        return usuarioMapper.toDTO(usuario);
+        UsuarioDTO usuarioDTO = usuarioService.obtenerUsuarioPorNickname(nickname);
+        return usuarioDTO;
     }
 
 
 
     @Override
-    public void modificarDatosUsuario(String nickname, UsuarioDTO dto) {
-        AnnotationValidator.validateRequiredFields(dto);
-        Usuario usuario = usuarioFactoryMapper.desdeDTO(dto);
-        usuarioService.modificarDatosUsuario(nickname, usuario);
+    public void modificarDatosUsuario(String nickname, UsuarioDTO usuarioDTO) {
+        AnnotationValidator.validateRequiredFields(usuarioDTO);
+        usuarioService.modificarDatosUsuario(nickname, usuarioDTO);
     }
 
     @Override
-    public UsuarioDTO modificarDatosUsuarioTemporal(UsuarioDTO dto) {
-        AnnotationValidator.validateRequiredFields(dto);
-        Usuario usuario = usuarioFactoryMapper.desdeDTO(dto);
-        Usuario modificado = usuarioService.modificarDatosUsuarioTemporal(usuario);
-        return usuarioMapper.toDTO(modificado);
+    public UsuarioDTO modificarDatosUsuarioTemporal(UsuarioDTO usuarioDTO) {
+        AnnotationValidator.validateRequiredFields(usuarioDTO);
+        UsuarioDTO modificado = usuarioService.modificarDatosUsuarioTemporal(usuarioDTO);
+        return modificado;
     }
 
 }

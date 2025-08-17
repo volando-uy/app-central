@@ -18,7 +18,7 @@ public class UsuarioMapper {
     public UsuarioDTO toDTO(Usuario usuario) {
         if (usuario instanceof Cliente) {
             return modelMapper.map(usuario, ClienteDTO.class);
-        } else if (usuario instanceof Aereolinea) {
+        } else if (usuario instanceof Aerolinea) {
             return modelMapper.map(usuario, AerolineaDTO.class);
         }
         throw new IllegalArgumentException("Tipo de usuario desconocido: " + usuario.getClass());

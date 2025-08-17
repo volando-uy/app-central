@@ -1,6 +1,9 @@
 package casosdeuso;
 
 import controllers.user.UsuarioController;
+import domain.dtos.user.AerolineaDTO;
+import domain.dtos.user.ClienteDTO;
+import domain.dtos.user.UsuarioDTO;
 import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
@@ -18,55 +21,51 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 public class ConsultaUsuarioTest {
-    @Mock
     private IUsuarioService usuarioService;
-    @Mock
     private ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
         usuarioService = mock(IUsuarioService.class);
         modelMapper = mock(ModelMapper.class);
-
-
     }
 
 
     @Test
     void consultClienteTest() {
 
-        Cliente cliente=crearCliente("cliente");
+        ClienteDTO clienteDTO = crearCliente("cliente");
         //El sistema muestra todos los usuarios
 
-        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(cliente));
-        when(usuarioService.obtenerUsuarioPorNickname("cliente")).thenReturn(cliente);
+        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(clienteDTO));
+        when(usuarioService.obtenerUsuarioPorNickname("cliente")).thenReturn(clienteDTO);
 
 
         System.out.println(usuarioService.obtenerTodosLosUsuarios());
 
-        Usuario usuarioSeleccionado = usuarioService.obtenerUsuarioPorNickname("cliente");
+        UsuarioDTO usuarioSeleccionadoDTO = usuarioService.obtenerUsuarioPorNickname("cliente");
 
 
-        System.out.println("Usuario seleccionado: " + usuarioSeleccionado);
+        System.out.println("Usuario seleccionado: " + usuarioSeleccionadoDTO);
 
-        assertNotNull(usuarioSeleccionado);
-        assertEquals("cliente", usuarioSeleccionado.getNickname());
+        assertNotNull(usuarioSeleccionadoDTO);
+        assertEquals("cliente", usuarioSeleccionadoDTO.getNickname());
 
         //pa que se rompa porque tengo que hacer lops paquetes t-t
-        System.out.println(usuarioSeleccionado instanceof Aerolinea);
+        System.out.println(usuarioSeleccionadoDTO instanceof AerolineaDTO);
 
     }
 
-    Cliente crearCliente(String nick) {
-        Cliente c = new Cliente();
-        c.setNickname(nick);
-        c.setNombre("Juan");
-        c.setApellido("Pérez");
-        c.setMail("juan@example.com");
-        c.setNumDocumento("123");
-        c.setFechaNacimiento(LocalDate.of(1990, 1, 1));
-        c.setTipoDocumento(EnumTipoDocumento.CI);
-        return c;
+    ClienteDTO crearCliente(String nick) {
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setNickname(nick);
+        clienteDTO.setNombre("Juan");
+        clienteDTO.setApellido("Pérez");
+        clienteDTO.setMail("juan@example.com");
+        clienteDTO.setNumDocumento("123");
+        clienteDTO.setFechaNacimiento(LocalDate.of(1990, 1, 1));
+        clienteDTO.setTipoDocumento(EnumTipoDocumento.CI);
+        return clienteDTO;
     }
 
 }

@@ -30,6 +30,7 @@ public class ModificarDatosUsuarioTest {
     private IUsuarioService usuarioService;
     private ModelMapper modelMapper;
     private UsuarioMapper usuarioMapper;
+    private UsuarioFactoryMapper usuarioFactoryMapper;
     private IUsuarioController usuarioController;
 
 
@@ -38,7 +39,12 @@ public class ModificarDatosUsuarioTest {
         usuarioService = new UsuarioService(); // o podés mockearlo si querés
         modelMapper = new ModelMapper();
         usuarioMapper = new UsuarioMapper(modelMapper);
-        usuarioController = ControllerFactory.crearUsuarioController();
+        usuarioController = ControllerFactory.crearUsuarioController(
+                usuarioService,
+                modelMapper,
+                usuarioMapper,
+                usuarioFactoryMapper
+        );
 
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setNickname("Nickname");
@@ -144,36 +150,37 @@ public class ModificarDatosUsuarioTest {
         // Verificar campos inmutables
         assertEquals("FlyTest", finalDTO.getNickname());
         assertEquals("a@gmail.com", finalDTO.getMail());
-
-    public void modificarDatosAerolinea() {
-        Aerolinea aerolinea = crearAerolinea("test");
-
-        //Given
-        Aerolinea aerolineaTemp = new Aerolinea();
-        aerolineaTemp.setNickname(aerolinea.getNickname());
-        aerolineaTemp.setMail(aerolinea.getMail());
-
-
-        //When
-        when(modelMapper.map(aerolineaTemp, Aerolinea.class)).thenReturn(aerolineaTemp);
-        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(aerolinea));
-        when(usuarioService.obtenerUsuarioPorNickname(aerolinea.getNickname())).thenReturn(aerolinea);
-
-        //Then
-        // Ya es seguro modificar AerolineTemp
-        aerolineaTemp.setNombre("NombreTEMP");
-        aerolineaTemp.setWeb("webTEMP");
-        aerolineaTemp.setDescripcion("descripcionTEMP");
-
-        System.out.println("Aerolinea " + aerolinea);
-        System.out.println("AerolineaTemp " + aerolineaTemp);
-        //Supongamos que desea confirmar
-        aerolinea.actualizarDatosDesde(aerolineaTemp);
-        assertEquals(aerolineaTemp, aerolinea);
-        aerolineaTemp=null;
     }
+//
+//    public void modificarDatosAerolinea () {
+//        Aerolinea aerolinea = crearAerolinea("test");
+//
+//        //Given
+//        AerolineaDTO aerolineaTempDTO = new AerolineaDTO();
+//        aerolineaTempDTO.setNickname(aerolinea.getNickname());
+//        aerolineaTempDTO.setMail(aerolinea.getMail());
+//
+//
+//        //When
+//        when(modelMapper.map(aerolinea, Aerolinea.class)).thenReturn(aerolinea);
+//        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(modelMapper.map(aerolinea, AerolineaDTO.class)));
+//        when(usuarioService.obtenerUsuarioPorNickname(aerolinea.getNickname())).thenReturn(modelMapper.map(aerolinea, AerolineaDTO.class);
+//
+//        //Then
+//        // Ya es seguro modificar AerolineTemp
+//        aerolineaTempDTO.setNombre("NombreTEMP");
+//        aerolineaTempDTO.setWeb("webTEMP");
+//        aerolineaTempDTO.setDescripcion("descripcionTEMP");
+//
+//        System.out.println("Aerolinea " + aerolinea);
+//        System.out.println("AerolineaTemp " + aerolineaTempDTO);
+//
+//        //Supongamos que desea confirmar
+//        aerolinea.actualizarDatosDesde(aerolineaTempDTO);
+//        assertEquals(modelMapper.map(aerolineaTempDTO, Aerolinea.class), aerolinea);
+//    }
 
-    Cliente crearCliente(String nick) {
+    Cliente crearCliente (String nick) {
         Cliente c = new Cliente();
         c.setNickname(nick);
         c.setNombre("Juan");
@@ -185,6 +192,7 @@ public class ModificarDatosUsuarioTest {
         return c;
     }
 
+
     Aerolinea crearAerolinea(String nick) {
         Aerolinea a = new Aerolinea();
         a.setNickname(nick);
@@ -194,6 +202,4 @@ public class ModificarDatosUsuarioTest {
         a.setMail("a@gmail.com");
         return a;
     }
-
-
 }

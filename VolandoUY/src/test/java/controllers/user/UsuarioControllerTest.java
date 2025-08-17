@@ -2,6 +2,7 @@ package controllers.user;
 
 import domain.dtos.user.AerolineaDTO;
 import domain.dtos.user.ClienteDTO;
+import domain.dtos.user.UsuarioDTO;
 import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
@@ -27,6 +28,7 @@ class UsuarioControllerTest {
     private IUsuarioService usuarioService;
     private ModelMapper modelMapper;
     private UsuarioMapper usuarioMapper;
+    private UsuarioFactoryMapper usuarioFactoryMapper;
     private IUsuarioController usuarioController;
 
     @BeforeEach
@@ -34,63 +36,67 @@ class UsuarioControllerTest {
         usuarioService = mock(IUsuarioService.class);
         modelMapper = mock(ModelMapper.class);
         usuarioMapper = mock(UsuarioMapper.class);
-        usuarioController = ControllerFactory.crearUsuarioController();
+        usuarioFactoryMapper = mock(UsuarioFactoryMapper.class);
+        usuarioController = ControllerFactory.crearUsuarioController(
+                usuarioService,
+                modelMapper,
+                usuarioMapper,
+                usuarioFactoryMapper
+        );
     }
 
     @Test
     @DisplayName("Debe llamar a altaCliente y mapear correctamente el DTO")
     void altaCliente_deberiaLlamarAlServiceConEntidadMapeada() {
-        ClienteDTO dto = new ClienteDTO();
-        dto.setNickname("gyabisito");
-        dto.setNombre("Jose");
-        dto.setApellido("Ramirez"); // <- obligatorio
-        dto.setMail("gyabisito@example.com");
-        dto.setFechaNacimiento(LocalDate.of(2000, 1, 1));
-        dto.setTipoDocumento(EnumTipoDocumento.CI);
-        dto.setNumDocumento("12345678");
-        dto.setNacionalidad("Uruguay");
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setNickname("gyabisito");
+        clienteDTO.setNombre("Jose");
+        clienteDTO.setApellido("Ramirez"); // <- obligatorio
+        clienteDTO.setMail("gyabisito@example.com");
+        clienteDTO.setFechaNacimiento(LocalDate.of(2000, 1, 1));
+        clienteDTO.setTipoDocumento(EnumTipoDocumento.CI);
+        clienteDTO.setNumDocumento("12345678");
+        clienteDTO.setNacionalidad("Uruguay");
 
         Cliente clienteMock = new Cliente();
         clienteMock.setNickname("gyabisito");
 
-        when(modelMapper.map(dto, Cliente.class)).thenReturn(clienteMock);
+        when(modelMapper.map(clienteDTO, Cliente.class)).thenReturn(clienteMock);
 
-        usuarioController.altaCliente(dto);
+        usuarioController.altaCliente(clienteDTO);
 
-        verify(modelMapper).map(dto, Cliente.class);
-        verify(usuarioService).altaCliente(clienteMock);
+        verify(usuarioService).altaCliente(clienteDTO);
     }
 
     @Test
     @DisplayName("Debe llamar a altaAerolinea y mapear correctamente el DTO")
     void altaAerolinea_deberiaLlamarAlServiceConEntidadMapeada() {
-        AerolineaDTO dto = new AerolineaDTO();
-        dto.setNickname("flyuy");
-        dto.setNombre("FlyUY");
-        dto.setMail("flyuy@correo.com");
-        dto.setDescripcion("Low cost desde el cielo");
+        AerolineaDTO aerolineaDTO = new AerolineaDTO();
+        aerolineaDTO.setNickname("flyuy");
+        aerolineaDTO.setNombre("FlyUY");
+        aerolineaDTO.setMail("flyuy@correo.com");
+        aerolineaDTO.setDescripcion("Low cost desde el cielo");
 
         Aerolinea aerolineaMock = new Aerolinea();
         aerolineaMock.setNickname("flyuy");
 
-        when(modelMapper.map(dto, Aerolinea.class)).thenReturn(aerolineaMock);
+        when(modelMapper.map(aerolineaDTO, Aerolinea.class)).thenReturn(aerolineaMock);
 
-        usuarioController.altaAerolinea(dto);
+        usuarioController.altaAerolinea(aerolineaDTO);
 
-        verify(modelMapper).map(dto, Aerolinea.class);
-        verify(usuarioService).altaAerolinea(aerolineaMock);
+        verify(usuarioService).altaAerolinea(aerolineaDTO);
     }
 
 
     @Test
     @DisplayName("Debe retornar todos los usuarios desde el service")
     void obtenerTodosLosUsuarios_deberiaRetornarListaDelService() {
-        Usuario u = new Cliente();
-        u.setNickname("gyabisito");
+        UsuarioDTO usuario = new ClienteDTO();
+        usuario.setNickname("gyabisito");
 
-        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(u));
+        when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(List.of(usuario));
 
-        List<Usuario> resultado = usuarioController.obtenerTodosLosUsuarios();
+        List<UsuarioDTO> resultado = usuarioController.obtenerTodosLosUsuarios();
 
         assertEquals(1, resultado.size());
         assertEquals("gyabisito", resultado.get(0).getNickname());
@@ -101,7 +107,7 @@ class UsuarioControllerTest {
     void obtenerTodosLosUsuarios_listaVacia() {
         when(usuarioService.obtenerTodosLosUsuarios()).thenReturn(Collections.emptyList());
 
-        List<Usuario> resultado = usuarioController.obtenerTodosLosUsuarios();
+        List<UsuarioDTO> resultado = usuarioController.obtenerTodosLosUsuarios();
 
         assertTrue(resultado.isEmpty());
     }

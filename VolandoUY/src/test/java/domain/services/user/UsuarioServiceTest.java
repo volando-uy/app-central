@@ -1,5 +1,8 @@
 package domain.services.user;
 
+import domain.dtos.user.AerolineaDTO;
+import domain.dtos.user.ClienteDTO;
+import domain.dtos.user.UsuarioDTO;
 import domain.models.user.Aerolinea;
 import domain.models.user.Cliente;
 import domain.models.user.Usuario;
@@ -25,25 +28,25 @@ class UsuarioServiceTest {
         usuarioService = new UsuarioService();
     }
 
-    Cliente crearCliente(String nick) {
-        Cliente c = new Cliente();
+    ClienteDTO crearClienteDTO(String nick) {
+        ClienteDTO c = new ClienteDTO();
         c.setNickname(nick);
-        c.setNombre("Juan");
-        c.setApellido("Pérez");
-        c.setMail("juan@example.com");
-        c.setNumDocumento("123");
+        c.setNombre("TEST_CLIENTE");
+        c.setApellido("TEST_APELLIDO");
+        c.setMail("TEST@TEST.TEST");
+        c.setNumDocumento("11111111");
         c.setFechaNacimiento(LocalDate.of(1990, 1, 1));
         c.setTipoDocumento(EnumTipoDocumento.CI);
         return c;
     }
 
-    Aerolinea crearAerolinea(String nick) {
-        Aerolinea a = new Aerolinea();
+    AerolineaDTO crearAerolineaDTO(String nick) {
+        AerolineaDTO a = new AerolineaDTO();
         a.setNickname(nick);
-        a.setNombre("Air Gyabisito");
-        a.setMail("aerolinea@gyabisito.com");
-        a.setDescripcion("9999");
-        a.setWeb("www.google.com");
+        a.setNombre("TEST_AEROLINEA");
+        a.setMail("TEST@TEST.TEST");
+        a.setDescripcion("TEST_DESCRIPCION");
+        a.setWeb("www.TEST_WEB.com");
         return a;
     }
 
@@ -54,23 +57,23 @@ class UsuarioServiceTest {
         @Test
         @DisplayName("Debe agregar un nuevo cliente")
         void agregaClienteValido() {
-            Cliente cliente = crearCliente("gyabisito");
+            ClienteDTO cliente = crearClienteDTO("gyabisito");
             usuarioService.altaCliente(cliente);
 
-            List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
-            assertEquals(1, usuarios.size());
-            assertEquals("gyabisito", usuarios.get(0).getNickname());
+            List<UsuarioDTO> usuariosDTO = usuarioService.obtenerTodosLosUsuarios();
+            assertEquals(1, usuariosDTO.size());
+            assertEquals("gyabisito", usuariosDTO.get(0).getNickname());
         }
 
         @Test
         @DisplayName("No debe permitir nickname duplicado (case-insensitive)")
         void nicknameDuplicado_lanzaExcepcion() {
-            Cliente cliente1 = crearCliente("Gyabisito");
-            Cliente cliente2 = crearCliente("gyabisito");
+            ClienteDTO primerClienteDTO = crearClienteDTO("Gyabisito");
+            ClienteDTO segundoClienteDTO = crearClienteDTO("gyabisito");
 
-            usuarioService.altaCliente(cliente1);
+            usuarioService.altaCliente(primerClienteDTO);
             UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () ->
-                    usuarioService.altaCliente(cliente2)
+                    usuarioService.altaCliente(segundoClienteDTO)
             );
             assertTrue(ex.getMessage().contains("gyabisito"));
         }
@@ -83,10 +86,10 @@ class UsuarioServiceTest {
         @Test
         @DisplayName("Debe agregar una aerolínea correctamente")
         void agregaAerolinea() {
-            Aerolinea aerolinea = crearAerolinea("skyline");
+            AerolineaDTO aerolinea = crearAerolineaDTO("skyline");
             usuarioService.altaAerolinea(aerolinea);
 
-            List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+            List<UsuarioDTO> usuarios = usuarioService.obtenerTodosLosUsuarios();
             assertEquals(1, usuarios.size());
             assertEquals("skyline", usuarios.get(0).getNickname());
         }
@@ -99,17 +102,17 @@ class UsuarioServiceTest {
         @Test
         @DisplayName("Debe retornar lista vacía al inicio")
         void listaVaciaInicialmente() {
-            List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+            List<UsuarioDTO> usuarios = usuarioService.obtenerTodosLosUsuarios();
             assertTrue(usuarios.isEmpty());
         }
 
         @Test
         @DisplayName("Debe retornar todos los usuarios agregados")
         void retornaUsuariosCreados() {
-            usuarioService.altaCliente(crearCliente("uno"));
-            usuarioService.altaAerolinea(crearAerolinea("dos"));
+            usuarioService.altaCliente(crearClienteDTO("uno"));
+            usuarioService.altaAerolinea(crearAerolineaDTO("dos"));
 
-            List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+            List<UsuarioDTO> usuarios = usuarioService.obtenerTodosLosUsuarios();
             assertEquals(2, usuarios.size());
         }
     }
