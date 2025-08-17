@@ -13,7 +13,7 @@ public interface IUsuarioController {
 
     void altaAerolinea(AerolineaDTO dto);
 
-    List<Usuario> obtenerTodosLosUsuarios();
+    List<UsuarioDTO> obtenerTodosLosUsuarios();
 
     UsuarioDTO obtenerUsuarioPorNickname(String nickname);
 

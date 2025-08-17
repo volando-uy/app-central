@@ -20,6 +20,7 @@ public class VolandoApp {
         LocalDate fechaNacimiento = LocalDate.now();
 
         ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setNickname("gyabisito");
         clienteDTO.setNombre("Jose");
         clienteDTO.setApellido("Gabriel");
         clienteDTO.setFechaNacimiento(fechaNacimiento);
@@ -27,14 +28,13 @@ public class VolandoApp {
         clienteDTO.setMail("josecitohernandez5@gmail.com");
         clienteDTO.setTipoDocumento(EnumTipoDocumento.CI);
         clienteDTO.setNumDocumento("55906938");
-        clienteDTO.setNickname("gyabisito");
 
         IUsuarioController usuarioController = ControllerFactory.getUsuarioController();
         usuarioController.altaCliente(clienteDTO);
 
         AerolineaDTO aerolineaDTO = new AerolineaDTO();
+        aerolineaDTO.setNickname("gyabisito2");
         aerolineaDTO.setNombre("Nombre");
-        aerolineaDTO.setNickname("gyabisito");
         aerolineaDTO.setMail("mail@a.com");
         aerolineaDTO.setDescripcion("Descrip");
         aerolineaDTO.setWeb("Web");

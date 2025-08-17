@@ -50,4 +50,8 @@ public class ControllerFactory {
     public static IUsuarioController crearUsuarioController() {
         return new UsuarioController(getUsuarioService(), getModelMapper(),getusuarioMapper(),getUsuarioFactoryMapper());
     }
+
+    public static IUsuarioController crearUsuarioController(IUsuarioService usuarioService, ModelMapper modelMapper, UsuarioMapper usuarioMapper, UsuarioFactoryMapper usuarioFactoryMapper) {
+        return new UsuarioController(usuarioService, modelMapper, usuarioMapper, usuarioFactoryMapper);
+    }
 }

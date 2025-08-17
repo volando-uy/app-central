@@ -51,45 +51,43 @@ public class AltaUsuarioTest {
     @Test
     @DisplayName("Debe llamar a altaCliente y mapear correctamente el DTO")
     void altaCliente_deberiaLlamarAlServiceConEntidadMapeada() {
-        ClienteDTO dto = new ClienteDTO();
-        dto.setNickname("gyabisito");
-        dto.setNombre("Jose");
-        dto.setApellido("Ramirez"); // <- obligatorio
-        dto.setMail("gyabisito@example.com");
-        dto.setFechaNacimiento(LocalDate.of(2000, 1, 1));
-        dto.setTipoDocumento(EnumTipoDocumento.CI);
-        dto.setNumDocumento("01234567");
-        dto.setNacionalidad("Uruguay");
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setNickname("gyabisito");
+        clienteDTO.setNombre("Jose");
+        clienteDTO.setApellido("Ramirez"); // <- obligatorio
+        clienteDTO.setMail("gyabisito@example.com");
+        clienteDTO.setFechaNacimiento(LocalDate.of(2000, 1, 1));
+        clienteDTO.setTipoDocumento(EnumTipoDocumento.CI);
+        clienteDTO.setNumDocumento("01234567");
+        clienteDTO.setNacionalidad("Uruguay");
 
         Cliente clienteMock = new Cliente();
         clienteMock.setNickname("gyabisito");
 
-        when(modelMapper.map(dto, Cliente.class)).thenReturn(clienteMock);
+        when(modelMapper.map(clienteDTO, Cliente.class)).thenReturn(clienteMock);
 
-        usuarioController.altaCliente(dto);
+        usuarioController.altaCliente(clienteDTO);
 
-        verify(modelMapper).map(dto, Cliente.class);
-        verify(usuarioService).altaCliente(clienteMock);
+        verify(usuarioService).altaCliente(clienteDTO);
     }
 
     @Test
     @DisplayName("Debe llamar a altaAerolinea y mapear correctamente el DTO")
     void altaAerolinea_deberiaLlamarAlServiceConEntidadMapeada() {
-        AerolineaDTO dto = new AerolineaDTO();
-        dto.setNickname("flyuy");
-        dto.setNombre("FlyUY");
-        dto.setMail("flyuy@correo.com");
-        dto.setDescripcion("Low cost desde el cielo");
+        AerolineaDTO aerolineaDTO = new AerolineaDTO();
+        aerolineaDTO.setNickname("flyuy");
+        aerolineaDTO.setNombre("FlyUY");
+        aerolineaDTO.setMail("flyuy@correo.com");
+        aerolineaDTO.setDescripcion("Low cost desde el cielo");
 
         Aerolinea aerolineaMock = new Aerolinea();
         aerolineaMock.setNickname("flyuy");
 
-        when(modelMapper.map(dto, Aerolinea.class)).thenReturn(aerolineaMock);
+        when(modelMapper.map(aerolineaDTO, Aerolinea.class)).thenReturn(aerolineaMock);
 
-        usuarioController.altaAerolinea(dto);
+        usuarioController.altaAerolinea(aerolineaDTO);
 
-        verify(modelMapper).map(dto, Aerolinea.class);
-        verify(usuarioService).altaAerolinea(aerolineaMock);
+        verify(usuarioService).altaAerolinea(aerolineaDTO);
     }
 
 }

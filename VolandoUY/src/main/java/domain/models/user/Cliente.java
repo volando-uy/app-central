@@ -1,6 +1,8 @@
 package domain.models.user;
 
 
+import domain.dtos.user.ClienteDTO;
+import domain.dtos.user.UsuarioDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +22,8 @@ public class Cliente extends Usuario {
 
 
     @Override
-    public void actualizarDatosDesde(Usuario nuevosDatos) {
-        if (!(nuevosDatos instanceof Cliente nuevo)) return;
+    public void actualizarDatosDesde(UsuarioDTO nuevosDatos) {
+        if (!(nuevosDatos instanceof ClienteDTO nuevo)) return;
 
         this.setNombre(nuevo.getNombre());
         this.setApellido(nuevo.getApellido());
