@@ -1,22 +1,22 @@
 package factory;
 
-import controllers.user.IUsuarioController;
-import controllers.user.UsuarioController;
-import domain.models.user.mapper.UsuarioMapper;
-import domain.services.user.IUsuarioService;
-import domain.services.user.UsuarioService;
+import controllers.user.IUserController;
+import controllers.user.UserController;
+import domain.models.user.mapper.UserMapper;
+import domain.services.user.IUserService;
+import domain.services.user.UserService;
 import org.modelmapper.ModelMapper;
 
 
 public class ControllerFactory {
 
-    private static IUsuarioController usuarioController;
+    private static IUserController usuarioController;
     private static ModelMapper modelMapper;
-    private static UsuarioMapper usuarioMapper;
-    private static UsuarioFactoryMapper usuarioFactoryMapper;
-    private static IUsuarioService usuarioService;
+    private static UserMapper userMapper;
+    private static UserFactoryMapper userFactoryMapper;
+    private static IUserService usuarioService;
 
-    public static IUsuarioController getUsuarioController() {
+    public static IUserController getUsuarioController() {
         if (usuarioController == null) {
             usuarioController = crearUsuarioController();
         }
@@ -28,30 +28,30 @@ public class ControllerFactory {
         }
         return modelMapper;
     }
-    public static UsuarioMapper getusuarioMapper() {
-        if(usuarioMapper == null){
-            return new UsuarioMapper(getModelMapper());
+    public static UserMapper getusuarioMapper() {
+        if(userMapper == null){
+            return new UserMapper(getModelMapper());
         }
-        return usuarioMapper;
+        return userMapper;
     }
-    public static IUsuarioService getUsuarioService() {
+    public static IUserService getUsuarioService() {
         if(usuarioService == null){
-            return new UsuarioService();
+            return new UserService();
         }
         return usuarioService;
     }
-    public static UsuarioFactoryMapper getUsuarioFactoryMapper() {
-        if(usuarioFactoryMapper == null){
-            return new UsuarioFactoryMapper(getModelMapper());
+    public static UserFactoryMapper getUsuarioFactoryMapper() {
+        if(userFactoryMapper == null){
+            return new UserFactoryMapper(getModelMapper());
         }
-        return usuarioFactoryMapper;
+        return userFactoryMapper;
     }
 
-    public static IUsuarioController crearUsuarioController() {
-        return new UsuarioController(getUsuarioService(), getModelMapper(),getusuarioMapper(),getUsuarioFactoryMapper());
+    public static IUserController crearUsuarioController() {
+        return new UserController(getUsuarioService(), getModelMapper(),getusuarioMapper(),getUsuarioFactoryMapper());
     }
 
-    public static IUsuarioController crearUsuarioController(IUsuarioService usuarioService, ModelMapper modelMapper, UsuarioMapper usuarioMapper, UsuarioFactoryMapper usuarioFactoryMapper) {
-        return new UsuarioController(usuarioService, modelMapper, usuarioMapper, usuarioFactoryMapper);
+    public static IUserController crearUsuarioController(IUserService usuarioService, ModelMapper modelMapper, UserMapper userMapper, UserFactoryMapper userFactoryMapper) {
+        return new UserController(usuarioService, modelMapper, userMapper, userFactoryMapper);
     }
 }

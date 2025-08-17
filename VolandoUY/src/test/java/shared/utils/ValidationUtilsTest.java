@@ -13,13 +13,13 @@ class ValidationUtilsTest {
     class IsValidEmailTests {
         @Test
         @DisplayName("Email válido")
-        void dadoEmailValido_retornaTrue() {
+        void givenValidMail_returnTrue() {
             assertTrue(ValidationUtils.isValidEmail("correo@example.com"));
         }
 
         @Test
         @DisplayName("Emails inválidos")
-        void dadoEmailInvalido_retornaFalse() {
+        void givenInvalidMail_returnFalse() {
             assertFalse(ValidationUtils.isValidEmail("correo@mal"));
             assertFalse(ValidationUtils.isValidEmail("correo"));
             assertFalse(ValidationUtils.isValidEmail("correo@.com"));
@@ -33,19 +33,19 @@ class ValidationUtilsTest {
     class IsNullOrEmptyTests {
         @Test
         @DisplayName("null debe retornar true")
-        void dadoNull_retornaTrue() {
+        void givenNull_returnTrue() {
             assertTrue(ValidationUtils.isNullOrEmpty(null));
         }
 
         @Test
         @DisplayName("String vacío o espacios retorna true")
-        void dadoStringVacio_retornaTrue() {
+        void givenEmptyString_returnTrue() {
             assertTrue(ValidationUtils.isNullOrEmpty("   "));
         }
 
         @Test
         @DisplayName("Texto válido retorna false")
-        void dadoTextoValido_retornaFalse() {
+        void givenValidText_returnFalse() {
             assertFalse(ValidationUtils.isNullOrEmpty("algo"));
         }
     }
@@ -55,13 +55,13 @@ class ValidationUtilsTest {
     class ValidateRequiredTests {
         @Test
         @DisplayName("Valor válido no lanza excepción")
-        void dadoValorValido_noLanzaExcepcion() {
+        void givenValidValue_doesntThrowException() {
             assertDoesNotThrow(() -> ValidationUtils.validateRequired("texto", "campo"));
         }
 
         @Test
         @DisplayName("null lanza excepción con nombre del campo")
-        void dadoNull_lanzaExcepcion() {
+        void givenNull_throwException() {
             Exception ex = assertThrows(IllegalArgumentException.class, () ->
                     ValidationUtils.validateRequired(null, "email")
             );
@@ -70,7 +70,7 @@ class ValidationUtilsTest {
 
         @Test
         @DisplayName("String vacío lanza excepción con nombre del campo")
-        void dadoStringVacio_lanzaExcepcion() {
+        void givenEmptyString_throwException() {
             Exception ex = assertThrows(IllegalArgumentException.class, () ->
                     ValidationUtils.validateRequired("   ", "nombre")
             );

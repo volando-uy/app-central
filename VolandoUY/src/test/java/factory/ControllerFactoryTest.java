@@ -1,6 +1,6 @@
 package factory;
 
-import controllers.user.IUsuarioController;
+import controllers.user.IUserController;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
@@ -9,16 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControllerFactoryTest {
 
     @Test
-    void getUsuarioController_deberiaRetornarLaMismaInstancia() {
-        IUsuarioController instancia1 = ControllerFactory.getUsuarioController();
-        IUsuarioController instancia2 = ControllerFactory.getUsuarioController();
+    void getUserController_shouldReturnTheSameInstance() {
+        IUserController instance1 = ControllerFactory.getUsuarioController();
+        IUserController instance2 = ControllerFactory.getUsuarioController();
 
-        assertNotNull(instancia1);
-        assertSame(instancia1, instancia2, "Las instancias de UsuarioController deberían ser las mismas");
+        assertNotNull(instance1);
+        assertSame(instance1, instance2, "Las instancias de UserController deberían ser las mismas");
     }
 
     @Test
-    void getModelMapper_deberiaRetornarLaMismaInstancia() {
+    void getModelMapper_shouldReturnTheSameInstance() {
         ModelMapper mapper1 = ControllerFactory.getModelMapper();
         ModelMapper mapper2 = ControllerFactory.getModelMapper();
 

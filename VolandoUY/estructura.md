@@ -93,7 +93,7 @@ Plantilla:
 ```java
 public class UsuarioService implements IUsuarioService {
     private List<Usuario> usuarios = new ArrayList<>();
-    public void altaCliente(Cliente cliente) { /* lógica */ }
+    public void altaCliente(Cliente customer) { /* lógica */ }
 }
 ```
 
@@ -248,11 +248,11 @@ class UsuarioServiceTest {
 
 ```java
 public Cliente toDomain() {
-    Cliente cliente = new Cliente();
-    cliente.setNombre(this.getNombre());
-    cliente.setApellido(this.getApellido());
+    Cliente customer = new Cliente();
+    customer.setNombre(this.getNombre());
+    customer.setApellido(this.getApellido());
     // ...
-    return cliente;
+    return customer;
 }
 ```
 
@@ -260,7 +260,7 @@ public Cliente toDomain() {
 
 ```java
 ModelMapper mapper = new ModelMapper();
-Cliente cliente = mapper.map(clienteDTO, Cliente.class);
+Cliente customer = mapper.map(customerDTO, Cliente.class);
 ```
 
 🟢 Ahorra código repetitivo y mejora mantenibilidad. Ideal cuando los nombres de atributos coinciden.
@@ -289,7 +289,7 @@ class UsuarioControllerTest {
     IUsuarioService usuarioService;
 
     @InjectMocks
-    UsuarioController usuarioController;
+    UsuarioController userController;
 
     @Test
     void altaCliente_deberiaLlamarService() {
@@ -298,7 +298,7 @@ class UsuarioControllerTest {
         dto.setNickname("testuser");
         dto.setMail("test@test.com");
 
-        usuarioController.altaCliente(dto);
+        userController.altaCliente(dto);
 
         verify(usuarioService).altaCliente(any(Cliente.class));
     }

@@ -2,7 +2,6 @@ package shared.utils;
 
 import org.junit.jupiter.api.Test;
 import shared.annotations.Required;
-import shared.constants.ErrorMessages;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,40 +9,40 @@ class AnnotationValidatorTest {
 
     static class SimpleDTO {
         @Required(label = "Nombre")
-        private String nombre;
+        private String name;
 
-        public SimpleDTO(String nombre) {
-            this.nombre = nombre;
+        public SimpleDTO(String name) {
+            this.name = name;
         }
     }
 
-    static class HeredadoDTO extends BaseDTO {
+    static class InheritedDTO extends BaseDTO {
         @Required(label = "Email")
         private String email;
 
-        public HeredadoDTO(String nombre, String email) {
-            super(nombre);
+        public InheritedDTO(String name, String email) {
+            super(name);
             this.email = email;
         }
     }
 
     static class BaseDTO {
         @Required(label = "Nombre")
-        private String nombre;
+        private String name;
 
-        public BaseDTO(String nombre) {
-            this.nombre = nombre;
+        public BaseDTO(String name) {
+            this.name = name;
         }
     }
 
     @Test
-    void validateRequiredFields_conCampoValido_noLanzaExcepcion() {
+    void validateRequiredFields_withValidField_doesntThrowException() {
         SimpleDTO dto = new SimpleDTO("Jose");
         assertDoesNotThrow(() -> AnnotationValidator.validateRequiredFields(dto));
     }
 
     @Test
-    void validateRequiredFields_conCampoNulo_lanzaExcepcion() {
+    void validateRequiredFields_withNullField_throwException() {
         SimpleDTO dto = new SimpleDTO(null);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -52,7 +51,7 @@ class AnnotationValidatorTest {
     }
 
     @Test
-    void validateRequiredFields_conCampoVacio_lanzaExcepcion() {
+    void validateRequiredFields_withEmptyField_throwException() {
         SimpleDTO dto = new SimpleDTO("   ");
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -61,14 +60,14 @@ class AnnotationValidatorTest {
     }
 
     @Test
-    void validateRequiredFields_conHerenciaValida_noLanzaExcepcion() {
-        HeredadoDTO dto = new HeredadoDTO("Gabriel", "correo@ejemplo.com");
+    void validateRequiredFields_withValidInheritance_doesntThrowException() {
+        InheritedDTO dto = new InheritedDTO("Gabriel", "correo@ejemplo.com");
         assertDoesNotThrow(() -> AnnotationValidator.validateRequiredFields(dto));
     }
 
     @Test
-    void validateRequiredFields_conHerenciaYCampoNulo_lanzaExcepcion() {
-        HeredadoDTO dto = new HeredadoDTO(null, "correo@ejemplo.com");
+    void validateRequiredFields_withInheritanceAndFieldNull_throwException() {
+        InheritedDTO dto = new InheritedDTO(null, "correo@ejemplo.com");
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> AnnotationValidator.validateRequiredFields(dto));
