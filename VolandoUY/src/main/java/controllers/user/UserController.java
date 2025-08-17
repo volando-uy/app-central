@@ -1,0 +1,63 @@
+package controllers.user;
+
+import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.UserDTO;
+import domain.models.user.mapper.UserMapper;
+import domain.services.user.IUserService;
+import factory.UserFactoryMapper;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import shared.utils.AnnotationValidator;
+
+import java.util.List;
+
+@AllArgsConstructor
+public class UserController implements IUserController {
+    IUserService userService;
+    ModelMapper modelMapper;
+    UserMapper userMapper;
+    UserFactoryMapper userFactoryMapper;
+
+    @Override
+    public void registerCustomer(CustomerDTO customerDTO) {
+        AnnotationValidator.validateRequiredFields(customerDTO);
+        userService.registerCustomer(customerDTO);
+    }
+
+    @Override
+    public void registerAirline(AirlineDTO airlineDTO) {
+        AnnotationValidator.validateRequiredFields(airlineDTO);
+        userService.registerAirline(airlineDTO);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @Override
+    public List<String> getAllUsersNicknames() {
+        return userService.getAllUsersNicknames();
+    }
+
+    @Override
+    public UserDTO getUserByNickname(String nickname) {
+        UserDTO userDTO = userService.getUserByNickname(nickname);
+        return userDTO;
+    }
+
+    @Override
+    public void updateUser(String nickname, UserDTO user) {
+        AnnotationValidator.validateRequiredFields(user);
+        userService.updateUser(nickname, user);
+    }
+
+    @Override
+    public UserDTO updateTemporalUser(UserDTO user) {
+        AnnotationValidator.validateRequiredFields(user);
+        UserDTO modifiedUser = userService.updateTempUser(user);
+        return modifiedUser;
+    }
+
+}
