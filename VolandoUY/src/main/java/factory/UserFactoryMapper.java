@@ -1,7 +1,7 @@
 package factory;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -17,7 +17,7 @@ public class UserFactoryMapper {
     }
 
     public User desdeDTO(UserDTO dto) {
-        if (dto instanceof CustomerDTO) {
+        if (dto instanceof CategoryDTO) {
             return modelMapper.map(dto, Customer.class);
         } else if (dto instanceof AirlineDTO) {
             return modelMapper.map(dto, Airline.class);

@@ -2,7 +2,7 @@ package casosdeuso;
 
 import controllers.user.IUserController;
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -32,17 +32,12 @@ public class UpdateUserTest {
 
     @BeforeEach
     void setUp() {
-        usuarioService = new UserService(); // o podés mockearlo si querés
         modelMapper = new ModelMapper();
         userMapper = new UserMapper(modelMapper);
-        usuarioController = ControllerFactory.crearUsuarioController(
-                usuarioService,
-                modelMapper,
-                userMapper,
-                userFactoryMapper
-        );
+        usuarioService = new UserService(modelMapper, userMapper); // o podés mockearlo si querés
+        usuarioController = ControllerFactory.createUserController(usuarioService);
 
-        CustomerDTO customerDTO = new CustomerDTO();
+        CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname("Nickname");
         customerDTO.setMail("mail@gmail.com");
         customerDTO.setName("Customer");
@@ -67,7 +62,7 @@ public class UpdateUserTest {
         System.out.println("Original: " + originalUserDTO);
 
         // Paso 3: Crear versión temp modificada
-        CustomerDTO modifiedCustomerDTO = new CustomerDTO(); // O usar un UserDTO si estás usando uno genérico
+        CategoryDTO modifiedCustomerDTO = new CategoryDTO(); // O usar un UserDTO si estás usando uno genérico
         modifiedCustomerDTO.setNickname(originalUserDTO.getNickname()); // campo que no cambia
         modifiedCustomerDTO.setMail(originalUserDTO.getMail());         // campo que no cambia
         modifiedCustomerDTO.setName("NuevoNombre");
@@ -85,7 +80,7 @@ public class UpdateUserTest {
         usuarioController.updateUser(nickname, temp);
 
         // Paso 5: Volver a obtener y verificar cambios
-        CustomerDTO finalDTO = (CustomerDTO) usuarioController.getUserByNickname(nickname);
+        CategoryDTO finalDTO = (CategoryDTO) usuarioController.getUserByNickname(nickname);
         System.out.println("Final: " + finalDTO);
 
         assertEquals("NuevoNombre", finalDTO.getName());
