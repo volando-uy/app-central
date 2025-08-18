@@ -1,7 +1,7 @@
 package casosdeuso;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import domain.services.user.IUserService;
@@ -28,7 +28,7 @@ public class GetUserTest {
 
     @Test
     void getClientTest() {
-        CustomerDTO customerDTO = createCustomer("cliente");
+        CategoryDTO customerDTO = createCustomer("cliente");
         //El sistema muestra todos los usuarios
 
         when(usuarioService.getAllUsers()).thenReturn(List.of(customerDTO));
@@ -50,8 +50,8 @@ public class GetUserTest {
 
     }
 
-    CustomerDTO createCustomer(String nick) {
-        CustomerDTO customerDTO = new CustomerDTO();
+    CategoryDTO createCustomer(String nick) {
+        CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname(nick);
         customerDTO.setName("Juan");
         customerDTO.setSurname("Pérez");

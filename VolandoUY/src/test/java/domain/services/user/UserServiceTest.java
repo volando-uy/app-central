@@ -1,13 +1,15 @@
 package domain.services.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,15 +19,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Tests de UserService")
 class UserServiceTest {
 
+    private ModelMapper modelMapper;
+    private UserMapper userModelMapper;
     private UserService usuarioService;
 
     @BeforeEach
     void setUp() {
-        usuarioService = new UserService();
+        modelMapper = new ModelMapper();
+        userModelMapper = new UserMapper(modelMapper);
+        usuarioService = new UserService(modelMapper, userModelMapper);
     }
 
-    CustomerDTO createCustomerDTO(String nick) {
-        CustomerDTO c = new CustomerDTO();
+    CategoryDTO createCustomerDTO(String nick) {
+        CategoryDTO c = new CategoryDTO();
         c.setNickname(nick);
         c.setName("TEST_CLIENTE");
         c.setSurname("TEST_APELLIDO");
@@ -53,7 +59,7 @@ class UserServiceTest {
         @Test
         @DisplayName("Debe agregar un nuevo cliente")
         void registerValidCustomer() {
-            CustomerDTO customer = createCustomerDTO("gyabisito");
+            CategoryDTO customer = createCustomerDTO("gyabisito");
             usuarioService.registerCustomer(customer);
 
             List<UserDTO> usersDTOs = usuarioService.getAllUsers();
@@ -64,8 +70,8 @@ class UserServiceTest {
         @Test
         @DisplayName("No debe permitir nickname duplicado (case-insensitive)")
         void duplicatedNickname_throwException() {
-            CustomerDTO firstCustomerDTO = createCustomerDTO("Gyabisito");
-            CustomerDTO secondCustomerDTO = createCustomerDTO("gyabisito");
+            CategoryDTO firstCustomerDTO = createCustomerDTO("Gyabisito");
+            CategoryDTO secondCustomerDTO = createCustomerDTO("gyabisito");
 
             usuarioService.registerCustomer(firstCustomerDTO);
             UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () ->

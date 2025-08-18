@@ -1,13 +1,10 @@
 package controllers.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
-import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
-import factory.UserFactoryMapper;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import shared.utils.AnnotationValidator;
 
 import java.util.List;
@@ -15,12 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController implements IUserController {
     IUserService userService;
-    ModelMapper modelMapper;
-    UserMapper userMapper;
-    UserFactoryMapper userFactoryMapper;
 
     @Override
-    public void registerCustomer(CustomerDTO customerDTO) {
+    public void registerCustomer(CategoryDTO customerDTO) {
         AnnotationValidator.validateRequiredFields(customerDTO);
         userService.registerCustomer(customerDTO);
     }
