@@ -1,0 +1,95 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+			name: "Jpanel1"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+				name: "MainPanel"
+				"background": new java.awt.Color( 20, 33, 61, 255 )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "UserButton"
+					"text": "Usuario"
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"y": 265
+					"width": 170
+					"x": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "FlightManagementButton"
+					"text": "Gestión de Vuelos"
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 34
+					"x": 0
+					"y": 315
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "PackageManagementButton"
+					"text": "Gestión de Paquetes"
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 34
+					"x": 0
+					"y": 365
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "AirlineManagementButton"
+					"text": "Gestión de Aerolínea"
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 34
+					"x": 0
+					"y": 415
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "ReservationsButton"
+					"text": "Reservas"
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 34
+					"x": 0
+					"y": 465
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/volando_uy_logo_resized.png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 5
+					"y": 15
+					"width": 160
+					"height": 130
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"height": 600
+				"x": 0
+				"y": 0
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {space :0:630:x}"
+				"$verticalGroup": "par l {space :0:600:x}"
+			} ) {
+				name: "RightSection"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 170
+				"y": 0
+				"height": 600
+				"width": 630
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 85, 25 )
+			"size": new java.awt.Dimension( 800, 600 )
+		} )
+	}
+}

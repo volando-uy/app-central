@@ -1,0 +1,21 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormComponent( "javax.swing.JLabel" ) {
+			name: "label1"
+			"text": "text"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 575, 45 )
+			"size": new java.awt.Dimension( 85, 40 )
+		} )
+		add( new FormComponent( "javax.swing.JButton" ) {
+			name: "button1"
+			"text": "text"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 155, 5 )
+			"size": new java.awt.Dimension( 335, 154 )
+		} )
+	}
+}
