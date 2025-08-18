@@ -18,16 +18,12 @@ public class FlightRouteControllerTest {
     @Mock
     private IFlightRouteService flightRouteService;
 
-    @Mock
-    private ModelMapper modelMapper;
-
     @InjectMocks
     private IFlightRouteController flightRouteController;
 
     @BeforeEach
     void setUp() {
         flightRouteService = mock(IFlightRouteService.class);
-        modelMapper = mock(ModelMapper.class);
         flightRouteController = new FlightRouteController(flightRouteService);
     }
 
