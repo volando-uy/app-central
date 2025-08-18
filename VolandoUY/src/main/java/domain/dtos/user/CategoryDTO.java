@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDTO extends UserDTO {
+public class CategoryDTO extends UserDTO {
 
     @Required(label = CTCliente.CT_SURNAME)
     private String surname;

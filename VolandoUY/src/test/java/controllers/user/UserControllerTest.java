@@ -1,7 +1,7 @@
 package controllers.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -36,18 +36,13 @@ class UserControllerTest {
         modelMapper = mock(ModelMapper.class);
         userMapper = mock(UserMapper.class);
         userFactoryMapper = mock(UserFactoryMapper.class);
-        usuarioController = ControllerFactory.crearUsuarioController(
-                usuarioService,
-                modelMapper,
-                userMapper,
-                userFactoryMapper
-        );
+        usuarioController = new UserController(usuarioService);
     }
 
     @Test
     @DisplayName("Debe llamar a registerCustomer y mapear correctamente el DTO")
     void registerCustomer_shouldCallToServiceWithMappedEntity() {
-        CustomerDTO customerDTO = new CustomerDTO();
+        CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
         customerDTO.setSurname("Ramirez"); // <- obligatorio
@@ -91,7 +86,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe retornar todos los usuarios desde el service")
     void obtenerTodosLosUsuarios_deberiaRetornarListaDelService() {
-        UserDTO usuario = new CustomerDTO();
+        UserDTO usuario = new CategoryDTO();
         usuario.setNickname("gyabisito");
 
         when(usuarioService.getAllUsers()).thenReturn(List.of(usuario));

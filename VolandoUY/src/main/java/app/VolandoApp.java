@@ -1,5 +1,6 @@
 package app;
 
+import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import factory.ControllerFactory;
 import gui.MainFrame1;
@@ -9,10 +10,11 @@ import javax.swing.*;
 public class VolandoApp {
 
     public static void main(String[] args) {
-        IUserController usuarioController = ControllerFactory.crearUsuarioController();
+        IUserController usuarioController = ControllerFactory.getUserController();
+        IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame1 mainFrame1 = new MainFrame1();
+            MainFrame1 mainFrame = new MainFrame(usuarioController, flightRouteController);
             mainFrame1.setVisible(true);
         });
     }

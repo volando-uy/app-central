@@ -3,13 +3,11 @@ package casosdeuso;
 import controllers.user.IUserController;
 import controllers.user.UserController;
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.enums.EnumTipoDocumento;
-import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
-import factory.UserFactoryMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,19 +36,13 @@ public class RegisterUserTest {
     void setUp() {
         usuarioService = mock(IUserService.class);
         modelMapper = mock(ModelMapper.class);
-        usuarioController = new UserController(
-                usuarioService,
-                modelMapper,
-                new UserMapper(modelMapper),
-                new UserFactoryMapper(modelMapper)
-        );
-
+        usuarioController = new UserController(usuarioService);
     }
 
     @Test
     @DisplayName("Debe llamar a registerCustomer y mapear correctamente el DTO")
     void registerCustomer_shouldCallToServiceWithMappedEntity() {
-        CustomerDTO customerDTO = new CustomerDTO();
+        CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
         customerDTO.setSurname("Ramirez"); // <- obligatorio

@@ -1,7 +1,7 @@
 package domain.services.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -19,9 +19,13 @@ public class UserService implements IUserService {
     //Supongamos que tenemos el UserRepository
     private LinkedList<User> users = new LinkedList<>();
     private Map<String, User> usuariosTemporales = new HashMap<>();
-    private ModelMapper modelMapper = new ModelMapper();
-    private UserMapper userMapper = new UserMapper(modelMapper);
+    private ModelMapper modelMapper;
+    private UserMapper userMapper;
 
+    public UserService(ModelMapper modelMapper, UserMapper userMapper) {
+        this.modelMapper = modelMapper;
+        this.userMapper = userMapper;
+    }
 
 
     // Les puse _ a las funciones internas, que luego van a ser parte del repository.
@@ -40,13 +44,13 @@ public class UserService implements IUserService {
 
 
     @Override
-    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
+    public CategoryDTO registerCustomer(CategoryDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
         }
         users.add(customer);
-        return modelMapper.map(customer, CustomerDTO.class);
+        return modelMapper.map(customer, CategoryDTO.class);
     }
 
     @Override
