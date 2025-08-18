@@ -1,6 +1,7 @@
 package casosdeuso;
 
 import controllers.user.IUserController;
+import controllers.user.UserController;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CategoryDTO;
 import domain.dtos.user.UserDTO;
@@ -35,7 +36,7 @@ public class UpdateUserTest {
         modelMapper = new ModelMapper();
         userMapper = new UserMapper(modelMapper);
         usuarioService = new UserService(modelMapper, userMapper); // o podés mockearlo si querés
-        usuarioController = ControllerFactory.createUserController(usuarioService);
+        usuarioController = new UserController(usuarioService);
 
         CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname("Nickname");

@@ -10,8 +10,8 @@ import javax.swing.*;
 public class VolandoApp {
 
     public static void main(String[] args) {
-        IUserController usuarioController = ControllerFactory.createUserController();
-        IFlightRouteController flightRouteController = ControllerFactory.createFlightRouteController();
+        IUserController usuarioController = ControllerFactory.getUserController();
+        IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
 
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController);

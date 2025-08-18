@@ -10,8 +10,8 @@ class ControllerFactoryTest {
 
     @Test
     void getUserController_shouldReturnTheSameInstance() {
-        IUserController instance1 = ControllerFactory.getUsuarioController();
-        IUserController instance2 = ControllerFactory.getUsuarioController();
+        IUserController instance1 = ControllerFactory.getUserController();
+        IUserController instance2 = ControllerFactory.getUserController();
 
         assertNotNull(instance1);
         assertSame(instance1, instance2, "Las instancias de UserController deberían ser las mismas");

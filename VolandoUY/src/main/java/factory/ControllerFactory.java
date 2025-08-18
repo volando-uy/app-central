@@ -1,10 +1,14 @@
 package factory;
 
+import controllers.flight.FlightController;
+import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
 import domain.models.user.mapper.UserMapper;
+import domain.services.flight.FlightService;
+import domain.services.flight.IFlightService;
 import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
@@ -14,42 +18,35 @@ import org.modelmapper.ModelMapper;
 
 public class ControllerFactory {
 
-    private static IUserController usuarioController;
+    private static IUserController userController;
     private static ModelMapper modelMapper;
     private static UserMapper userMapper;
     private static UserFactoryMapper userFactoryMapper;
-    private static IUserService usuarioService;
+    private static IUserService userService;
 
     private static IFlightRouteController flightRouteController;
     private static IFlightRouteService flightRouteService;
 
+    private static IFlightController flightController;
+    private static IFlightService flightService;
+
 
     // ############ USER CONTROLLER & SERVICE ############
 
-    // Metodo para crear el controlador, se utiliza al inicio de la aplicación
-    public static IUserController createUserController() {
-        return new UserController(getUsuarioService());
-    }
-
-    // Overload que sirve para los tests, permitiendo inyectar mocks o instancias específicas
-    public static IUserController createUserController(IUserService usuarioService) {
-        return new UserController(usuarioService);
-    }
-
     // Metodo para obtener el controlador de usuario, inicializándolo si es necesario
-    public static IUserController getUsuarioController() {
-        if (usuarioController == null) {
-            usuarioController = createUserController();
+    public static IUserController getUserController() {
+        if (userController == null) {
+            userController = new UserController(getUserService());
         }
-        return usuarioController;
+        return userController;
     }
 
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
-    public static IUserService getUsuarioService() {
-        if (usuarioService == null) {
-            usuarioService = new UserService(getModelMapper(), getusuarioMapper());
+    public static IUserService getUserService() {
+        if (userService == null) {
+            userService = new UserService(getModelMapper(), getusuarioMapper());
         }
-        return usuarioService;
+        return userService;
     }
 
     // #############################################################
@@ -83,21 +80,11 @@ public class ControllerFactory {
 
     // ############ FLIGHT ROUTE CONTROLLER & SERVICE ############
 
-    // Metodo para crear el controlador de rutas de vuelo, se utiliza al inicio de la aplicación
-    public static IFlightRouteController createFlightRouteController() {
-        return new FlightRouteController(getFlightRouteService());
-    }
-
-    // Overload que sirve para los tests, permitiendo inyectar mocks o instancias específicas
-    public static IFlightRouteController createFlightRouteController(IFlightRouteService flightRouteService) {
-        return new FlightRouteController(flightRouteService);
-    }
 
     // Metodo para obtener el controlador de rutas de vuelo, inicializándolo si es necesario
-    // Esto asegura que solo se cree una instancia del controlador
     public static IFlightRouteController getFlightRouteController() {
         if (flightRouteController == null) {
-            flightRouteController = createFlightRouteController();
+            flightRouteController = new FlightRouteController(getFlightRouteService());
         }
         return flightRouteController;
     }
@@ -111,4 +98,20 @@ public class ControllerFactory {
     }
 
     // #############################################################
+
+    // ############### FLIGHT CONTROLLER & SERVICE #################
+
+    public static IFlightController getFlightController() {
+        if (flightController == null) {
+            flightController = new FlightController(getFlightService());
+        }
+        return flightController;
+    }
+
+    private static IFlightService getFlightService() {
+        if (flightService == null) {
+            flightService = new FlightService(getModelMapper());
+        }
+        return flightService;
+    }
 }

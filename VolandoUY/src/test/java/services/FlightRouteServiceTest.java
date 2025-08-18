@@ -22,7 +22,7 @@ class FlightRouteServiceTest {
 
     private ModelMapper modelMapper;
 
-    @BeforeEachw
+    @BeforeEach
     void setUp() {
         modelMapper = ControllerFactory.getModelMapper();
         // ESTO VA CON NEW PORQUE SINO SE ROMPE ENTRE TESTS!!!!
