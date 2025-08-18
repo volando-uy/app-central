@@ -2,7 +2,7 @@ package app;
 
 import controllers.user.IUserController;
 import factory.ControllerFactory;
-import gui.MainFrame;
+import gui.MainFrame1;
 
 import javax.swing.*;
 
@@ -12,8 +12,8 @@ public class VolandoApp {
         IUserController usuarioController = ControllerFactory.crearUsuarioController();
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(usuarioController);
-            mainFrame.setVisible(true);
+            MainFrame1 mainFrame1 = new MainFrame1();
+            mainFrame1.setVisible(true);
         });
     }
 }
