@@ -1,20 +1,16 @@
-package domain.services.flightRoute;
+package domain.services.flightroute;
 
 import domain.dtos.flightRoute.CategoryDTO;
-import domain.models.flightRoute.Category;
+import domain.services.flightRoute.FlightRouteService;
+import domain.services.flightRoute.IFlightRouteService;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-
-import javax.naming.ldap.Control;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class FlightRouteServiceTest {
 
@@ -22,7 +18,7 @@ class FlightRouteServiceTest {
 
     private ModelMapper modelMapper;
 
-    @BeforeEachw
+    @BeforeEach
     void setUp() {
         modelMapper = ControllerFactory.getModelMapper();
         // ESTO VA CON NEW PORQUE SINO SE ROMPE ENTRE TESTS!!!!
