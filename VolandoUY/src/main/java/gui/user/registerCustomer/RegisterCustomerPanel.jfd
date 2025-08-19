@@ -1,0 +1,102 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {par l {seq {space :p:235:p, comp createNewCustomerBtn:::p::p}, seq l {space :p:73:p, par t {seq t {comp idLabel:::p::p, space :::p, comp idTextField:::p::p}, seq t {par t {seq t {comp surnameLabel:::p::p, space :6:6:p, comp surnameTextField:::p::p}, seq t {comp nicknameLabel:::p::p, space :::p, comp nicknameTextField:::p::p}, seq t {par t {comp citizenshipLabel:::p::p, comp birthDayLabel:::p::p}, space :6:6:p, par l {comp citizenshipTextLabel:::p::p, comp birthDayTextField:::p::p}}}, space :p:60:p, par t {seq t {comp nameLabel:::p::p, space :6:6:p, comp nameTextField:::p::p}, seq t {comp emailLabel:::p::p, space :6:6:p, comp emailTextField:::p::p}, seq t {comp idTypeLabel:::p::p, space :::p, comp idTypeComboBox:::p::p}}}}}}, space ::94:x}}"
+			"$verticalGroup": "par l {seq t {space :p:57:p, par l {par b:l {comp nicknameTextField::b:p::p, comp nicknameLabel::b:p::p}, seq l {space :6:6:p, comp nameLabel:::p::p}, comp nameTextField:::p::p}, space :p:42:p, par l {comp surnameTextField:::p::p, comp emailTextField:::p::p, seq l {space :6:6:p, par l {comp surnameLabel:::p::p, comp emailLabel::l:p::p}}}, space :p:40:p, par l {par b:l {comp citizenshipTextLabel::b:p::p, comp idTypeComboBox::b:p::p, comp idTypeLabel::b:p::p}, seq l {space :6:6:p, comp citizenshipLabel:::p::p}}, space :p:38:p, par l {par b:l {comp idTextField::b:p::p, comp idLabel::b:p::p}, par b:l {comp birthDayTextField::b:p::p, comp birthDayLabel::b:p::p}}, space ::174:x, comp createNewCustomerBtn:::p::p, space :p:30:p}}"
+		} ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 640, 540 )
+			"minimumSize": new java.awt.Dimension( 640, 540 )
+			"maximumSize": new java.awt.Dimension( 640, 540 )
+			"background": new java.awt.Color( 81, 126, 214, 255 )
+			"border": new javax.swing.border.EtchedBorder( 1, null, null )
+			"opaque": false
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "createNewCustomerBtn"
+				"text": "Crear nuevo cliente"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "nicknameLabel"
+				"text": "Nickname:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nicknameTextField"
+				"preferredSize": &Dimension0 new java.awt.Dimension( 100, 30 )
+				"minimumSize": &Dimension1 new java.awt.Dimension( 100, 30 )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "nameLabel"
+				"text": "Nombre:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nameTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "surnameTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "surnameLabel"
+				"text": "Apellido:"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "emailLabel"
+				"text": "Email:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "emailTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "citizenshipLabel"
+				"text": "Nacionalidad:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "citizenshipTextLabel"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "idLabel"
+				"text": "ID:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "idTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "idTypeLabel"
+				"text": "Tipo de ID:"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "idTypeComboBox"
+				"minimumSize": new java.awt.Dimension( 100, 30 )
+				"preferredSize": new java.awt.Dimension( 100, 30 )
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "EnumTipoDocumento"
+				}
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "birthDayLabel"
+				"text": "Fecha de nacimiento"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "birthDayTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+				"text": "dd/mm/yyyy"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 640, 540 )
+		} )
+	}
+}

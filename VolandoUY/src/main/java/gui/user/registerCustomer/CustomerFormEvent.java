@@ -1,13 +1,8 @@
-package gui.user.registerUser;
+package gui.user.registerCustomer;
 
-import domain.dtos.user.CustomerDTO;
-import domain.models.user.Customer;
 import domain.models.user.enums.EnumTipoDocumento;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import shared.annotations.Required;
-import shared.constants.CTCliente;
 
 import java.time.LocalDate;
 import java.util.EventObject;
@@ -28,13 +23,13 @@ public class CustomerFormEvent extends EventObject {
         super(source);
     }
 
-    public CustomerFormEvent(Object source, String name, String nickname, String mail, String surname,
+    public CustomerFormEvent(Object source, String nickname, String name, String surname, String mail,
                              String citizenship, LocalDate birthDate, String id, EnumTipoDocumento idType) {
         super(source);
-        this.name = name;
         this.nickname = nickname;
-        this.mail = mail;
+        this.name = name;
         this.surname = surname;
+        this.mail = mail;
         this.citizenship = citizenship;
         this.birthDate = birthDate;
         this.id = id;

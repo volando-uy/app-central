@@ -6,25 +6,31 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
 			"preferredSize": new java.awt.Dimension( 640, 600 )
-			"minimumSize": new java.awt.Dimension( 320, 300 )
+			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
-			"background": new java.awt.Color( 42, 64, 108, 255 )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:42:p, comp button1:::p:130:p, space s:::p, comp button2:::p:130:p, space ::320:x}}"
-				"$verticalGroup": "par l {seq t {space ::20:x, par b {comp button1::b:p::p, comp button2::b:p::p}, space :::p}}"
-			} ) {
+			"background": new java.awt.Color( 204, 204, 204, 255 )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
 				"minimumSize": new java.awt.Dimension( 640, 60 )
 				"preferredSize": new java.awt.Dimension( 640, 60 )
 				"maximumSize": new java.awt.Dimension( 640, 60 )
-				"background": new java.awt.Color( 51, 51, 51, 255 )
+				"background": new java.awt.Color( 56, 106, 172, 255 )
+				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
-					"text": "text"
+					name: "registerCustomerBtn"
+					"text": "Registrar Cliente"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button2"
-					"text": "text"
+					name: "registerAirlineBtn"
+					"text": "Registrar Aerolinea"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "updateUserBtn"
+					"text": "Modificar Usuario"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "getUserBtn"
+					"text": "Listar Clientes"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

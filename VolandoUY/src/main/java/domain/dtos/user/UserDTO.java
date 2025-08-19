@@ -10,10 +10,7 @@ import shared.constants.CTCliente;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class UserDTO {
-    @Required(label = CTCliente.CT_NAME)
-    private String name;
-    @Required(label = CTCliente.CT_NICKNAME)
     private String nickname;
-    @Required(label = CTCliente.CT_MAIL)
+    private String name;
     private String mail;
 }
