@@ -1,16 +1,20 @@
-package domain.services.flightroute;
+package domain.services.flightRoute;
 
 import domain.dtos.flightRoute.CategoryDTO;
-import domain.services.flightRoute.FlightRouteService;
-import domain.services.flightRoute.IFlightRouteService;
+import domain.models.flightRoute.Category;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+
+import javax.naming.ldap.Control;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FlightRouteServiceTest {
 
