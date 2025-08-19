@@ -1,7 +1,7 @@
 package domain.models.user;
 
 
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class Customer extends User {
 
     @Override
     public void updateDataFrom(UserDTO newData) {
-        if (!(newData instanceof CategoryDTO newDataCasted)) return;
+        if (!(newData instanceof CustomerDTO newDataCasted)) return;
 
         this.setName(newDataCasted.getName());
         this.setSurname(newDataCasted.getSurname());

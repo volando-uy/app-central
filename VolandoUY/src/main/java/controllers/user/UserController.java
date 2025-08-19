@@ -1,7 +1,7 @@
 package controllers.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.services.user.IUserService;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ public class UserController implements IUserController {
     IUserService userService;
 
     @Override
-    public void registerCustomer(CategoryDTO customerDTO) {
+    public void registerCustomer(CustomerDTO customerDTO) {
         AnnotationValidator.validateRequiredFields(customerDTO);
         userService.registerCustomer(customerDTO);
     }

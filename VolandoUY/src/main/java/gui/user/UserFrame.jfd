@@ -14,9 +14,9 @@ new FormModel {
 				"$verticalGroup": "par l {seq t {space ::20:x, par b {comp button1::b:p::p, comp button2::b:p::p}, space :::p}}"
 			} ) {
 				name: "NavPanel"
-				"minimumSize": new java.awt.Dimension( 200, 30 )
+				"minimumSize": new java.awt.Dimension( 640, 60 )
 				"preferredSize": new java.awt.Dimension( 640, 60 )
-				"maximumSize": new java.awt.Dimension( 640, 30 )
+				"maximumSize": new java.awt.Dimension( 640, 60 )
 				"background": new java.awt.Color( 51, 51, 51, 255 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button1"
@@ -28,17 +28,6 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {space :0:640:x}"
-				"$verticalGroup": "par l {space :0:0:x}"
-			} ) {
-				name: "ContentPanel"
-				"preferredSize": new java.awt.Dimension( 200, 200 )
-				"minimumSize": new java.awt.Dimension( 200, 200 )
-				"background": new java.awt.Color( 42, 64, 108, 255 )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "Center"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 85, 45 )

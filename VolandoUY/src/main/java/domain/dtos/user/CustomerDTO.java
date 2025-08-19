@@ -1,18 +1,15 @@
 package domain.dtos.user;
 
 import domain.models.user.enums.EnumTipoDocumento;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import shared.annotations.Required;
 import shared.constants.CTCliente;
 
 import java.time.LocalDate;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CategoryDTO extends UserDTO {
+@Getter
+@Setter
+public class CustomerDTO extends UserDTO {
 
     @Required(label = CTCliente.CT_SURNAME)
     private String surname;
@@ -28,5 +25,18 @@ public class CategoryDTO extends UserDTO {
 
     @Required(label = CTCliente.CT_ID_TYPE)
     private EnumTipoDocumento idType;
+
+    public CustomerDTO() {
+        super();
+    }
+
+    public CustomerDTO(String username, String password, String email, String surname, String citizenship, LocalDate birthDate, String id, EnumTipoDocumento idType) {
+        super(username, password, email);
+        this.surname = surname;
+        this.citizenship = citizenship;
+        this.birthDate = birthDate;
+        this.id = id;
+        this.idType = idType;
+    }
 
 }

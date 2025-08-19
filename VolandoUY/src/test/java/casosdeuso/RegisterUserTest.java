@@ -3,7 +3,7 @@ package casosdeuso;
 import controllers.user.IUserController;
 import controllers.user.UserController;
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -42,7 +42,7 @@ public class RegisterUserTest {
     @Test
     @DisplayName("Debe llamar a registerCustomer y mapear correctamente el DTO")
     void registerCustomer_shouldCallToServiceWithMappedEntity() {
-        CategoryDTO customerDTO = new CategoryDTO();
+        CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
         customerDTO.setSurname("Ramirez");
