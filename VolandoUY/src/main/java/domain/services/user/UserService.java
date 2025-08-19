@@ -1,7 +1,7 @@
 package domain.services.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -44,13 +44,13 @@ public class UserService implements IUserService {
 
 
     @Override
-    public CategoryDTO registerCustomer(CategoryDTO customerDTO) {
+    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
         }
         users.add(customer);
-        return modelMapper.map(customer, CategoryDTO.class);
+        return modelMapper.map(customer, CustomerDTO.class);
     }
 
     @Override

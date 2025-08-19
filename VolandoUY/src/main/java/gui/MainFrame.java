@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import gui.user.UserFrame;
@@ -20,7 +21,9 @@ public class MainFrame extends JFrame {
     private SideBar sideBar;
     private JPanel mainPanel;
 
-    public MainFrame(IUserController userController, IFlightRouteController flightRouteController) {
+    public MainFrame(IUserController uController, IFlightRouteController frController) {
+        userController = uController;
+        flightRouteController = frController;
         sideBar = createSideBar();
         mainPanel = new JPanel();
         initUI();
@@ -56,7 +59,7 @@ public class MainFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 System.out.println("User button clicked");
                 // Clear the main panel and add the UserFrame
-                updateMainPanel(new UserFrame());
+                updateMainPanel(new UserFrame(userController));
             }
         };
         return new SideBar(userListener);

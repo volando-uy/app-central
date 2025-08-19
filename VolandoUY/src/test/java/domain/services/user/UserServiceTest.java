@@ -1,7 +1,7 @@
 package domain.services.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
@@ -30,8 +30,8 @@ class UserServiceTest {
         usuarioService = new UserService(modelMapper, userModelMapper);
     }
 
-    CategoryDTO createCustomerDTO(String nick) {
-        CategoryDTO c = new CategoryDTO();
+    CustomerDTO createCustomerDTO(String nick) {
+        CustomerDTO c = new CustomerDTO();
         c.setNickname(nick);
         c.setName("TEST_CLIENTE");
         c.setSurname("TEST_APELLIDO");
@@ -59,7 +59,7 @@ class UserServiceTest {
         @Test
         @DisplayName("Debe agregar un nuevo cliente")
         void registerValidCustomer() {
-            CategoryDTO customer = createCustomerDTO("gyabisito");
+            CustomerDTO customer = createCustomerDTO("gyabisito");
             usuarioService.registerCustomer(customer);
 
             List<UserDTO> usersDTOs = usuarioService.getAllUsers();
@@ -70,8 +70,8 @@ class UserServiceTest {
         @Test
         @DisplayName("No debe permitir nickname duplicado (case-insensitive)")
         void duplicatedNickname_throwException() {
-            CategoryDTO firstCustomerDTO = createCustomerDTO("Gyabisito");
-            CategoryDTO secondCustomerDTO = createCustomerDTO("gyabisito");
+            CustomerDTO firstCustomerDTO = createCustomerDTO("Gyabisito");
+            CustomerDTO secondCustomerDTO = createCustomerDTO("gyabisito");
 
             usuarioService.registerCustomer(firstCustomerDTO);
             UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () ->

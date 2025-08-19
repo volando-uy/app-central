@@ -1,14 +1,13 @@
 package controllers.user;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
-import factory.ControllerFactory;
 import factory.UserFactoryMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +41,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe llamar a registerCustomer y mapear correctamente el DTO")
     void registerCustomer_shouldCallToServiceWithMappedEntity() {
-        CategoryDTO customerDTO = new CategoryDTO();
+        CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
         customerDTO.setSurname("Ramirez"); // <- obligatorio
@@ -86,7 +85,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe retornar todos los usuarios desde el service")
     void obtenerTodosLosUsuarios_deberiaRetornarListaDelService() {
-        UserDTO usuario = new CategoryDTO();
+        UserDTO usuario = new CustomerDTO();
         usuario.setNickname("gyabisito");
 
         when(usuarioService.getAllUsers()).thenReturn(List.of(usuario));

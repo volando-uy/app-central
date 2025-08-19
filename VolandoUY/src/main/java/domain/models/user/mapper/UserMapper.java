@@ -1,7 +1,7 @@
 package domain.models.user.mapper;
 
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CategoryDTO;
+import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
@@ -17,7 +17,7 @@ public class UserMapper {
 
     public UserDTO toDTO(User user) {
         if (user instanceof Customer) {
-            return modelMapper.map(user, CategoryDTO.class);
+            return modelMapper.map(user, CustomerDTO.class);
         } else if (user instanceof Airline) {
             return modelMapper.map(user, AirlineDTO.class);
         }
