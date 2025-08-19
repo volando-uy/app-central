@@ -45,7 +45,7 @@ public class RegisterUserTest {
         CategoryDTO customerDTO = new CategoryDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
-        customerDTO.setSurname("Ramirez"); // <- obligatorio
+        customerDTO.setSurname("Ramirez");
         customerDTO.setMail("gyabisito@example.com");
         customerDTO.setBirthDate(LocalDate.of(2000, 1, 1));
         customerDTO.setIdType(EnumTipoDocumento.CI);
