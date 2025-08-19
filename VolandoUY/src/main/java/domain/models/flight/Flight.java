@@ -1,5 +1,6 @@
 package domain.models.flight;
 
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,21 +11,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Flight {
-    // Primary key
+
+    @NotBlank
+    @Size(min = 2, max = 100)
     private String name;
-    // private Airline airline;
+
+    @Future(message = "La salida debe ser en el futuro")
     private LocalDateTime departureTime;
 
-    /**
-     * The duration of the flight.
-     * Is represented in minutes.
-     */
+    @NotNull
+    @Positive(message = "La duración (min) debe ser > 0")
     private Long duration;
 
+    @NotNull
+    @PositiveOrZero
     private Integer maxEconomySeats;
+
+    @NotNull
+    @PositiveOrZero
     private Integer maxBusinessSeats;
 
+    @PastOrPresent
     private LocalDateTime createdAt;
-
-
 }

@@ -2,7 +2,6 @@ package gui.user;
 
 import javax.swing.*;
 import java.awt.*;
-import com.jgoodies.forms.layout.*;
 
 public class UserFrame extends JPanel {
     public UserFrame() {
