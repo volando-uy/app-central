@@ -1,4 +1,4 @@
-package gui.user.registerUser;
+package gui.user.registerCustomer;
 
 import java.util.EventListener;
 

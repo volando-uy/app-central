@@ -1,0 +1,71 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {par l {seq {space :p:235:p, comp createNewAirlineBtn:::p::p}, seq l {space :p:126:p, par t {seq t {comp descriptionLabel:::p::p, space :6:6:p, comp descriptionTextField:::p::p}, seq t {comp nicknameLabel:::p::p, space :::p, comp nicknameTextField:::p::p}, seq t {comp webLabel:::p::p, space :6:6:p, comp webTextLabel:::p::p}}, space :p:73:p, par t {seq t {comp nameLabel:::p::p, space :6:6:p, comp nameTextField:::p::p}, seq t {comp emailLabel:::p::p, space :6:6:p, comp emailTextField:::p::p}}}}, space ::94:x}}"
+			"$verticalGroup": "par l {seq t {space :p:57:p, par l {par b:l {comp nicknameTextField::b:p::p, comp nicknameLabel::b:p::p}, seq l {space :6:6:p, comp nameLabel:::p::p}, comp nameTextField:::p::p}, space :p:42:p, par l {comp descriptionTextField:::p::p, comp emailTextField:::p::p, seq l {space :6:6:p, par l {comp descriptionLabel:::p::p, comp emailLabel::l:p::p}}}, space :p:40:p, par l {comp webTextLabel::l:p::p, seq l {space :6:6:p, comp webLabel:::p::p}}, space ::243:x, comp createNewAirlineBtn:::p::p, space :p:30:p}}"
+		} ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 640, 540 )
+			"minimumSize": new java.awt.Dimension( 640, 540 )
+			"maximumSize": new java.awt.Dimension( 640, 540 )
+			"background": new java.awt.Color( 81, 126, 214, 255 )
+			"border": new javax.swing.border.EtchedBorder( 1, null, null )
+			"opaque": false
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "createNewAirlineBtn"
+				"text": "Crear nueva aerolinea"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "nicknameLabel"
+				"text": "Nickname:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nicknameTextField"
+				"preferredSize": &Dimension0 new java.awt.Dimension( 100, 30 )
+				"minimumSize": &Dimension1 new java.awt.Dimension( 100, 30 )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "nameLabel"
+				"text": "Nombre:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nameTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "descriptionTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "descriptionLabel"
+				"text": "Descripción:"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "emailLabel"
+				"text": "Email:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "emailTextField"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "webLabel"
+				"text": "Web:"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "webTextLabel"
+				"preferredSize": #Dimension0
+				"minimumSize": #Dimension1
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 640, 540 )
+		} )
+	}
+}

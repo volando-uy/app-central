@@ -8,8 +8,8 @@ import java.util.List;
 
 //Aca al no trabajarse directamente en el dominio, para mayor abstraccion se usan los DTO
 public interface IUserController {
-    void registerCustomer(CustomerDTO dto);
-    void registerAirline(AirlineDTO dto);
+    CustomerDTO registerCustomer(CustomerDTO dto);
+    AirlineDTO registerAirline(AirlineDTO dto);
     List<UserDTO> getAllUsers();
     UserDTO getUserByNickname(String nickname);
     List<String> getAllUsersNicknames();

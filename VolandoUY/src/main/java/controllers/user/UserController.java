@@ -14,15 +14,15 @@ public class UserController implements IUserController {
     IUserService userService;
 
     @Override
-    public void registerCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         AnnotationValidator.validateRequiredFields(customerDTO);
-        userService.registerCustomer(customerDTO);
+        return userService.registerCustomer(customerDTO);
     }
 
     @Override
-    public void registerAirline(AirlineDTO airlineDTO) {
+    public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
         AnnotationValidator.validateRequiredFields(airlineDTO);
-        userService.registerAirline(airlineDTO);
+        return userService.registerAirline(airlineDTO);
     }
 
     @Override

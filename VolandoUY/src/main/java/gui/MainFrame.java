@@ -4,10 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
-import gui.user.UserFrame;
+import gui.user.UserPanel;
 
 /**
  * Ventana principal de la aplicación Volando Uy
@@ -20,12 +19,15 @@ public class MainFrame extends JFrame {
 
     private SideBar sideBar;
     private JPanel mainPanel;
+    // 0: Default, 1: UserPanel, 2: FlightManagementPanel, 3: PackageManagementPanel, 4: AirlineManagementPanel, 5: ReservationsPanel
+    private Integer mainPanelType;
 
     public MainFrame(IUserController uController, IFlightRouteController frController) {
         userController = uController;
         flightRouteController = frController;
         sideBar = createSideBar();
-        mainPanel = new JPanel();
+        mainPanel = new JPanel(); // Añadir un panel default
+        mainPanelType = 0;
         initUI();
     }
 
@@ -43,13 +45,17 @@ public class MainFrame extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    private void updateMainPanel(JPanel panel) {
+    private void updateMainPanel(JPanel panel, Integer panelType) {
         // Delete the current main panel if it exists
+        if (mainPanelType.equals(panelType)) {
+            return; // Same panel, no need to update
+        }
         remove(mainPanel);
         mainPanel = panel; // Update the main panel with the new content
         add(mainPanel, BorderLayout.CENTER);
         mainPanel.revalidate();
         mainPanel.repaint();
+        mainPanelType = panelType; // Update the type of the main panel
     }
 
 
@@ -57,9 +63,7 @@ public class MainFrame extends JFrame {
         MouseListener userListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("User button clicked");
-                // Clear the main panel and add the UserFrame
-                updateMainPanel(new UserFrame(userController));
+                updateMainPanel(new UserPanel(userController), 1);
             }
         };
         return new SideBar(userListener);
