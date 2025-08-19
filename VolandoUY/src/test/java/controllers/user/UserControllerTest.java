@@ -36,7 +36,7 @@ class UserControllerTest {
         modelMapper = mock(ModelMapper.class);
         userMapper = mock(UserMapper.class);
         userFactoryMapper = mock(UserFactoryMapper.class);
-        usuarioController = ControllerFactory.createUserController(usuarioService);
+        usuarioController = new UserController(usuarioService);
     }
 
     @Test

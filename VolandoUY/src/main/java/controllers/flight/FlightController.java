@@ -1,0 +1,23 @@
+package controllers.flight;
+
+import domain.dtos.flight.FlightDTO;
+import domain.services.flight.IFlightService;
+import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+@AllArgsConstructor
+public class FlightController implements IFlightController {
+
+    private final IFlightService flightService;
+
+    @Override
+    public FlightDTO createFlight(FlightDTO flight) {
+        return flightService.createFlight(flight);
+    }
+
+    @Override
+    public List<FlightDTO> getAllFlights() {
+        return flightService.getAllFlights();
+    }
+}
