@@ -1,81 +1,65 @@
 package gui;
 
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
-import domain.dtos.flightRoute.CategoryDTO;
-import domain.models.user.enums.EnumTipoDocumento;
+import gui.user.UserFrame;
 
-import javax.swing.*;
-import java.time.LocalDate;
-import java.util.List;
-
+/**
+ * Ventana principal de la aplicación Volando Uy
+ * @author Nahu
+ */
 public class MainFrame extends JFrame {
+
     private IUserController userController;
     private IFlightRouteController flightRouteController;
 
+    private SideBar sideBar;
+    private JPanel mainPanel;
+
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController) {
-        this.userController = userController;
-        this.flightRouteController = flightRouteController;
+        sideBar = createSideBar();
+        mainPanel = new JPanel();
         initUI();
     }
 
     private void initUI() {
-        setTitle("Volando App");
-        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Volando Uy");
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
-        setLayout(new java.awt.GridLayout(3, 1)); // 3 rows, 1 column
+        mainPanel = new JPanel(); // Default panel to initialize
 
-        JLabel label = new JLabel("Bienvenido a Volando App");
-        add(label);
-
-        JButton registerCategoryBtn = new JButton("Crear Categoria");
-        registerCategoryBtn.addActionListener(e -> {
-            CategoryDTO categoryDTO = new CategoryDTO();
-            categoryDTO.setName("Categoria " + System.currentTimeMillis());
-
-            flightRouteController.createCategory(categoryDTO);
-        });
-        add(registerCategoryBtn);
-
-        JButton showCategoriesBtn = new JButton("Mostrar Categorias");
-        showCategoriesBtn.addActionListener(e -> {
-            List<CategoryDTO> categories = flightRouteController.getAllCategories();
-            StringBuilder allCategories = new StringBuilder("Categorias registradas:\n");
-            for (CategoryDTO category : categories) {
-                allCategories.append(category.getName()).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, allCategories);
-        });
-        add(showCategoriesBtn);
-
-
-//        JButton registerCustomerBtn = new JButton("Crear Customer");
-//        registerCustomerBtn.addActionListener(e -> {
-//            CategoryDTO customerDTO = new CategoryDTO();
-//            customerDTO.setNickname("cliente" + System.currentTimeMillis());
-//            customerDTO.setName("Nombre");
-//            customerDTO.setMail("asd@gmail.com");
-//            customerDTO.setSurname("Apellido");
-//            customerDTO.setBirthDate(LocalDate.now());
-//            customerDTO.setIdType(EnumTipoDocumento.CI);
-//            customerDTO.setId("12345678");
-//            customerDTO.setCitizenship("Uruguay");
-//
-//            userController.registerCustomer(customerDTO);
-//        });
-//        add(registerCustomerBtn);
-//
-//        JButton showCustomersBtn = new JButton("Mostrar Clientes");
-//        showCustomersBtn.addActionListener(e -> {
-//            List<String> clientes = userController.getAllUsersNicknames();
-//            StringBuilder allCustomers = new StringBuilder("Clientes registrados:\n");
-//            for (String cliente : clientes) {
-//                allCustomers.append(cliente).append("\n");
-//            }
-//            JOptionPane.showMessageDialog(this, allCustomers);
-//        });
-//        add(showCustomersBtn);
+        // I want to use a BorderLayout to place the sidebar on the left and the main content on the right
+        setLayout(new BorderLayout());
+        add(sideBar, BorderLayout.WEST);
+        add(mainPanel, BorderLayout.CENTER);
     }
+
+    private void updateMainPanel(JPanel panel) {
+        // Delete the current main panel if it exists
+        remove(mainPanel);
+        mainPanel = panel; // Update the main panel with the new content
+        add(mainPanel, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
+
+    private SideBar createSideBar() {
+        MouseListener userListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("User button clicked");
+                // Clear the main panel and add the UserFrame
+                updateMainPanel(new UserFrame());
+            }
+        };
+        return new SideBar(userListener);
+    }
+
 }
