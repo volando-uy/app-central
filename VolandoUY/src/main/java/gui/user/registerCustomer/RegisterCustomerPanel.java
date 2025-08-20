@@ -5,6 +5,9 @@
 package gui.user.registerCustomer;
 
 import javax.swing.border.*;
+
+import controllers.user.IUserController;
+import domain.dtos.user.CustomerDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import lombok.Setter;
 
@@ -20,9 +23,11 @@ import javax.swing.GroupLayout;
 @Setter
 public class RegisterCustomerPanel extends JPanel {
 
-    private CustomerFormListener customerFormListener;
+    private IUserController userController;
 
-    public RegisterCustomerPanel() {
+    public RegisterCustomerPanel(IUserController userController) {
+        this.userController = userController;
+
         initComponents();
         initComponntsManually();
         initListeners();
@@ -41,13 +46,12 @@ public class RegisterCustomerPanel extends JPanel {
                 String id = idTextField.getText();
                 EnumTipoDocumento idType = (EnumTipoDocumento) idTypeComboBox.getSelectedItem();
 
-                CustomerFormEvent ev = new CustomerFormEvent(this, nickname, name,
-                        surname, mail, citizenship, birthDate, id, idType);
-                if (customerFormListener != null) {
-                    customerFormListener.formEventOccurred(ev);
-                } else {
-                    System.out.println("No listener registered for customer form events.");
-                }
+                CustomerDTO customerDTO = new CustomerDTO(nickname, name, mail, surname, citizenship, birthDate, id, idType);
+
+                CustomerDTO createdCustomerDTO = userController.registerCustomer(customerDTO);
+
+                JOptionPane.showMessageDialog(this, createdCustomerDTO, "Cliente creado exitosamente", JOptionPane.INFORMATION_MESSAGE);
+
             } catch (Exception ex) {
                 // Create a dialog to show the error
                 JOptionPane.showMessageDialog(this, "Error al crear el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

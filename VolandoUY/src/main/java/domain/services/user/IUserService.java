@@ -13,7 +13,6 @@ public interface IUserService {
     List<UserDTO> getAllUsers();
     List<String> getAllUsersNicknames();
     UserDTO getUserByNickname(String nickname);
-    UserDTO updateTempUser(UserDTO userDTO);
-    void updateUser(String nickname, UserDTO userDTO);
+    UserDTO updateUser(String nickname, UserDTO userDTO);
 
 }

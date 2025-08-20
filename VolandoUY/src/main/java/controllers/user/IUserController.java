@@ -13,6 +13,5 @@ public interface IUserController {
     List<UserDTO> getAllUsers();
     UserDTO getUserByNickname(String nickname);
     List<String> getAllUsersNicknames();
-    UserDTO updateTemporalUser(UserDTO user);
-    void updateUser(String nickname, UserDTO user);
+    UserDTO updateUser(String nickname, UserDTO user);
 }
