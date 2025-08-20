@@ -2,7 +2,7 @@ package controllers.city;
 
 import domain.dtos.city.CityDTO;
 public interface ICityController {
-    void addCity(CityDTO city);
+    CityDTO createCity(CityDTO city);
     void updateCity(CityDTO city);
     void deleteCity(String cityName);
     CityDTO getCity(String cityName);

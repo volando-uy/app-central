@@ -67,7 +67,7 @@ public class UserPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo RegisterAirlinePanel
+                    // Verificar si el contentPanel ya es de tipo CreateCategoryPanel
                     if (contentPanel instanceof RegisterAirlinePanel) {
                         return;
                     }
