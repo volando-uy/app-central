@@ -249,7 +249,6 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "updateUserBtn"
 					"text": "Modificar cliente"
-					"margin": new java.awt.Insets( 0, 50, 0, 50 )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"
 				} )
@@ -258,7 +257,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 				name: "vSpacer19"
-				"preferredSize": new java.awt.Dimension( 10, 200 )
+				"preferredSize": new java.awt.Dimension( 10, 100 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 4
 				"weighty": 2.0
