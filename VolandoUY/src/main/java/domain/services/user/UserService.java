@@ -11,6 +11,7 @@ import domain.models.user.User;
 import org.modelmapper.ModelMapper;
 import domain.models.user.mapper.UserMapper;
 import shared.constants.ErrorMessages;
+import shared.utils.ValidatorUtil;
 
 import java.util.*;
 import java.util.List;
@@ -48,9 +49,13 @@ public class UserService implements IUserService {
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
+
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
         }
+
+        ValidatorUtil.validate(customer);
+
         users.add(customer);
         return modelMapper.map(customer, CustomerDTO.class);
     }
@@ -61,6 +66,9 @@ public class UserService implements IUserService {
         if (_userExists(airline)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, airline.getNickname()));
         }
+
+        ValidatorUtil.validate(airline);
+
         users.add(airline);
         return modelMapper.map(airline, AirlineDTO.class);
     }
@@ -91,42 +99,18 @@ public class UserService implements IUserService {
         return userMapper.toDTO(user);
     }
 
-
-
     @Override
-    public UserDTO updateTempUser(UserDTO newDataDTO) {
-        // TODO: Pasarle esta responsabilidad al userRepository
-        // Comprobar que estamos modificando un usuario existente
-        User originalUser = _getUserByNickname(newDataDTO.getNickname());
-        if (originalUser == null) {
-            throw new IllegalArgumentException("User no encontrado: " + newDataDTO.getNickname());
-        }
-
-        // Si no es la primera modificación ya existirá un usuario temporal
-        User userTemporal = usuariosTemporales.get(newDataDTO.getNickname());
-        // En cambio, si es la primera vez, creamos uno nuevo
-        if (userTemporal == null) {
-            userTemporal = modelMapper.map(newDataDTO, originalUser.getClass());
-        } else {
-            // Si ya existe, lo actualizamos con los nuevos datos
-            userTemporal.updateDataFrom(newDataDTO);
-        }
-
-        // Guardamos/Actualizamos el usuario temporal en el mapa
-        usuariosTemporales.put(newDataDTO.getNickname(), userTemporal);
-
-        // Retornamos el DTO del usuario temporal actualizado
-        return userMapper.toDTO(userTemporal);
-    }
-
-    @Override
-    public void updateUser(String nickname, UserDTO usuarioTempDTO) {
+    public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
         User originalUser = _getUserByNickname(nickname);
-        if (originalUser == null) return;
+        if (originalUser == null) {
+            throw new IllegalArgumentException("User no encontrado: " + nickname);
+        };
 
-        originalUser.updateDataFrom(usuarioTempDTO);
+        User tempUser = userMapper.fromDTO(updatedUserDTO);
+        ValidatorUtil.validate(tempUser);
 
-        usuariosTemporales.remove(nickname);
+        originalUser.updateDataFrom(updatedUserDTO);
+        return userMapper.toDTO(originalUser);
     }
 
     @Override

@@ -7,6 +7,8 @@ import domain.dtos.user.UserDTO;
 import domain.services.user.IUserService;
 import lombok.AllArgsConstructor;
 import shared.utils.AnnotationValidator;
+import shared.utils.ValidatorFactoryProvider;
+import shared.utils.ValidatorUtil;
 
 import java.util.List;
 
@@ -16,13 +18,11 @@ public class UserController implements IUserController {
 
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
-        AnnotationValidator.validateRequiredFields(customerDTO);
         return userService.registerCustomer(customerDTO);
     }
 
     @Override
     public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
-        AnnotationValidator.validateRequiredFields(airlineDTO);
         return userService.registerAirline(airlineDTO);
     }
 
@@ -43,16 +43,8 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public void updateUser(String nickname, UserDTO user) {
-        AnnotationValidator.validateRequiredFields(user);
-        userService.updateUser(nickname, user);
-    }
-
-    @Override
-    public UserDTO updateTemporalUser(UserDTO user) {
-        AnnotationValidator.validateRequiredFields(user);
-        UserDTO modifiedUser = userService.updateTempUser(user);
-        return modifiedUser;
+    public UserDTO updateUser(String nickname, UserDTO user) {
+        return userService.updateUser(nickname, user);
     }
 
     @Override

@@ -5,9 +5,11 @@ import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.UserDTO;
 import domain.models.user.enums.EnumTipoDocumento;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
+import gui.user.updateUser.UpdateUserPanel;
 
 import javax.swing.*;
 
@@ -53,7 +55,7 @@ public class UserPanel extends JPanel {
 
                 System.out.println("Register User button clicked");
                 // Crear el nuevo contentPanel con el contenido de registro de usuario
-                contentPanel = createRegisterConsumerPanel();
+                contentPanel = new RegisterCustomerPanel(userController);
                 add(contentPanel);
                 revalidate();
                 repaint();
@@ -73,7 +75,7 @@ public class UserPanel extends JPanel {
                 }
                 System.out.println("Register Airline button clicked");
                 // Crear el nuevo contentPanel con el contenido de registro de aerolínea
-                contentPanel = createRegisterAirplinePanel();
+                contentPanel = new RegisterAirlinePanel(userController);
                 add(contentPanel);
                 revalidate();
                 repaint();
@@ -84,8 +86,20 @@ public class UserPanel extends JPanel {
         updateUserPanelListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    // Verificar si el contentPanel ya es de tipo UpdateUserPanel
+                    if (contentPanel instanceof UpdateUserPanel) {
+                        return;
+                    }
+                    remove(contentPanel);
+                }
+
                 System.out.println("Update User button clicked");
-                // Implement the logic to update a user
+                // Crear el nuevo contentPanel con el contenido de actualización de usuario
+                contentPanel = new UpdateUserPanel(userController);
+                add(contentPanel);
+                revalidate();
+                repaint();
             }
         };
 
@@ -99,106 +113,10 @@ public class UserPanel extends JPanel {
 
         registerCustomerBtn.addMouseListener(registerCustomerPanelListener);
         registerAirlineBtn.addMouseListener(registerAirlinePanelListener);
-        //button2.addMouseListener(updateUserPanelListener);
+        updateUserBtn.addMouseListener(updateUserPanelListener);
         //button3.addMouseListener(getUserListener);
     }
-
-    private void registerUserListener() {
-
-    }
-
-    // Crea el JPanel que que se encarga de los registros del consumidor
-    private JPanel createRegisterConsumerPanel() {
-        RegisterCustomerPanel registerCustomerPanel = new RegisterCustomerPanel();
-        // Crea e implementa la única función del listener de registro de usuario
-        registerCustomerPanel.setCustomerFormListener(e -> {
-
-            // Get all the info from the form and create a CustomerDTO
-            String nickname = e.getNickname();
-            String name = e.getName();
-            String surname = e.getSurname();
-            String mail = e.getMail();
-            String citizenship = e.getCitizenship();
-            LocalDate birthDate = e.getBirthDate();
-            String id = e.getId();
-            EnumTipoDocumento idType = e.getIdType();
-
-            CustomerDTO customerDTO = new CustomerDTO(nickname, name, mail,
-                    surname, citizenship, birthDate, id, idType);
-
-
-            // Try to register the user using the userController
-            CustomerDTO userCreated;
-            try {
-                userCreated = userController.registerCustomer(customerDTO);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al crear el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Show the new user in a JDialog
-            JOptionPane.showMessageDialog(this,
-                    "Nickname: " + userCreated.getNickname() +
-                            "\nName: " + userCreated.getName() +
-                            "\nSurname: " + userCreated.getSurname() +
-                            "\nMail: " + userCreated.getMail() +
-                            "\nCitizenship: " + userCreated.getCitizenship() +
-                            "\nBirth Date: " + userCreated.getBirthDate() +
-                            "\nID: " + userCreated.getId() +
-                            "\nID Type: " + userCreated.getIdType(),
-                    "User Registered",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-
-        });
-        return registerCustomerPanel;
-    }
-
-    // Crea el JPanel que que se encarga de los registros de la aerolínea
-    private JPanel createRegisterAirplinePanel() {
-        RegisterAirlinePanel registerAirlinePanel = new RegisterAirlinePanel();
-        // Crea e implementa la única función del listener de registro de aerolínea
-        registerAirlinePanel.setAirlineFormListener(e -> {
-            // Get all the info from the form and create an AirlineDTO
-            String nickname = e.getNickname();
-            String name = e.getName();
-            String description = e.getDescription();
-            String email = e.getMail();
-            String web = e.getWeb();
-
-            // Create the AirlineDTO based on the provided information
-            AirlineDTO airlineDTO = null;
-            List<FlightRouteDTO> flightRouteDTO = new ArrayList<>();
-            if (Objects.equals(web, "")) {
-                airlineDTO = new AirlineDTO(nickname, name, email, description, flightRouteDTO);
-            } else {
-                airlineDTO = new AirlineDTO(nickname, name, email, description, web, flightRouteDTO);
-            }
-
-            // Try to register the airline using the userController
-            try {
-                userController.registerAirline(airlineDTO);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al registrar la aerolínea: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Create the airline information string
-            // If web is empty, it will not be included in the information string
-            String airlineInfo = "Nickname: " + airlineDTO.getNickname() +
-                    "\nName: " + airlineDTO.getName() +
-                    "\nDescription: " + airlineDTO.getDescription() +
-                    "\nEmail: " + airlineDTO.getMail();
-            if (Objects.equals(web, "")) {
-                airlineInfo += "\nWeb: " + airlineDTO.getWeb();
-            }
-
-            // Show the new airline in a JDialog
-            JOptionPane.showMessageDialog(this, airlineInfo, "Aerolínea Registrada", JOptionPane.INFORMATION_MESSAGE);
-        });
-        return registerAirlinePanel;
-    }
-
+  
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
     private JPanel NavPanel;

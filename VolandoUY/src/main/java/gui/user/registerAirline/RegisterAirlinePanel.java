@@ -1,5 +1,7 @@
 package gui.user.registerAirline;
 
+import controllers.user.IUserController;
+import domain.dtos.user.AirlineDTO;
 import lombok.Setter;
 
 import java.awt.*;
@@ -9,9 +11,11 @@ import javax.swing.border.*;
 @Setter
 public class RegisterAirlinePanel extends JPanel {
     
-    AirlineFormListener airlineFormListener;
+    IUserController userController;
     
-    public RegisterAirlinePanel() {
+    public RegisterAirlinePanel(IUserController uController) {
+        userController = uController;
+
         initComponents();
         // initComponentsManually();
         initListeners();
@@ -26,12 +30,19 @@ public class RegisterAirlinePanel extends JPanel {
                 String email = emailTextField.getText();
                 String web = webTextLabel.getText();
 
-                AirlineFormEvent event = new AirlineFormEvent(this, nickname, name, email, description, web);
-                if (airlineFormListener != null) {
-                    airlineFormListener.formEventOccurred(event);
-                } else {
-                    System.out.println("No listener registered for airline form events.");
-                }
+                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web);
+
+                AirlineDTO createdAirlineDTO = userController.registerAirline(airlineDTO);
+
+                JOptionPane.showMessageDialog(this,
+                        "Nickname: " + createdAirlineDTO.getNickname() +
+                                "\nName: " + createdAirlineDTO.getName() +
+                                "\nEmail: " + createdAirlineDTO.getMail() +
+                                "\nDescription: " + createdAirlineDTO.getDescription() +
+                                (web.isEmpty() ? ("\nWeb: " + createdAirlineDTO.getWeb()) : ""),
+                        "User Registered",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al crear la aerolínea: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }

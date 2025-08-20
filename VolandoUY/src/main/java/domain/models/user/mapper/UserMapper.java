@@ -23,4 +23,13 @@ public class UserMapper {
         }
         throw new IllegalArgumentException("Tipo de user desconocido: " + user.getClass());
     }
+
+    public User fromDTO(UserDTO updatedUserDTO) {
+        if (updatedUserDTO instanceof CustomerDTO customerDTO) {
+            return modelMapper.map(customerDTO, Customer.class);
+        } else if (updatedUserDTO instanceof AirlineDTO airlineDTO) {
+            return modelMapper.map(airlineDTO, Airline.class);
+        }
+        throw new IllegalArgumentException("Tipo de UserDTO desconocido: " + updatedUserDTO.getClass());
+    }
 }
