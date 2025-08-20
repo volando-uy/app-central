@@ -26,4 +26,10 @@ public class Airport {
     @NotBlank(message = "El código IATA es obligatorio")
     @Pattern(regexp = "^[A-Z]{3}$", message = "El código IATA debe ser 3 letras mayúsculas")
     private String code;
+
+    @Override
+    public String toString() {
+        return "Airport{name=" + name + ", code=" + code + "}";
+    }
+
 }

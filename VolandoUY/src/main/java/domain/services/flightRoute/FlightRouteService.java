@@ -1,10 +1,14 @@
 package domain.services.flightRoute;
 
-import domain.dtos.flightRoute.CategoryDTO;
-import domain.models.flightRoute.Category;
+
+import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.models.flightRoute.FlightRoute;
+import domain.services.category.ICategoryService;
+import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 
+import javax.naming.ldap.Control;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,34 +16,33 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FlightRouteService implements IFlightRouteService {
-    private List<Category> categories = new ArrayList<>();
-    private ModelMapper modelMapper;
+    List<FlightRoute> flightRouteList = new ArrayList<>();
 
-    public FlightRouteService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    private ICategoryService categoryService = ControllerFactory.getCategoryService();
+    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
+    private List<FlightRouteDTO> flightRouteDTOList = new ArrayList<>();
+
+    @Override
+    public boolean existFlightRoute(String name) {
+        return this.flightRouteList.stream().anyMatch(flightRoute -> flightRoute.getName().equalsIgnoreCase(name));
     }
 
     @Override
-    public CategoryDTO createCategory(CategoryDTO cat) {
-        Category category = modelMapper.map(cat, Category.class);
-        System.out.println(category.getName());
-        System.out.println(categories);
-        if (_categoryExists(category)) {
-            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_CATEGORY_EXISTS, category.getName()));
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO) {
+        if (existFlightRoute(flightRouteDTO.getName())) {
+            throw new UnsupportedOperationException("no podes meter un bicho que ya existe");
         }
-        categories.add(category);
-        System.out.println(categories);
-        return modelMapper.map(category, CategoryDTO.class);
+        FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
+        this.flightRouteList.add(flightRoute);
+        return flightRouteDTO;
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        return categories.stream()
-                .map(category -> modelMapper.map(category, CategoryDTO.class))
+    public List<FlightRouteDTO> getAllFlightRoutes() {
+        return this.flightRouteDTOList = this.flightRouteList.stream()
+                .map(flightRoute -> modelMapper.map(flightRoute, FlightRouteDTO.class))
                 .collect(Collectors.toList());
-    }
 
-    private boolean _categoryExists(Category category) {
-        return categories.contains(category);
     }
 }
+

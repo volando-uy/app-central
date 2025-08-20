@@ -2,6 +2,7 @@ package domain.services.flight;
 
 import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
+import domain.models.user.Airline;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ public class FlightService implements IFlightService {
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
     private List<Flight> flights = new ArrayList<>();
+
+    private List<Airline> airlines = new ArrayList<>();
 
     // Constructor
     public FlightService(ModelMapper modelMapper) {
@@ -37,7 +40,10 @@ public class FlightService implements IFlightService {
                 .toList();
     }
 
+
     private boolean _flightExists(Flight flight) {
         return flights.contains(flight);
     }
+
+
 }

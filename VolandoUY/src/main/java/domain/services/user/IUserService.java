@@ -1,5 +1,6 @@
 package domain.services.user;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -15,5 +16,6 @@ public interface IUserService {
     UserDTO getUserByNickname(String nickname);
     UserDTO updateTempUser(UserDTO userDTO);
     void updateUser(String nickname, UserDTO userDTO);
-
+    List<AirlineDTO> getAllAirlines();
+    FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO);
 }

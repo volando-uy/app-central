@@ -3,7 +3,7 @@ package controllers.flight;
 import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.CategoryDTO;
+
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.IFlightRouteService;
 import org.junit.jupiter.api.BeforeEach;
