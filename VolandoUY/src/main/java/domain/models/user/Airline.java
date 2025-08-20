@@ -25,8 +25,6 @@ public class Airline extends User {
     @Pattern(regexp = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", message = "El formato de la web no es válido")
     private String web;
 
-    @NotBlank
-    @NotNull
     List<FlightRoute> flightRoutes;
 
     @Override
