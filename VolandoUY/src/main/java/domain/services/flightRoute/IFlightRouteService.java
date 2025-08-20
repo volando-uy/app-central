@@ -1,10 +1,14 @@
 package domain.services.flightRoute;
 
-import domain.dtos.flightRoute.CategoryDTO;
+
+
+import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.FlightRouteDTO;
 
 import java.util.List;
 
 public interface IFlightRouteService {
-    CategoryDTO createCategory(CategoryDTO category);
-    List<CategoryDTO> getAllCategories();
+    public boolean existFlightRoute(String name);
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO);
+    public List<FlightRouteDTO> getAllFlightRoutes();
 }

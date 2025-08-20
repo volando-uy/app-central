@@ -1,5 +1,6 @@
 package controllers.user;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -46,4 +47,13 @@ public class UserController implements IUserController {
         return userService.updateUser(nickname, user);
     }
 
+    @Override
+    public List<AirlineDTO> getAllAirlines() {
+        return userService.getAllAirlines();
+    }
+
+    @Override
+    public FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO) {
+        return userService.addFlightRouteToAirline(airlineName, flightRouteDTO);
+    }
 }

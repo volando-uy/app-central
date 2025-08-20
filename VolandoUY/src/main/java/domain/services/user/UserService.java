@@ -1,8 +1,10 @@
 package domain.services.user;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
+import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
@@ -111,8 +113,32 @@ public class UserService implements IUserService {
         return userMapper.toDTO(originalUser);
     }
 
+    @Override
+    public List<AirlineDTO> getAllAirlines(){
+        // Filtramos las aerolíneas de la lista de usuarios
+        List<AirlineDTO> airlines = users.stream()
+                .filter(user -> user instanceof Airline)
+                .map(user -> modelMapper.map(user, AirlineDTO.class))
+                .toList();
+        return airlines;
+    }
 
+    @Override
+    public FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO) {
+        User user = _getUserByNickname(airlineName);
+        if (user == null || !(user instanceof Airline)) {
+            throw new IllegalArgumentException("Airline no encontrada: " + airlineName);
+        }
 
+        Airline airline = modelMapper.map(airlineName, Airline.class);
 
+        // Convertir FlightRouteDTO a FlightRoute
+        FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
 
+        // Agregar la nueva ruta aérea a la aerolínea
+        airline.getFlightRoutes().add(flightRoute);
+
+        // Convertir de nuevo a DTO para devolver
+        return modelMapper.map(flightRoute, FlightRouteDTO.class);
+    }
 }

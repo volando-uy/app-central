@@ -1,19 +1,28 @@
 package factory;
 
+import controllers.category.CategoryController;
+import controllers.category.ICategoryController;
 import controllers.flight.FlightController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
+import controllers.packages.PackageController;
+import controllers.packages.IPackageController;
 import domain.models.user.mapper.UserMapper;
+import domain.services.category.CategoryService;
+import domain.services.category.ICategoryService;
 import domain.services.flight.FlightService;
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import domain.services.packages.PackageService;
+import domain.services.packages.IPackageService ;
 import org.modelmapper.ModelMapper;
+
 
 
 public class ControllerFactory {
@@ -30,6 +39,11 @@ public class ControllerFactory {
     private static IFlightController flightController;
     private static IFlightService flightService;
 
+    private static ICategoryController categoryController;
+    private static ICategoryService categoryService;
+
+    private static IPackageController packageController;
+    private static IPackageService packageService;
 
     // ############ USER CONTROLLER & SERVICE ############
 
@@ -92,11 +106,26 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteService getFlightRouteService() {
         if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService(getModelMapper());
+            flightRouteService = new FlightRouteService();
         }
         return flightRouteService;
     }
 
+    // ############### FLIGHT CONTROLLER & SERVICE #################
+
+    public static ICategoryService getCategoryService() {
+        if(categoryService == null) {
+            categoryService = new CategoryService(getModelMapper());
+        }
+        return categoryService;
+    }
+
+    public static ICategoryController getCategoryController() {
+        if(categoryController == null) {
+            categoryController = new CategoryController(getCategoryService());
+        }
+        return categoryController;
+    }
     // #############################################################
 
     // ############### FLIGHT CONTROLLER & SERVICE #################
@@ -114,4 +143,23 @@ public class ControllerFactory {
         }
         return flightService;
     }
+
+
+// ############### PACKAGES CONTROLLER & SERVICE #################
+
+    public static IPackageService getPackageService() {
+        if (packageService == null) {
+            packageService = new PackageService(getModelMapper());
+        }
+        return packageService;
+    }
+
+    public static IPackageController getPackageController() {
+        if (packageController == null) {
+            packageController = new PackageController(getPackageService());
+        }
+        return packageController;
+    }
+
+
 }

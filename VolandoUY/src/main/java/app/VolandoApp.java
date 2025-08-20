@@ -34,6 +34,5 @@ public class VolandoApp {
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController);
             mainFrame.setVisible(true);
-        });
     }
 }

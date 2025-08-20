@@ -2,6 +2,7 @@ package gui.user;
 
 import javax.swing.border.*;
 import controllers.user.IUserController;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -11,11 +12,14 @@ import gui.user.registerCustomer.RegisterCustomerPanel;
 import gui.user.updateUser.UpdateUserPanel;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class UserPanel extends JPanel {
@@ -112,7 +116,7 @@ public class UserPanel extends JPanel {
         updateUserBtn.addMouseListener(updateUserPanelListener);
         //button3.addMouseListener(getUserListener);
     }
-
+  
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
     private JPanel NavPanel;

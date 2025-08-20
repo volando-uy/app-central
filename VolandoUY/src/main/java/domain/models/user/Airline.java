@@ -2,12 +2,16 @@ package domain.models.user;
 
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.UserDTO;
+import domain.models.flightRoute.FlightRoute;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +24,10 @@ public class Airline extends User {
 
     @Pattern(regexp = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", message = "El formato de la web no es válido")
     private String web;
+
+    @NotBlank
+    @NotNull
+    List<FlightRoute> flightRoutes;
 
     @Override
     public void updateDataFrom(UserDTO newData) {

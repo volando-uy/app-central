@@ -17,7 +17,7 @@ import java.util.Map;
 public class City {
 
     @Valid // valida cada Airport dentro de la lista
-    private List<@NotNull Airport> airports = new ArrayList<>();
+    private List<@NotNull Airport> airports;
 
     @NotBlank
     @Size(min = 2, max = 100)
