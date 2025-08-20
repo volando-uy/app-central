@@ -1,4 +1,4 @@
-package domain.services.packages;
+package domain.services.flightRoutePackage;
 
 import domain.dtos.packages.PackageDTO;
 import domain.models.flightRoutePackage.FlightRoutePackage;
@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PackageService implements IPackageService {
+public class FlightRoutePackageService implements IFlightRoutePackageService {
     private List<FlightRoutePackage> flightRoutePackages = new ArrayList<>();
     private ModelMapper modelMapper  = ControllerFactory.getModelMapper();
 
-    public PackageService (ModelMapper modelMapper) {
+    public FlightRoutePackageService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
