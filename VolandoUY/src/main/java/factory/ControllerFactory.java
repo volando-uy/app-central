@@ -8,6 +8,8 @@ import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
+import controllers.packages.PackageController;
+import controllers.packages.IPackageController;
 import domain.models.user.mapper.UserMapper;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
@@ -17,7 +19,10 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import domain.services.packages.PackageService;
+import domain.services.packages.IPackageService ;
 import org.modelmapper.ModelMapper;
+
 
 
 public class ControllerFactory {
@@ -36,6 +41,9 @@ public class ControllerFactory {
 
     private static ICategoryController categoryController;
     private static ICategoryService categoryService;
+
+    private static IPackageController packageController;
+    private static IPackageService packageService;
 
     // ############ USER CONTROLLER & SERVICE ############
 
@@ -135,4 +143,23 @@ public class ControllerFactory {
         }
         return flightService;
     }
+
+
+// ############### PACKAGES CONTROLLER & SERVICE #################
+
+    public static IPackageService getPackageService() {
+        if (packageService == null) {
+            packageService = new PackageService(getModelMapper());
+        }
+        return packageService;
+    }
+
+    public static IPackageController getPackageController() {
+        if (packageController == null) {
+            packageController = new PackageController(getPackageService());
+        }
+        return packageController;
+    }
+
+
 }
