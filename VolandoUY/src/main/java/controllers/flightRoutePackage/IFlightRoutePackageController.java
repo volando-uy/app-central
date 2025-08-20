@@ -1,8 +1,8 @@
-package domain.services.packages;
+package controllers.flightRoutePackage;
 
 import domain.dtos.packages.PackageDTO;
 
-public interface IPackageService {
+public interface IFlightRoutePackageController {
     void addPackage(PackageDTO packageDTO);
     void updatePackage(PackageDTO packageDTO);
     void deletePackage(String packageName);

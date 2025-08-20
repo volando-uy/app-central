@@ -1,14 +1,15 @@
 
-package controllers.packages;
+package controllers.flightRoutePackage;
 
 import domain.dtos.packages.PackageDTO;
-import domain.services.packages.IPackageService;
+import domain.services.flightRoutePackage.FlightRoutePackageService;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 
-public class PackageController implements IPackageController {
-    private IPackageService packageService;
+public class FlightRoutePackageController implements IFlightRoutePackageController {
+    private IFlightRoutePackageService packageService;
 
     @Override
     public void addPackage(PackageDTO packageDTO) {

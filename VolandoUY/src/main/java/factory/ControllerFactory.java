@@ -8,8 +8,8 @@ import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
-import controllers.packages.PackageController;
-import controllers.packages.IPackageController;
+import controllers.flightRoutePackage.FlightRoutePackageController;
+import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.models.user.mapper.UserMapper;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
@@ -17,10 +17,10 @@ import domain.services.flight.FlightService;
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import domain.services.packages.PackageService;
-import domain.services.packages.IPackageService ;
+import domain.services.flightRoutePackage.FlightRoutePackageService;
 import org.modelmapper.ModelMapper;
 
 
@@ -42,8 +42,8 @@ public class ControllerFactory {
     private static ICategoryController categoryController;
     private static ICategoryService categoryService;
 
-    private static IPackageController packageController;
-    private static IPackageService packageService;
+    private static IFlightRoutePackageController packageController;
+    private static IFlightRoutePackageService packageService;
 
     // ############ USER CONTROLLER & SERVICE ############
 
@@ -147,16 +147,16 @@ public class ControllerFactory {
 
 // ############### PACKAGES CONTROLLER & SERVICE #################
 
-    public static IPackageService getPackageService() {
+    public static IFlightRoutePackageService getPackageService() {
         if (packageService == null) {
-            packageService = new PackageService(getModelMapper());
+            packageService = new FlightRoutePackageService(getModelMapper());
         }
         return packageService;
     }
 
-    public static IPackageController getPackageController() {
+    public static IFlightRoutePackageController getPackageController() {
         if (packageController == null) {
-            packageController = new PackageController(getPackageService());
+            packageController = new FlightRoutePackageController(getPackageService());
         }
         return packageController;
     }
