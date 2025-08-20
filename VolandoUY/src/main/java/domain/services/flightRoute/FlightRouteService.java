@@ -45,4 +45,27 @@ public class FlightRouteService implements IFlightRouteService {
 
     }
 }
+    public List<AirlineDTO> getAllAirlines() {
+        return airlines.stream()
+        .map(a -> modelMapper.map(a, AirlineDTO.class))
+        .toList();
+    }
+    public List<FlightRouteDTO> getRoutesByAirline(String airlineNickname) {
+        AirlineDTO airline = (AirlineDTO) userService.getUserByNickname(airlineNickname);
+        if (airline == null) {
+            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
+        }
+        return airline.getFlightRoutes();
+    }
 
+    // 🔹 Consultar detalle de una ruta específica
+    public FlightRouteDTO getRouteDetail(String routeName) {
+        for (FlightRoute route : flightRouteList) {
+            if (route.getName().equalsIgnoreCase(routeName)) {
+                return modelMapper.map(route, FlightRouteDTO.class);
+            }
+        }
+        return null;
+    }
+
+}
