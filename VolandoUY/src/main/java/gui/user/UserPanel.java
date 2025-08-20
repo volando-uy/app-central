@@ -2,6 +2,7 @@ package gui.user;
 
 import javax.swing.border.*;
 import controllers.user.IUserController;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.user.enums.EnumTipoDocumento;
@@ -9,11 +10,14 @@ import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class UserPanel extends JPanel {
@@ -164,10 +168,11 @@ public class UserPanel extends JPanel {
 
             // Create the AirlineDTO based on the provided information
             AirlineDTO airlineDTO = null;
+            List<FlightRouteDTO> flightRouteDTO = new ArrayList<>();
             if (Objects.equals(web, "")) {
-                airlineDTO = new AirlineDTO(nickname, name, email, description);
+                airlineDTO = new AirlineDTO(nickname, name, email, description, flightRouteDTO);
             } else {
-                airlineDTO = new AirlineDTO(nickname, name, email, description, web);
+                airlineDTO = new AirlineDTO(nickname, name, email, description, web, flightRouteDTO);
             }
 
             // Try to register the airline using the userController

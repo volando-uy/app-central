@@ -1,4 +1,4 @@
-package domain.dtos.flightRoute;
+package domain.dtos.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

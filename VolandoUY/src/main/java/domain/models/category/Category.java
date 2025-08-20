@@ -1,4 +1,4 @@
-package domain.models.flightRoute;
+package domain.models.category;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
