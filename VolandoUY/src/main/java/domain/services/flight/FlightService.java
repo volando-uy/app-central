@@ -40,6 +40,32 @@ public class FlightService implements IFlightService {
                 .toList();
     }
 
+    @Override
+    public FlightDTO getFlightByName(String name) {
+        Flight flight = flights.stream()
+                .filter(f -> f.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+        if (flight == null) {
+            return null;
+        }
+        return modelMapper.map(flight, FlightDTO.class);
+    }
+
+    @Override
+    public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
+        Airline airline = airlines.stream()
+                .filter(a -> a.getNickname().equalsIgnoreCase(airlineNickname))
+                .findFirst()
+                .orElse(null);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline not found: " + airlineNickname);
+        }
+        return flights.stream()
+                .filter(flight -> flight.getAirline().equals(airline))
+                .map(flight -> modelMapper.map(flight, FlightDTO.class))
+                .toList();
+    }
 
     private boolean _flightExists(Flight flight) {
         return flights.contains(flight);

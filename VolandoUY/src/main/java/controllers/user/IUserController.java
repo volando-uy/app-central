@@ -17,4 +17,5 @@ public interface IUserController {
     UserDTO getUserByNickname(String nickname);
     List<String> getAllUsersNicknames();
     UserDTO updateUser(String nickname, UserDTO user);
+    AirlineDTO getAirlineByNickname(String nickname);
 }

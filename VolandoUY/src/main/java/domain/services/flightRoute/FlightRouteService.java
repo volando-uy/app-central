@@ -1,8 +1,12 @@
 package domain.services.flightRoute;
 
+import domain.dtos.category.CategoryDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.user.AirlineDTO;
+import domain.models.category.Category;
 import domain.models.flightRoute.FlightRoute;
 import domain.services.category.ICategoryService;
+import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 
@@ -16,6 +20,7 @@ public class FlightRouteService implements IFlightRouteService {
     private ICategoryService categoryService = ControllerFactory.getCategoryService();
     private ModelMapper modelMapper = ControllerFactory.getModelMapper();
     private List<FlightRouteDTO> flightRouteDTOList = new ArrayList<>();
+    private IUserService userService = ControllerFactory.getUserService();
 
     @Override
     public boolean existFlightRoute(String name) {
@@ -23,12 +28,42 @@ public class FlightRouteService implements IFlightRouteService {
     }
 
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO) {
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO, String airlineNickname) {
         if (existFlightRoute(flightRouteDTO.getName())) {
-            throw new UnsupportedOperationException("no podes meter un bicho que ya existe");
+            throw new UnsupportedOperationException("Ya existe una ruta con el nombre: " + flightRouteDTO.getName());
+        }
+        //Asignar a la aereolinea, la ruta del vuelo
+        AirlineDTO airlineDTO = userService.getAirlineByNickname(airlineNickname);
+        if (airlineDTO == null) {
+            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
         }
         FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
         this.flightRouteList.add(flightRoute);
+        // Asignar las categorías a la ruta de vuelo
+        if (flightRouteDTO.getCategory() != null) {
+            flightRouteDTO.getCategory().forEach(categoryDTO -> {
+                // Verificar si la categoría existe
+                if (categoryService.existsCategory(categoryDTO.getName())) {
+                    // Si existe, agregarla a la ruta de vuelo
+                    flightRoute.addCategory(modelMapper.map(categoryDTO, Category.class));
+                } else {
+                    // Si no existe, lanzar una excepción
+                    throw new IllegalArgumentException("La categoría " + categoryDTO.getName() + " no existe.");
+                }
+            });
+        }
+        // Asignar la ruta de vuelo a la aerolínea
+        airlineDTO.addFlightRoute(flightRouteDTO);
+
+        // Guardar la aerolínea actualizada
+        userService.updateUser(airlineNickname, airlineDTO);
+
+        // Mapear la ruta de vuelo a FlightRouteDTO
+        flightRouteDTO = modelMapper.map(flightRoute, FlightRouteDTO.class);
+        // Agregar la ruta de vuelo a la lista de rutas de vuelo
+
+        this.flightRouteDTOList.add(flightRouteDTO);
+
         return flightRouteDTO;
     }
 
@@ -45,17 +80,17 @@ public class FlightRouteService implements IFlightRouteService {
 //        Hay que agregar el userService si lo quieren hacer así
 //        Se puede hacer sin usar el userService, filtrando por la aerolinea.
 //
-//        AirlineDTO airline = (AirlineDTO) userService.getUserByNickname(airlineNickname);
-//        if (airline == null) {
-//            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
-//        }
-//        return airline.getFlightRoutes();
-
-        return null; // Temporalmente
-    }
+        AirlineDTO airline = userService.getAirlineByNickname(airlineNickname);
+        System.out.println("Aereolinea: " + airline);
+        if (airline == null) {
+            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
+        }
+        System.out.println(airline.getFlightRoutes());
+        return airline.getFlightRoutes();
+}
 
     // busca una ruta especifica en la lista de rutas y devuelve todo el detalle como un FlightRouteDTO
-    public FlightRouteDTO getFlightRoute(String routeName) {
+    public FlightRouteDTO getFlightRouteByName(String routeName) {
         return this.flightRouteList.stream()
                 .filter(route -> route.getName().equalsIgnoreCase(routeName))
                 .findFirst()

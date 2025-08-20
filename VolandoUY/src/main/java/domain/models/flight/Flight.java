@@ -1,5 +1,7 @@
 package domain.models.flight;
 
+import domain.models.flightRoute.FlightRoute;
+import domain.models.user.Airline;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Flight {
+
+    private FlightRoute flightRoute;
+
+    private Airline airline;
 
     @NotBlank
     @Size(min = 2, max = 100)

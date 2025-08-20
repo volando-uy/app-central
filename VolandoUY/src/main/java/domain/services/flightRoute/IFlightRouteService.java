@@ -9,8 +9,9 @@ import java.util.List;
 
 public interface IFlightRouteService {
     public boolean existFlightRoute(String name);
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO);
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO,String airlineNickname);
     public List<FlightRouteDTO> getAllFlightRoutes();
     List<FlightRouteDTO> getFlightRoutesByAirline(String airlineNickname);
-    FlightRouteDTO getFlightRoute(String routeName);
+    FlightRouteDTO getFlightRouteByName(String routeName);
+
 }
