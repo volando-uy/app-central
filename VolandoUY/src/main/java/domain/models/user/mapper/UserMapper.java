@@ -1,5 +1,6 @@
 package domain.models.user.mapper;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -7,6 +8,11 @@ import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
 import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserMapper {
     private final ModelMapper modelMapper;
@@ -32,4 +38,22 @@ public class UserMapper {
         }
         throw new IllegalArgumentException("Tipo de UserDTO desconocido: " + updatedUserDTO.getClass());
     }
+    public AirlineDTO toAirlineDTO(Airline airline) {
+        AirlineDTO dto = new AirlineDTO();
+        dto.setNickname(airline.getNickname());
+        dto.setName(airline.getName());
+        dto.setDescription(airline.getDescription());
+        dto.setWeb(airline.getWeb());
+        dto.setMail(airline.getMail());
+
+        List<FlightRouteDTO> rutas = Optional.ofNullable(airline.getFlightRoutes())
+                .orElse(new ArrayList<>())
+                .stream()
+                .map(route -> modelMapper.map(route, FlightRouteDTO.class))
+                .collect(Collectors.toList());
+
+        dto.setFlightRoutes(rutas);
+        return dto;
+    }
+
 }

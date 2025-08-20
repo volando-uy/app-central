@@ -130,15 +130,31 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("Airline no encontrada: " + airlineName);
         }
 
-        Airline airline = modelMapper.map(airlineName, Airline.class);
+        Airline airline = (Airline) user; // ✅ ESTA es la aerolínea real
 
         // Convertir FlightRouteDTO a FlightRoute
         FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
 
-        // Agregar la nueva ruta aérea a la aerolínea
+        // Asegurar que la lista esté inicializada
+        if (airline.getFlightRoutes() == null) {
+            airline.setFlightRoutes(new ArrayList<>());
+        }
+
+        // Agregar la nueva ruta aérea a la aerolínea real
         airline.getFlightRoutes().add(flightRoute);
 
         // Convertir de nuevo a DTO para devolver
         return modelMapper.map(flightRoute, FlightRouteDTO.class);
+    }
+
+
+    @Override
+    public AirlineDTO getAirlineByNickname(String nickname) {
+        Airline airline = (Airline) _getUserByNickname(nickname);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+        }
+        // Convertir Airline a AirlineDTO
+        return userMapper.toAirlineDTO(airline);
     }
 }

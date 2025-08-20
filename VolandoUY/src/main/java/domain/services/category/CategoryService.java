@@ -24,7 +24,7 @@ public class CategoryService implements ICategoryService {
         Category category = modelMapper.map(cat, Category.class);
         System.out.println(category.getName());
         System.out.println(categories);
-        if (_categoryExists(category)) {
+        if (existsCategory(category.getName())) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_CATEGORY_EXISTS, category.getName()));
         }
         categories.add(category);
@@ -39,10 +39,10 @@ public class CategoryService implements ICategoryService {
                 .collect(Collectors.toList());
     }
 
-
-
-    private boolean _categoryExists(Category category) {
-        return categories.contains(category);
+    @Override
+    public boolean existsCategory(String name) {
+        return categories.stream()
+                .anyMatch(category -> category.getName().equalsIgnoreCase(name));
     }
 
 

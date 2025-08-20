@@ -66,11 +66,11 @@ public class RegisterFlightRouteTest {
         miRuta.setPriceExtraUnitBaggage(5000.0);
         miRuta.setOriginCity(arg);
         miRuta.setDestinationCity(madrid);
-        miRuta.setCategory(List.of(miCategoria));
+        miRuta.setCategory(List.of(new domain.dtos.category.CategoryDTO(miCategoria.getName())));
         System.out.println("Ruta a crear: "+miRuta);
 
         assertFalse(flightRouteController.existFlightRoute("TEST"));
-        flightRouteController.createFlightRoute(miRuta);
+        flightRouteController.createFlightRoute(miRuta,"AA");
         System.out.println("Rutas existentes: "+flightRouteController.getAllFlightRoutes());
         assertTrue(flightRouteController.existFlightRoute("TEST"));
 

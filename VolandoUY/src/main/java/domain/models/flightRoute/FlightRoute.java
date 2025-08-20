@@ -2,12 +2,14 @@ package domain.models.flightRoute;
 
 import domain.models.category.Category;
 import domain.models.city.City;
+import domain.models.flight.Flight;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,6 +19,9 @@ public class FlightRoute {
 
     @NotNull
     private List<Category> category; // categoriaVuelo
+
+    @NotNull
+    private List<Flight> flights; // vuelos asociados a la ruta
 
     @NotNull
     private City originCity;
@@ -47,4 +52,19 @@ public class FlightRoute {
 
     @PositiveOrZero()
     private Double priceExtraUnitBaggage;
+
+
+
+    public void addCategory(Category category) {
+        if (this.category == null) {
+            this.category = new ArrayList<>();
+        }
+        this.category.add(category);
+    }
+    public void addFlight(Flight flight) {
+        if (this.flights == null) {
+            this.flights = new ArrayList<>();
+        }
+        this.flights.add(flight);
+    }
 }

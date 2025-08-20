@@ -20,4 +20,14 @@ public class FlightController implements IFlightController {
     public List<FlightDTO> getAllFlights() {
         return flightService.getAllFlights();
     }
+
+    @Override
+    public FlightDTO getFlightByName(String flightName) {
+        return flightService.getFlightByName(flightName);
+    }
+
+    @Override
+    public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
+        return flightService.getAllFlightsByAirline(airlineNickname);
+    }
 }

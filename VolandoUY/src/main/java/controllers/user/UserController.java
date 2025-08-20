@@ -56,4 +56,9 @@ public class UserController implements IUserController {
     public FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO) {
         return userService.addFlightRouteToAirline(airlineName, flightRouteDTO);
     }
+
+    @Override
+    public AirlineDTO getAirlineByNickname(String nickname) {
+        return userService.getAirlineByNickname(nickname);
+    }
 }

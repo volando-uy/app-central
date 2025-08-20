@@ -9,5 +9,5 @@ import java.util.List;
 public interface ICategoryService {
     CategoryDTO createCategory(CategoryDTO category);
     List<CategoryDTO> getAllCategories();
-
+    boolean existsCategory(String name);
 }
