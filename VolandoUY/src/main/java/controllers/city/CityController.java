@@ -5,9 +5,14 @@ import domain.services.city.ICityService;
 
 public class CityController implements ICityController {
     private ICityService cityService;
+
+    public CityController(ICityService cityService) {
+        this.cityService = cityService;
+    }
+
     @Override
-    public void addCity(CityDTO city) {
-        this.cityService.addCity(city);
+    public CityDTO createCity(CityDTO city) {
+        return this.cityService.createCity(city);
     }
 
     @Override

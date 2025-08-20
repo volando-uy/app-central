@@ -16,4 +16,12 @@ public class CityDTO {
     private String country;
     private double latitude;
     private double longitude;
+
+    public CityDTO(String name, String country, double latitude, double longitude) {
+        this.name = name;
+        this.country = country;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.airports = List.of(); // Initialize with an empty list
+    }
 }

@@ -1,0 +1,122 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0:1.0"
+			"$rowSpecs": "0, 0:1.0, 0, 0"
+			"$alignTop": true
+			"$alignLeft": true
+		} ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 640, 540 )
+			"minimumSize": new java.awt.Dimension( 640, 540 )
+			"maximumSize": new java.awt.Dimension( 640, 540 )
+			"background": new java.awt.Color( 81, 126, 214, 255 )
+			"border": new javax.swing.border.EtchedBorder( 1, null, null )
+			"opaque": false
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0:1.0, 0"
+				"$rowSpecs": "0, 20, top:38, 0, 0, 0"
+				"$alignTop": true
+				"$alignLeft": true
+			} ) {
+				name: "InfoCategoryPanel"
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer5"
+					"preferredSize": new java.awt.Dimension( 40, 10 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer17"
+					"minimumSize": new java.awt.Dimension( 12, 70 )
+					"preferredSize": new java.awt.Dimension( 10, 100 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"weighty": 1.0
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer6"
+					"preferredSize": new java.awt.Dimension( 40, 10 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "120, 380"
+					"$hGap": 10
+					"$alignTop": true
+					"$alignLeft": true
+					"$rowSpecs": "center:10"
+				} ) {
+					name: "firstRowPanel"
+					"preferredSize": new java.awt.Dimension( 510, 30 )
+					"minimumSize": new java.awt.Dimension( 510, 30 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nicknameLabel"
+						"text": "Nombre:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": new java.awt.Dimension( 120, 30 )
+						"maximumSize": new java.awt.Dimension( 70, 15 )
+						"minimumSize": new java.awt.Dimension( 70, 15 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "nicknameTextField"
+						"preferredSize": new java.awt.Dimension( 120, 30 )
+						"minimumSize": new java.awt.Dimension( 100, 30 )
+						"maximumSize": new java.awt.Dimension( 100, 30 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+					"vAlign": 0
+					"hAlign": 2
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer13"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 4
+					"weighty": 400.0
+					"gridx": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "updateBtnPanel"
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer1"
+					"preferredSize": new java.awt.Dimension( 200, 10 )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Before"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer2"
+					"preferredSize": new java.awt.Dimension( 200, 10 )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "After"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createNewCategoryBtn"
+					"text": "Crear nueva categoria"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 2
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer19"
+				"preferredSize": new java.awt.Dimension( 10, 100 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 3
+				"weighty": 2.0
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 556 )
+			"size": new java.awt.Dimension( 640, 540 )
+		} )
+	}
+}

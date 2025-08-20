@@ -2,6 +2,8 @@ package factory;
 
 import controllers.category.CategoryController;
 import controllers.category.ICategoryController;
+import controllers.city.CityController;
+import controllers.city.ICityController;
 import controllers.flight.FlightController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
@@ -13,6 +15,8 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.models.user.mapper.UserMapper;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
+import domain.services.city.CityService;
+import domain.services.city.ICityService;
 import domain.services.flight.FlightService;
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.FlightRouteService;
@@ -42,8 +46,12 @@ public class ControllerFactory {
     private static ICategoryController categoryController;
     private static ICategoryService categoryService;
 
+    private static ICityController cityController;
+    private static ICityService cityService;
+
     private static IFlightRoutePackageController packageController;
     private static IFlightRoutePackageService packageService;
+
 
     // ############ USER CONTROLLER & SERVICE ############
 
@@ -161,5 +169,20 @@ public class ControllerFactory {
         return packageController;
     }
 
+    // ############### CITY CONTROLLER & SERVICE #################
+
+    public static ICityController getCityController() {
+        if (cityController == null) {
+            cityController = new CityController(getCityService());
+        }
+        return cityController;
+    }
+
+    public static ICityService getCityService() {
+        if (cityService == null) {
+            cityService = new CityService(getModelMapper());
+        }
+        return cityService;
+    }
 
 }

@@ -63,7 +63,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    @DisplayName("Debe llamar a registerAirline y mapear correctamente el DTO")
+    @DisplayName("Debe llamar a createCategory y mapear correctamente el DTO")
     void registerAirline_shouldCallToServiceWithMappedEntity() {
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("flyuy");

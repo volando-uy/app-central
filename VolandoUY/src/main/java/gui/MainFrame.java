@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import controllers.category.ICategoryController;
+import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import gui.others.OtherPanel;
 import gui.user.UserPanel;
 
 /**
@@ -16,18 +19,20 @@ public class MainFrame extends JFrame {
 
     private IUserController userController;
     private IFlightRouteController flightRouteController;
+    private ICategoryController categoryController;
+    private ICityController cityController;
 
     private SideBar sideBar;
     private JPanel mainPanel;
-    // 0: Default, 1: UserPanel, 2: FlightManagementPanel, 3: PackageManagementPanel, 4: AirlineManagementPanel, 5: ReservationsPanel
+    // 0: Default, 1: OtherPanel, 2: FlightPanel, 3: FlightRoutePanel, 4: FlightRoutePackagePanel, 5: ReservationsPanel, 6: OtherPanel
     private Integer mainPanelType;
 
-    public MainFrame(IUserController uController, IFlightRouteController frController) {
-        userController = uController;
-        flightRouteController = frController;
-        sideBar = createSideBar();
-        mainPanel = new JPanel(); // Añadir un panel default
-        mainPanelType = 0;
+    public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
+                     ICategoryController categoryController, ICityController cityController) {
+        this.userController = userController;
+        this.flightRouteController = flightRouteController;
+        this.categoryController = categoryController;
+        this.cityController = cityController;
         initUI();
     }
 
@@ -38,6 +43,9 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
 
         mainPanel = new JPanel(); // Default panel to initialize
+        mainPanelType = 0;
+
+        sideBar = createSideBar();
 
         // I want to use a BorderLayout to place the sidebar on the left and the main content on the right
         setLayout(new BorderLayout());
@@ -60,13 +68,23 @@ public class MainFrame extends JFrame {
 
 
     private SideBar createSideBar() {
-        MouseListener userListener = new MouseAdapter() {
+        MouseListener userManagementBtnListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.println("User Management button clicked");
                 updateMainPanel(new UserPanel(userController), 1);
             }
         };
-        return new SideBar(userListener);
+
+        MouseListener othersManagementBtnListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Others Management button clicked");
+                updateMainPanel(new OtherPanel(categoryController, cityController), 6);
+            }
+        };
+
+        return new SideBar(userManagementBtnListener, othersManagementBtnListener);
     }
 
 }

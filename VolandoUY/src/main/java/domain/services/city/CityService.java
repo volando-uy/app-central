@@ -5,26 +5,32 @@ import domain.models.city.City;
 import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class CityService implements ICityService {
     private List<City> cities;
-    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
+    private ModelMapper modelMapper;
+
+    public CityService(ModelMapper modelMapper) {
+        this.cities = new ArrayList<>();
+        this.modelMapper = modelMapper;
+    }
 
     @Override
-
-    public void addCity(CityDTO cityDTO) {
+    public CityDTO createCity(CityDTO cityDTO) {
         City city = modelMapper.map(cityDTO, City.class);
         if (cityExists(city.getName())) {
             throw new IllegalArgumentException("City already exists");
         }
         cities.add(city);
 
-
         if (city.getAirports() == null) {
             city.setAirports(List.of());
         }
+
+        return cityDTO;
     }
 
     @Override
