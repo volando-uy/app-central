@@ -52,7 +52,7 @@ public class UserService implements IUserService {
 
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
-        }
+        }   
 
         ValidatorUtil.validate(customer);
 

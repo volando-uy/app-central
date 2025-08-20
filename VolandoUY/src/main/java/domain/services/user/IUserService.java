@@ -15,4 +15,6 @@ public interface IUserService {
     List<String> getAllUsersNicknames();
     UserDTO getUserByNickname(String nickname);
     UserDTO updateUser(String nickname, UserDTO userDTO);
+    List<AirlineDTO> getAllAirlines();
+    FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO);
 }

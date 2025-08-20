@@ -25,14 +25,15 @@ public class VolandoApp {
                 "customer2", "Nahuel", "waza2@gmail.com", "Gonzalez", "uruguayo", LocalDate.of(2003, 1, 1), "123123124", EnumTipoDocumento.CI
         ));
         usuarioController.registerAirline(new AirlineDTO(
-                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar"
+                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar", null
         ));
         usuarioController.registerAirline(new AirlineDTO(
-                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com"
+                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com", null
         ));
 
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController);
             mainFrame.setVisible(true);
+        });
     }
 }

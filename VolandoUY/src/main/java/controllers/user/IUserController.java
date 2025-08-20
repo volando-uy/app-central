@@ -12,6 +12,8 @@ public interface IUserController {
     CustomerDTO registerCustomer(CustomerDTO dto);
     AirlineDTO registerAirline(AirlineDTO dto);
     List<UserDTO> getAllUsers();
+    List<AirlineDTO> getAllAirlines();
+    FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO);
     UserDTO getUserByNickname(String nickname);
     List<String> getAllUsersNicknames();
     UserDTO updateUser(String nickname, UserDTO user);
