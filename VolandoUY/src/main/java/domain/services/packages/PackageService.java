@@ -1,9 +1,8 @@
 package domain.services.packages;
 
 import domain.dtos.packages.PackageDTO;
-import domain.models.packages.Package;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import factory.ControllerFactory;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 
 
 public class PackageService implements IPackageService {
-    private List<Package> packages = new ArrayList<>();
+    private List<FlightRoutePackage> flightRoutePackages = new ArrayList<>();
     private ModelMapper modelMapper  = ControllerFactory.getModelMapper();
 
     public PackageService (ModelMapper modelMapper) {
@@ -20,22 +19,22 @@ public class PackageService implements IPackageService {
 
     @Override
     public void addPackage(PackageDTO packageDTO) {
-        Package pack = modelMapper.map(packageDTO, Package.class);
+        FlightRoutePackage pack = modelMapper.map(packageDTO, FlightRoutePackage.class);
         if (packageExists(pack.getName())) {
             throw new IllegalArgumentException("El paquete ya existe");
         }
-        packages.add(pack);
+        flightRoutePackages.add(pack);
     }
 
     @Override
     public void updatePackage(PackageDTO packageDTO) {
-        Package pack = modelMapper.map(packageDTO, Package.class);
+        FlightRoutePackage pack = modelMapper.map(packageDTO, FlightRoutePackage.class);
         if (!packageExists(pack.getName())) {
             throw new IllegalArgumentException("El paquete no existe");
         }
-        for (int i = 0; i < packages.size(); i++) {
-            if (packages.get(i).getName().equalsIgnoreCase(pack.getName())) {
-                packages.set(i, pack);
+        for (int i = 0; i < flightRoutePackages.size(); i++) {
+            if (flightRoutePackages.get(i).getName().equalsIgnoreCase(pack.getName())) {
+                flightRoutePackages.set(i, pack);
                 return;
             }
         }
@@ -47,12 +46,12 @@ public class PackageService implements IPackageService {
         if (!packageExists(packageName)) {
             throw new IllegalArgumentException("El paquete no existe");
         }
-        packages.removeIf(pack -> pack.getName().equalsIgnoreCase(packageName));
+        flightRoutePackages.removeIf(pack -> pack.getName().equalsIgnoreCase(packageName));
     }
 
     @Override
     public PackageDTO getPackage(String packageName) {
-        for (Package pack : packages) {
+        for (FlightRoutePackage pack : flightRoutePackages) {
             if (pack.getName().equalsIgnoreCase(packageName)) {
                 return modelMapper.map(pack, PackageDTO.class);
             }
@@ -62,7 +61,7 @@ public class PackageService implements IPackageService {
 
     @Override
     public boolean packageExists(String packageName) {
-        for (Package pack : packages) {
+        for (FlightRoutePackage pack : flightRoutePackages) {
             if (pack.getName().equalsIgnoreCase(packageName)) {
                 return true;
             }

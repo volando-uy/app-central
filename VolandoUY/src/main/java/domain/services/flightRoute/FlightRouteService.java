@@ -1,18 +1,13 @@
 package domain.services.flightRoute;
 
-
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flightRoute.FlightRoute;
 import domain.services.category.ICategoryService;
 import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
-import shared.constants.ErrorMessages;
 
-import javax.naming.ldap.Control;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FlightRouteService implements IFlightRouteService {
@@ -44,30 +39,28 @@ public class FlightRouteService implements IFlightRouteService {
                 .collect(Collectors.toList());
 
     }
-}
-    // listar todas las aerolíneas con formato airlinedto
-    public List<AirlineDTO> getAllAirlines() {
-        return airlines.stream()
-        .map(a -> modelMapper.map(a, AirlineDTO.class))
-        .toList();
-    }
+
     //con el nickname de la aerolínea, devuelvo todas sus rutas
-    public List<FlightRouteDTO> getRoutesByAirline(String airlineNickname) {
-        AirlineDTO airline = (AirlineDTO) userService.getUserByNickname(airlineNickname);
-        if (airline == null) {
-            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
-        }
-        return airline.getFlightRoutes();
+    public List<FlightRouteDTO> getFlightRoutesByAirline(String airlineNickname) {
+//        Hay que agregar el userService si lo quieren hacer así
+//        Se puede hacer sin usar el userService, filtrando por la aerolinea.
+//
+//        AirlineDTO airline = (AirlineDTO) userService.getUserByNickname(airlineNickname);
+//        if (airline == null) {
+//            throw new IllegalArgumentException("No existe la aerolínea: " + airlineNickname);
+//        }
+//        return airline.getFlightRoutes();
+
+        return null; // Temporalmente
     }
 
     // busca una ruta especifica en la lista de rutas y devuelve todo el detalle como un FlightRouteDTO
-    public FlightRouteDTO getRouteDetail(String routeName) {
-        for (FlightRoute route : flightRouteList) {
-            if (route.getName().equalsIgnoreCase(routeName)) {
-                return modelMapper.map(route, FlightRouteDTO.class);
-            }
-        }
-        return null;
+    public FlightRouteDTO getFlightRoute(String routeName) {
+        return this.flightRouteList.stream()
+                .filter(route -> route.getName().equalsIgnoreCase(routeName))
+                .findFirst()
+                .map(route -> modelMapper.map(route, FlightRouteDTO.class))
+                .orElse(null);
     }
 
 }

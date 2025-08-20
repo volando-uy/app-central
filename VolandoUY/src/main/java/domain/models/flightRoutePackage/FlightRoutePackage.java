@@ -1,4 +1,4 @@
-package domain.models.packages;
+package domain.models.flightRoutePackage;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Package {
+public class FlightRoutePackage {
 
     @NotBlank
     @Size(min = 2, max = 100)

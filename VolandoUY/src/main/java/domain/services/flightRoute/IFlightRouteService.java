@@ -11,4 +11,6 @@ public interface IFlightRouteService {
     public boolean existFlightRoute(String name);
     public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO);
     public List<FlightRouteDTO> getAllFlightRoutes();
+    List<FlightRouteDTO> getFlightRoutesByAirline(String airlineNickname);
+    FlightRouteDTO getFlightRoute(String routeName);
 }
