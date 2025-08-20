@@ -45,11 +45,13 @@ public class FlightRouteService implements IFlightRouteService {
 
     }
 }
+    // listar todas las aerolíneas con formato airlinedto
     public List<AirlineDTO> getAllAirlines() {
         return airlines.stream()
         .map(a -> modelMapper.map(a, AirlineDTO.class))
         .toList();
     }
+    //con el nickname de la aerolínea, devuelvo todas sus rutas
     public List<FlightRouteDTO> getRoutesByAirline(String airlineNickname) {
         AirlineDTO airline = (AirlineDTO) userService.getUserByNickname(airlineNickname);
         if (airline == null) {
@@ -58,7 +60,7 @@ public class FlightRouteService implements IFlightRouteService {
         return airline.getFlightRoutes();
     }
 
-    // 🔹 Consultar detalle de una ruta específica
+    // busca una ruta especifica en la lista de rutas y devuelve todo el detalle como un FlightRouteDTO
     public FlightRouteDTO getRouteDetail(String routeName) {
         for (FlightRoute route : flightRouteList) {
             if (route.getName().equalsIgnoreCase(routeName)) {
