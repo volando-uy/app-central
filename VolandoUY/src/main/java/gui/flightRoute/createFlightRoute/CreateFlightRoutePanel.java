@@ -88,6 +88,7 @@ public class CreateFlightRoutePanel extends JPanel {
                 touristCostTextField.setEnabled(true);
                 businessCostTextField.setEnabled(true);
                 originCityTextField.setEnabled(true);
+                destinationCityTextField.setEnabled(true);
                 categoriesTable.setEnabled(true);
                 JOptionPane.showMessageDialog(this, "Aerolinea seleccionada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
