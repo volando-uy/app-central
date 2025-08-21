@@ -20,13 +20,16 @@ public class SideBar extends JPanel {
     private MouseListener userManagementBtnListener;
     private MouseListener flightRouteManagementBtnListener;
     private MouseListener othersManagementBtnListener;
+    private MouseListener flightRoutePackageManagementBtnListener;
 
     public SideBar(MouseListener userManagementBtnListener,
                    MouseListener flightRouteManagementBtnListener,
-                   MouseListener othersManagementBtnListener) {
+                   MouseListener othersManagementBtnListener,
+                   MouseListener flightRoutePackageManagementBtnListener) {
         this.userManagementBtnListener = userManagementBtnListener;
         this.flightRouteManagementBtnListener = flightRouteManagementBtnListener;
         this.othersManagementBtnListener = othersManagementBtnListener;
+        this.flightRoutePackageManagementBtnListener = flightRoutePackageManagementBtnListener;
         initComponents();
         initListeners();
     }
@@ -34,6 +37,7 @@ public class SideBar extends JPanel {
     private void initListeners() {
         UserManagementBtn.addMouseListener(userManagementBtnListener);
         FlightRouteManagementBtn.addMouseListener(flightRouteManagementBtnListener);
+        FlightRoutePackageManagementBtn.addMouseListener(flightRoutePackageManagementBtnListener);
         OthersManagementBtn.addMouseListener(othersManagementBtnListener);
     }
 
