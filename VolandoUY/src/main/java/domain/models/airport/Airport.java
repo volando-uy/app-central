@@ -9,14 +9,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.utils.ValidatorUtil;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Airport {
 
-    @NotNull(message = "La ciudad es obligatoria")
-    @Valid
     private City city;
 
     @NotBlank(message = "El nombre del aeropuerto es obligatorio")
@@ -30,6 +29,12 @@ public class Airport {
     @Override
     public String toString() {
         return "Airport{name=" + name + ", code=" + code + "}";
+    }
+
+    public Airport(String name, String code) {
+        this.name = name;
+        this.code = code;
+        this.city = null;
     }
 
 }

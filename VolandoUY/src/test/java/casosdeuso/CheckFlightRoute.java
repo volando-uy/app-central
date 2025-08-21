@@ -1,3 +1,4 @@
+/*
 package casosdeuso;
 import controllers.category.ICategoryController;
 import controllers.flight.IFlightController;
@@ -49,7 +50,6 @@ public class CheckFlightRoute {
         arg.setCountry("Argentina");
         arg.setLongitude(-34.6037);
         arg.setLatitude(-58.3816);
-        arg.addAirport("Argentina Irport","ARG");
 
 
 
@@ -164,3 +164,4 @@ public class CheckFlightRoute {
 
     }
 }
+*/

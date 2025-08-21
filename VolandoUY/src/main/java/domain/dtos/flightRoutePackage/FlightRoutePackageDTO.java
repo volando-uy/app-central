@@ -1,4 +1,4 @@
-package domain.dtos.packages;
+package domain.dtos.flightRoutePackage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PackageDTO {
+public class FlightRoutePackageDTO {
     private String name;
     private String description;
     private int validityPeriodDays;

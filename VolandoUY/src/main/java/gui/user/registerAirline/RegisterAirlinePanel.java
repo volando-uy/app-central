@@ -30,7 +30,7 @@ public class RegisterAirlinePanel extends JPanel {
                 String email = mailTextField.getText();
                 String web = webTextField.getText();
 
-                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web, null);
+                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web);
 
                 AirlineDTO createdAirlineDTO = userController.registerAirline(airlineDTO);
 

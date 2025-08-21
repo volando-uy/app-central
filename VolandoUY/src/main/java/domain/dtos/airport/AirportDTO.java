@@ -1,5 +1,6 @@
 package domain.dtos.airport;
 
+import domain.dtos.city.CityDTO;
 import domain.models.city.City;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AirportDTO {
-    private City city;
     private String name;
     private String code;
 }

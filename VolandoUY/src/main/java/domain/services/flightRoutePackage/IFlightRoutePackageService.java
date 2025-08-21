@@ -1,11 +1,9 @@
 package domain.services.flightRoutePackage;
 
-import domain.dtos.packages.PackageDTO;
+import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 
 public interface IFlightRoutePackageService {
-    void addPackage(PackageDTO packageDTO);
-    void updatePackage(PackageDTO packageDTO);
-    void deletePackage(String packageName);
-    PackageDTO getPackage(String packageName);
-    boolean packageExists(String packageName);
+    FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO);
+    FlightRoutePackageDTO getFlightRoutePackageByName(String flightRoutePackageName);
+    boolean flightRoutePackageExists(String flightRoutePackageName);
 }

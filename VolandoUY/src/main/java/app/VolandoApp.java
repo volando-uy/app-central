@@ -30,10 +30,10 @@ public class VolandoApp {
                 "customer2", "Nahuel", "waza2@gmail.com", "Gonzalez", "uruguayo", LocalDate.of(2003, 1, 1), "123123124", EnumTipoDocumento.CI
         ));
         usuarioController.registerAirline(new AirlineDTO(
-                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar", new ArrayList<>()
+                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar"
         ));
         usuarioController.registerAirline(new AirlineDTO(
-                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com", new ArrayList<>()
+                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com"
         ));
 
         SwingUtilities.invokeLater(() -> {

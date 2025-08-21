@@ -23,7 +23,7 @@ public class FlightController implements IFlightController {
 
     @Override
     public FlightDTO getFlightByName(String flightName) {
-        return flightService.getFlightByName(flightName);
+        return flightService.getFlightDetailsByName(flightName);
     }
 
     @Override

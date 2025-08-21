@@ -4,44 +4,43 @@ import controllers.user.IUserController;
 import controllers.user.UserController;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
+import domain.services.user.UserService;
+import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RegisterUserTest {
 
-    @Mock
-    private IUserService usuarioService;
+    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
+    private UserMapper userMapper = ControllerFactory.getUserMapper();
 
-    @Mock
-    private ModelMapper modelMapper;
+    private IUserService userService;
 
-    @InjectMocks
-    private IUserController usuarioController;
+    private IUserController userController;
 
     @BeforeEach
     void setUp() {
-        usuarioService = mock(IUserService.class);
-        modelMapper = mock(ModelMapper.class);
-        usuarioController = new UserController(usuarioService);
+        userService = new UserService(modelMapper, userMapper);
+        userController = new UserController(userService);
     }
 
     @Test
-    @DisplayName("Debe llamar a registerCustomer y mapear correctamente el DTO")
-    void registerCustomer_shouldCallToServiceWithMappedEntity() {
+    @DisplayName("Debe crear el CustomerDTO")
+    void registerCustomer_shouldCreateTheCustomer() {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setNickname("gyabisito");
         customerDTO.setName("Jose");
@@ -52,33 +51,30 @@ public class RegisterUserTest {
         customerDTO.setId("01234567");
         customerDTO.setCitizenship("Uruguay");
 
-        Customer customerMock = new Customer();
-        customerMock.setNickname("gyabisito");
+        userController.registerCustomer(customerDTO);
 
-        when(modelMapper.map(customerDTO, Customer.class)).thenReturn(customerMock);
+        UserDTO createdCustomer = userController.getUserByNickname("gyabisito");
 
-        usuarioController.registerCustomer(customerDTO);
-
-        verify(usuarioService).registerCustomer(customerDTO);
+        // Verificar que el CustomerDTO fue creado correctamente
+        assertEquals("gyabisito", createdCustomer.getNickname());
     }
 
     @Test
     @DisplayName("Debe llamar a createCategory y mapear correctamente el DTO")
-    void registerAirline_shouldCallToServiceWithMappedEntity() {
+    void registerAirline_shouldCreateTheAirline() {
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("flyuy");
         airlineDTO.setName("FlyUY");
         airlineDTO.setMail("flyuy@correo.com");
         airlineDTO.setDescription("Low cost desde el cielo");
+        airlineDTO.setWeb("www.flyuy.com");
 
-        Airline airlineMock = new Airline();
-        airlineMock.setNickname("flyuy");
+        userController.registerAirline(airlineDTO);
 
-        when(modelMapper.map(airlineDTO, Airline.class)).thenReturn(airlineMock);
+        AirlineDTO createdAirline = userController.getAirlineByNickname("flyuy");
 
-        usuarioController.registerAirline(airlineDTO);
-
-        verify(usuarioService).registerAirline(airlineDTO);
+        // Verificar que el AirlineDTO fue creado correctamente
+        assertEquals("flyuy", createdAirline.getNickname());
     }
 
 }
