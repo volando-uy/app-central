@@ -33,8 +33,8 @@ public class UserPanel extends JPanel {
     
     private JPanel contentPanel;
 
-    public UserPanel(IUserController uController) {
-        userController = uController;
+    public UserPanel(IUserController userController) {
+        this.userController = userController;
         initComponents();
         initListeners();
     }

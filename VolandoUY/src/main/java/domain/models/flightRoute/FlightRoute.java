@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import shared.utils.ValidatorUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,7 @@ public class FlightRoute {
     private String description;
 
     @NotNull
-    @FutureOrPresent(message = "La fecha de salida debe ser en el futuro o presente")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @NotNull
     @PositiveOrZero()
@@ -53,7 +53,7 @@ public class FlightRoute {
     @PositiveOrZero()
     private Double priceExtraUnitBaggage;
 
-    public FlightRoute(String name, String description, LocalDateTime createdAt,
+    public FlightRoute(String name, String description, LocalDate createdAt,
                        Double priceTouristClass, Double priceBusinessClass,
                        Double priceExtraUnitBaggage) {
         this.name = name;

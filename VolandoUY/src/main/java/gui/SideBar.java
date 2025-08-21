@@ -18,11 +18,14 @@ import lombok.Setter;
 public class SideBar extends JPanel {
 
     private MouseListener userManagementBtnListener;
+    private MouseListener flightRouteManagementBtnListener;
     private MouseListener othersManagementBtnListener;
 
     public SideBar(MouseListener userManagementBtnListener,
+                   MouseListener flightRouteManagementBtnListener,
                    MouseListener othersManagementBtnListener) {
         this.userManagementBtnListener = userManagementBtnListener;
+        this.flightRouteManagementBtnListener = flightRouteManagementBtnListener;
         this.othersManagementBtnListener = othersManagementBtnListener;
         initComponents();
         initListeners();
@@ -30,6 +33,7 @@ public class SideBar extends JPanel {
 
     private void initListeners() {
         UserManagementBtn.addMouseListener(userManagementBtnListener);
+        FlightRouteManagementBtn.addMouseListener(flightRouteManagementBtnListener);
         OthersManagementBtn.addMouseListener(othersManagementBtnListener);
     }
 

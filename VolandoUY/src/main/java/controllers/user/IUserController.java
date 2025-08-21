@@ -16,6 +16,7 @@ public interface IUserController {
 
     List<UserDTO> getAllUsers();
     List<String> getAllUsersNicknames();
+    List<String> getAllAirlinesNicknames();
 
     AirlineDTO getAirlineByNickname(String nickname);
     UserDTO getUserByNickname(String nickname);
