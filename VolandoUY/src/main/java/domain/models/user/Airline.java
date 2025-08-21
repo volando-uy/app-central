@@ -1,8 +1,11 @@
 package domain.models.user;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.UserDTO;
+import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
+import factory.ControllerFactory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -10,13 +13,19 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
+import shared.utils.ValidatorUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Airline extends User {
+
+    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
 
     @NotBlank
     @Size(min = 10, max = 500)
@@ -25,7 +34,18 @@ public class Airline extends User {
     @Pattern(regexp = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", message = "El formato de la web no es válido")
     private String web;
 
-    List<FlightRoute> flightRoutes;
+    private List<Flight> flights;
+
+    private List<FlightRoute> flightRoutes;
+
+    public Airline(String nickname, String name, String mail, String description, String web) {
+        super(nickname, name, mail);
+        this.description = description;
+        this.web = web;
+        this.flights = new ArrayList<>();
+        this.flightRoutes = new ArrayList<>();
+    }
+
 
     @Override
     public void updateDataFrom(UserDTO newData) {
@@ -34,6 +54,5 @@ public class Airline extends User {
         this.setName(newDataCasted.getName());
         this.setDescription(newDataCasted.getDescription());
         this.setWeb(newDataCasted.getWeb());
-
     }
 }

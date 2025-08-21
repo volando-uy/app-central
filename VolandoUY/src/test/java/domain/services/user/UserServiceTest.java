@@ -82,7 +82,7 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("registerAirline()")
+    @DisplayName("createCategory()")
     class RegisterAirline {
 
         @Test

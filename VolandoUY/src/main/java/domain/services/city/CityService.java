@@ -1,143 +1,74 @@
 package domain.services.city;
 
 import domain.dtos.city.CityDTO;
+import domain.models.airport.Airport;
 import domain.models.city.City;
+import domain.services.airport.IAirportService;
+import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
+import shared.constants.ErrorMessages;
+import shared.utils.ValidatorUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class CityService implements ICityService {
     private List<City> cities;
-    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
+    private ModelMapper modelMapper;
+
+    public CityService(ModelMapper modelMapper) {
+        this.cities = new ArrayList<>();
+        this.modelMapper = modelMapper;
+    }
 
     @Override
-
-    public void addCity(CityDTO cityDTO) {
+    public CityDTO createCity(CityDTO cityDTO) {
         City city = modelMapper.map(cityDTO, City.class);
         if (cityExists(city.getName())) {
             throw new IllegalArgumentException("City already exists");
         }
-        cities.add(city);
+        ValidatorUtil.validate(city);
 
+        cities.add(city);
 
         if (city.getAirports() == null) {
             city.setAirports(List.of());
         }
+
+        return modelMapper.map(city, CityDTO.class);
     }
 
     @Override
-    public void updateCity(CityDTO cityDTO) {
-        City city = modelMapper.map(cityDTO, City.class);
-        if (!cityExists(city.getName())) {
-            throw new IllegalArgumentException("City does not exist");
-        }
-        for (int i = 0; i < cities.size(); i++) {
-            if (cities.get(i).getName().equalsIgnoreCase(city.getName())) {
-                cities.set(i, city);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("City not found in the list");
+    public City getCityByName(String cityName) {
+        return cities.stream()
+                .filter(city -> city.getName().equalsIgnoreCase(cityName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName)));
     }
 
     @Override
-    public void deleteCity(String cityName) {
-        if (!cityExists(cityName)) {
-            throw new IllegalArgumentException("City does not exist");
-        }
-        cities.removeIf(city -> city.getName().equalsIgnoreCase(cityName));
-
-
-    }
-
-    @Override
-    public CityDTO getCity(String cityName) {
-        for (City city : cities) {
-            if (city.getName().equalsIgnoreCase(cityName)) {
-                return modelMapper.map(city, CityDTO.class);
-            }
-        }
-        throw new IllegalArgumentException("City not found");
+    public CityDTO getCityDetailsByName(String cityName) {
+        return cities.stream()
+                .filter(city -> city.getName().equalsIgnoreCase(cityName))
+                .findFirst()
+                .map(city -> modelMapper.map(city, CityDTO.class))
+                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName)));
     }
 
     @Override
     public boolean cityExists(String cityName) {
-        for (City city : cities) {
-            if (city.getName().equalsIgnoreCase(cityName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void addAirportToCity(String cityName, String airportName, String airportCode) {
-        for (City city : cities) {
-            if (city.getName().equalsIgnoreCase(cityName)) {
-                if (city.isAirportInCity(airportName)) {
-                    throw new IllegalArgumentException("Airport already exists in this city");
-                }
-                city.addAirport(airportName, airportCode);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("City does not exist");
-    }
-
-    @Override
-    public void removeAirportFromCity(String cityName, String airportName) {
-        City city = getCityEntity(cityName);
-
-        if (!city.isAirportInCity(airportName)) {
-            throw new IllegalArgumentException("Airport does not exist in this city");
-        }
-
-        // Eliminar aeropuerto
-        city.getAirports().removeIf(airport -> airport.getName().equalsIgnoreCase(airportName));
-    }
-
-
-    @Override
-    public void updateAirportInCity(String cityName, String airportName, String newAirportName, String newAirportCode) {
-        CityDTO cityDTO = getCity(cityName);
-        City city = modelMapper.map(cityDTO, City.class);
-        if (city == null) {
-            throw new IllegalArgumentException("City does not exist");
-        }
-        if (!city.isAirportInCity(airportName)) {
-            throw new IllegalArgumentException("Airport does not exist in this city");
-        }
-        for (int i = 0; i < city.getAirports().size(); i++) {
-            if (city.getAirports().get(i).getName().equalsIgnoreCase(airportName)) {
-                city.getAirports().get(i).setName(newAirportName);
-                city.getAirports().get(i).setCode(newAirportCode);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Airport not found in the city");
-    }
-
-    @Override
-    public CityDTO getCityWithAirports(String cityName) {
-        City city = getCityEntity(cityName);
-        return modelMapper.map(city, CityDTO.class);
+        return cities.stream()
+                .anyMatch(city -> city.getName().equalsIgnoreCase(cityName));
     }
 
 
     @Override
     public boolean isAirportInCity(String cityName, String airportName) {
-        City city = getCityEntity(cityName);
-
-        return city.isAirportInCity(airportName);
-    }
-
-    private City getCityEntity(String cityName) {
-        return cities.stream()
-                .filter(c -> c.getName().equalsIgnoreCase(cityName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("City does not exist"));
+        City city = this.getCityByName(cityName);
+        return city.getAirports().stream()
+                .anyMatch(airport -> airport.getName().equalsIgnoreCase(airportName));
     }
 
 }

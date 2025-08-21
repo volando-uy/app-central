@@ -4,6 +4,7 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
+import domain.models.user.Airline;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface IUserService {
     UserDTO updateUser(String nickname, UserDTO userDTO);
     List<AirlineDTO> getAllAirlines();
     FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO);
+    Airline getAirlineByNickname(String nickname);
+    AirlineDTO getAirlineDetailsByNickname(String nickname);
 }

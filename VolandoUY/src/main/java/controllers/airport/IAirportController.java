@@ -6,10 +6,7 @@ import domain.models.city.City;
 
 // controllers.airport.IAirportController
 public interface IAirportController {
-    void addAirport(CityDTO city, String name, String code);
-    void removeAirport(String code);
-    void updateAirport(String code, CityDTO city);
+    AirportDTO createAirport(AirportDTO airportDTO, String cityName);
     AirportDTO getAirportByCode(String code);
-    AirportDTO getAirportByName(String name);
     boolean airportExists(String code);
 }

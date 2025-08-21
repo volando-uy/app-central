@@ -1,5 +1,8 @@
 package domain.dtos.flight;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.user.AirlineDTO;
+import domain.models.flightRoute.FlightRoute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

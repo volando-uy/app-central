@@ -14,14 +14,16 @@ public class FlightRouteController implements IFlightRouteController{
 
     @Override
     public boolean existFlightRoute(String name){
-        return this.flightRouteService.existFlightRoute(name);
+        return flightRouteService.existFlightRoute(name);
     }
+
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO){
-        return this.flightRouteService.createFlightRoute(flightRouteDTO);
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO,String airlineNickname){
+        return flightRouteService.createFlightRoute(flightRouteDTO,airlineNickname);
     }
+
     @Override
-    public List<FlightRouteDTO> getAllFlightRoutes(){
-        return this.flightRouteService.getAllFlightRoutes();
+    public FlightRouteDTO getFlightRouteByName(String routeName) {
+        return flightRouteService.getFlightRouteDetailsByName(routeName);
     }
 }

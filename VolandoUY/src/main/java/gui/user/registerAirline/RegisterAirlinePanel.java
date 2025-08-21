@@ -27,10 +27,10 @@ public class RegisterAirlinePanel extends JPanel {
                 String nickname = nicknameTextField.getText();
                 String name = nameTextField.getText();
                 String description = descriptionTextField.getText();
-                String email = emailTextField.getText();
-                String web = webTextLabel.getText();
+                String email = mailTextField.getText();
+                String web = webTextField.getText();
 
-                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web, null);
+                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web);
 
                 AirlineDTO createdAirlineDTO = userController.registerAirline(airlineDTO);
 
@@ -53,17 +53,29 @@ public class RegisterAirlinePanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
-        createNewAirlineBtn = new JButton();
+        InfoUserPanel = new JPanel();
+        hSpacer5 = new JPanel(null);
+        vSpacer17 = new JPanel(null);
+        hSpacer6 = new JPanel(null);
+        firstRowPanel = new JPanel();
         nicknameLabel = new JLabel();
         nicknameTextField = new JTextField();
         nameLabel = new JLabel();
         nameTextField = new JTextField();
-        descriptionTextField = new JTextField();
+        secondRowPanel = new JPanel();
         descriptionLabel = new JLabel();
-        emailLabel = new JLabel();
-        emailTextField = new JTextField();
+        descriptionTextField = new JTextField();
+        vSpacer13 = new JPanel(null);
+        thirdRowPanel = new JPanel();
+        mailLabel = new JLabel();
+        mailTextField = new JTextField();
         webLabel = new JLabel();
-        webTextLabel = new JTextField();
+        webTextField = new JTextField();
+        updateBtnPanel = new JPanel();
+        hSpacer1 = new JPanel(null);
+        hSpacer2 = new JPanel(null);
+        createNewAirlineBtn = new JButton();
+        vSpacer19 = new JPanel(null);
 
         //======== this ========
         setPreferredSize(new Dimension(640, 540));
@@ -72,133 +84,242 @@ public class RegisterAirlinePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
-        EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing
-        .border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),
-        java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))
-        throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setLayout(new GridBagLayout());
+        ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
-        //---- createNewAirlineBtn ----
-        createNewAirlineBtn.setText("Crear nueva aerolinea");
+        //======== InfoUserPanel ========
+        {
+            InfoUserPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
-        //---- nicknameLabel ----
-        nicknameLabel.setText("Nickname:");
+            //---- hSpacer5 ----
+            hSpacer5.setPreferredSize(new Dimension(40, 10));
+            InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
-        //---- nicknameTextField ----
-        nicknameTextField.setPreferredSize(new Dimension(100, 30));
-        nicknameTextField.setMinimumSize(new Dimension(100, 30));
+            //---- vSpacer17 ----
+            vSpacer17.setMinimumSize(new Dimension(12, 70));
+            vSpacer17.setPreferredSize(new Dimension(10, 100));
+            InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
-        //---- nameLabel ----
-        nameLabel.setText("Nombre:");
+            //---- hSpacer6 ----
+            hSpacer6.setPreferredSize(new Dimension(40, 10));
+            InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
-        //---- nameTextField ----
-        nameTextField.setPreferredSize(new Dimension(100, 30));
-        nameTextField.setMinimumSize(new Dimension(100, 30));
+            //======== firstRowPanel ========
+            {
+                firstRowPanel.setPreferredSize(new Dimension(510, 30));
+                firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
+                ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
+                ((GridBagLayout)firstRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)firstRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-        //---- descriptionTextField ----
-        descriptionTextField.setPreferredSize(new Dimension(100, 30));
-        descriptionTextField.setMinimumSize(new Dimension(100, 30));
+                //---- nicknameLabel ----
+                nicknameLabel.setText("Nickname:");
+                nicknameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                nicknameLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                nicknameLabel.setPreferredSize(new Dimension(120, 30));
+                nicknameLabel.setMaximumSize(new Dimension(70, 15));
+                nicknameLabel.setMinimumSize(new Dimension(70, 15));
+                firstRowPanel.add(nicknameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
 
-        //---- descriptionLabel ----
-        descriptionLabel.setText("Descripci\u00f3n:");
+                //---- nicknameTextField ----
+                nicknameTextField.setPreferredSize(new Dimension(120, 30));
+                nicknameTextField.setMinimumSize(new Dimension(100, 30));
+                nicknameTextField.setMaximumSize(new Dimension(100, 30));
+                firstRowPanel.add(nicknameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
 
-        //---- emailLabel ----
-        emailLabel.setText("Email:");
+                //---- nameLabel ----
+                nameLabel.setText("Nombre:");
+                nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                nameLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                nameLabel.setPreferredSize(new Dimension(120, 30));
+                nameLabel.setMaximumSize(new Dimension(70, 15));
+                nameLabel.setMinimumSize(new Dimension(70, 15));
+                firstRowPanel.add(nameLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
 
-        //---- emailTextField ----
-        emailTextField.setPreferredSize(new Dimension(100, 30));
-        emailTextField.setMinimumSize(new Dimension(100, 30));
+                //---- nameTextField ----
+                nameTextField.setPreferredSize(new Dimension(120, 30));
+                nameTextField.setMinimumSize(new Dimension(100, 30));
+                nameTextField.setMaximumSize(new Dimension(100, 30));
+                firstRowPanel.add(nameTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
 
-        //---- webLabel ----
-        webLabel.setText("Web:");
+            //======== secondRowPanel ========
+            {
+                secondRowPanel.setPreferredSize(new Dimension(510, 30));
+                secondRowPanel.setMinimumSize(new Dimension(510, 30));
+                secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 380, 0};
+                ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)secondRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)secondRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-        //---- webTextLabel ----
-        webTextLabel.setPreferredSize(new Dimension(100, 30));
-        webTextLabel.setMinimumSize(new Dimension(100, 30));
+                //---- descriptionLabel ----
+                descriptionLabel.setText("Descripcion:");
+                descriptionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                descriptionLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                descriptionLabel.setPreferredSize(new Dimension(120, 30));
+                descriptionLabel.setMaximumSize(new Dimension(70, 15));
+                descriptionLabel.setMinimumSize(new Dimension(70, 15));
+                secondRowPanel.add(descriptionLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
 
-        GroupLayout layout = new GroupLayout(this);
-        setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup()
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup()
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(235, 235, 235)
-                            .addComponent(createNewAirlineBtn))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(126, 126, 126)
-                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(descriptionLabel)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(descriptionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(nicknameLabel)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(nicknameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(webLabel)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(webTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                            .addGap(73, 73, 73)
-                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(nameLabel)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(emailLabel)
-                                    .addGap(6, 6, 6)
-                                    .addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-                    .addContainerGap(94, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup()
-                .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(57, 57, 57)
-                    .addGroup(layout.createParallelGroup()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(nicknameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nicknameLabel))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addComponent(nameLabel))
-                        .addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGap(42, 42, 42)
-                    .addGroup(layout.createParallelGroup()
-                        .addComponent(descriptionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addGroup(layout.createParallelGroup()
-                                .addComponent(descriptionLabel)
-                                .addComponent(emailLabel))))
-                    .addGap(40, 40, 40)
-                    .addGroup(layout.createParallelGroup()
-                        .addComponent(webTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addComponent(webLabel)))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
-                    .addComponent(createNewAirlineBtn)
-                    .addGap(30, 30, 30))
-        );
+                //---- descriptionTextField ----
+                descriptionTextField.setPreferredSize(new Dimension(120, 30));
+                descriptionTextField.setMinimumSize(new Dimension(100, 30));
+                descriptionTextField.setMaximumSize(new Dimension(100, 30));
+                secondRowPanel.add(descriptionTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 4, 1, 1, 0.0, 400.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //======== thirdRowPanel ========
+            {
+                thirdRowPanel.setPreferredSize(new Dimension(510, 30));
+                thirdRowPanel.setMinimumSize(new Dimension(510, 30));
+                thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- mailLabel ----
+                mailLabel.setText("Email:");
+                mailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                mailLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                mailLabel.setPreferredSize(new Dimension(120, 30));
+                mailLabel.setMaximumSize(new Dimension(70, 15));
+                mailLabel.setMinimumSize(new Dimension(70, 15));
+                thirdRowPanel.add(mailLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- mailTextField ----
+                mailTextField.setPreferredSize(new Dimension(120, 30));
+                mailTextField.setMinimumSize(new Dimension(100, 30));
+                mailTextField.setMaximumSize(new Dimension(100, 30));
+                thirdRowPanel.add(mailTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- webLabel ----
+                webLabel.setText("Web:");
+                webLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                webLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                webLabel.setPreferredSize(new Dimension(120, 30));
+                webLabel.setMaximumSize(new Dimension(70, 15));
+                webLabel.setMinimumSize(new Dimension(70, 15));
+                thirdRowPanel.add(webLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- webTextField ----
+                webTextField.setPreferredSize(new Dimension(120, 30));
+                webTextField.setMinimumSize(new Dimension(100, 30));
+                webTextField.setMaximumSize(new Dimension(100, 30));
+                thirdRowPanel.add(webTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        }
+        add(InfoUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //======== updateBtnPanel ========
+        {
+            updateBtnPanel.setLayout(new BorderLayout());
+
+            //---- hSpacer1 ----
+            hSpacer1.setPreferredSize(new Dimension(200, 10));
+            updateBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
+
+            //---- hSpacer2 ----
+            hSpacer2.setPreferredSize(new Dimension(200, 10));
+            updateBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
+
+            //---- createNewAirlineBtn ----
+            createNewAirlineBtn.setText("Crear nueva aerolinea");
+            updateBtnPanel.add(createNewAirlineBtn, BorderLayout.CENTER);
+        }
+        add(updateBtnPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //---- vSpacer19 ----
+        vSpacer19.setPreferredSize(new Dimension(10, 100));
+        add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
-    private JButton createNewAirlineBtn;
+    private JPanel InfoUserPanel;
+    private JPanel hSpacer5;
+    private JPanel vSpacer17;
+    private JPanel hSpacer6;
+    private JPanel firstRowPanel;
     private JLabel nicknameLabel;
     private JTextField nicknameTextField;
     private JLabel nameLabel;
     private JTextField nameTextField;
-    private JTextField descriptionTextField;
+    private JPanel secondRowPanel;
     private JLabel descriptionLabel;
-    private JLabel emailLabel;
-    private JTextField emailTextField;
+    private JTextField descriptionTextField;
+    private JPanel vSpacer13;
+    private JPanel thirdRowPanel;
+    private JLabel mailLabel;
+    private JTextField mailTextField;
     private JLabel webLabel;
-    private JTextField webTextLabel;
+    private JTextField webTextField;
+    private JPanel updateBtnPanel;
+    private JPanel hSpacer1;
+    private JPanel hSpacer2;
+    private JButton createNewAirlineBtn;
+    private JPanel vSpacer19;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

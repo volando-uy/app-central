@@ -1,75 +1,56 @@
 package domain.services.flightRoutePackage;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
+
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
+import shared.constants.ErrorMessages;
+import shared.utils.ValidatorUtil;
 
+import javax.xml.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class FlightRoutePackageService implements IFlightRoutePackageService {
 
-    private List<FlightRoutePackage> flightRoutePackages = new ArrayList<>();
+    private List<FlightRoutePackage> flightRoutePackages;
+    private ModelMapper modelMapper;
 
-    private ModelMapper modelMapper  = ControllerFactory.getModelMapper();
 
     public FlightRoutePackageService(ModelMapper modelMapper) {
+        flightRoutePackages = new ArrayList<>();
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public void addFlightRoutePackage(FlightRoutePackageDTO packageDTO) {
-        FlightRoutePackage pack = modelMapper.map(packageDTO, FlightRoutePackage.class);
+    public FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO) {
+        FlightRoutePackage pack = modelMapper.map(flightRoutePackageDTO, FlightRoutePackage.class);
         if (flightRoutePackageExists(pack.getName())) {
             throw new IllegalArgumentException("El paquete ya existe");
         }
+        ValidatorUtil.validate(pack);
+      
         flightRoutePackages.add(pack);
+
+        return modelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 
     @Override
-    public void updateFlightRoutePackage(FlightRoutePackageDTO packageDTO) {
-        FlightRoutePackage pack = modelMapper.map(packageDTO, FlightRoutePackage.class);
-        if (!flightRoutePackageExists(pack.getName())) {
-            throw new IllegalArgumentException("El paquete no existe");
-        }
-        for (int i = 0; i < flightRoutePackages.size(); i++) {
-            if (flightRoutePackages.get(i).getName().equalsIgnoreCase(pack.getName())) {
-                flightRoutePackages.set(i, pack);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Paquete no encontrado en la lista");
-    }
-
-    @Override
-    public void deleteFlightRoutePackage(String packageName) {
-        if (!flightRoutePackageExists(packageName)) {
-            throw new IllegalArgumentException("El paquete no existe");
-        }
-        flightRoutePackages.removeIf(pack -> pack.getName().equalsIgnoreCase(packageName));
-    }
-
-    @Override
-    public FlightRoutePackageDTO getFlightRoutePackage(String packageName) {
-        for (FlightRoutePackage pack : flightRoutePackages) {
-            if (pack.getName().equalsIgnoreCase(packageName)) {
-                return modelMapper.map(pack, FlightRoutePackageDTO.class);
-            }
-        }
-        throw new IllegalArgumentException("Paquete no encontrado");
+    public FlightRoutePackageDTO getFlightRoutePackageByName(String flightRoutePackageName) {
+        return flightRoutePackages.stream()
+                .filter(pack -> pack.getName().equalsIgnoreCase(flightRoutePackageName))
+                .findFirst()
+                .map(pack -> modelMapper.map(pack, FlightRoutePackageDTO.class))
+                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName)));
     }
 
     @Override
     public boolean flightRoutePackageExists(String packageName) {
-        for (FlightRoutePackage pack : flightRoutePackages) {
-            if (pack.getName().equalsIgnoreCase(packageName)) {
-                return true;
-            }
-        }
-        return false;
+
+        return flightRoutePackages.stream()
+                .anyMatch(pack -> pack.getName().equalsIgnoreCase(packageName));
     }
 
     @Override

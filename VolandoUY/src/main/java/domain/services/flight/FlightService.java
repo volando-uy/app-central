@@ -1,9 +1,12 @@
 package domain.services.flight;
 
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flight.Flight;
 import domain.models.user.Airline;
 import org.modelmapper.ModelMapper;
+import shared.constants.ErrorMessages;
+import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class FlightService implements IFlightService {
         if (_flightExists(originalFlight)) {
             throw new UnsupportedOperationException("Flight already exists: " + originalFlight.getName());
         }
+        ValidatorUtil.validate(originalFlight);
+
         flights.add(originalFlight);
         return flight;
     }
@@ -40,6 +45,41 @@ public class FlightService implements IFlightService {
                 .toList();
     }
 
+    @Override
+    public FlightDTO getFlightDetailsByName(String name) {
+        Flight flight = flights.stream()
+                .filter(f -> f.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+        if (flight == null) {
+            return null;
+        }
+        FlightDTO flightDTO = modelMapper.map(flight, FlightDTO.class);
+        return flightDTO;
+    }
+
+    @Override
+    public Flight getFlightByName(String flightName) {
+        return flights.stream()
+                .filter(flight -> flight.getName().equalsIgnoreCase(flightName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName)));
+    }
+
+    @Override
+    public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
+        Airline airline = airlines.stream()
+                .filter(a -> a.getNickname().equalsIgnoreCase(airlineNickname))
+                .findFirst()
+                .orElse(null);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline not found: " + airlineNickname);
+        }
+        return flights.stream()
+                .filter(flight -> flight.getAirline().equals(airline))
+                .map(flight -> modelMapper.map(flight, FlightDTO.class))
+                .toList();
+    }
 
     private boolean _flightExists(Flight flight) {
         return flights.contains(flight);

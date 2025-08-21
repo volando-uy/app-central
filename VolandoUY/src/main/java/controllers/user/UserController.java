@@ -48,12 +48,7 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public List<AirlineDTO> getAllAirlines() {
-        return userService.getAllAirlines();
-    }
-
-    @Override
-    public FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO) {
-        return userService.addFlightRouteToAirline(airlineName, flightRouteDTO);
+    public AirlineDTO getAirlineByNickname(String nickname) {
+        return userService.getAirlineDetailsByNickname(nickname);
     }
 }

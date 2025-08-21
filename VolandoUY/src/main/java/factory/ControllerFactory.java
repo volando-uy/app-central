@@ -2,6 +2,8 @@ package factory;
 
 import controllers.category.CategoryController;
 import controllers.category.ICategoryController;
+import controllers.city.CityController;
+import controllers.city.ICityController;
 import controllers.flight.FlightController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
@@ -13,6 +15,8 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.models.user.mapper.UserMapper;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
+import domain.services.city.CityService;
+import domain.services.city.ICityService;
 import domain.services.flight.FlightService;
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.FlightRouteService;
@@ -42,8 +46,12 @@ public class ControllerFactory {
     private static ICategoryController categoryController;
     private static ICategoryService categoryService;
 
+    private static ICityController cityController;
+    private static ICityService cityService;
+
     private static IFlightRoutePackageController packageController;
     private static IFlightRoutePackageService packageService;
+
 
     // ############ USER CONTROLLER & SERVICE ############
 
@@ -58,7 +66,7 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
     public static IUserService getUserService() {
         if (userService == null) {
-            userService = new UserService(getModelMapper(), getusuarioMapper());
+            userService = new UserService(getModelMapper(), getUserMapper());
         }
         return userService;
     }
@@ -75,7 +83,7 @@ public class ControllerFactory {
         return modelMapper;
     }
 
-    public static UserMapper getusuarioMapper() {
+    public static UserMapper getUserMapper() {
         if (userMapper == null) {
             userMapper = new UserMapper(getModelMapper());
         }
@@ -106,7 +114,7 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteService getFlightRouteService() {
         if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService();
+            flightRouteService = new FlightRouteService(getModelMapper(), getCategoryService(), getUserService());
         }
         return flightRouteService;
     }
@@ -161,5 +169,20 @@ public class ControllerFactory {
         return packageController;
     }
 
+    // ############### CITY CONTROLLER & SERVICE #################
+
+    public static ICityController getCityController() {
+        if (cityController == null) {
+            cityController = new CityController(getCityService());
+        }
+        return cityController;
+    }
+
+    public static ICityService getCityService() {
+        if (cityService == null) {
+            cityService = new CityService(getModelMapper());
+        }
+        return cityService;
+    }
 
 }

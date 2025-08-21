@@ -49,11 +49,9 @@ public class UserService implements IUserService {
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
-        }   
-
+        }
         ValidatorUtil.validate(customer);
 
         users.add(customer);
@@ -66,7 +64,6 @@ public class UserService implements IUserService {
         if (_userExists(airline)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, airline.getNickname()));
         }
-
         ValidatorUtil.validate(airline);
 
         users.add(airline);
@@ -130,15 +127,39 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("Airline no encontrada: " + airlineName);
         }
 
-        Airline airline = modelMapper.map(airlineName, Airline.class);
+        Airline airline = (Airline) user; // ✅ ESTA es la aerolínea real
 
         // Convertir FlightRouteDTO a FlightRoute
         FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
 
-        // Agregar la nueva ruta aérea a la aerolínea
+        // Asegurar que la lista esté inicializada
+        if (airline.getFlightRoutes() == null) {
+            airline.setFlightRoutes(new ArrayList<>());
+        }
+
+        // Agregar la nueva ruta aérea a la aerolínea real
         airline.getFlightRoutes().add(flightRoute);
 
         // Convertir de nuevo a DTO para devolver
         return modelMapper.map(flightRoute, FlightRouteDTO.class);
+    }
+
+
+    @Override
+    public Airline getAirlineByNickname(String nickname) {
+        Airline airline = (Airline) _getUserByNickname(nickname);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+        }
+        return airline;
+    }
+
+    @Override
+    public AirlineDTO getAirlineDetailsByNickname(String nickname) {
+        Airline airline = (Airline) _getUserByNickname(nickname);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+        }
+        return userMapper.toAirlineDTO(airline);
     }
 }

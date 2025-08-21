@@ -1,9 +1,12 @@
 package domain.models.flight;
 
+import domain.models.flightRoute.FlightRoute;
+import domain.models.user.Airline;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Flight {
+
+    private FlightRoute flightRoute;
+
+    private Airline airline;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -31,6 +38,15 @@ public class Flight {
     @PositiveOrZero
     private Integer maxBusinessSeats;
 
-    @PastOrPresent
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public Flight(String name, LocalDateTime departureTime, Long duration, Integer maxEconomySeats, Integer maxBusinessSeats) {
+        this.name = name;
+        this.departureTime = departureTime;
+        this.duration = duration;
+        this.maxEconomySeats = maxEconomySeats;
+        this.maxBusinessSeats = maxBusinessSeats;
+        this.flightRoute = null;
+        this.airline = null;
+    }
 }

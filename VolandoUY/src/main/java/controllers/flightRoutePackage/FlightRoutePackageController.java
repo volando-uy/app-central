@@ -2,6 +2,10 @@
 package controllers.flightRoutePackage;
 
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+
+import domain.models.flight.Flight;
+import domain.models.flightRoute.FlightRoute;
+
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import lombok.AllArgsConstructor;
 
@@ -19,28 +23,17 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     }
 
     @Override
-    public void updateFlightRoutePackage(FlightRoutePackageDTO packageDTO) {
-        this.packageService.updateFlightRoutePackage(packageDTO);
+    public FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO) {
+        return packageService.createFlightRoutePackage(flightRoutePackageDTO);
     }
-
     @Override
-    public void deleteFlightRoutePackage(String packageName) {
-        this.packageService.deleteFlightRoutePackage(packageName);
-    }
-
-    @Override
-    public FlightRoutePackageDTO getFlightRoutePackage(String packageName) {
-        return this.packageService.getFlightRoutePackage(packageName);
+    public FlightRoutePackageDTO getFlightRoutePackageByName(String packageName) {
+        return packageService.getFlightRoutePackageByName(packageName);
     }
 
     @Override
     public boolean flightRoutePackageExists(String packageName) {
-        return this.packageService.flightRoutePackageExists(packageName);
-    }
-
-    @Override
-    public List<FlightRoutePackageDTO> getAllFlightRoutePackage( ) {
-        return this.packageService.getAllFlightRoutePackage();
+        return packageService.flightRoutePackageExists(packageName);
     }
 
 

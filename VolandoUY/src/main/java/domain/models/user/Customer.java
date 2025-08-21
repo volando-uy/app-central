@@ -11,12 +11,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.utils.ValidatorUtil;
 
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Customer extends User {
 
     @NotBlank
@@ -35,7 +36,6 @@ public class Customer extends User {
 
     @NotBlank
     private String id;
-
 
 
 
