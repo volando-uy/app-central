@@ -55,4 +55,18 @@ public class Airline extends User {
         this.setDescription(newDataCasted.getDescription());
         this.setWeb(newDataCasted.getWeb());
     }
+
+    @Override
+    public String toString() {
+        return "Airline{" +
+                "description='" + description + '\'' +
+                ", web='" + web + '\'' +
+                ", flights=" + flights +
+                ", flightRoutes=" + (flightRoutes == null ? "[]" :
+                flightRoutes.stream()
+                        .map(FlightRoute::getName)
+                        .toList()) +
+                '}';
+    }
+
 }
