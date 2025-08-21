@@ -2,21 +2,12 @@ package casosdeuso;
 
 import controllers.flight.IFlightController;
 import controllers.user.IUserController;
-import controllers.user.UserController;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
-import domain.models.user.enums.EnumTipoDocumento;
-import domain.models.user.mapper.UserMapper;
-import domain.services.user.IUserService;
-import domain.services.user.UserService;
-import factory.ControllerFactory;
+import factory.FactoryController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
@@ -28,8 +19,8 @@ public class CheckFlightTest {
 
     @BeforeEach
     void setUp() {
-        userController = ControllerFactory.getUserController();
-        flightController = ControllerFactory.getFlightController();
+        userController = FactoryController.getUserController();
+        flightController = FactoryController.getFlightController();
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("airline1");
         airlineDTO.setName("Aerolíneas Argentinas");
