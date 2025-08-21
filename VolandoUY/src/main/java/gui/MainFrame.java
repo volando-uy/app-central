@@ -103,7 +103,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Route Packages Management button clicked");
-                updateMainPanel(new FlightRoutePackagePanel(flightRoutePackageController), 4);
+                updateMainPanel(new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController), 4);
             }
         };
 

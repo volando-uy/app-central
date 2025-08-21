@@ -1,9 +1,7 @@
 package domain.dtos.user;
 
-import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.enums.EnumTipoDocumento;
 import lombok.*;
-import shared.annotations.Required;
-import shared.constants.CTCliente;
 
 import java.time.LocalDate;
 

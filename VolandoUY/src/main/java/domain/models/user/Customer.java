@@ -3,7 +3,7 @@ package domain.models.user;
 
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
-import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.enums.EnumTipoDocumento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import shared.utils.ValidatorUtil;
 
 import java.time.LocalDate;
 

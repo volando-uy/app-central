@@ -7,6 +7,7 @@ import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.models.enums.EnumTipoAsiento;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -41,9 +42,10 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 String description = descriptionTextField.getText();
                 LocalDate createdAt = LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 Float discount = Float.parseFloat(discountCostTextField.getText());
+                EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
 
                 FlightRoutePackageDTO flightRoutePackageDTO = new FlightRoutePackageDTO(
-                        name, description, expirationInDays, discount, createdAt
+                        name, description, expirationInDays, discount, createdAt, seatType
                 );
 
                 // Throws exception if something is invalid
@@ -68,6 +70,8 @@ public class CreateFlightRoutePackagePanel extends JPanel {
 
     private void initComponentsManually() {
         createdAtTextField.setText("dd/mm/yyyy");
+        seatTypeComboBox.addItem(EnumTipoAsiento.TURISTA);
+        seatTypeComboBox.addItem(EnumTipoAsiento.EJECUTIVO);
     }
 
     private void initComponents() {
@@ -85,6 +89,8 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         secondRowPanel = new JPanel();
         descriptionLabel = new JLabel();
         descriptionTextField = new JTextField();
+        seatTypeLabel = new JLabel();
+        seatTypeComboBox = new JComboBox<>();
         thirdRowPanel = new JPanel();
         createdAtLabel = new JLabel();
         createdAtTextField = new JTextField();
@@ -103,12 +109,12 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-        . EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax
-        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,
-        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
-        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .
-        getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -147,7 +153,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
                 firstRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
+                ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 130, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
@@ -200,9 +206,9 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
                 secondRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 380, 0};
+                ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
-                ((GridBagLayout)secondRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)secondRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- descriptionLabel ----
@@ -221,6 +227,20 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 descriptionTextField.setMinimumSize(new Dimension(100, 30));
                 descriptionTextField.setMaximumSize(new Dimension(100, 30));
                 secondRowPanel.add(descriptionTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- seatTypeLabel ----
+                seatTypeLabel.setText("Tipo de asiento:");
+                seatTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                seatTypeLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                seatTypeLabel.setPreferredSize(new Dimension(120, 30));
+                seatTypeLabel.setMaximumSize(new Dimension(70, 15));
+                seatTypeLabel.setMinimumSize(new Dimension(70, 15));
+                secondRowPanel.add(seatTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+                secondRowPanel.add(seatTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
@@ -327,6 +347,8 @@ public class CreateFlightRoutePackagePanel extends JPanel {
     private JPanel secondRowPanel;
     private JLabel descriptionLabel;
     private JTextField descriptionTextField;
+    private JLabel seatTypeLabel;
+    private JComboBox<EnumTipoAsiento> seatTypeComboBox;
     private JPanel thirdRowPanel;
     private JLabel createdAtLabel;
     private JTextField createdAtTextField;

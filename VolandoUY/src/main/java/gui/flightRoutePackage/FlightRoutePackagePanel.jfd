@@ -18,11 +18,11 @@ new FormModel {
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createFlightRoutePackageBtn"
-					"text": "Crear Paquete de RV"
+					"text": "Crear Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "registerAirlineBtn"
-					"text": "---"
+					name: "addFlightRouteToPackageBtn"
+					"text": "Añadir R.V. a Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "updateUserBtn"

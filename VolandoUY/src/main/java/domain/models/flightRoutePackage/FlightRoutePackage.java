@@ -1,10 +1,13 @@
 package domain.models.flightRoutePackage;
 
+import domain.models.enums.EnumTipoAsiento;
+import domain.models.flightRoute.FlightRoute;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import shared.utils.ValidatorUtil;
+import java.util.List;
 
 import java.time.LocalDate;
 
@@ -12,6 +15,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightRoutePackage {
+
+    private List<FlightRoute> flightRoutes;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -30,4 +35,7 @@ public class FlightRoutePackage {
 
     @NotNull
     private LocalDate creationDate;
+
+    @NotNull
+    private EnumTipoAsiento seatType;
 }
