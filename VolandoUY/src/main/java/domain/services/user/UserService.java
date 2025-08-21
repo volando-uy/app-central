@@ -55,13 +55,13 @@ public class UserService implements IUserService {
         ValidatorUtil.validate(customer);
 
         users.add(customer);
+        System.out.println(users);
         return modelMapper.map(customer, CustomerDTO.class);
     }
 
     @Override
     public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
         Airline airline = modelMapper.map(airlineDTO, Airline.class);
-        System.out.println("Registering airline: " + airline);
         if (_userExists(airline)) {
             throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
         }
@@ -71,6 +71,7 @@ public class UserService implements IUserService {
         airline.setFlights(new ArrayList<>());
 
         users.add(airline);
+        System.out.println(users);
         return modelMapper.map(airline, AirlineDTO.class);
     }
 
@@ -102,9 +103,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
-        System.out.println(this.getAllUsers());
         User originalUser = _getUserByNickname(nickname);
-        System.out.println("Original user: " + originalUser);
         if (originalUser == null) {
             throw new IllegalArgumentException("User no encontrado: " + nickname);
         };

@@ -12,6 +12,8 @@ import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
@@ -28,8 +30,9 @@ public class RegisterCustomerPanel extends JPanel {
         this.userController = userController;
 
         initComponents();
-        initComponntsManually();
+        initComponentsManually();
         initListeners();
+        initPlaceholderForTextField(birthDateTextField, "dd/mm/yyyy");
         try {
             setBorder(null);
         } catch (Exception ignored) {
@@ -62,13 +65,40 @@ public class RegisterCustomerPanel extends JPanel {
         });
     }
 
-    private void initComponntsManually() {
+    private void initComponentsManually() {
         // Aquí se puede inicializar los componentes manualmente si es necesario
         // Por ejemplo, agregar elementos al JComboBox de tipos de ID
         idTypeComboBox.addItem(EnumTipoDocumento.CI);
         idTypeComboBox.addItem(EnumTipoDocumento.PASAPORTE);
         idTypeComboBox.addItem(EnumTipoDocumento.RUT);
 
+    }
+
+    private void initPlaceholderForTextField(JTextField textField, String placeholder) {
+        textField.setForeground(Color.GRAY);
+
+        // When text field is selected, delete the placeholder text
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setForeground(Color.BLACK);
+                    textField.setText("");
+                }
+            }
+        });
+
+
+        // Set the placeholder text when the field loses focus
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
+            }
+        });
     }
 
     private void initComponents() {
@@ -112,12 +142,12 @@ public class RegisterCustomerPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
-        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
-        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
-        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
-        getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};

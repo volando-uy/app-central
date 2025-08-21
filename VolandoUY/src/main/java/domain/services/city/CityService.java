@@ -27,11 +27,12 @@ public class CityService implements ICityService {
         }
         ValidatorUtil.validate(city);
 
-        cities.add(city);
-
         if (city.getAirports() == null) {
             city.setAirports(List.of());
         }
+
+        cities.add(city);
+        System.out.println(cities);
 
         return modelMapper.map(city, CityDTO.class);
     }
