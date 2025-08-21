@@ -1,7 +1,6 @@
 package controllers.flightRoute;
 
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import lombok.AllArgsConstructor;
 
@@ -30,5 +29,6 @@ public class FlightRouteController implements IFlightRouteController{
     @Override
     public List<FlightRouteDTO> getAllFlightRoutesByAirlineNickname(String airlineNickname) {
         return flightRouteService.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
+
     }
 }

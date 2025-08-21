@@ -49,4 +49,18 @@ public class Flight {
         this.flightRoute = null;
         this.airline = null;
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "flightRoute=" + flightRoute.getName() +
+                ", airline=" + airline.getNickname() +
+                ", name='" + name + '\'' +
+                ", departureTime=" + departureTime +
+                ", duration=" + duration +
+                ", maxEconomySeats=" + maxEconomySeats +
+                ", maxBusinessSeats=" + maxBusinessSeats +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

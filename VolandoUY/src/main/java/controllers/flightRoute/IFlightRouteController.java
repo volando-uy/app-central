@@ -11,4 +11,5 @@ public interface IFlightRouteController {
     FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO);
     FlightRouteDTO getFlightRouteByName(String routeName);
     List<FlightRouteDTO> getAllFlightRoutesByAirlineNickname(String airlineNickname);
+
 }
