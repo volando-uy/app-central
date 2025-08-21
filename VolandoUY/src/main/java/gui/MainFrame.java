@@ -7,8 +7,10 @@ import javax.swing.*;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
+import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import gui.flightRoute.FlightRoutePanel;
+import gui.flightRoutePackage.FlightRoutePackagePanel;
 import gui.others.OtherPanel;
 import gui.user.UserPanel;
 
@@ -22,18 +24,22 @@ public class MainFrame extends JFrame {
     private IFlightRouteController flightRouteController;
     private ICategoryController categoryController;
     private ICityController cityController;
+    private IFlightRoutePackageController flightRoutePackageController;
 
     private SideBar sideBar;
     private JPanel mainPanel;
+
     // 0: Default, 1: OtherPanel, 2: FlightPanel, 3: FlightRoutePanel, 4: FlightRoutePackagePanel, 5: ReservationsPanel, 6: OtherPanel
     private Integer mainPanelType;
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
-                     ICategoryController categoryController, ICityController cityController) {
+                     ICategoryController categoryController, ICityController cityController,
+                     IFlightRoutePackageController flightRoutePackageController) {
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.categoryController = categoryController;
         this.cityController = cityController;
+        this.flightRoutePackageController = flightRoutePackageController;
         initUI();
     }
 
@@ -93,7 +99,15 @@ public class MainFrame extends JFrame {
             }
         };
 
-        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener);
+        MouseListener flightRoutePackagesManagementBtnListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Flight Route Packages Management button clicked");
+                updateMainPanel(new FlightRoutePackagePanel(flightRoutePackageController), 4);
+            }
+        };
+
+        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener);
     }
 
 }

@@ -27,9 +27,9 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         if (flightRoutePackageExists(pack.getName())) {
             throw new IllegalArgumentException("El paquete ya existe");
         }
-        flightRoutePackages.add(pack);
         ValidatorUtil.validate(pack);
 
+        flightRoutePackages.add(pack);
         return modelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 

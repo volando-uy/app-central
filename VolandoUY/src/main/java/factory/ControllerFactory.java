@@ -153,18 +153,18 @@ public class ControllerFactory {
     }
 
 
-// ############### PACKAGES CONTROLLER & SERVICE #################
+// ############### FLIGHT ROUTE PACKAGES CONTROLLER & SERVICE #################
 
-    public static IFlightRoutePackageService getPackageService() {
+    public static IFlightRoutePackageService getFlightRoutePackageService() {
         if (packageService == null) {
             packageService = new FlightRoutePackageService(getModelMapper());
         }
         return packageService;
     }
 
-    public static IFlightRoutePackageController getPackageController() {
+    public static IFlightRoutePackageController getFlightRoutePackageController() {
         if (packageController == null) {
-            packageController = new FlightRoutePackageController(getPackageService());
+            packageController = new FlightRoutePackageController(getFlightRoutePackageService());
         }
         return packageController;
     }

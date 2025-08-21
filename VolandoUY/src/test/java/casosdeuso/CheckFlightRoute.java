@@ -80,7 +80,7 @@ public class CheckFlightRoute {
 
 
         assertFalse(flightRouteController.existFlightRoute("TEST"));
-        flightRouteController.createFlightRoute(miRuta,"AA");
+        flightRouteController.createFlightRoutePackage(miRuta,"AA");
         assertTrue(flightRouteController.existFlightRoute("TEST"));
         System.out.println("Ruta de vuelo creada: " + miRuta.getName());
         System.out.println("Ruta de vuelo creada: " + miRuta.getDescription());

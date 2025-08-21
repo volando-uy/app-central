@@ -3,6 +3,7 @@ package app;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
+import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
@@ -21,6 +22,7 @@ public class VolandoApp {
         IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
         ICategoryController categoryController = ControllerFactory.getCategoryController();
         ICityController cityController = ControllerFactory.getCityController();
+        IFlightRoutePackageController flightRoutePackageController = ControllerFactory.getFlightRoutePackageController();
 
         /* Creates users */
         usuarioController.registerCustomer(new CustomerDTO(
@@ -37,7 +39,7 @@ public class VolandoApp {
         ));
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController);
+            MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController, flightRoutePackageController);
             mainFrame.setVisible(true);
         });
     }
