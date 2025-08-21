@@ -23,6 +23,10 @@ public class CreateCityPanel extends JPanel {
         initComponents();
         // initComponentsManually();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
     
     private void initListeners() {

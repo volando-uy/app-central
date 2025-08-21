@@ -30,6 +30,10 @@ public class RegisterCustomerPanel extends JPanel {
         initComponents();
         initComponntsManually();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initListeners() {

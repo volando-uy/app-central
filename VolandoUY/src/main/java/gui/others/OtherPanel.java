@@ -34,6 +34,10 @@ public class OtherPanel extends JPanel {
         this.cityController = cityController;
         initComponents();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initListeners() {

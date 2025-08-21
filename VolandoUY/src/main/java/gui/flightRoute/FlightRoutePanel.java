@@ -34,6 +34,10 @@ public class FlightRoutePanel extends JPanel {
         this.categoryController = categoryController;
         initComponents();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initListeners() {
