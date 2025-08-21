@@ -8,12 +8,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.*;
 
 import lombok.Setter;
+import org.postgresql.util.ReaderInputStream;
 
 /**
  * @author ignac
@@ -37,7 +35,10 @@ public class SideBar extends JPanel {
         initComponents();
         initListeners();
         try {
-            setBorder(null);
+            setBorder(new CompoundBorder(
+                    new BevelBorder(BevelBorder.LOWERED),
+                    new BevelBorder(BevelBorder.RAISED)
+            ));
         } catch (Exception ignored) {
         }
     }

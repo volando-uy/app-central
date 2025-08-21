@@ -41,7 +41,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         initNotBoughtPackagesList();
         initAirlineList();
         try {
-            setBorder(null);
+            setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         } catch (Exception ignored) {
         }
     }

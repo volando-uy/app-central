@@ -39,7 +39,7 @@ public class FlightRoutePackagePanel extends JPanel {
         initComponents();
         initListeners();
         try {
-            setBorder(null);
+            setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         } catch (Exception ignored) {
         }
     }
