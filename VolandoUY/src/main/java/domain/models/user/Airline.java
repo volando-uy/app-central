@@ -31,7 +31,7 @@ public class Airline extends User {
     @Size(min = 10, max = 500)
     private String description;
 
-    @Pattern(regexp = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$", message = "El formato de la web no es válido")
+    @Pattern(regexp = "(^$)|(^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$)", message = "El formato de la web no es válido")
     private String web;
 
     private List<Flight> flights;

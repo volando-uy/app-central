@@ -42,7 +42,7 @@ public class UserService implements IUserService {
     // Funcion para saber si existe un user con el mismo nickname
     private boolean _userExists(User user) {
         // TODO: usar acá el userRepository
-        return users.stream().anyMatch(u -> u.getNickname().equalsIgnoreCase(user.getNickname()));
+        return users.stream().anyMatch(u -> u.getNickname().equalsIgnoreCase(user.getNickname()) || u.getMail().equalsIgnoreCase(user.getMail()));
     }
 
 
@@ -50,7 +50,7 @@ public class UserService implements IUserService {
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         if (_userExists(customer)) {
-            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
+            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
         }
         ValidatorUtil.validate(customer);
 
@@ -62,7 +62,7 @@ public class UserService implements IUserService {
     public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
         Airline airline = modelMapper.map(airlineDTO, Airline.class);
         if (_userExists(airline)) {
-            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, airline.getNickname()));
+            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
         }
         ValidatorUtil.validate(airline);
 
