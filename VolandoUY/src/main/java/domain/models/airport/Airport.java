@@ -26,15 +26,18 @@ public class Airport {
     @Pattern(regexp = "^[A-Z]{3}$", message = "El código IATA debe ser 3 letras mayúsculas")
     private String code;
 
-    @Override
-    public String toString() {
-        return "Airport{name=" + name + ", code=" + code + "}";
-    }
-
     public Airport(String name, String code) {
         this.name = name;
         this.code = code;
         this.city = null;
     }
 
+    @Override
+    public String toString() {
+        return "Airport{" +
+                "city=" + city.getName() +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

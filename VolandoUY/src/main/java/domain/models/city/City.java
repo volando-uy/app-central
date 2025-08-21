@@ -43,4 +43,15 @@ public class City {
         this.longitude = longitude;
         this.airports = new ArrayList<>();
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "airports=" + airports.stream().map(Airport::getName).toList() +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }
