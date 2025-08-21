@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-public class RegisterFlightRouteTest {
+public class  RegisterFlightRouteTest {
 
     IUserController userController= ControllerFactory.getUserController();
     IFlightRouteController flightRouteController=ControllerFactory.getFlightRouteController();

@@ -1,11 +1,14 @@
 package controllers.flightRoutePackage;
 
-import domain.dtos.packages.PackageDTO;
+import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+
+import java.util.List;
 
 public interface IFlightRoutePackageController {
-    void addPackage(PackageDTO packageDTO);
-    void updatePackage(PackageDTO packageDTO);
-    void deletePackage(String packageName);
-    PackageDTO getPackage(String packageName);
-    boolean packageExists(String packageName);
-}
+    void createFlightRoutePackage(FlightRoutePackageDTO packageDTO);
+    void updateFlightRoutePackage(FlightRoutePackageDTO packageDTO);
+    void deleteFlightRoutePackage(String packageName);
+    FlightRoutePackageDTO getFlightRoutePackage(String packageName);
+    boolean flightRoutePackageExists(String packageName);
+    List<FlightRoutePackageDTO> getAllFlightRoutePackage();
+    }
