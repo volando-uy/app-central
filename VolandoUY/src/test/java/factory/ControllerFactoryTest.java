@@ -10,8 +10,8 @@ class ControllerFactoryTest {
 
     @Test
     void getUserController_shouldReturnTheSameInstance() {
-        IUserController instance1 = ControllerFactory.getUserController();
-        IUserController instance2 = ControllerFactory.getUserController();
+        IUserController instance1 = FactoryController.getUserController();
+        IUserController instance2 = FactoryController.getUserController();
 
         assertNotNull(instance1);
         assertSame(instance1, instance2, "Las instancias de UserController deberían ser las mismas");
@@ -19,8 +19,8 @@ class ControllerFactoryTest {
 
     @Test
     void getModelMapper_shouldReturnTheSameInstance() {
-        ModelMapper mapper1 = ControllerFactory.getModelMapper();
-        ModelMapper mapper2 = ControllerFactory.getModelMapper();
+        ModelMapper mapper1 = FactoryController.getModelMapper();
+        ModelMapper mapper2 = FactoryController.getModelMapper();
 
         assertNotNull(mapper1);
         assertSame(mapper1, mapper2, "Las instancias de ModelMapper deberían ser las mismas");

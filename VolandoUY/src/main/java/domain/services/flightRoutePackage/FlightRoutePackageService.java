@@ -1,16 +1,13 @@
 package domain.services.flightRoutePackage;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.services.flightRoute.IFlightRouteService;
-import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
-import javax.xml.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
