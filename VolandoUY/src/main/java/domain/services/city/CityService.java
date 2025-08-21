@@ -1,11 +1,7 @@
 package domain.services.city;
 
 import domain.dtos.city.CityDTO;
-import domain.models.airport.Airport;
 import domain.models.city.City;
-import domain.services.airport.IAirportService;
-import domain.services.user.IUserService;
-import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
