@@ -66,7 +66,7 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
     public static IUserService getUserService() {
         if (userService == null) {
-            userService = new UserService(getModelMapper(), getusuarioMapper());
+            userService = new UserService(getModelMapper(), getUserMapper());
         }
         return userService;
     }
@@ -83,7 +83,7 @@ public class ControllerFactory {
         return modelMapper;
     }
 
-    public static UserMapper getusuarioMapper() {
+    public static UserMapper getUserMapper() {
         if (userMapper == null) {
             userMapper = new UserMapper(getModelMapper());
         }
@@ -114,7 +114,7 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteService getFlightRouteService() {
         if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService();
+            flightRouteService = new FlightRouteService(getModelMapper(), getCategoryService(), getUserService());
         }
         return flightRouteService;
     }

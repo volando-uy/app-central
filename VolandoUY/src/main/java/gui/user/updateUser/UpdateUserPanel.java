@@ -120,7 +120,7 @@ public class UpdateUserPanel extends JPanel {
                     customer.setSurname(variable1);
                     customer.setCitizenship(variable2);
                     customer.setId(variable3);
-                    customer.setBirthDate(LocalDate.parse(variable4));
+                    customer.setBirthDate(LocalDate.parse(variable4, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     customer.setIdType((EnumTipoDocumento) idTypeComboBox.getSelectedItem());
                     userController.updateUser(customer.getNickname(), customer);
                 } else {

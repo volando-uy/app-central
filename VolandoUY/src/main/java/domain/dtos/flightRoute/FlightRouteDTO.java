@@ -2,6 +2,7 @@ package domain.dtos.flightRoute;
 
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.city.CityDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
 import jakarta.validation.constraints.*;
@@ -16,10 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlightRouteDTO {
-    private List<FlightDTO> flightsDTO;
-    private List<CategoryDTO> category; // categoriaVuelo
-    private City originCity;
-    private City destinationCity;
+    private List<String> categories;
+    private String originCityName;
+    private String destinationCityName;
     private String name;
     private String description;
     private LocalDateTime createdAt;

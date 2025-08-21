@@ -6,14 +6,15 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class City {
 
     @Valid // valida cada Airport dentro de la lista
@@ -35,17 +36,11 @@ public class City {
     @DecimalMax(value = "180.0", inclusive = true, message = "Longitud máxima 180")
     private double longitude;
 
-    public boolean isAirportInCity(String airportName) {
-        if (airports == null || airports.isEmpty()) return false;
-        for (Airport airport : airports) {
-            if (airport.getName().equalsIgnoreCase(airportName)) return true;
-        }
-        return false;
-    }
-
-    public void addAirport(String airportName, String airportCode) {
-        if (airports == null) airports = new ArrayList<>();
-        Airport newAirport = new Airport(this, airportName, airportCode);
-        airports.add(newAirport);
+    public City(String name, String country, double latitude, double longitude) {
+        this.name = name;
+        this.country = country;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.airports = new ArrayList<>();
     }
 }

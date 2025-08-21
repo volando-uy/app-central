@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +38,15 @@ public class Flight {
     @PositiveOrZero
     private Integer maxBusinessSeats;
 
-    @PastOrPresent
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public Flight(String name, LocalDateTime departureTime, Long duration, Integer maxEconomySeats, Integer maxBusinessSeats) {
+        this.name = name;
+        this.departureTime = departureTime;
+        this.duration = duration;
+        this.maxEconomySeats = maxEconomySeats;
+        this.maxBusinessSeats = maxBusinessSeats;
+        this.flightRoute = null;
+        this.airline = null;
+    }
 }

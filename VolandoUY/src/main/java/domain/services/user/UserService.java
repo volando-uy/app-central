@@ -49,11 +49,9 @@ public class UserService implements IUserService {
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-
         if (_userExists(customer)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, customer.getNickname()));
-        }   
-
+        }
         ValidatorUtil.validate(customer);
 
         users.add(customer);
@@ -66,7 +64,6 @@ public class UserService implements IUserService {
         if (_userExists(airline)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USUARIO_YA_EXISTE, airline.getNickname()));
         }
-
         ValidatorUtil.validate(airline);
 
         users.add(airline);
@@ -149,12 +146,20 @@ public class UserService implements IUserService {
 
 
     @Override
-    public AirlineDTO getAirlineByNickname(String nickname) {
+    public Airline getAirlineByNickname(String nickname) {
         Airline airline = (Airline) _getUserByNickname(nickname);
         if (airline == null) {
             throw new IllegalArgumentException("Airline no encontrada: " + nickname);
         }
-        // Convertir Airline a AirlineDTO
+        return airline;
+    }
+
+    @Override
+    public AirlineDTO getAirlineDetailsByNickname(String nickname) {
+        Airline airline = (Airline) _getUserByNickname(nickname);
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+        }
         return userMapper.toAirlineDTO(airline);
     }
 }

@@ -46,13 +46,6 @@ public class UserMapper {
         dto.setWeb(airline.getWeb());
         dto.setMail(airline.getMail());
 
-        List<FlightRouteDTO> rutas = Optional.ofNullable(airline.getFlightRoutes())
-                .orElse(new ArrayList<>())
-                .stream()
-                .map(route -> modelMapper.map(route, FlightRouteDTO.class))
-                .collect(Collectors.toList());
-
-        dto.setFlightRoutes(rutas);
         return dto;
     }
 

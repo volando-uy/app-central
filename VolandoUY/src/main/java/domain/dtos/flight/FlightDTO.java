@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightDTO {
-    private FlightRouteDTO flightRoute;
-    private AirlineDTO airline;
     private String name;
     private LocalDateTime departureTime;
     private Long duration;

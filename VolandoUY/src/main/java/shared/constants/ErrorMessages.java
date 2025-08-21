@@ -7,4 +7,10 @@ public class ErrorMessages {
     public static final String ERR_FORMATO_EMAIL_INVALIDO="Formato de email invalido";
     public static final String ERR_ACCEDER_CAMPO = "Error al acceder al campo %s";
     public static final String ERR_CATEGORY_EXISTS = "La categoría %s ya existe";
+    public static final String ERR_CATEGORY_NOT_FOUND = "La categoría %s no fue encontrada";
+    public static final String ERR_CITY_NOT_FOUND = "La ciudad %s no fue encontrada";
+    public static final String ERR_AIRPORT_NOT_FOUND = "El aeropuerto con código %s no fue encontrado";
+    public static final String ERR_FLIGHT_NOT_FOUND = "El vuelo con nombre %s no fue encontrado";
+    public static final String ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND = "El paquete de ruta del vuelo con nombre %s no fue encontrado";
+    public static final String ERR_FLIGHT_ROUTE_NOT_FOUND = "La ruta del vuelo con nombre %s no fue encontrada";
 }
