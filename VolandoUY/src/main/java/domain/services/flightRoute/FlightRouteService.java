@@ -144,36 +144,4 @@ public class FlightRouteService implements IFlightRouteService {
                 })
                 .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName)));
     }
-
-    @Override
-    public List<FlightRouteDTO> getAllFlightRoutesByAirline(String airlineNickname) {
-        //Buscar la aerolínea por su nickname
-        Airline airline = userService.getAirlineByNickname(airlineNickname);
-        if (airline == null) {
-            throw new IllegalArgumentException("Aerolínea no encontrada: " + airlineNickname);
-        }
-        // Filtrar las rutas de vuelo por la aerolínea
-        List<FlightRoute> flightRoutes = flightRouteList.stream()
-                .filter(route -> route.getAirline().getNickname().equalsIgnoreCase(airlineNickname))
-                .collect(Collectors.toList());
-
-        // Mapear las rutas de vuelo a FlightRouteDTO
-        List<FlightRouteDTO> flightRouteDTOs = flightRoutes.stream()
-                .map(route -> {
-                    FlightRouteDTO flightRouteDTO = modelMapper.map(route, FlightRouteDTO.class);
-                    // Setear las categorias
-                    flightRouteDTO.setCategories(route.getCategories().stream()
-                            .map(Category::getName)
-                            .collect(Collectors.toList()));
-                    // Setear las ciudades de origen y destino
-                    flightRouteDTO.setOriginCityName(route.getOriginCity().getName());
-                    flightRouteDTO.setDestinationCityName(route.getDestinationCity().getName());
-                    return flightRouteDTO;
-                })
-                .collect(Collectors.toList());
-        if (flightRouteDTOs.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return flightRouteDTOs;
-    }
 }
