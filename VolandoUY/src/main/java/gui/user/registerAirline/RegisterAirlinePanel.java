@@ -43,7 +43,7 @@ public class RegisterAirlinePanel extends JPanel {
                                 "\nName: " + createdAirlineDTO.getName() +
                                 "\nEmail: " + createdAirlineDTO.getMail() +
                                 "\nDescription: " + createdAirlineDTO.getDescription() +
-                                (web.isEmpty() ? ("\nWeb: " + createdAirlineDTO.getWeb()) : ""),
+                                (web.isEmpty() ? "" : ("\nWeb: " + createdAirlineDTO.getWeb())),
                         "User Registered",
                         JOptionPane.INFORMATION_MESSAGE
                 );
