@@ -34,6 +34,10 @@ public class CreateFlightRoutePanel extends JPanel {
         initListeners();
         initAirlineList();
         initCategoryList();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initAirlineList() {

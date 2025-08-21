@@ -30,6 +30,10 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         initComponents();
         initComponentsManually();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
 

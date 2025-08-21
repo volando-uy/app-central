@@ -25,6 +25,10 @@ public class UpdateUserPanel extends JPanel {
         initComponents();
         initListeners();
         initUserList();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initUserList() {

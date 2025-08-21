@@ -38,6 +38,10 @@ public class FlightRoutePackagePanel extends JPanel {
         this.userController = userController;
         initComponents();
         initListeners();
+        try {
+            setBorder(null);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initListeners() {
