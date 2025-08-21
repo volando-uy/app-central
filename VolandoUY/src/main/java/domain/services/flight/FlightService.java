@@ -31,27 +31,31 @@ public class FlightService implements IFlightService {
     public FlightDTO createFlight(FlightDTO flightDTO) {
 
         Flight originalFlight = modelMapper.map(flightDTO, Flight.class);
+        // Verificar si el vuelo ya existe
+        if (_flightExists(originalFlight)) {
+            throw new UnsupportedOperationException("Flight already exists: " + originalFlight.getName());
+        }
+        ValidatorUtil.validate(originalFlight);
 
         // Mapear Airline desde nickname
         Airline airline = userService.getAirlineByNickname(flightDTO.getAirlineNickname());
         if (airline == null) {
             throw new IllegalArgumentException("Airline not found: " + flightDTO.getAirlineNickname());
         }
+
+        // Agregar el vuelo a la aerolínea y viceversa
         originalFlight.setAirline(airline);
-
-
-
-
-        if (_flightExists(originalFlight)) {
-            throw new UnsupportedOperationException("Flight already exists: " + originalFlight.getName());
-        }
-
-        ValidatorUtil.validate(originalFlight);
-        //Lisatar todos los vuelos
         airline.getFlights().add(originalFlight);
+
+        // Agregar el vuelo a la lista de vuelos
         flights.add(originalFlight);
-        System.out.println("Flights: " + flights.get(0).getName());
-        return flightDTO;
+        System.out.println(flights);
+
+        // Mapear el DTO del vuelo creado
+        FlightDTO createdFlightDTO = modelMapper.map(originalFlight, FlightDTO.class);
+        createdFlightDTO.setAirlineNickname(flightDTO.getAirlineNickname());
+
+        return createdFlightDTO;
     }
 
 

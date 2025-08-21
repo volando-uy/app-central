@@ -16,6 +16,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,6 +32,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         initComponents();
         initComponentsManually();
         initListeners();
+        initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
         try {
             setBorder(null);
         } catch (Exception ignored) {
@@ -76,6 +79,33 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         createdAtTextField.setText("dd/mm/yyyy");
         seatTypeComboBox.addItem(EnumTipoAsiento.TURISTA);
         seatTypeComboBox.addItem(EnumTipoAsiento.EJECUTIVO);
+    }
+
+    private void initPlaceholderForTextField(JTextField textField, String placeholder) {
+        textField.setForeground(Color.GRAY);
+
+        // When text field is selected, delete the placeholder text
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setForeground(Color.BLACK);
+                    textField.setText("");
+                }
+            }
+        });
+
+
+        // Set the placeholder text when the field loses focus
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
+            }
+        });
     }
 
     private void initComponents() {
