@@ -37,6 +37,13 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public List<String> getAllAirlinesNicknames() {
+        return userService.getAllAirlines().stream()
+                .map(AirlineDTO::getNickname)
+                .toList();
+    }
+
+    @Override
     public UserDTO getUserByNickname(String nickname) {
         UserDTO userDTO = userService.getUserByNickname(nickname);
         return userDTO;

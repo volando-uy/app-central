@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,13 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlightRouteDTO {
-    private List<String> categories;
-    private String originCityName;
-    private String destinationCityName;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private Double priceTouristClass;
     private Double priceBusinessClass;
     private Double priceExtraUnitBaggage;
+    private String originCityName;
+    private String destinationCityName;
+    private List<String> categories;
 }

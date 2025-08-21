@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -36,8 +37,8 @@ public class UpdateUserPanel extends JPanel {
 
     private void initListeners() {
         loadUserBtn.addActionListener(e -> {
-            String selectedNickname = (String) userComboBox.getSelectedItem();
-            if (selectedNickname != null) {
+            try {
+                String selectedNickname = (String) userComboBox.getSelectedItem();
                 // If user doesn't exist, throw exception
                 selectedUser = userController.getUserByNickname(selectedNickname);
                 nameTextField.setText(selectedUser.getName());
@@ -69,7 +70,7 @@ public class UpdateUserPanel extends JPanel {
                     variableLabel3.setText("ID:");
                     variableTextField3.setText(selectedUser.getId());
                     variableLabel4.setText("Fecha de nacimiento:");
-                    variableTextField4.setText(selectedUser.getBirthDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    variableTextField4.setText(selectedUser.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     idTypeLabel.setText("Tipo de ID:");
                     idTypeComboBox.setModel(new DefaultComboBoxModel<>(EnumTipoDocumento.values()));
                     idTypeComboBox.setSelectedItem(selectedUser.getIdType());
@@ -88,10 +89,9 @@ public class UpdateUserPanel extends JPanel {
                     idTypeComboBox.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Error del sistema", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecciona un usuario", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al cargar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -175,12 +175,12 @@ public class UpdateUserPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};

@@ -56,5 +56,12 @@ public class CategoryService implements ICategoryService {
                 .anyMatch(category -> category.getName().equalsIgnoreCase(name));
     }
 
+    @Override
+    public List<String> getAllCategoriesNames() {
+        return categories.stream()
+                .map(Category::getName)
+                .collect(Collectors.toList());
+    }
+
 
 }

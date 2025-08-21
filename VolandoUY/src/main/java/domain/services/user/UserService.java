@@ -66,6 +66,9 @@ public class UserService implements IUserService {
         }
         ValidatorUtil.validate(airline);
 
+        airline.setFlightRoutes(new ArrayList<>());
+        airline.setFlights(new ArrayList<>());
+
         users.add(airline);
         return modelMapper.map(airline, AirlineDTO.class);
     }

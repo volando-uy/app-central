@@ -8,6 +8,7 @@ import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import gui.flightRoute.FlightRoutePanel;
 import gui.others.OtherPanel;
 import gui.user.UserPanel;
 
@@ -84,7 +85,15 @@ public class MainFrame extends JFrame {
             }
         };
 
-        return new SideBar(userManagementBtnListener, othersManagementBtnListener);
+        MouseListener flightRoutesManagementBtnListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Flight Routes Management button clicked");
+                updateMainPanel(new FlightRoutePanel(flightRouteController, userController, categoryController), 3);
+            }
+        };
+
+        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener);
     }
 
 }

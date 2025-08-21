@@ -12,4 +12,5 @@ public interface ICategoryService {
     CategoryDTO getCategoryDetailsByName(String categoryName);
     Category getCategoryByName(String categoryName);
     boolean existsCategory(String categoryName);
+    List<String> getAllCategoriesNames();
 }

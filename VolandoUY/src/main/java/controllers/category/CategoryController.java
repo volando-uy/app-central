@@ -21,4 +21,8 @@ public class CategoryController implements ICategoryController {
         return categoryService.getCategoryDetailsByName(categoryName);
     }
 
+    public List<String> getAllCategoriesNames() {
+        return categoryService.getAllCategoriesNames();
+    }
+
 }

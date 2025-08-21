@@ -114,7 +114,7 @@ public class ControllerFactory {
     // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteService getFlightRouteService() {
         if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService(getModelMapper(), getCategoryService(), getUserService());
+            flightRouteService = new FlightRouteService(getModelMapper(), getCategoryService(), getUserService(), getCityService());
         }
         return flightRouteService;
     }
