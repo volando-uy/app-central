@@ -1,9 +1,6 @@
 package domain.services.flightRoute;
 
-import domain.dtos.category.CategoryDTO;
-import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.flightRoute.FlightRoute;
@@ -11,7 +8,6 @@ import domain.models.user.Airline;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
-import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;

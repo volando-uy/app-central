@@ -13,7 +13,7 @@ import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
-import factory.ControllerFactory;
+import factory.FactoryController;
 import gui.MainFrame;
 
 import javax.swing.*;
@@ -23,11 +23,11 @@ import java.util.List;
 public class VolandoApp {
 
     public static void main(String[] args) {
-        IUserController usuarioController = ControllerFactory.getUserController();
-        IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
-        ICategoryController categoryController = ControllerFactory.getCategoryController();
-        ICityController cityController = ControllerFactory.getCityController();
-        IFlightRoutePackageController flightRoutePackageController = ControllerFactory.getFlightRoutePackageController();
+        IUserController usuarioController = FactoryController.getUserController();
+        IFlightRouteController flightRouteController = FactoryController.getFlightRouteController();
+        ICategoryController categoryController = FactoryController.getCategoryController();
+        ICityController cityController = FactoryController.getCityController();
+        IFlightRoutePackageController flightRoutePackageController = FactoryController.getFlightRoutePackageController();
 
         /* Creates users: customers and airlines */
         usuarioController.registerCustomer(new CustomerDTO(

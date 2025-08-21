@@ -29,7 +29,7 @@ import org.modelmapper.ModelMapper;
 
 
 
-public class ControllerFactory {
+public class FactoryController {
 
     private static IUserController userController;
     private static ModelMapper modelMapper;
