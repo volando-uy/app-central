@@ -142,7 +142,6 @@ public class UpdateUserPanel extends JPanel {
     }
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
-        textField.setForeground(Color.GRAY);
 
         // When text field is selected, delete the placeholder text
         textField.addMouseListener(new MouseAdapter() {
