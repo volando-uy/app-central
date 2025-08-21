@@ -4,6 +4,8 @@ import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flight.Flight;
 import domain.models.user.Airline;
+import domain.services.user.IUserService;
+import factory.ControllerFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -15,11 +17,11 @@ public class FlightService implements IFlightService {
 
     private final ModelMapper modelMapper;
 
+    private IUserService userService= ControllerFactory.getUserService();
+
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
     private List<Flight> flights = new ArrayList<>();
-
-    private List<Airline> airlines = new ArrayList<>();
 
     // Constructor
     public FlightService(ModelMapper modelMapper) {
@@ -27,16 +29,32 @@ public class FlightService implements IFlightService {
     }
 
     @Override
-    public FlightDTO createFlight(FlightDTO flight) {
-        Flight originalFlight = modelMapper.map(flight, Flight.class);
+    public FlightDTO createFlight(FlightDTO flightDTO) {
+
+        Flight originalFlight = modelMapper.map(flightDTO, Flight.class);
+
+        // Mapear Airline desde nickname
+        Airline airline = userService.getAirlineByNickname(flightDTO.getAirlineNickname());
+        if (airline == null) {
+            throw new IllegalArgumentException("Airline not found: " + flightDTO.getAirlineNickname());
+        }
+        originalFlight.setAirline(airline);
+
+
+
+
         if (_flightExists(originalFlight)) {
             throw new UnsupportedOperationException("Flight already exists: " + originalFlight.getName());
         }
-        ValidatorUtil.validate(originalFlight);
 
+        ValidatorUtil.validate(originalFlight);
+        //Lisatar todos los vuelos
+        airline.getFlights().add(originalFlight);
         flights.add(originalFlight);
-        return flight;
+        System.out.println("Flights: " + flights.get(0).getName());
+        return flightDTO;
     }
+
 
     @Override
     public List<FlightDTO> getAllFlights() {
@@ -68,10 +86,7 @@ public class FlightService implements IFlightService {
 
     @Override
     public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
-        Airline airline = airlines.stream()
-                .filter(a -> a.getNickname().equalsIgnoreCase(airlineNickname))
-                .findFirst()
-                .orElse(null);
+        Airline airline = userService.getAirlineByNickname(airlineNickname);
         if (airline == null) {
             throw new IllegalArgumentException("Airline not found: " + airlineNickname);
         }

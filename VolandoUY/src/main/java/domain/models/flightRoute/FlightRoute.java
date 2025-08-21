@@ -68,4 +68,21 @@ public class FlightRoute {
         this.originCity = null;
         this.destinationCity = null;
     }
+
+    @Override
+    public String toString() {
+        return "FlightRoute{" +
+                "categories=" + categories.stream().map(Category::getName).toList() +
+                ", flights=" + flights.stream().map(Flight::getName).toList() +
+                ", airline=" + airline.getNickname() +
+                ", originCity=" + originCity +
+                ", destinationCity=" + destinationCity +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", priceTouristClass=" + priceTouristClass +
+                ", priceBusinessClass=" + priceBusinessClass +
+                ", priceExtraUnitBaggage=" + priceExtraUnitBaggage +
+                '}';
+    }
 }
