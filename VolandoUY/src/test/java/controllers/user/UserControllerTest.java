@@ -5,7 +5,7 @@ import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
-import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
 import factory.UserFactoryMapper;

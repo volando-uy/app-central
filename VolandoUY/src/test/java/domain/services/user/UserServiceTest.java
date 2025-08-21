@@ -3,7 +3,7 @@ package domain.services.user;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
-import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

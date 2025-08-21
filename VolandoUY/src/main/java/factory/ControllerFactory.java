@@ -157,7 +157,7 @@ public class ControllerFactory {
 
     public static IFlightRoutePackageService getFlightRoutePackageService() {
         if (packageService == null) {
-            packageService = new FlightRoutePackageService(getModelMapper());
+            packageService = new FlightRoutePackageService(getFlightRouteService(), getModelMapper());
         }
         return packageService;
     }

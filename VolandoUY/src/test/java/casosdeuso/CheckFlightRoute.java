@@ -13,7 +13,7 @@ import domain.dtos.user.UserDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.flightRoute.FlightRoute;
-import domain.models.user.enums.EnumTipoDocumento;
+import domain.models.enums.EnumTipoDocumento;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;

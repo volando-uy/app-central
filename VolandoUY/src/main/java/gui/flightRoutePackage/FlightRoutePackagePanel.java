@@ -4,6 +4,7 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import gui.flightRoutePackage.addFlightRouteToPackage.AddFlightRouteToPackagePanel;
 import gui.flightRoutePackage.createFlightRoutePackage.CreateFlightRoutePackagePanel;
 
 import javax.swing.*;
@@ -19,13 +20,22 @@ import java.awt.event.MouseListener;
 public class FlightRoutePackagePanel extends JPanel {
 
     private MouseListener createFlightRoutePackagePanelListener;
+    private MouseListener addFlightRouteToPackagePanelListener;
 
     private IFlightRoutePackageController flightRoutePackageController;
+    private IFlightRouteController flightRouteController;
+    private IUserController userController;
 
     private JPanel contentPanel;
 
-    public FlightRoutePackagePanel(IFlightRoutePackageController flightRoutePackageController) {
+    public FlightRoutePackagePanel(
+            IFlightRoutePackageController flightRoutePackageController,
+            IFlightRouteController flightRouteController,
+            IUserController userController
+    ) {
         this.flightRoutePackageController = flightRoutePackageController;
+        this.flightRouteController = flightRouteController;
+        this.userController = userController;
         initComponents();
         initListeners();
     }
@@ -52,8 +62,30 @@ public class FlightRoutePackagePanel extends JPanel {
                 repaint();
             }
         };
+        
+        addFlightRouteToPackagePanelListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Remover solo si ya existe un contentPanel
+                if (contentPanel != null) {
+                    // Verificar si el contentPanel ya es de tipo AddFlightRouteToPackagePanel
+                    if (contentPanel instanceof AddFlightRouteToPackagePanel) {
+                        return;
+                    }
+                    remove(contentPanel);
+                }
+
+                System.out.println("Add Flight Route to Package button clicked");
+                // Crear el nuevo contentPanel con el contenido de adición de ruta de vuelo a paquete
+                contentPanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
+                add(contentPanel);
+                revalidate();
+                repaint();
+            }
+        };
 
         createFlightRoutePackageBtn.addMouseListener(createFlightRoutePackagePanelListener);
+        addFlightRouteToPackageBtn.addMouseListener(addFlightRouteToPackagePanelListener);
         //button3.addMouseListener(getUserListener);
     }
   
@@ -61,7 +93,7 @@ public class FlightRoutePackagePanel extends JPanel {
     // Generated using JFormDesigner Evaluation license - dotto
     private JPanel NavPanel;
     private JButton createFlightRoutePackageBtn;
-    private JButton registerAirlineBtn;
+    private JButton addFlightRouteToPackageBtn;
     private JButton updateUserBtn;
     private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
@@ -71,7 +103,7 @@ public class FlightRoutePackagePanel extends JPanel {
         // Generated using JFormDesigner Evaluation license - dotto
         NavPanel = new JPanel();
         createFlightRoutePackageBtn = new JButton();
-        registerAirlineBtn = new JButton();
+        addFlightRouteToPackageBtn = new JButton();
         updateUserBtn = new JButton();
         getUserBtn = new JButton();
 
@@ -80,13 +112,12 @@ public class FlightRoutePackagePanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
-        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border
-        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg"
-        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
-        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
-        . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException
-        ( ) ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+        . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
+        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )
+        throw new RuntimeException( ) ;} } );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -99,12 +130,12 @@ public class FlightRoutePackagePanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- createFlightRoutePackageBtn ----
-            createFlightRoutePackageBtn.setText("Crear Paquete de RV");
+            createFlightRoutePackageBtn.setText("Crear Paquete");
             NavPanel.add(createFlightRoutePackageBtn);
 
-            //---- registerAirlineBtn ----
-            registerAirlineBtn.setText("---");
-            NavPanel.add(registerAirlineBtn);
+            //---- addFlightRouteToPackageBtn ----
+            addFlightRouteToPackageBtn.setText("A\u00f1adir R.V. a Paquete");
+            NavPanel.add(addFlightRouteToPackageBtn);
 
             //---- updateUserBtn ----
             updateUserBtn.setText("---");

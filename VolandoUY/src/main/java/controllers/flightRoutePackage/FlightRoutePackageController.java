@@ -7,6 +7,8 @@ import domain.models.flightRoute.FlightRoute;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 
 public class FlightRoutePackageController implements IFlightRoutePackageController {
@@ -19,6 +21,16 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     @Override
     public FlightRoutePackageDTO getFlightRoutePackageByName(String packageName) {
         return packageService.getFlightRoutePackageByName(packageName);
+    }
+
+    @Override
+    public List<String> getAllNotBoughtFlightRoutePackagesNames() {
+        return packageService.getAllNotBoughtFlightRoutePackagesNames();
+    }
+
+    @Override
+    public void addFlightRouteToPackage(String packageName, String flightRouteName, Integer quantity) {
+        packageService.addFlightRouteToPackage(packageName, flightRouteName, quantity);
     }
 
     @Override

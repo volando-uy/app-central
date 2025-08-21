@@ -1,4 +1,4 @@
-package domain.models.user.enums;
+package domain.models.enums;
 
 public enum EnumTipoDocumento {
     CI, RUT, PASAPORTE

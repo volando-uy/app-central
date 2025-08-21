@@ -1,9 +1,5 @@
 package shared.constants;
 
-import domain.models.user.enums.EnumTipoDocumento;
-
-import java.time.LocalDate;
-
 public class CTCliente {
     public static final String CT_NAME="Nombre";
     public static final String CT_SURNAME="Apellido";

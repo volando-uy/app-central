@@ -42,7 +42,26 @@ public class FlightRouteService implements IFlightRouteService {
     }
 
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO, String airlineNickname) {
+    public List<FlightRouteDTO> getAllFlightRoutesDetailsByAirlineNickname(String airlineNickname) {
+        return this.flightRouteList.stream()
+                .filter(route -> route.getAirline().getNickname().equalsIgnoreCase(airlineNickname))
+                .map(route -> {
+                    // Mapear la ruta de vuelo a FlightRouteDTO
+                    FlightRouteDTO flightRouteDTO = modelMapper.map(route, FlightRouteDTO.class);
+                    // Setear las categorias
+                    flightRouteDTO.setCategories(route.getCategories().stream()
+                            .map(Category::getName)
+                            .toList());
+                    // Setear las ciudades de origen y destino
+                    flightRouteDTO.setOriginCityName(route.getOriginCity().getName());
+                    flightRouteDTO.setDestinationCityName(route.getDestinationCity().getName());
+                    return flightRouteDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO) {
         // Crear la ruta de vuelo
         FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
         // Comprobar que la ruta de vuelo no exista
@@ -52,7 +71,7 @@ public class FlightRouteService implements IFlightRouteService {
         ValidatorUtil.validate(flightRoute);
 
         // Tira throw si no existe
-        Airline airline = userService.getAirlineByNickname(airlineNickname);
+        Airline airline = userService.getAirlineByNickname(flightRouteDTO.getAirlineNickname());
         flightRoute.setAirline(airline);
 
         // Asignar las categorías a la ruta de vuelo
