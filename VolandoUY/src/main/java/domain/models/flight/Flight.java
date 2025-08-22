@@ -53,8 +53,8 @@ public class Flight {
     @Override
     public String toString() {
         return "Flight{" +
-                "flightRoute=" + flightRoute.getName() +
-                ", airline=" + airline.getNickname() +
+                "flightRoute=" + (flightRoute != null ? flightRoute.getName() : "null") +
+                ", airline=" + (airline != null ? airline.getNickname() : "null") +
                 ", name='" + name + '\'' +
                 ", departureTime=" + departureTime +
                 ", duration=" + duration +
@@ -63,4 +63,5 @@ public class Flight {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
 }

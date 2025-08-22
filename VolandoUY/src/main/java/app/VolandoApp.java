@@ -18,6 +18,7 @@ import gui.MainFrame;
 
 import javax.swing.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VolandoApp {
@@ -54,8 +55,8 @@ public class VolandoApp {
         /* Creates categories y ciudad*/
         categoryController.createCategory(new CategoryDTO("category1"));
         categoryController.createCategory(new CategoryDTO("category2"));
-        cityController.createCity(new CityDTO("San José", "Uruguay", 50.0, 50.0));
-        cityController.createCity(new CityDTO("Montevideo", "Uruguay", 60.0, 60.0));
+        cityController.createCity(new CityDTO("San José", "Uruguay", 50.0, 50.0, new ArrayList<>()));
+        cityController.createCity(new CityDTO("Montevideo", "Uruguay", 60.0, 60.0, new ArrayList<>()));
 
         /* Creates flight routes */
         flightRouteController.createFlightRoute(new FlightRouteDTO(

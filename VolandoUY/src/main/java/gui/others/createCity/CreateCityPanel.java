@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 @Setter
 public class CreateCityPanel extends JPanel {
@@ -37,7 +38,7 @@ public class CreateCityPanel extends JPanel {
                 double latitude = Double.parseDouble(latitudeTextField.getText());
                 double longitude = Double.parseDouble(longitudeTextField.getText());
 
-                CityDTO cityDTO = new CityDTO(name, country, latitude, longitude);
+                CityDTO cityDTO = new CityDTO(name, country, latitude, longitude,new ArrayList<>());
 
                 CityDTO createdCityDTO = cityController.createCity(cityDTO);
 

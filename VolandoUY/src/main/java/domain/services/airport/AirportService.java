@@ -23,31 +23,28 @@ public class AirportService implements IAirportService {
         this.airports = new ArrayList<>();
     }
 
-    @Override
-    public AirportDTO createAirport(AirportDTO airportDTO, String cityName) {
-        Airport airport = modelMapper.map(airportDTO, Airport.class);
-        if (airportExists(airportDTO.getCode())) {
-            throw new IllegalArgumentException("Airport already exists");
-        }
-        // Validar el aeropuerto
-        ValidatorUtil.validate(airport);
-
-        // Obtener la ciudad, si no exista, lanza una excepción
+    public AirportDTO createAirport(AirportDTO dto, String cityName) {
         City city = cityService.getCityByName(cityName);
+        System.out.println("City found: " + city);
+        if (city.getAirports() == null) {
+            city.setAirports(new ArrayList<>()); // 🔧 Previene la excepción
+        }
 
-        // Agregarle la ciudad al aeropuerto y viceversa
+        if (airportExists(dto.getCode())) {
+            throw new IllegalArgumentException("Ya existe un aeropuerto con el código " + dto.getCode());
+        }
+
+        Airport airport = modelMapper.map(dto, Airport.class);
+        System.out.println("Airportes before adding: " + airports);
         airport.setCity(city);
+        ValidatorUtil.validate(airport);
+        airports.add(airport);
+        System.out.println("Airport after setting city: " + airports);
         city.getAirports().add(airport);
 
-        // Agregar el airport a la lista de aeropuertos
-        airports.add(airport);
-        System.out.println(airports);
-
-        // Mapear el DTO a la entidad Airport
-        AirportDTO createdAirportDTO = modelMapper.map(airport, AirportDTO.class);
-        return createdAirportDTO;
-
+        return modelMapper.map(airport, AirportDTO.class);
     }
+
 //    @Override
 //    public void removeAirport(String code) {
 //        Airport toRemove = null;
@@ -102,6 +99,7 @@ public class AirportService implements IAirportService {
 
     @Override
     public Airport getAirportByCode(String code) {
+        System.out.println("airports: " + airports);
         return airports.stream()
                 .filter(airport -> airport.getCode().equalsIgnoreCase(code))
                 .findFirst()

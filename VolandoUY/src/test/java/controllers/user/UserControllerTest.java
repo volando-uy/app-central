@@ -99,10 +99,96 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe retornar lista vacía si no hay usuarios")
     void obtenerTodosLosUsuarios_listaVacia() {
+
         when(usuarioService.getAllUsers()).thenReturn(Collections.emptyList());
 
         List<UserDTO> resultado = usuarioController.getAllUsers();
 
         assertTrue(resultado.isEmpty());
     }
+
+    @Test
+    @DisplayName("Debe retornar todos los nicknames de usuarios desde el service")
+    void getAllUsersNicknames_shouldReturnFromService() {
+        // GIVEN
+        List<String> expectedNicknames = List.of("gyabisito", "flyuy");
+        when(usuarioService.getAllUsersNicknames()).thenReturn(expectedNicknames);
+
+        // WHEN
+        List<String> result = usuarioController.getAllUsersNicknames();
+
+        // THEN
+        assertEquals(expectedNicknames, result);
+    }
+
+    @Test
+    @DisplayName("Debe retornar todos los nicknames de aerolíneas desde el service")
+    void getAllAirlinesNicknames_shouldReturnMappedNicknames() {
+        // GIVEN
+        AirlineDTO airline1 = new AirlineDTO();
+        airline1.setNickname("air1");
+
+        AirlineDTO airline2 = new AirlineDTO();
+        airline2.setNickname("air2");
+
+        when(usuarioService.getAllAirlines()).thenReturn(List.of(airline1, airline2));
+
+        // WHEN
+        List<String> result = usuarioController.getAllAirlinesNicknames();
+
+        // THEN
+        assertEquals(List.of("air1", "air2"), result);
+    }
+
+    @Test
+    @DisplayName("Debe retornar el usuario correspondiente por nickname")
+    void getUserByNickname_shouldReturnUserDTO() {
+        // GIVEN
+        UserDTO user = new CustomerDTO();
+        user.setNickname("gyabisito");
+
+        when(usuarioService.getUserByNickname("gyabisito")).thenReturn(user);
+
+        // WHEN
+        UserDTO result = usuarioController.getUserByNickname("gyabisito");
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("gyabisito", result.getNickname());
+    }
+
+    @Test
+    @DisplayName("Debe actualizar el usuario correctamente")
+    void updateUser_shouldDelegateToService() {
+        // GIVEN
+        UserDTO updated = new CustomerDTO();
+        updated.setNickname("gyabisito");
+
+        when(usuarioService.updateUser("gyabisito", updated)).thenReturn(updated);
+
+        // WHEN
+        UserDTO result = usuarioController.updateUser("gyabisito", updated);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("gyabisito", result.getNickname());
+    }
+
+    @Test
+    @DisplayName("Debe retornar AirlineDTO por nickname")
+    void getAirlineByNickname_shouldReturnFromService() {
+        // GIVEN
+        AirlineDTO airline = new AirlineDTO();
+        airline.setNickname("flyuy");
+
+        when(usuarioService.getAirlineDetailsByNickname("flyuy")).thenReturn(airline);
+
+        // WHEN
+        AirlineDTO result = usuarioController.getAirlineByNickname("flyuy");
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("flyuy", result.getNickname());
+    }
+
 }

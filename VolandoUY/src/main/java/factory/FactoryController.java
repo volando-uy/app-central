@@ -145,7 +145,7 @@ public class FactoryController {
         return flightController;
     }
 
-    private static IFlightService getFlightService() {
+    public static IFlightService getFlightService() {
         if (flightService == null) {
             flightService = new FlightService(getModelMapper());
         }

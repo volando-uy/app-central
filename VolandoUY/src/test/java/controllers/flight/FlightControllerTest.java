@@ -1,27 +1,20 @@
 package controllers.flight;
 
-import controllers.flightRoute.FlightRouteController;
-import controllers.flightRoute.IFlightRouteController;
 import domain.dtos.flight.FlightDTO;
-
 import domain.services.flight.IFlightService;
-import domain.services.flightRoute.IFlightRouteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.modelmapper.ModelMapper;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import java.time.LocalDateTime;
+import java.util.List;
 
-public class FlightControllerTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    @Mock
+class FlightControllerTest {
+
     private IFlightService flightService;
-
-    @InjectMocks
     private IFlightController flightController;
 
     @BeforeEach
@@ -31,25 +24,74 @@ public class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("Debe llamar a createFlight correctamente")
-    void createFlight_shouldCallTheServiceCorrectly() {
-        FlightDTO flightDTO = new FlightDTO();
-        flightDTO.setName("test");
+    @DisplayName("GIVEN valid FlightDTO WHEN createFlight is called THEN it should return created FlightDTO")
+    void createFlight_shouldDelegateToServiceAndReturnDTO() {
+        // GIVEN
+        FlightDTO flightDTO = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123");
 
-        // Act
-        flightController.createFlight(flightDTO);
+        when(flightService.createFlight(flightDTO)).thenReturn(flightDTO);
 
-        // Assert
+        // WHEN
+        FlightDTO result = flightController.createFlight(flightDTO);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("Vuelo 1", result.getName());
         verify(flightService).createFlight(flightDTO);
     }
 
     @Test
-    @DisplayName("Debe llamar a getAllFlights correctamente")
-    void getAllFlights_shouldCallTheServiceCorrectly() {
-        // Act
-        flightController.getAllFlights();
+    @DisplayName("GIVEN multiple flights WHEN getAllFlights is called THEN return full list")
+    void getAllFlights_shouldReturnListFromService() {
+        // GIVEN
+        List<FlightDTO> mockFlights = List.of(
+                new FlightDTO("Vuelo A", LocalDateTime.now(), 90L, 80, 40, null, "air123"),
+                new FlightDTO("Vuelo B", LocalDateTime.now(), 60L, 70, 35, null, "air123")
+        );
+        when(flightService.getAllFlights()).thenReturn(mockFlights);
 
-        // Assert
+        // WHEN
+        List<FlightDTO> result = flightController.getAllFlights();
+
+        // THEN
+        assertEquals(2, result.size());
+        assertEquals("Vuelo A", result.get(0).getName());
         verify(flightService).getAllFlights();
+    }
+
+    @Test
+    @DisplayName("GIVEN flight name WHEN getFlightByName is called THEN return correct DTO")
+    void getFlightByName_shouldReturnFlightDTO() {
+        // GIVEN
+        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now(), 120L, 100, 50, null, "air123");
+
+        when(flightService.getFlightDetailsByName("Vuelo 1")).thenReturn(dto);
+
+        // WHEN
+        FlightDTO result = flightController.getFlightByName("Vuelo 1");
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("Vuelo 1", result.getName());
+        verify(flightService).getFlightDetailsByName("Vuelo 1");
+    }
+
+    @Test
+    @DisplayName("GIVEN airline nickname WHEN getAllFlightsByAirline is called THEN return list from service")
+    void getAllFlightsByAirline_shouldReturnFlightsForAirline() {
+        // GIVEN
+        List<FlightDTO> flights = List.of(
+                new FlightDTO("Vuelo X", LocalDateTime.now(), 90L, 80, 40, null, "flyuy"),
+                new FlightDTO("Vuelo Y", LocalDateTime.now(), 100L, 90, 45, null, "flyuy")
+        );
+        when(flightService.getAllFlightsByAirline("flyuy")).thenReturn(flights);
+
+        // WHEN
+        List<FlightDTO> result = flightController.getAllFlightsByAirline("flyuy");
+
+        // THEN
+        assertEquals(2, result.size());
+        assertEquals("Vuelo X", result.get(0).getName());
+        verify(flightService).getAllFlightsByAirline("flyuy");
     }
 }
