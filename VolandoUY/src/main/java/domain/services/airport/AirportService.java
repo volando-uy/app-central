@@ -41,6 +41,7 @@ public class AirportService implements IAirportService {
 
         // Agregar el airport a la lista de aeropuertos
         airports.add(airport);
+        System.out.println(airports);
 
         // Mapear el DTO a la entidad Airport
         AirportDTO createdAirportDTO = modelMapper.map(airport, AirportDTO.class);

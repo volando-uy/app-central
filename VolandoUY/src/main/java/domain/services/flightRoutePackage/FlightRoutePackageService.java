@@ -33,7 +33,9 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         ValidatorUtil.validate(pack);
 
         pack.setFlightRoutes(new ArrayList<>());
+
         flightRoutePackages.add(pack);
+        System.out.println(flightRoutePackages);
         return modelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 
@@ -77,6 +79,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         
         for (int i = 0; i < quantity; i++) {
             pack.getFlightRoutes().add(flightRoute);
+            System.out.println("Added flight route " + flightRouteName + " to package " + packageName);
         }
 
     }

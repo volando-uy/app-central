@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class CreateFlightRoutePanel extends JPanel {
         initListeners();
         initAirlineList();
         initCategoryList();
+        initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
         try {
             setBorder(null);
         } catch (Exception ignored) {
@@ -152,6 +155,33 @@ public class CreateFlightRoutePanel extends JPanel {
 
     private void initComponentsManually() {
         createdAtTextField.setText("dd/mm/yyyy");
+    }
+
+    private void initPlaceholderForTextField(JTextField textField, String placeholder) {
+        textField.setForeground(Color.GRAY);
+
+        // When text field is selected, delete the placeholder text
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setForeground(Color.BLACK);
+                    textField.setText("");
+                }
+            }
+        });
+
+
+        // Set the placeholder text when the field loses focus
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
+            }
+        });
     }
 
     private void initComponents() {

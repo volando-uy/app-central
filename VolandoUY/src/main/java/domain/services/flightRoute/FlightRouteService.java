@@ -94,11 +94,12 @@ public class FlightRouteService implements IFlightRouteService {
         // Inicializar la lista de vuelos
         flightRoute.setFlights(new ArrayList<>());
 
-        // Agregar la ruta de vuelo a la lista de rutas de vuelo
-        flightRouteList.add(flightRoute);
-
         // Añadir la ruta de vuelo a la aerolinea
         airline.getFlightRoutes().add(flightRoute);
+
+        // Agregar la ruta de vuelo a la lista de rutas de vuelo
+        flightRouteList.add(flightRoute);
+        System.out.println(flightRouteList);
 
         // Mapear la ruta de vuelo a FlightRouteDTO
         flightRouteDTO = modelMapper.map(flightRoute, FlightRouteDTO.class);

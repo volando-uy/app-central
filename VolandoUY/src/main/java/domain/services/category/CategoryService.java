@@ -29,6 +29,7 @@ public class CategoryService implements ICategoryService {
         ValidatorUtil.validate(category);
 
         categories.add(category);
+        System.out.println(categories);
         return modelMapper.map(category, CategoryDTO.class);
     }
 

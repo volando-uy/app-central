@@ -8,6 +8,8 @@ import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,6 +27,7 @@ public class UpdateUserPanel extends JPanel {
         initComponents();
         initListeners();
         initUserList();
+        initPlaceholderForTextField(variableTextField4, "dd/mm/yyyy");
         try {
             setBorder(null);
         } catch (Exception ignored) {
@@ -134,6 +137,32 @@ public class UpdateUserPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private void initPlaceholderForTextField(JTextField textField, String placeholder) {
+
+        // When text field is selected, delete the placeholder text
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setForeground(Color.BLACK);
+                    textField.setText("");
+                }
+            }
+        });
+
+
+        // Set the placeholder text when the field loses focus
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
             }
         });
     }
