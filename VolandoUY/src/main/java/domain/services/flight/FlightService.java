@@ -100,8 +100,10 @@ public class FlightService implements IFlightService {
     }
 
     private boolean _flightExists(Flight flight) {
-        return flights.contains(flight);
+        return flights.stream()
+                .anyMatch(existingFlight -> existingFlight.getName().equalsIgnoreCase(flight.getName()));
     }
+
 
 
 }

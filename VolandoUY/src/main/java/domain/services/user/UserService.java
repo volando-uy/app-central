@@ -54,7 +54,7 @@ public class UserService implements IUserService {
         }
         ValidatorUtil.validate(customer);
 
-        users.add(customer);
+        this.users.add(customer);
         System.out.println(users);
         return modelMapper.map(customer, CustomerDTO.class);
     }
@@ -70,7 +70,7 @@ public class UserService implements IUserService {
         airline.setFlightRoutes(new ArrayList<>());
         airline.setFlights(new ArrayList<>());
 
-        users.add(airline);
+        this.users.add(airline);
         System.out.println(users);
         return modelMapper.map(airline, AirlineDTO.class);
     }
@@ -167,4 +167,6 @@ public class UserService implements IUserService {
         }
         return userMapper.toAirlineDTO(airline);
     }
+
+
 }

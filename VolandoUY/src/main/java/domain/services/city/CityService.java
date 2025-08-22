@@ -28,7 +28,7 @@ public class CityService implements ICityService {
         ValidatorUtil.validate(city);
 
         if (city.getAirports() == null) {
-            city.setAirports(List.of());
+            city.setAirports(new ArrayList<>());
         }
 
         cities.add(city);
