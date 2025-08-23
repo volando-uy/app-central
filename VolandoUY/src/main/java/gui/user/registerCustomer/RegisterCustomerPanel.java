@@ -75,19 +75,7 @@ public class RegisterCustomerPanel extends JPanel {
     }
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
-        textField.setForeground(Color.GRAY);
-
-        // When text field is selected, delete the placeholder text
-        textField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setForeground(Color.BLACK);
-                    textField.setText("");
-                }
-            }
-        });
-
+        textField.setForeground(Color.BLACK);
 
         // Set the placeholder text when the field loses focus
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -96,6 +84,14 @@ public class RegisterCustomerPanel extends JPanel {
                 if (textField.getText().isEmpty()) {
                     textField.setForeground(Color.GRAY);
                     textField.setText(placeholder);
+                }
+            }
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
                 }
             }
         });
