@@ -9,55 +9,106 @@ new FormModel {
 			"preferredSize": new java.awt.Dimension( 160, 600 )
 			"minimumSize": new java.awt.Dimension( 80, 300 )
 			"maximumSize": new java.awt.Dimension( 160, 600 )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "Icon"
-				"icon": new com.jformdesigner.model.SwingIcon( 0, "/volando_uy_logo_resized.png" )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "First"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {par l {comp FlightRouteManagementBtn::l:p:160:p, comp FlightManagementBtn::l:p:160:p, comp UserManagementBtn::l:p:160:p, comp FlightRoutePackageManagementBtn::l:p:160:p, comp ReservationsManagementBtn:::p:160:p, comp OthersManagementBtn:::p:160:p}, space :0:0:x}}"
-				"$verticalGroup": "par l {seq l {space :p:30:p, comp UserManagementBtn:::p::p, space :p:30:p, comp FlightManagementBtn:::p::p, space :p:30:p, comp FlightRouteManagementBtn:::p::p, space :p:30:p, comp FlightRoutePackageManagementBtn:::p::p, space :p:30:p, comp ReservationsManagementBtn:::p::p, space :p:36:p, comp OthersManagementBtn:::p::p, space ::80:x}}"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$rowSpecs": "0, 10, 0, 0, 0, 0, 0, 0, 0"
+				"$vGap": 20
+				"$alignTop": true
+				"$alignLeft": true
+				"$columnSpecs": "160"
 			} ) {
 				name: "MenuPanel"
-				"background": new java.awt.Color( 20, 33, 61, 255 )
 				"maximumSize": new java.awt.Dimension( 160, 470 )
 				"minimumSize": new java.awt.Dimension( 160, 470 )
+				"background": new java.awt.Color( 21, 77, 113, 255 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "invisibleLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "Icon"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/volando_uy_logo_resized_3.png" )
+					"background": new java.awt.Color( 28, 110, 164, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 0
+					"vAlign": 0
+					"gridy": 1
+				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "UserManagementBtn"
 					"text": "Usuarios"
 					"foreground": new java.awt.Color( 59, 130, 246, 255 )
 					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 2
+					"hAlign": 0
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "FlightManagementBtn"
 					"text": "Vuelos"
 					"font": &Font0 new java.awt.Font( "Leelawadee UI", 1, 13 )
 					"foreground": &Color0 new java.awt.Color( 59, 130, 246, 255 )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "FlightRoutePackageManagementBtn"
-					"text": "Paquetes de RV"
-					"font": &Font1 new java.awt.Font( "Leelawadee UI", 1, 13 )
-					"foreground": &Color1 new java.awt.Color( 59, 130, 246, 255 )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "ReservationsManagementBtn"
-					"text": "Reservas"
-					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
-					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 3
+					"hAlign": 0
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "FlightRouteManagementBtn"
 					"text": "Rutas de Vuelos"
 					"font": #Font0
 					"foreground": #Color0
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 4
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "FlightRoutePackageManagementBtn"
+					"text": "Paquetes de RV"
+					"font": &Font1 new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": &Color1 new java.awt.Color( 59, 130, 246, 255 )
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 5
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "ReservationsManagementBtn"
+					"text": "Reservas"
+					"font": new java.awt.Font( "Leelawadee UI", 1, 13 )
+					"foreground": new java.awt.Color( 59, 130, 246, 255 )
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 6
+					"hAlign": 0
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "OthersManagementBtn"
 					"text": "Otros (Cat., Ciud.)"
 					"font": #Font1
 					"foreground": #Color1
+					"opaque": false
+					"preferredSize": new java.awt.Dimension( 140, 34 )
+					"minimumSize": new java.awt.Dimension( 140, 34 )
+					"maximumSize": new java.awt.Dimension( 140, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 7
+					"hAlign": 0
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
@@ -40,6 +41,13 @@ public class MainFrame extends JFrame {
         this.categoryController = categoryController;
         this.cityController = cityController;
         this.flightRoutePackageController = flightRoutePackageController;
+        try {
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
+
+// create UI here...
         initUI();
     }
 

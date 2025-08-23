@@ -9,6 +9,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.border.*;
+import shared.constants.GUIConstants;
 
 import lombok.Setter;
 import org.postgresql.util.ReaderInputStream;
@@ -35,10 +36,11 @@ public class SideBar extends JPanel {
         initComponents();
         initListeners();
         try {
-            setBorder(new CompoundBorder(
-                    new BevelBorder(BevelBorder.LOWERED),
-                    new BevelBorder(BevelBorder.RAISED)
-            ));
+//            setBorder(new CompoundBorder(
+//                    new BevelBorder(BevelBorder.LOWERED),
+//                    new BevelBorder(BevelBorder.RAISED)
+//            ));
+            setBorder(null);
         } catch (Exception ignored) {
         }
     }
@@ -53,13 +55,14 @@ public class SideBar extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
-        Icon = new JLabel();
         MenuPanel = new JPanel();
+        invisibleLabel = new JLabel();
+        Icon = new JLabel();
         UserManagementBtn = new JButton();
         FlightManagementBtn = new JButton();
+        FlightRouteManagementBtn = new JButton();
         FlightRoutePackageManagementBtn = new JButton();
         ReservationsManagementBtn = new JButton();
-        FlightRouteManagementBtn = new JButton();
         OthersManagementBtn = new JButton();
 
         //======== this ========
@@ -67,85 +70,106 @@ public class SideBar extends JPanel {
         setPreferredSize(new Dimension(160, 600));
         setMinimumSize(new Dimension(80, 300));
         setMaximumSize(new Dimension(160, 600));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
-        EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing
-        .border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),
-        java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))
-        throw new RuntimeException();}});
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
+        .EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing.border.TitledBorder.CENTER,javax
+        .swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dialo\u0067",java.awt.Font.BOLD,
+        12),java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans
+        .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".equals(e.
+        getPropertyName()))throw new RuntimeException();}});
         setLayout(new BorderLayout());
-
-        //---- Icon ----
-        Icon.setIcon(new ImageIcon(getClass().getResource("/volando_uy_logo_resized.png")));
-        add(Icon, BorderLayout.PAGE_START);
 
         //======== MenuPanel ========
         {
-            MenuPanel.setBackground(new Color(0x14213d));
             MenuPanel.setMaximumSize(new Dimension(160, 470));
             MenuPanel.setMinimumSize(new Dimension(160, 470));
+            MenuPanel.setBackground(new Color(0x154d71));
+            MenuPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)MenuPanel.getLayout()).columnWidths = new int[] {160, 0};
+            ((GridBagLayout)MenuPanel.getLayout()).rowHeights = new int[] {0, 30, 0, 0, 0, 0, 0, 0, 0, 0};
+            ((GridBagLayout)MenuPanel.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
+            ((GridBagLayout)MenuPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            MenuPanel.add(invisibleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 20, 0), 0, 0));
+
+            //---- Icon ----
+            Icon.setIcon(new ImageIcon(getClass().getResource("/volando_uy_logo_resized_3.png")));
+            Icon.setBackground(new Color(0x1c6ea4));
+            MenuPanel.add(Icon, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                new Insets(0, 0, 20, 0), 0, 0));
 
             //---- UserManagementBtn ----
             UserManagementBtn.setText("Usuarios");
             UserManagementBtn.setForeground(new Color(0x3b82f6));
             UserManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
+            UserManagementBtn.setPreferredSize(new Dimension(140, 34));
+            UserManagementBtn.setMinimumSize(new Dimension(140, 34));
+            UserManagementBtn.setMaximumSize(new Dimension(140, 34));
+            UserManagementBtn.setOpaque(false);
+            MenuPanel.add(UserManagementBtn, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
 
             //---- FlightManagementBtn ----
             FlightManagementBtn.setText("Vuelos");
             FlightManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
             FlightManagementBtn.setForeground(new Color(0x3b82f6));
-
-            //---- FlightRoutePackageManagementBtn ----
-            FlightRoutePackageManagementBtn.setText("Paquetes de RV");
-            FlightRoutePackageManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
-            FlightRoutePackageManagementBtn.setForeground(new Color(0x3b82f6));
-
-            //---- ReservationsManagementBtn ----
-            ReservationsManagementBtn.setText("Reservas");
-            ReservationsManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
-            ReservationsManagementBtn.setForeground(new Color(0x3b82f6));
+            FlightManagementBtn.setPreferredSize(new Dimension(140, 34));
+            FlightManagementBtn.setMinimumSize(new Dimension(140, 34));
+            FlightManagementBtn.setMaximumSize(new Dimension(140, 34));
+            FlightManagementBtn.setOpaque(false);
+            MenuPanel.add(FlightManagementBtn, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
 
             //---- FlightRouteManagementBtn ----
             FlightRouteManagementBtn.setText("Rutas de Vuelos");
             FlightRouteManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
             FlightRouteManagementBtn.setForeground(new Color(0x3b82f6));
+            FlightRouteManagementBtn.setPreferredSize(new Dimension(140, 34));
+            FlightRouteManagementBtn.setMinimumSize(new Dimension(140, 34));
+            FlightRouteManagementBtn.setMaximumSize(new Dimension(140, 34));
+            FlightRouteManagementBtn.setOpaque(false);
+            MenuPanel.add(FlightRouteManagementBtn, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
+
+            //---- FlightRoutePackageManagementBtn ----
+            FlightRoutePackageManagementBtn.setText("Paquetes de RV");
+            FlightRoutePackageManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
+            FlightRoutePackageManagementBtn.setForeground(new Color(0x3b82f6));
+            FlightRoutePackageManagementBtn.setPreferredSize(new Dimension(140, 34));
+            FlightRoutePackageManagementBtn.setMinimumSize(new Dimension(140, 34));
+            FlightRoutePackageManagementBtn.setMaximumSize(new Dimension(140, 34));
+            FlightRoutePackageManagementBtn.setOpaque(false);
+            MenuPanel.add(FlightRoutePackageManagementBtn, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
+
+            //---- ReservationsManagementBtn ----
+            ReservationsManagementBtn.setText("Reservas");
+            ReservationsManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
+            ReservationsManagementBtn.setForeground(new Color(0x3b82f6));
+            ReservationsManagementBtn.setPreferredSize(new Dimension(140, 34));
+            ReservationsManagementBtn.setMinimumSize(new Dimension(140, 34));
+            ReservationsManagementBtn.setMaximumSize(new Dimension(140, 34));
+            ReservationsManagementBtn.setOpaque(false);
+            MenuPanel.add(ReservationsManagementBtn, new GridBagConstraints(0, 6, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
 
             //---- OthersManagementBtn ----
             OthersManagementBtn.setText("Otros (Cat., Ciud.)");
             OthersManagementBtn.setFont(new Font("Leelawadee UI", Font.BOLD, 13));
             OthersManagementBtn.setForeground(new Color(0x3b82f6));
-
-            GroupLayout MenuPanelLayout = new GroupLayout(MenuPanel);
-            MenuPanel.setLayout(MenuPanelLayout);
-            MenuPanelLayout.setHorizontalGroup(
-                MenuPanelLayout.createParallelGroup()
-                    .addGroup(MenuPanelLayout.createSequentialGroup()
-                        .addGroup(MenuPanelLayout.createParallelGroup()
-                            .addComponent(FlightRouteManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FlightManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(UserManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FlightRoutePackageManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ReservationsManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(OthersManagementBtn, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-            );
-            MenuPanelLayout.setVerticalGroup(
-                MenuPanelLayout.createParallelGroup()
-                    .addGroup(MenuPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(UserManagementBtn)
-                        .addGap(30, 30, 30)
-                        .addComponent(FlightManagementBtn)
-                        .addGap(30, 30, 30)
-                        .addComponent(FlightRouteManagementBtn)
-                        .addGap(30, 30, 30)
-                        .addComponent(FlightRoutePackageManagementBtn)
-                        .addGap(30, 30, 30)
-                        .addComponent(ReservationsManagementBtn)
-                        .addGap(36, 36, 36)
-                        .addComponent(OthersManagementBtn)
-                        .addContainerGap(80, Short.MAX_VALUE))
-            );
+            OthersManagementBtn.setOpaque(false);
+            OthersManagementBtn.setPreferredSize(new Dimension(140, 34));
+            OthersManagementBtn.setMinimumSize(new Dimension(140, 34));
+            OthersManagementBtn.setMaximumSize(new Dimension(140, 34));
+            MenuPanel.add(OthersManagementBtn, new GridBagConstraints(0, 7, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 20, 0), 0, 0));
         }
         add(MenuPanel, BorderLayout.CENTER);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -153,13 +177,14 @@ public class SideBar extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
-    private JLabel Icon;
     private JPanel MenuPanel;
+    private JLabel invisibleLabel;
+    private JLabel Icon;
     private JButton UserManagementBtn;
     private JButton FlightManagementBtn;
+    private JButton FlightRouteManagementBtn;
     private JButton FlightRoutePackageManagementBtn;
     private JButton ReservationsManagementBtn;
-    private JButton FlightRouteManagementBtn;
     private JButton OthersManagementBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
