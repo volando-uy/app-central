@@ -13,7 +13,7 @@ import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
-import factory.FactoryController;
+import factory.ControllerFactory;
 import gui.MainFrame;
 import jakarta.persistence.EntityManager;
 
@@ -25,28 +25,26 @@ import java.util.List;
 public class VolandoApp {
 
     public static void main(String[] args) {
-//        DBConnection.main(args);
-        EntityManager em=new DBConnection().getEntityManager();
 
-        IUserController usuarioController = FactoryController.getUserController();
-        IFlightRouteController flightRouteController = FactoryController.getFlightRouteController();
-        ICategoryController categoryController = FactoryController.getCategoryController();
-        ICityController cityController = FactoryController.getCityController();
-        IFlightRoutePackageController flightRoutePackageController = FactoryController.getFlightRoutePackageController();
+        IUserController usuarioController = ControllerFactory.getUserController();
+        IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
+        ICategoryController categoryController = ControllerFactory.getCategoryController();
+        ICityController cityController = ControllerFactory.getCityController();
+        IFlightRoutePackageController flightRoutePackageController = ControllerFactory.getFlightRoutePackageController();
 
         /* Creates users: customers and airlines */
-        usuarioController.registerCustomer(new CustomerDTO(
-                "customer1", "Aparicio", "waza@gmail.com", "Quian", "uruguayo", LocalDate.of(2004, 12, 12), "123123123", EnumTipoDocumento.CI
-        ));
-        usuarioController.registerCustomer(new CustomerDTO(
-                "customer2", "Nahuel", "waza2@gmail.com", "Gonzalez", "uruguayo", LocalDate.of(2003, 1, 1), "123123124", EnumTipoDocumento.CI
-        ));
-        usuarioController.registerAirline(new AirlineDTO(
-                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar"
-        ));
-        usuarioController.registerAirline(new AirlineDTO(
-                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com"
-        ));
+//        usuarioController.registerCustomer(new CustomerDTO(
+//                "customer1", "Aparicio", "waza@gmail.com", "Quian", "uruguayo", LocalDate.of(2004, 12, 12), "123123123", EnumTipoDocumento.CI
+//        ));
+//        usuarioController.registerCustomer(new CustomerDTO(
+//                "customer2", "Nahuel", "waza2@gmail.com", "Gonzalez", "uruguayo", LocalDate.of(2003, 1, 1), "123123124", EnumTipoDocumento.CI
+//        ));
+//        usuarioController.registerAirline(new AirlineDTO(
+//                "airline1", "Aerolíneas Argentinas", "aa@mail.com", "Aerolíneas Argentinas S.A.", "www.aerolineas.com.ar"
+//        ));
+//        usuarioController.registerAirline(new AirlineDTO(
+//                "airline2", "LATAM Airlines", "ltm@gmail.com", "LATAM Airlines Group S.A.", "www.latam.com"
+//        ));
 
         /* Creates flight route packages */
         flightRoutePackageController.createFlightRoutePackage(new FlightRoutePackageDTO(
@@ -63,12 +61,12 @@ public class VolandoApp {
         cityController.createCity(new CityDTO("Montevideo", "Uruguay", 60.0, 60.0, new ArrayList<>()));
 
         /* Creates flight routes */
-        flightRouteController.createFlightRoute(new FlightRouteDTO(
-                "route1", "Ruta de vuelo 1", LocalDate.now(), 100.0, 200.0, 50.0, "San José", "Montevideo", "airline1", List.of("category1", "category2")
-        ));
-        flightRouteController.createFlightRoute(new FlightRouteDTO(
-                "route2", "Ruta de vuelo 2", LocalDate.now().plusDays(1), 150.0, 250.0, 75.0, "Montevideo", "San José", "airline2", List.of("category1")
-        ));
+//        flightRouteController.createFlightRoute(new FlightRouteDTO(
+//                "route1", "Ruta de vuelo 1", LocalDate.now(), 100.0, 200.0, 50.0, "San José", "Montevideo", "airline1", List.of("category1", "category2")
+//        ));
+//        flightRouteController.createFlightRoute(new FlightRouteDTO(
+//                "route2", "Ruta de vuelo 2", LocalDate.now().plusDays(1), 150.0, 250.0, 75.0, "Montevideo", "San José", "airline2", List.of("category1")
+//        ));
 
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController, flightRoutePackageController);

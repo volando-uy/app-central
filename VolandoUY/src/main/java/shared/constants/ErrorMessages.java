@@ -2,10 +2,14 @@ package shared.constants;
 
 public class ErrorMessages {
     public static final String ERR_CAMPO_OBLIGATORIO="El campo %s es obligatorio";
-    public static final String ERR_USUARIO_YA_EXISTE="El nickname o email ya están en uso";
-    public static final String ERR_CLIENTE_NO_EXISTE_CLIENTE="El cliente %s no existe";
+
     public static final String ERR_FORMATO_EMAIL_INVALIDO="Formato de email invalido";
     public static final String ERR_ACCEDER_CAMPO = "Error al acceder al campo %s";
+
+    public static final String ERR_USER_EXISTS = "El usuario %s ya existe";
+    public static final String ERR_USER_MAIL_ALREADY_IN_USE = "Ya existe un usuario con el correo %s";
+    public static final String ERR_USER_NOT_FOUND = "El usuario %s no fue encontrado";
+
     public static final String ERR_CATEGORY_EXISTS = "La categoría %s ya existe";
     public static final String ERR_CATEGORY_NOT_FOUND = "La categoría %s no fue encontrada";
     public static final String ERR_CITY_NOT_FOUND = "La ciudad %s no fue encontrada";

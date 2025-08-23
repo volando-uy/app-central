@@ -207,52 +207,6 @@ class UserServiceTest {
     }
 
     @Test
-    void addFlightRouteToAirline_shouldAddRouteSuccessfully() {
-        // GIVEN
-        AirlineDTO dto = new AirlineDTO("skyline", "Skyline", "sky@mail.com", "Best airline", "www.skyline.com");
-        userService.registerAirline(dto);
-
-        FlightRouteDTO routeDTO = new FlightRouteDTO();
-        routeDTO.setName("Ruta 1");
-        routeDTO.setDescription("Una ruta");
-        routeDTO.setCreatedAt(LocalDate.now());
-        routeDTO.setPriceTouristClass(100.0);
-        routeDTO.setPriceBusinessClass(200.0);
-        routeDTO.setPriceExtraUnitBaggage(30.0);
-
-        // WHEN
-        FlightRouteDTO result = userService.addFlightRouteToAirline("skyline", routeDTO);
-
-        // THEN
-        assertEquals("Ruta 1", result.getName());
-    }
-
-    @Test
-    void addFlightRouteToAirline_shouldThrowIfUserNotAirline() {
-        // GIVEN
-        CustomerDTO customerDTO = new CustomerDTO(
-                "c123", "Cliente", "cliente@mail.com", "Perez", "Uruguay",
-                LocalDate.of(1995, 1, 1), "12345678", EnumTipoDocumento.CI
-        );
-        userService.registerCustomer(customerDTO);
-
-        FlightRouteDTO routeDTO = new FlightRouteDTO();
-        routeDTO.setName("Ruta X");
-        routeDTO.setDescription("desc");
-        routeDTO.setCreatedAt(LocalDate.now());
-        routeDTO.setPriceTouristClass(90.0);
-        routeDTO.setPriceBusinessClass(180.0);
-        routeDTO.setPriceExtraUnitBaggage(25.0);
-
-        // WHEN + THEN
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            userService.addFlightRouteToAirline("c123", routeDTO);
-        });
-
-        assertTrue(ex.getMessage().contains("Airline no encontrada"));
-    }
-
-    @Test
     void getAirlineByNickname_shouldReturnEntity() {
         // GIVEN
         AirlineDTO dto = new AirlineDTO("vuela", "Vuela", "vuela@mail.com", "Super Airline", "web.com");

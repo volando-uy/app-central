@@ -29,49 +29,18 @@ import org.modelmapper.ModelMapper;
 
 
 
-public class FactoryController {
+public class ControllerFactory {
 
-    private static IUserController userController;
     private static ModelMapper modelMapper;
     private static UserMapper userMapper;
     private static UserFactoryMapper userFactoryMapper;
-    private static IUserService userService;
 
+    private static IUserController userController;
     private static IFlightRouteController flightRouteController;
-    private static IFlightRouteService flightRouteService;
-
     private static IFlightController flightController;
-    private static IFlightService flightService;
-
     private static ICategoryController categoryController;
-    private static ICategoryService categoryService;
-
     private static ICityController cityController;
-    private static ICityService cityService;
-
     private static IFlightRoutePackageController packageController;
-    private static IFlightRoutePackageService packageService;
-
-
-    // ############ USER CONTROLLER & SERVICE ############
-
-    // Metodo para obtener el controlador de usuario, inicializándolo si es necesario
-    public static IUserController getUserController() {
-        if (userController == null) {
-            userController = new UserController(getUserService());
-        }
-        return userController;
-    }
-
-    // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
-    public static IUserService getUserService() {
-        if (userService == null) {
-            userService = new UserService(getModelMapper(), getUserMapper());
-        }
-        return userService;
-    }
-
-    // #############################################################
 
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
@@ -100,89 +69,80 @@ public class FactoryController {
     // #############################################################
 
 
-    // ############ FLIGHT ROUTE CONTROLLER & SERVICE ############
+    // ############ USER CONTROLLER ############
+
+    // Metodo para obtener el controlador de usuario, inicializándolo si es necesario
+    public static IUserController getUserController() {
+        if (userController == null) {
+            userController = new UserController(ServiceFactory.getUserService());
+        }
+        return userController;
+    }
+
+
+    // #############################################################
+
+
+
+    // ############ FLIGHT ROUTE CONTROLLER ############
 
 
     // Metodo para obtener el controlador de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteController getFlightRouteController() {
         if (flightRouteController == null) {
-            flightRouteController = new FlightRouteController(getFlightRouteService());
+            flightRouteController = new FlightRouteController(ServiceFactory.getFlightRouteService());
         }
         return flightRouteController;
     }
 
-    // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
-    public static IFlightRouteService getFlightRouteService() {
-        if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService(getModelMapper(), getCategoryService(), getUserService(), getCityService());
-        }
-        return flightRouteService;
-    }
 
-    // ############### FLIGHT CONTROLLER & SERVICE #################
-
-    public static ICategoryService getCategoryService() {
-        if(categoryService == null) {
-            categoryService = new CategoryService(getModelMapper());
-        }
-        return categoryService;
-    }
+    // ############### CATEGORY CONTROLLER #################
 
     public static ICategoryController getCategoryController() {
         if(categoryController == null) {
-            categoryController = new CategoryController(getCategoryService());
+            categoryController = new CategoryController(ServiceFactory.getCategoryService());
         }
         return categoryController;
     }
+
     // #############################################################
 
-    // ############### FLIGHT CONTROLLER & SERVICE #################
+
+
+    // ############### FLIGHT CONTROLLER  #################
 
     public static IFlightController getFlightController() {
         if (flightController == null) {
-            flightController = new FlightController(getFlightService());
+            flightController = new FlightController(ServiceFactory.getFlightService());
         }
         return flightController;
     }
 
-    public static IFlightService getFlightService() {
-        if (flightService == null) {
-            flightService = new FlightService(getModelMapper());
-        }
-        return flightService;
-    }
+    // ##########################################
 
 
-// ############### FLIGHT ROUTE PACKAGES CONTROLLER & SERVICE #################
+    // ############### FLIGHT ROUTE PACKAGES CONTROLLER #################
 
-    public static IFlightRoutePackageService getFlightRoutePackageService() {
-        if (packageService == null) {
-            packageService = new FlightRoutePackageService(getFlightRouteService(), getModelMapper());
-        }
-        return packageService;
-    }
 
     public static IFlightRoutePackageController getFlightRoutePackageController() {
         if (packageController == null) {
-            packageController = new FlightRoutePackageController(getFlightRoutePackageService());
+            packageController = new FlightRoutePackageController(ServiceFactory.getFlightRoutePackageService());
         }
         return packageController;
     }
+
+    // ##########################################
+
 
     // ############### CITY CONTROLLER & SERVICE #################
 
     public static ICityController getCityController() {
         if (cityController == null) {
-            cityController = new CityController(getCityService());
+            cityController = new CityController(ServiceFactory.getCityService());
         }
         return cityController;
     }
 
-    public static ICityService getCityService() {
-        if (cityService == null) {
-            cityService = new CityService(getModelMapper());
-        }
-        return cityService;
-    }
+
 
 }
