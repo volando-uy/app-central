@@ -1,5 +1,6 @@
 package domain.services.user;
 
+import app.DBConnection;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
@@ -8,6 +9,8 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
+import infra.repository.BaseRepository;
+import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import domain.models.user.mapper.UserMapper;
 import shared.constants.ErrorMessages;
@@ -20,19 +23,37 @@ import java.util.stream.Collectors;
 
 public class UserService implements IUserService {
     //Supongamos que tenemos el UserRepository
+    EntityManager em = DBConnection.getEntityManager();
     private LinkedList<User> users = new LinkedList<>();
     private Map<String, User> usuariosTemporales = new HashMap<>();
     private ModelMapper modelMapper;
     private UserMapper userMapper;
+    BaseRepository<Customer> customerRepo = new BaseRepository<>(Customer.class);
+
 
     public UserService(ModelMapper modelMapper, UserMapper userMapper) {
         this.modelMapper = modelMapper;
         this.userMapper = userMapper;
     }
 
+    @Override
+    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
+        if (_userExists(customer)) {
+            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
+        }
+        ValidatorUtil.validate(customer);
+
+        this.users.add(customer);
+        customerRepo.save(customer);
+
+        System.out.println(users);
+        return modelMapper.map(customer, CustomerDTO.class);
+    }
+
 
     // Les puse _ a las funciones internas, que luego van a ser parte del repository.
-    private User _getUserByNickname(String nickname){
+    private User _getUserByNickname(String nickname) {
         return this.users.stream()
                 .filter(u -> u.getNickname().equalsIgnoreCase(nickname))
                 .findFirst()
@@ -45,19 +66,6 @@ public class UserService implements IUserService {
         return users.stream().anyMatch(u -> u.getNickname().equalsIgnoreCase(user.getNickname()) || u.getMail().equalsIgnoreCase(user.getMail()));
     }
 
-
-    @Override
-    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
-        Customer customer = modelMapper.map(customerDTO, Customer.class);
-        if (_userExists(customer)) {
-            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
-        }
-        ValidatorUtil.validate(customer);
-
-        this.users.add(customer);
-        System.out.println(users);
-        return modelMapper.map(customer, CustomerDTO.class);
-    }
 
     @Override
     public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
@@ -106,7 +114,8 @@ public class UserService implements IUserService {
         User originalUser = _getUserByNickname(nickname);
         if (originalUser == null) {
             throw new IllegalArgumentException("User no encontrado: " + nickname);
-        };
+        }
+        ;
 
         User tempUser = userMapper.fromDTO(updatedUserDTO);
         ValidatorUtil.validate(tempUser);
@@ -116,7 +125,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<AirlineDTO> getAllAirlines(){
+    public List<AirlineDTO> getAllAirlines() {
         // Filtramos las aerolíneas de la lista de usuarios
         List<AirlineDTO> airlines = users.stream()
                 .filter(user -> user instanceof Airline)

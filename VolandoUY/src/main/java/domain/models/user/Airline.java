@@ -5,13 +5,13 @@ import domain.dtos.user.UserDTO;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
 import factory.FactoryController;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Airline extends User {
-
-    private ModelMapper modelMapper = FactoryController.getModelMapper();
 
     @NotBlank
     @Size(min = 10, max = 500)
@@ -30,8 +29,10 @@ public class Airline extends User {
     @Pattern(regexp = "(^$)|(^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$)", message = "El formato de la web no es válido")
     private String web;
 
+    @OneToMany
     private List<Flight> flights= new ArrayList<>();
 
+    @OneToMany
     private List<FlightRoute> flightRoutes=new ArrayList<>();
 
     public Airline(String nickname, String name, String mail, String description, String web) {

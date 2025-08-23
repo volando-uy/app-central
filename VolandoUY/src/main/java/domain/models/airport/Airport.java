@@ -1,6 +1,9 @@
 package domain.models.airport;
 
 import domain.models.city.City;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,14 +17,17 @@ import shared.utils.ValidatorUtil;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Airport {
 
+    @ManyToOne
     private City city;
 
     @NotBlank(message = "El nombre del aeropuerto es obligatorio")
     @Size(min = 2, max = 100)
     private String name;
 
+    @Id
     @NotBlank(message = "El código IATA es obligatorio")
     @Pattern(regexp = "^[A-Z]{3}$", message = "El código IATA debe ser 3 letras mayúsculas")
     private String code;
