@@ -1,6 +1,9 @@
 package domain.models.city;
 
 import domain.models.airport.Airport;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -15,11 +18,14 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class City {
 
     @Valid // valida cada Airport dentro de la lista
+    @OneToMany
     private List<@NotNull Airport> airports;
 
+    @Id
     @NotBlank
     @Size(min = 2, max = 100)
     private String name;

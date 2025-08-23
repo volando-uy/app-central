@@ -4,6 +4,7 @@ package domain.models.user;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.enums.EnumTipoDocumento;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name="customer")
 public class Customer extends User {
 
     @NotBlank

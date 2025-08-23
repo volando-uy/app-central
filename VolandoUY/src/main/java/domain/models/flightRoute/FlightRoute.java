@@ -4,6 +4,7 @@ import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.flight.Flight;
 import domain.models.user.Airline;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,18 +19,25 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class FlightRoute {
 
+    @ManyToMany
     private List<Category> categories; // categoriaVuelo
 
+    @OneToMany
     private List<Flight> flights; // vuelos asociados a la ruta
 
+    @ManyToOne
     private Airline airline; // Aerolinea duenia
 
+    @ManyToOne
     private City originCity; // Ciudad de origen
 
+    @ManyToOne
     private City destinationCity; // Ciudad de destino
 
+    @Id
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 100)

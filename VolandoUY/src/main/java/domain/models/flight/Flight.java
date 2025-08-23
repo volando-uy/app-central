@@ -2,6 +2,10 @@ package domain.models.flight;
 
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +17,16 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Flight {
 
+    @ManyToOne
     private FlightRoute flightRoute;
 
+    @ManyToOne
     private Airline airline;
 
+    @Id
     @NotBlank
     @Size(min = 2, max = 100)
     private String name;

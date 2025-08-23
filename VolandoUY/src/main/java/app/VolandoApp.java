@@ -15,6 +15,7 @@ import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import factory.FactoryController;
 import gui.MainFrame;
+import jakarta.persistence.EntityManager;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -24,6 +25,9 @@ import java.util.List;
 public class VolandoApp {
 
     public static void main(String[] args) {
+//        DBConnection.main(args);
+        EntityManager em=new DBConnection().getEntityManager();
+
         IUserController usuarioController = FactoryController.getUserController();
         IFlightRouteController flightRouteController = FactoryController.getFlightRouteController();
         ICategoryController categoryController = FactoryController.getCategoryController();
