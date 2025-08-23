@@ -4,7 +4,8 @@ import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
 import domain.models.user.Airline;
 import domain.services.user.IUserService;
-import factory.FactoryController;
+import factory.ControllerFactory;
+import factory.ServiceFactory;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -16,7 +17,7 @@ public class FlightService implements IFlightService {
 
     private final ModelMapper modelMapper;
 
-    private IUserService userService= FactoryController.getUserService();
+    private IUserService userService;
 
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
@@ -25,6 +26,7 @@ public class FlightService implements IFlightService {
     // Constructor
     public FlightService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+        this.userService = ServiceFactory.getUserService();
     }
 
     @Override

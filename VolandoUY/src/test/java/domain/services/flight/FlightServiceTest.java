@@ -10,7 +10,8 @@ import domain.models.user.Airline;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import factory.FactoryController;
+import factory.ControllerFactory;
+import factory.ServiceFactory;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.modelmapper.ModelMapper;
@@ -22,16 +23,16 @@ class FlightServiceTest {
 
     private IFlightService flightService;
     private IUserService userService;
-    private MockedStatic<FactoryController> factoryMock;
+    private MockedStatic<ControllerFactory> factoryMock;
 
     @BeforeEach
     void setUp() {
         ModelMapper modelMapper = new ModelMapper();
         userService = new UserService(modelMapper, new UserMapper(modelMapper));
 
-        // Mockeamos FactoryController para que devuelva nuestro userService
-        factoryMock = mockStatic(FactoryController.class);
-        factoryMock.when(FactoryController::getUserService).thenReturn(userService);
+        // Mockeamos ControllerFactory para que devuelva nuestro userService
+        factoryMock = mockStatic(ControllerFactory.class);
+        factoryMock.when(ServiceFactory::getUserService).thenReturn(userService);
 
         flightService = new FlightService(modelMapper);
 

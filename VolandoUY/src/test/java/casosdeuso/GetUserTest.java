@@ -8,7 +8,7 @@ import domain.models.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import factory.FactoryController;
+import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.mock;
 import static org.junit.jupiter.api.Assertions.*;
 public class GetUserTest {
-    private ModelMapper modelMapper = FactoryController.getModelMapper();
-    private UserMapper userMapper = FactoryController.getUserMapper();
+    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
+    private UserMapper userMapper = ControllerFactory.getUserMapper();
     private IUserService userService;
     private IUserController userController;
 

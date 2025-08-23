@@ -9,6 +9,8 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
+import domain.services.flightRoute.FlightRouteService;
+import domain.services.flightRoute.IFlightRouteService;
 import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
@@ -22,79 +24,126 @@ import java.util.stream.Collectors;
 
 
 public class UserService implements IUserService {
-    //Supongamos que tenemos el UserRepository
-    EntityManager em = DBConnection.getEntityManager();
-    private LinkedList<User> users = new LinkedList<>();
-    private Map<String, User> usuariosTemporales = new HashMap<>();
     private ModelMapper modelMapper;
     private UserMapper userMapper;
-    BaseRepository<Customer> customerRepo = new BaseRepository<>(Customer.class);
+    BaseRepository<Customer> customerRepo;
+    BaseRepository<Airline> airlineRepo;
 
-
+    // ############### Constructor ###############
     public UserService(ModelMapper modelMapper, UserMapper userMapper) {
         this.modelMapper = modelMapper;
         this.userMapper = userMapper;
+        this.customerRepo = new BaseRepository<>(Customer.class);
+        this.airlineRepo = new BaseRepository<>(Airline.class);
     }
+
 
     @Override
     public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
+
+        // Convertimos el DTO a entidad y verificamos si ya existe
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        if (_userExists(customer)) {
-            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
+        if (_userExists(customer.getNickname())) {
+            throw new UnsupportedOperationException((ErrorMessages.ERR_USER_EXISTS));
         }
+
+        // TODO: Agregar una verificación para asegurarse que no exista otro usuario con el mismo mail.
+        // Se tiene que añadir una funcion de findByMail en un repositorio de usuario.
+        // ERR_USER_MAIL_ALREADY_IN_USE
+
+        // Validamos el cliente
         ValidatorUtil.validate(customer);
 
-        this.users.add(customer);
+        // Guardamos el cliente en la base de datos usando el repositorio
         customerRepo.save(customer);
 
-        System.out.println(users);
-        return modelMapper.map(customer, CustomerDTO.class);
+        // Comprobamos que se guardó correctamente
+        Customer savedCustomer = customerRepo.findByKey(customer.getNickname());
+        if (savedCustomer == null) {
+            throw new RuntimeException("Error al guardar el cliente en la base de datos.");
+        }
+
+        // Devolvemos el cliente guardado como DTO
+        return modelMapper.map(savedCustomer, CustomerDTO.class);
     }
 
-
-    // Les puse _ a las funciones internas, que luego van a ser parte del repository.
-    private User _getUserByNickname(String nickname) {
-        return this.users.stream()
-                .filter(u -> u.getNickname().equalsIgnoreCase(nickname))
-                .findFirst()
-                .orElse(null);
-    }
-
-    // Funcion para saber si existe un user con el mismo nickname
-    private boolean _userExists(User user) {
-        // TODO: usar acá el userRepository
-        return users.stream().anyMatch(u -> u.getNickname().equalsIgnoreCase(user.getNickname()) || u.getMail().equalsIgnoreCase(user.getMail()));
-    }
 
 
     @Override
     public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
+
+        // Convertimos el DTO a entidad y verificamos si ya existe
         Airline airline = modelMapper.map(airlineDTO, Airline.class);
-        if (_userExists(airline)) {
-            throw new UnsupportedOperationException((ErrorMessages.ERR_USUARIO_YA_EXISTE));
+        if (_userExists(airline.getNickname())) {
+            throw new UnsupportedOperationException((ErrorMessages.ERR_USER_EXISTS));
         }
+
+        // TODO: Agregar una verificación para asegurarse que no exista otro usuario con el mismo mail.
+        // Se tiene que añadir una funcion de findByMail en un repositorio de aerolinea.
+        // ERR_USER_MAIL_ALREADY_IN_USE
+
+
+        // Validamos la aerolínea
         ValidatorUtil.validate(airline);
 
+        // Setteamos listas vacias a los vuelos y rutas de vuelo.
         airline.setFlightRoutes(new ArrayList<>());
         airline.setFlights(new ArrayList<>());
 
-        this.users.add(airline);
-        System.out.println(users);
+        // Guardamos la aerolínea en la base de datos usando el repositorio
+        airlineRepo.save(airline);
+
+        // Comprobamos que se guardó correctamente
+        Airline savedAirline = airlineRepo.findByKey(airline.getNickname());
+        if (savedAirline == null) {
+            throw new RuntimeException("Error al guardar la aerolínea en la base de datos.");
+        }
+
+        // Devolvemos la aerolínea guardada como DTO
         return modelMapper.map(airline, AirlineDTO.class);
     }
 
     @Override
     public List<String> getAllUsersNicknames() {
-        // TODO: Pasar esta responsabilidad al userRepository
-        return users.stream().map(User::getNickname).collect(Collectors.toList());
+        // Inicializamos la lista de nicknames
+        List<String> nicknames = new ArrayList<>();
+
+        // Obtenemos todos los usuarios de ambos repositorios
+        List<Customer> customers = customerRepo.findAll();
+        List<Airline> airlines = airlineRepo.findAll();
+
+        // Agregamos los nicknames de los clientes
+        for (Customer customer : customers) {
+            nicknames.add(customer.getNickname());
+        }
+
+        // Agregamos los nicknames de las aerolíneas
+        for (Airline airline : airlines) {
+            nicknames.add(airline.getNickname());
+        }
+
+        // Devolvemos la lista completa de nicknames
+        return nicknames;
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
-        // TODO: Pasar esta responsabilidad al userRepository
-        List<UserDTO> userDTOs = this.users.stream()
-                .map(usuario -> userMapper.toDTO(usuario))
-                .collect(Collectors.toList());
+        // Inicializamos la lista de UserDTO
+        List<UserDTO> userDTOs = new ArrayList<>();
+
+        // Obtenemos todos los usuarios de ambos repositorios
+        List<Customer> customers = customerRepo.findAll();
+        List<Airline> airlines = airlineRepo.findAll();
+
+        // Convertimos y agregamos los clientes a la lista de UserDTO
+        for (Customer customer : customers) {
+            userDTOs.add(userMapper.toDTO(customer));
+        }
+
+        // Convertimos y agregamos las aerolíneas a la lista de UserDTO
+        for (Airline airline : airlines) {
+            userDTOs.add(userMapper.toDTO(airline));
+        }
 
         // Antes de devolver, asegurarse de agregar atributos Objetos al DTO en caso de que tenga
         return userDTOs;
@@ -102,60 +151,69 @@ public class UserService implements IUserService {
 
 
     public UserDTO getUserByNickname(String nickname) {
+        // Lo buscamos en el repo de clientes
         User user = _getUserByNickname(nickname);
         if (user == null) {
-            throw new IllegalArgumentException("User no encontrado: " + nickname);
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
+
+        // Convertimos a DTO y lo devolvemos
         return userMapper.toDTO(user);
     }
 
     @Override
     public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
+        // Buscamos el usuario original por nickname
         User originalUser = _getUserByNickname(nickname);
         if (originalUser == null) {
-            throw new IllegalArgumentException("User no encontrado: " + nickname);
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
-        ;
 
+        // Validamos si los datos nuevos son correctos
         User tempUser = userMapper.fromDTO(updatedUserDTO);
         ValidatorUtil.validate(tempUser);
 
+        // Actualizamos los datos del usuario original con los del DTO
         originalUser.updateDataFrom(updatedUserDTO);
-        return userMapper.toDTO(originalUser);
+
+        // Guardamos los cambios en la base de datos usando el repositorio correspondiente
+        User updatedUser;
+        if (originalUser instanceof Customer) {
+            updatedUser = customerRepo.update((Customer) originalUser);
+        } else if (originalUser instanceof Airline) {
+            updatedUser = airlineRepo.update((Airline) originalUser);
+        } else {
+            throw new IllegalStateException("Tipo de usuario desconocido.");
+        }
+
+        return userMapper.toDTO(updatedUser);
     }
+
+
 
     @Override
     public List<AirlineDTO> getAllAirlines() {
-        // Filtramos las aerolíneas de la lista de usuarios
-        List<AirlineDTO> airlines = users.stream()
-                .filter(user -> user instanceof Airline)
-                .map(user -> modelMapper.map(user, AirlineDTO.class))
-                .toList();
-        return airlines;
+        List<Airline> airlines = airlineRepo.findAll();
+        return airlines.stream()
+                .map(userMapper::toAirlineDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public FlightRouteDTO addFlightRouteToAirline(String airlineName, FlightRouteDTO flightRouteDTO) {
-        User user = _getUserByNickname(airlineName);
-        if (user == null || !(user instanceof Airline)) {
-            throw new IllegalArgumentException("Airline no encontrada: " + airlineName);
-        }
-
-        Airline airline = (Airline) user; // ✅ ESTA es la aerolínea real
-
-        // Convertir FlightRouteDTO a FlightRoute
-        FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
+    // Esta función agrega una ruta de vuelo a una aerolínea
+    // Se utiliza al crear una nueva ruta de vuelo desde el controlador de rutas de vuelo
+    public void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute) {
 
         // Asegurar que la lista esté inicializada
         if (airline.getFlightRoutes() == null) {
             airline.setFlightRoutes(new ArrayList<>());
         }
 
-        // Agregar la nueva ruta aérea a la aerolínea real
+        // Agregar la nueva ruta aérea a la aerolínea y viceversa
         airline.getFlightRoutes().add(flightRoute);
 
-        // Convertir de nuevo a DTO para devolver
-        return modelMapper.map(flightRoute, FlightRouteDTO.class);
+        // Guardar los cambios en la base de datos
+        airlineRepo.update(airline);
     }
 
 
@@ -175,6 +233,25 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("Airline no encontrada: " + nickname);
         }
         return userMapper.toAirlineDTO(airline);
+    }
+
+    // Función privada para obtener un usuario por nickname
+    // No tira excepción si no lo encuentra, devuelve null
+    private User _getUserByNickname(String nickname) {
+        // Lo buscamos en el repo de clientes
+        User user = customerRepo.findByKey(nickname);
+
+        // Si no está, lo buscamos en el repo de aerolíneas
+        if (user == null) {
+            user = airlineRepo.findByKey(nickname);
+        }
+
+        return user;
+    }
+
+    // Función privada para verificar si un usuario existe por nickname
+    private Boolean _userExists(String nickname) {
+        return _getUserByNickname(nickname) != null;
     }
 
 

@@ -4,7 +4,7 @@ import controllers.flight.IFlightController;
 import controllers.user.IUserController;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.user.AirlineDTO;
-import factory.FactoryController;
+import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +19,8 @@ public class CheckFlightTest {
 
     @BeforeEach
     void setUp() {
-        userController = FactoryController.getUserController();
-        flightController = FactoryController.getFlightController();
+        userController = ControllerFactory.getUserController();
+        flightController = ControllerFactory.getFlightController();
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("airline1");
         airlineDTO.setName("Aerolíneas Argentinas");

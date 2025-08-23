@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import app.DBConnection;
 
+import java.util.List;
+
 public class BaseRepository<T> {
 
     private final Class<T> entityClass;
@@ -14,41 +16,55 @@ public class BaseRepository<T> {
 
     public void save(T entity) {
         EntityManager em = DBConnection.getEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        try {
+        try (em) {
+            EntityTransaction tx = em.getTransaction();
             tx.begin();
             em.persist(entity);
             tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            throw e;
-        } finally {
-            em.close();
         }
     }
 
-    public T findById(Object id) {
+    public T update(T entity) {
         EntityManager em = DBConnection.getEntityManager();
-        try {
-            return em.find(entityClass, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public void delete(T entity) {
-        EntityManager em = DBConnection.getEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        try {
+        EntityTransaction tx = null;
+        try (em) {
+            tx = em.getTransaction();
             tx.begin();
-            em.remove(em.contains(entity) ? entity : em.merge(entity));
+            T mergedEntity = em.merge(entity);
             tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            throw e;
-        } finally {
-            em.close();
+            return mergedEntity;
         }
     }
+
+    public T findByKey(Object key) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.find(entityClass, key);
+        }
+    }
+
+    public Boolean existsByKey(Object key) {
+        return findByKey(key) != null;
+    }
+
+    public List<T> findAll() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery("FROM " + entityClass.getSimpleName(), entityClass).getResultList();
+        }
+    }
+
+//    public void delete(T entity) {
+//        EntityManager em = DBConnection.getEntityManager();
+//        EntityTransaction tx = em.getTransaction();
+//        try {
+//            tx.begin();
+//            em.remove(em.contains(entity) ? entity : em.merge(entity));
+//            tx.commit();
+//        } catch (Exception e) {
+//            if (tx.isActive()) tx.rollback();
+//            throw e;
+//        } finally {
+//            em.close();
+//        }
+//    }
 
 }

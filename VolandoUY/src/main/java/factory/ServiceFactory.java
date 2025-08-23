@@ -1,0 +1,98 @@
+package factory;
+
+import domain.services.category.CategoryService;
+import domain.services.category.ICategoryService;
+import domain.services.city.CityService;
+import domain.services.city.ICityService;
+import domain.services.flight.FlightService;
+import domain.services.flight.IFlightService;
+import domain.services.flightRoute.FlightRouteService;
+import domain.services.flightRoute.IFlightRouteService;
+import domain.services.flightRoutePackage.FlightRoutePackageService;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.user.IUserService;
+import domain.services.user.UserService;
+
+public class ServiceFactory {
+    private static IUserService userService;
+    private static IFlightRouteService flightRouteService;
+    private static IFlightService flightService;
+    private static ICategoryService categoryService;
+    private static ICityService cityService;
+    private static IFlightRoutePackageService packageService;
+
+
+    // ############ USER SERVICE ############
+
+
+    // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
+    public static IUserService getUserService() {
+        if (userService == null) {
+            userService = new UserService(ControllerFactory.getModelMapper(), ControllerFactory.getUserMapper());
+        }
+        return userService;
+    }
+
+    // ##########################################
+
+
+    // ############ FLIGHT ROUTE SERVICE ############
+
+    // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
+    public static IFlightRouteService getFlightRouteService() {
+        if (flightRouteService == null) {
+            flightRouteService = new FlightRouteService(ControllerFactory.getModelMapper(), getCategoryService(), getUserService(), getCityService());
+        }
+        return flightRouteService;
+    }
+
+    // ##########################################
+
+
+    // ############ CATEGORY SERVICE ############
+
+    public static ICategoryService getCategoryService() {
+        if(categoryService == null) {
+            categoryService = new CategoryService(ControllerFactory.getModelMapper());
+        }
+        return categoryService;
+    }
+
+    // ##########################################
+
+
+    // ############ FLIGHT SERVICE ############
+
+    public static IFlightService getFlightService() {
+        if (flightService == null) {
+            flightService = new FlightService(ControllerFactory.getModelMapper());
+        }
+        return flightService;
+    }
+
+    // ##########################################
+
+
+    // ############ FLIGHT ROUT PACKAGE SERVICE ############
+
+    public static IFlightRoutePackageService getFlightRoutePackageService() {
+        if (packageService == null) {
+            packageService = new FlightRoutePackageService(getFlightRouteService(), ControllerFactory.getModelMapper());
+        }
+        return packageService;
+    }
+
+    // ##########################################
+
+
+    // ############ CITY SERVICE ############
+
+    public static ICityService getCityService() {
+        if (cityService == null) {
+            cityService = new CityService(ControllerFactory.getModelMapper());
+        }
+        return cityService;
+    }
+
+    // ##########################################
+}

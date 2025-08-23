@@ -2,14 +2,13 @@ package domain.services.city;
 
 import domain.dtos.city.CityDTO;
 import domain.models.city.City;
-import factory.FactoryController;
+import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +19,7 @@ class CityServiceTest {
 
     @BeforeEach
     void setUp() {
-        modelMapper = FactoryController.getModelMapper();
+        modelMapper = ControllerFactory.getModelMapper();
         cityService = new CityService(modelMapper);
     }
 

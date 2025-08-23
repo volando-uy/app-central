@@ -8,7 +8,6 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
-import domain.services.flight.IFlightService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
@@ -17,13 +16,13 @@ import org.modelmapper.ModelMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FactoryControllerTest {
+class ControllerFactoryTest {
 
     @Test
     void getUserController_shouldReturnSingletonInstance() {
         // GIVEN
-        IUserController instance1 = FactoryController.getUserController();
-        IUserController instance2 = FactoryController.getUserController();
+        IUserController instance1 = ControllerFactory.getUserController();
+        IUserController instance2 = ControllerFactory.getUserController();
 
         // THEN
         assertNotNull(instance1);
@@ -33,8 +32,8 @@ class FactoryControllerTest {
     @Test
     void getUserService_shouldReturnSingletonInstance() {
         // GIVEN
-        IUserService service1 = FactoryController.getUserService();
-        IUserService service2 = FactoryController.getUserService();
+        IUserService service1 = ServiceFactory.getUserService();
+        IUserService service2 = ServiceFactory.getUserService();
 
         // THEN
         assertNotNull(service1);
@@ -44,8 +43,8 @@ class FactoryControllerTest {
     @Test
     void getModelMapper_shouldReturnSingletonInstance() {
         // GIVEN
-        ModelMapper mapper1 = FactoryController.getModelMapper();
-        ModelMapper mapper2 = FactoryController.getModelMapper();
+        ModelMapper mapper1 = ControllerFactory.getModelMapper();
+        ModelMapper mapper2 = ControllerFactory.getModelMapper();
 
         // THEN
         assertNotNull(mapper1);
@@ -55,8 +54,8 @@ class FactoryControllerTest {
     @Test
     void getFlightRouteController_shouldReturnSingletonInstance() {
         // GIVEN
-        IFlightRouteController controller1 = FactoryController.getFlightRouteController();
-        IFlightRouteController controller2 = FactoryController.getFlightRouteController();
+        IFlightRouteController controller1 = ControllerFactory.getFlightRouteController();
+        IFlightRouteController controller2 = ControllerFactory.getFlightRouteController();
 
         // THEN
         assertNotNull(controller1);
@@ -66,8 +65,8 @@ class FactoryControllerTest {
     @Test
     void getFlightRouteService_shouldReturnSingletonInstance() {
         // GIVEN
-        IFlightRouteService service1 = FactoryController.getFlightRouteService();
-        IFlightRouteService service2 = FactoryController.getFlightRouteService();
+        IFlightRouteService service1 = ServiceFactory.getFlightRouteService();
+        IFlightRouteService service2 = ServiceFactory.getFlightRouteService();
 
         // THEN
         assertNotNull(service1);
@@ -77,8 +76,8 @@ class FactoryControllerTest {
     @Test
     void getFlightController_shouldReturnSingletonInstance() {
         // GIVEN
-        IFlightController controller1 = FactoryController.getFlightController();
-        IFlightController controller2 = FactoryController.getFlightController();
+        IFlightController controller1 = ControllerFactory.getFlightController();
+        IFlightController controller2 = ControllerFactory.getFlightController();
 
         // THEN
         assertNotNull(controller1);
@@ -88,8 +87,8 @@ class FactoryControllerTest {
     @Test
     void getCategoryService_shouldReturnSingletonInstance() {
         // GIVEN
-        ICategoryService service1 = FactoryController.getCategoryService();
-        ICategoryService service2 = FactoryController.getCategoryService();
+        ICategoryService service1 = ServiceFactory.getCategoryService();
+        ICategoryService service2 = ServiceFactory.getCategoryService();
 
         // THEN
         assertNotNull(service1);
@@ -99,8 +98,8 @@ class FactoryControllerTest {
     @Test
     void getCategoryController_shouldReturnSingletonInstance() {
         // GIVEN
-        ICategoryController controller1 = FactoryController.getCategoryController();
-        ICategoryController controller2 = FactoryController.getCategoryController();
+        ICategoryController controller1 = ControllerFactory.getCategoryController();
+        ICategoryController controller2 = ControllerFactory.getCategoryController();
 
         // THEN
         assertNotNull(controller1);
@@ -110,8 +109,8 @@ class FactoryControllerTest {
     @Test
     void getFlightRoutePackageService_shouldReturnSingletonInstance() {
         // GIVEN
-        IFlightRoutePackageService service1 = FactoryController.getFlightRoutePackageService();
-        IFlightRoutePackageService service2 = FactoryController.getFlightRoutePackageService();
+        IFlightRoutePackageService service1 = ServiceFactory.getFlightRoutePackageService();
+        IFlightRoutePackageService service2 = ServiceFactory.getFlightRoutePackageService();
 
         // THEN
         assertNotNull(service1);
@@ -121,8 +120,8 @@ class FactoryControllerTest {
     @Test
     void getFlightRoutePackageController_shouldReturnSingletonInstance() {
         // GIVEN
-        IFlightRoutePackageController controller1 = FactoryController.getFlightRoutePackageController();
-        IFlightRoutePackageController controller2 = FactoryController.getFlightRoutePackageController();
+        IFlightRoutePackageController controller1 = ControllerFactory.getFlightRoutePackageController();
+        IFlightRoutePackageController controller2 = ControllerFactory.getFlightRoutePackageController();
 
         // THEN
         assertNotNull(controller1);
@@ -132,8 +131,8 @@ class FactoryControllerTest {
     @Test
     void getCityService_shouldReturnSingletonInstance() {
         // GIVEN
-        ICityService service1 = FactoryController.getCityService();
-        ICityService service2 = FactoryController.getCityService();
+        ICityService service1 = ServiceFactory.getCityService();
+        ICityService service2 = ServiceFactory.getCityService();
 
         // THEN
         assertNotNull(service1);
@@ -143,8 +142,8 @@ class FactoryControllerTest {
     @Test
     void getCityController_shouldReturnSingletonInstance() {
         // GIVEN
-        ICityController controller1 = FactoryController.getCityController();
-        ICityController controller2 = FactoryController.getCityController();
+        ICityController controller1 = ControllerFactory.getCityController();
+        ICityController controller2 = ControllerFactory.getCityController();
 
         // THEN
         assertNotNull(controller1);
@@ -154,9 +153,9 @@ class FactoryControllerTest {
 //    @Test
 //    void sharedModelMapper_shouldBeSameAcrossAllServices() {
 //        // GIVEN
-//        ModelMapper mapperFromUser = FactoryController.getUserService().getModelMapper();
-//        ModelMapper mapperFromFlight = FactoryController.getFlightController().getFlightService().getModelMapper();
-//        ModelMapper mapperFromCity = FactoryController.getCityService().getModelMapper();
+//        ModelMapper mapperFromUser = ControllerFactory.getUserService().getModelMapper();
+//        ModelMapper mapperFromFlight = ControllerFactory.getFlightController().getFlightService().getModelMapper();
+//        ModelMapper mapperFromCity = ControllerFactory.getCityService().getModelMapper();
 //
 //        // THEN
 //        assertSame(mapperFromUser, mapperFromFlight);
