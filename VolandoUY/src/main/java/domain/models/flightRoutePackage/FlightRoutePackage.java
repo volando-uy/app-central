@@ -2,6 +2,9 @@ package domain.models.flightRoutePackage;
 
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +17,13 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class FlightRoutePackage {
 
+    @ManyToMany
     private List<FlightRoute> flightRoutes;
 
+    @Id
     @NotBlank
     @Size(min = 2, max = 100)
     private String name;
