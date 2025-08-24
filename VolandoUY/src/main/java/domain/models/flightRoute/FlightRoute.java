@@ -15,27 +15,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class FlightRoute {
 
     @ManyToMany
-    private List<Category> categories; // categoriaVuelo
+    private List<Category> categories = new ArrayList<>();
 
-    @OneToMany
-    private List<Flight> flights; // vuelos asociados a la ruta
-
-    @ManyToOne
-    private Airline airline; // Aerolinea duenia
+    // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
+    @OneToMany(mappedBy = "flightRoute", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flight> flights = new ArrayList<>();
 
     @ManyToOne
-    private City originCity; // Ciudad de origen
+    private Airline airline;
 
     @ManyToOne
-    private City destinationCity; // Ciudad de destino
+    private City originCity;
+
+    @ManyToOne
+    private City destinationCity;
 
     @Id
     @NotNull
@@ -70,11 +70,6 @@ public class FlightRoute {
         this.priceTouristClass = priceTouristClass;
         this.priceBusinessClass = priceBusinessClass;
         this.priceExtraUnitBaggage = priceExtraUnitBaggage;
-        this.categories = new ArrayList<>();
-        this.flights = new ArrayList<>();
-        this.airline = null;
-        this.originCity = null;
-        this.destinationCity = null;
     }
 
     @Override
@@ -82,7 +77,7 @@ public class FlightRoute {
         return "FlightRoute{" +
                 "categories=" + categories.stream().map(Category::getName).toList() +
                 ", flights=" + flights.stream().map(Flight::getName).toList() +
-                ", airline=" + airline.getNickname() +
+                ", airline=" + (airline != null ? airline.getNickname() : "null") +
                 ", originCity=" + originCity +
                 ", destinationCity=" + destinationCity +
                 ", name='" + name + '\'' +

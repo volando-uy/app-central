@@ -22,8 +22,8 @@ import java.util.Map;
 public class City {
 
     @Valid // valida cada Airport dentro de la lista
-    @OneToMany
-    private List<@NotNull Airport> airports;
+    @OneToMany(mappedBy = "city")
+    private List<Airport> airports = new ArrayList<>();
 
     @Id
     @NotBlank

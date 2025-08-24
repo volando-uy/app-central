@@ -13,11 +13,10 @@ import lombok.NoArgsConstructor;
 import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
-
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class Flight {
 
     @ManyToOne
@@ -54,8 +53,6 @@ public class Flight {
         this.duration = duration;
         this.maxEconomySeats = maxEconomySeats;
         this.maxBusinessSeats = maxBusinessSeats;
-        this.flightRoute = null;
-        this.airline = null;
     }
 
     @Override
@@ -71,5 +68,4 @@ public class Flight {
                 ", createdAt=" + createdAt +
                 '}';
     }
-
 }
