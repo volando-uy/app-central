@@ -1,10 +1,7 @@
 package domain.models.user;
 
 import domain.dtos.user.UserDTO;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +16,7 @@ import shared.utils.ValidatorUtil;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 
 
