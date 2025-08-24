@@ -2,6 +2,7 @@ package gui.user;
 
 import javax.swing.border.*;
 import controllers.user.IUserController;
+import gui.user.getUsers.GetUsersPanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
 import gui.user.updateUser.UpdateUserPanel;
@@ -12,13 +13,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.InvocationTargetException;
 
 public class UserPanel extends JPanel {
-
-    private MouseListener registerCustomerPanelListener;
-    private MouseListener registerAirlinePanelListener;
-    private MouseListener updateUserPanelListener;
-    private MouseListener getUserPanelListener;
 
     private IUserController userController;
     
@@ -35,81 +32,38 @@ public class UserPanel extends JPanel {
     }
 
     private void initListeners() {
-        // Listener para el botón de registro de cliente
-        registerCustomerPanelListener = new MouseAdapter() {
+        registerCustomerBtn.addMouseListener(createListener(RegisterCustomerPanel.class));
+        registerAirlineBtn.addMouseListener(createListener(RegisterAirlinePanel.class));
+        updateUserBtn.addMouseListener(createListener(UpdateUserPanel.class));
+        getUsersBtn.addMouseListener(createListener(GetUsersPanel.class));
+    }
+
+    private MouseAdapter createListener(Class<? extends JPanel> panelClass) {
+        return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo RegisterCustomerPanel
-                    if (contentPanel instanceof RegisterCustomerPanel) {
+                    // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
+                    if (contentPanel.getClass().equals(panelClass)) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println("Register User button clicked");
-                // Crear el nuevo contentPanel con el contenido de registro de usuario
-                contentPanel = new RegisterCustomerPanel(userController);
-                add(contentPanel);
-                revalidate();
-                repaint();
-            }
-        };
-
-        // Listener para el botón de registro de aerolínea
-        registerAirlinePanelListener = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo CreateCategoryPanel
-                    if (contentPanel instanceof RegisterAirlinePanel) {
-                        return;
-                    }
-                    remove(contentPanel);
+                System.out.println(panelClass.getSimpleName() + " button clicked");
+                // Crear el nuevo contentPanel con el contenido del panel proporcionado
+                try {
+                    contentPanel = panelClass.getDeclaredConstructor(IUserController.class).newInstance(userController);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException ex) {
+                    throw new RuntimeException(ex);
                 }
-                System.out.println("Register Airline button clicked");
-                // Crear el nuevo contentPanel con el contenido de registro de aerolínea
-                contentPanel = new RegisterAirlinePanel(userController);
                 add(contentPanel);
                 revalidate();
                 repaint();
             }
         };
-
-        // Listener para el botón de actualización de usuario
-        updateUserPanelListener = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo UpdateUserPanel
-                    if (contentPanel instanceof UpdateUserPanel) {
-                        return;
-                    }
-                    remove(contentPanel);
-                }
-
-                System.out.println("Update User button clicked");
-                // Crear el nuevo contentPanel con el contenido de actualización de usuario
-                contentPanel = new UpdateUserPanel(userController);
-                add(contentPanel);
-                revalidate();
-                repaint();
-            }
-        };
-
-        getUserPanelListener = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Get User button clicked");
-                // Implement the logic to get a user
-            }
-        };
-
-        registerCustomerBtn.addMouseListener(registerCustomerPanelListener);
-        registerAirlineBtn.addMouseListener(registerAirlinePanelListener);
-        updateUserBtn.addMouseListener(updateUserPanelListener);
-        //button3.addMouseListener(getUserListener);
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
@@ -118,7 +72,7 @@ public class UserPanel extends JPanel {
     private JButton registerCustomerBtn;
     private JButton registerAirlineBtn;
     private JButton updateUserBtn;
-    private JButton getUserBtn;
+    private JButton getUsersBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
@@ -128,20 +82,21 @@ public class UserPanel extends JPanel {
         registerCustomerBtn = new JButton();
         registerAirlineBtn = new JButton();
         updateUserBtn = new JButton();
-        getUserBtn = new JButton();
+        getUsersBtn = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-        swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
-        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
-        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
-        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-        .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
-        ();}});
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
+        new javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e"
+        ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
+        ,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12)
+        ,java.awt.Color.red), getBorder())); addPropertyChangeListener(
+        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -165,9 +120,9 @@ public class UserPanel extends JPanel {
             updateUserBtn.setText("Modificar Usuario");
             NavPanel.add(updateUserBtn);
 
-            //---- getUserBtn ----
-            getUserBtn.setText("Listar Clientes");
-            NavPanel.add(getUserBtn);
+            //---- getUsersBtn ----
+            getUsersBtn.setText("Listar Clientes");
+            NavPanel.add(getUsersBtn);
         }
         add(NavPanel, BorderLayout.NORTH);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on

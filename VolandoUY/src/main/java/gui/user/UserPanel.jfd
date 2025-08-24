@@ -29,7 +29,7 @@ new FormModel {
 					"text": "Modificar Usuario"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "getUserBtn"
+					name: "getUsersBtn"
 					"text": "Listar Clientes"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {

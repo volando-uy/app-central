@@ -49,4 +49,17 @@ public class UserMapper {
         return dto;
     }
 
+    public CustomerDTO toCustomerDTO(Customer customer) {
+        CustomerDTO dto = new CustomerDTO();
+        dto.setNickname(customer.getNickname());
+        dto.setName(customer.getName());
+        dto.setSurname(customer.getSurname());
+        dto.setMail(customer.getMail());
+        dto.setIdType(customer.getIdType());
+        dto.setId(customer.getId());
+        dto.setBirthDate(customer.getBirthDate());
+        dto.setCitizenship(customer.getCitizenship());
+
+        return dto;
+    }
 }
