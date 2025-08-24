@@ -150,7 +150,8 @@ class UserServiceTest {
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
             userService.getUserByNickname("inexistente");
         });
-        assertTrue(ex.getMessage().contains("User no encontrado"));
+        //El usuario inexistente no fue encontrado
+        assertEquals(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "inexistente"), ex.getMessage());
     }
 
     @Test
@@ -202,7 +203,7 @@ class UserServiceTest {
             userService.updateUser("notFound", updatedDTO);
         });
 
-        assertTrue(ex.getMessage().contains("User no encontrado"));
+        assertTrue(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "notFound").contains("notFound"));
     }
 
     @Test
@@ -254,7 +255,7 @@ class UserServiceTest {
     void getUserByNickname_shouldBeCaseInsensitive() {
         // GIVEN
         userService.registerCustomer(new CustomerDTO(
-                "TestNick", "Nombre", "mail@test.com", "Apellido", "Pais",
+                "TeStNiCk", "Nombre", "mail@test.com", "Apellido", "Pais",
                 LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI));
 
         // WHEN
@@ -262,7 +263,7 @@ class UserServiceTest {
 
         // THEN
         assertNotNull(result);
-        assertEquals("TestNick", result.getNickname());
+        assertEquals("TeStNiCk", result.getNickname());
     }
 
     @Test

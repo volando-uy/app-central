@@ -1,7 +1,5 @@
 package domain.services.user;
 
-import app.DBConnection;
-import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -9,10 +7,9 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
-import domain.services.flightRoute.FlightRouteService;
-import domain.services.flightRoute.IFlightRouteService;
 import infra.repository.BaseRepository;
-import jakarta.persistence.EntityManager;
+import infra.repository.user.AirlineRepository;
+import infra.repository.user.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import domain.models.user.mapper.UserMapper;
 import shared.constants.ErrorMessages;
@@ -26,15 +23,15 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
     private ModelMapper modelMapper;
     private UserMapper userMapper;
-    BaseRepository<Customer> customerRepo;
-    BaseRepository<Airline> airlineRepo;
+    CustomerRepository customerRepo;
+    AirlineRepository airlineRepo;
 
     // ############### Constructor ###############
     public UserService(ModelMapper modelMapper, UserMapper userMapper) {
         this.modelMapper = modelMapper;
         this.userMapper = userMapper;
-        this.customerRepo = new BaseRepository<>(Customer.class);
-        this.airlineRepo = new BaseRepository<>(Airline.class);
+        this.customerRepo = new CustomerRepository();
+        this.airlineRepo = new AirlineRepository();
     }
 
 
@@ -43,13 +40,9 @@ public class UserService implements IUserService {
 
         // Convertimos el DTO a entidad y verificamos si ya existe
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        if (_userExists(customer.getNickname())) {
+        if (_nicknameExists(customerDTO.getNickname()) || _emailExists(customerDTO.getMail())) {
             throw new UnsupportedOperationException((ErrorMessages.ERR_USER_EXISTS));
         }
-
-        // TODO: Agregar una verificación para asegurarse que no exista otro usuario con el mismo mail.
-        // Se tiene que añadir una funcion de findByMail en un repositorio de usuario.
-        // ERR_USER_MAIL_ALREADY_IN_USE
 
         // Validamos el cliente
         ValidatorUtil.validate(customer);
@@ -74,14 +67,9 @@ public class UserService implements IUserService {
 
         // Convertimos el DTO a entidad y verificamos si ya existe
         Airline airline = modelMapper.map(airlineDTO, Airline.class);
-        if (_userExists(airline.getNickname())) {
+        if (_nicknameExists(airline.getNickname()) || _emailExists(airline.getMail())) {
             throw new UnsupportedOperationException((ErrorMessages.ERR_USER_EXISTS));
         }
-
-        // TODO: Agregar una verificación para asegurarse que no exista otro usuario con el mismo mail.
-        // Se tiene que añadir una funcion de findByMail en un repositorio de aerolinea.
-        // ERR_USER_MAIL_ALREADY_IN_USE
-
 
         // Validamos la aerolínea
         ValidatorUtil.validate(airline);
@@ -152,7 +140,8 @@ public class UserService implements IUserService {
 
     public UserDTO getUserByNickname(String nickname) {
         // Lo buscamos en el repo de clientes
-        User user = _getUserByNickname(nickname);
+        String nicknameLowerCase = nickname.trim().toLowerCase();
+        User user = _getUserByNickname(nicknameLowerCase);
         if (user == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
@@ -221,7 +210,7 @@ public class UserService implements IUserService {
     public Airline getAirlineByNickname(String nickname) {
         Airline airline = (Airline) _getUserByNickname(nickname);
         if (airline == null) {
-            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
         return airline;
     }
@@ -230,7 +219,7 @@ public class UserService implements IUserService {
     public AirlineDTO getAirlineDetailsByNickname(String nickname) {
         Airline airline = (Airline) _getUserByNickname(nickname);
         if (airline == null) {
-            throw new IllegalArgumentException("Airline no encontrada: " + nickname);
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
         return userMapper.toAirlineDTO(airline);
     }
@@ -239,20 +228,28 @@ public class UserService implements IUserService {
     // No tira excepción si no lo encuentra, devuelve null
     private User _getUserByNickname(String nickname) {
         // Lo buscamos en el repo de clientes
-        User user = customerRepo.findByKey(nickname);
+
+        User user = customerRepo.getCustomerByNickname(nickname);
 
         // Si no está, lo buscamos en el repo de aerolíneas
         if (user == null) {
-            user = airlineRepo.findByKey(nickname);
+            user = airlineRepo.getAirlineByNickname(nickname);
         }
 
         return user;
     }
 
-    // Función privada para verificar si un usuario existe por nickname
-    private Boolean _userExists(String nickname) {
-        return _getUserByNickname(nickname) != null;
+    // Funciones para preguntar si existe un usuario Aereolinea O Cliente
+
+    private boolean _nicknameExists(String nickname) {
+        return customerRepo.existsByNickname(nickname) ||  airlineRepo.existsByNickname(nickname);
     }
+
+    private boolean _emailExists(String email) {
+        return customerRepo.existsByEmail(email) || airlineRepo.existsByEmail(email);
+    }
+
+
 
 
 }
