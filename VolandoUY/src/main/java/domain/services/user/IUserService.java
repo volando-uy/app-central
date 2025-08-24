@@ -13,12 +13,18 @@ import java.util.List;
 public interface IUserService {
     CustomerDTO registerCustomer(CustomerDTO customerDTO);
     AirlineDTO registerAirline(AirlineDTO airlineDTO);
+
     List<UserDTO> getAllUsers();
     List<String> getAllUsersNicknames();
+
+    List<CustomerDTO> getAllCustomersDetails();
+    List<AirlineDTO> getAllAirlinesDetails();
+
+    AirlineDTO getAirlineDetailsByNickname(String nickname);
+    CustomerDTO getCustomerDetailsByNickname(String nickname);
+
     UserDTO getUserByNickname(String nickname);
     UserDTO updateUser(String nickname, UserDTO userDTO);
-    List<AirlineDTO> getAllAirlines();
     void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute);
     Airline getAirlineByNickname(String nickname);
-    AirlineDTO getAirlineDetailsByNickname(String nickname);
 }

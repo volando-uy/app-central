@@ -158,7 +158,7 @@ public class CreateFlightRoutePanel extends JPanel {
     }
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
-        textField.setForeground(Color.BLACK);
+        textField.setForeground(Color.GRAY);
 
         // Set the placeholder text when the field loses focus
         textField.addFocusListener(new java.awt.event.FocusAdapter() {

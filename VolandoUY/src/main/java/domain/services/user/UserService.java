@@ -192,10 +192,18 @@ public class UserService implements IUserService {
 
 
     @Override
-    public List<AirlineDTO> getAllAirlines() {
+    public List<AirlineDTO> getAllAirlinesDetails() {
         List<Airline> airlines = airlineRepo.findAll();
         return airlines.stream()
                 .map(userMapper::toAirlineDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomersDetails() {
+        List<Customer> customers = customerRepo.findAll();
+        return customers.stream()
+                .map(userMapper::toCustomerDTO)
                 .collect(Collectors.toList());
     }
 
@@ -233,6 +241,15 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("Airline no encontrada: " + nickname);
         }
         return userMapper.toAirlineDTO(airline);
+    }
+
+    @Override
+    public CustomerDTO getCustomerDetailsByNickname(String nickname) {
+        Customer customer = (Customer) _getUserByNickname(nickname);
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer no encontrado: " + nickname);
+        }
+        return userMapper.toCustomerDTO(customer);
     }
 
     // Función privada para obtener un usuario por nickname
