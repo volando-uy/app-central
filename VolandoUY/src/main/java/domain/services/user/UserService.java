@@ -31,12 +31,22 @@ public class UserService implements IUserService {
         this.userRepository = new UserRepository();
     }
 
+
+
     @Override
-    public List<AirlineDTO> getAllAirlines() {
+    public List<AirlineDTO> getAllAirlinesDetails() {
         return userRepository.getAllAirlines().stream()
                 .map(userMapper::toAirlineDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CustomerDTO> getAllCustomersDetails() {
+        return userRepository.getAllCustomers().stream()
+                .map(userMapper::toCustomerDTO)
+                .collect(Collectors.toList());
+    }
+
 
     // REGISTRO DE CUSTOMER
     @Override
@@ -122,6 +132,15 @@ public class UserService implements IUserService {
         }
         throw new IllegalArgumentException("No se encontró una aerolínea con ese nickname.");
     }
+    @Override
+    public CustomerDTO getCustomerDetailsByNickname(String nickname) {
+        User user = userRepository.getUserByNickname(nickname);
+        if (user instanceof Customer customer) {
+            return userMapper.toCustomerDTO(customer);
+        }
+        throw new IllegalArgumentException("No se encontró un cliente con ese nickname.");
+
+    }
 
     @Override
     public AirlineDTO getAirlineDetailsByNickname(String nickname) {
@@ -142,5 +161,9 @@ public class UserService implements IUserService {
     private boolean _emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
+
+
+
+
 }
 

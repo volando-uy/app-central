@@ -213,7 +213,7 @@ class UserServiceTest {
         userService.registerAirline(new AirlineDTO("air2", "Air2", "a2@mail.com", "desc234567", "www.air2.com"));
 
         // WHEN
-        List<AirlineDTO> result = userService.getAllAirlines();
+        List<AirlineDTO> result = userService.getAllAirlinesDetails();
 
         // THEN
         assertEquals(2, result.size());

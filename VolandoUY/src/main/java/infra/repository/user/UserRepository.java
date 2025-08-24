@@ -60,5 +60,6 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
     public List<Airline> getAllAirlines() {
         return airlineRepo.findAll();
     }
+    public List<Customer> getAllCustomers() {return customerRepo.findAll();}
 
 }
