@@ -17,4 +17,6 @@ public class ErrorMessages {
     public static final String ERR_FLIGHT_NOT_FOUND = "El vuelo con nombre %s no fue encontrado";
     public static final String ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND = "El paquete de ruta del vuelo con nombre %s no fue encontrado";
     public static final String ERR_FLIGHT_ROUTE_NOT_FOUND = "La ruta del vuelo con nombre %s no fue encontrada";
+
+
 }
