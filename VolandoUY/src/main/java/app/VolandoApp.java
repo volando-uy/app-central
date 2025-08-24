@@ -26,6 +26,7 @@ public class VolandoApp {
 
     public static void main(String[] args) {
 
+
         IUserController usuarioController = ControllerFactory.getUserController();
         IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
         ICategoryController categoryController = ControllerFactory.getCategoryController();
@@ -72,5 +73,14 @@ public class VolandoApp {
             MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController, flightRoutePackageController);
             mainFrame.setVisible(true);
         });
+
+        // Forzar conexión inicial
+        System.out.println("Estableciendo conexión inicial con la base de datos...");
+        EntityManager em = DBConnection.getEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("SELECT 1").getSingleResult();
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Conexión establecida.");
     }
 }

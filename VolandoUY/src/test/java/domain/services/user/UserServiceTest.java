@@ -1,5 +1,6 @@
 package domain.services.user;
 
+import app.DBConnection;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
@@ -9,6 +10,7 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.mapper.UserMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     private UserService userService;
+
+    @BeforeEach
+    void cleanDB() {
+        EntityManager em = DBConnection.getEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
+        em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
+        // otras tablas si aplican
+        em.getTransaction().commit();
+        em.close();
+    }
 
     @BeforeEach
     void setUp() {
@@ -61,7 +74,7 @@ class UserServiceTest {
         UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
             userService.registerCustomer(dto);
         });
-        assertEquals(ErrorMessages.ERR_USUARIO_YA_EXISTE, ex.getMessage());
+        assertEquals(ErrorMessages.ERR_USER_EXISTS, ex.getMessage());
     }
 
     @Test
@@ -251,6 +264,7 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("TestNick", result.getNickname());
     }
+
     @Test
     void registerCustomer_shouldThrowIfMailAlreadyExists() {
         // GIVEN
@@ -270,7 +284,7 @@ class UserServiceTest {
             userService.registerCustomer(second);
         });
 
-        assertEquals(ErrorMessages.ERR_USUARIO_YA_EXISTE, ex.getMessage());
+        assertEquals(ErrorMessages.ERR_USER_EXISTS, ex.getMessage());
     }
 
     @Test
