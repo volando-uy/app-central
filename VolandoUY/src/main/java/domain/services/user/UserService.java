@@ -133,21 +133,7 @@ public class UserService implements IUserService {
         throw new IllegalArgumentException("No se encontró una aerolínea con ese nickname.");
     }
 
-    @Override
-    public List<AirlineDTO> getAllAirlinesDetails() {
-        List<Airline> airlines = airlineRepo.findAll();
-        return airlines.stream()
-                .map(userMapper::toAirlineDTO)
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public List<CustomerDTO> getAllCustomersDetails() {
-        List<Customer> customers = customerRepo.findAll();
-        return customers.stream()
-                .map(userMapper::toCustomerDTO)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public CustomerDTO getCustomerDetailsByNickname(String nickname) {
@@ -168,28 +154,6 @@ public class UserService implements IUserService {
     public void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute) {
         airline.getFlightRoutes().add(flightRoute);
         userRepository.save(airline);
-    }
-
-    public CustomerDTO getCustomerDetailsByNickname(String nickname) {
-        Customer customer = (Customer) _getUserByNickname(nickname);
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer no encontrado: " + nickname);
-        }
-        return userMapper.toCustomerDTO(customer);
-    }
-
-    // Función privada para obtener un usuario por nickname
-    // No tira excepción si no lo encuentra, devuelve null
-    private User _getUserByNickname(String nickname) {
-        // Lo buscamos en el repo de clientes
-        User user = customerRepo.findByKey(nickname);
-
-        // Si no está, lo buscamos en el repo de aerolíneas
-        if (user == null) {
-            user = airlineRepo.findByKey(nickname);
-        }
-      
-        return user;
     }
 
 
