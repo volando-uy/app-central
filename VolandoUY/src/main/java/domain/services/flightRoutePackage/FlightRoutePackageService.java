@@ -28,7 +28,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     public FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO) {
         FlightRoutePackage pack = modelMapper.map(flightRoutePackageDTO, FlightRoutePackage.class);
         if (flightRoutePackageExists(pack.getName())) {
-            throw new IllegalArgumentException("El paquete ya existe");
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, pack.getName()));
         }
         ValidatorUtil.validate(pack);
 
@@ -74,7 +74,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
 
         if (quantity <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+            throw new IllegalArgumentException(ErrorMessages.ERR_QUANTITY_MUST_BE_GREATER_THAN_ZERO);
         }
         
         for (int i = 0; i < quantity; i++) {

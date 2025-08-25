@@ -10,6 +10,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
@@ -30,11 +31,11 @@ public class Flight {
     @Size(min = 2, max = 100)
     private String name;
 
-    @Future(message = "La salida debe ser en el futuro")
+    @Future(message = ErrorMessages.ERR_FLIGHT_DEPARTURE_FUTURE)
     private LocalDateTime departureTime;
 
     @NotNull
-    @Positive(message = "La duración (min) debe ser > 0")
+    @Positive(message = ErrorMessages.ERR_FLIGHT_DURATION_POSITIVE)
     private Long duration;
 
     @NotNull

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
@@ -34,12 +35,12 @@ public class City {
     @Size(min = 2, max = 100)
     private String country;
 
-    @DecimalMin(value = "-90.0", inclusive = true, message = "Latitud mínima -90")
-    @DecimalMax(value = "90.0", inclusive = true, message = "Latitud máxima 90")
+    @DecimalMin(value = "-90.0", inclusive = true, message = ErrorMessages.ERROR_MIN_LATITUDE)
+    @DecimalMax(value = "90.0", inclusive = true, message = ErrorMessages.ERROR_MAX_LATITUDE)
     private double latitude;
 
-    @DecimalMin(value = "-180.0", inclusive = true, message = "Longitud mínima -180")
-    @DecimalMax(value = "180.0", inclusive = true, message = "Longitud máxima 180")
+    @DecimalMin(value = "-180.0", inclusive = true, message = ErrorMessages.ERROR_MIN_LONGITUDE)
+    @DecimalMax(value = "180.0", inclusive = true, message = ErrorMessages.ERROR_MAX_LONGITUDE)
     private double longitude;
 
     public City(String name, String country, double latitude, double longitude) {

@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
+import shared.constants.RegexPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class Airline extends User {
     @Size(min = 10, max = 500)
     private String description;
 
-    @Pattern(regexp = "(^$)|(^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$)", message = "El formato de la web no es válido")
+    @Pattern(regexp = RegexPatterns.WEB_URL, message = ErrorMessages.ERR_WEB_FORMAT)
     private String web;
 
     // RELACIÓN BIDIRECCIONAL CORRECTA: Flight -> Airline
