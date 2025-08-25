@@ -1,5 +1,6 @@
 package domain.services.user;
 
+import app.DBConnection;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
@@ -9,6 +10,7 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.mapper.UserMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     private UserService userService;
+
+    @BeforeEach
+    void cleanDB() {
+        EntityManager em = DBConnection.getEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
+        em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
+        // otras tablas si aplican
+        em.getTransaction().commit();
+        em.close();
+    }
 
     @BeforeEach
     void setUp() {
@@ -137,7 +150,8 @@ class UserServiceTest {
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
             userService.getUserByNickname("inexistente");
         });
-        assertTrue(ex.getMessage().contains("User no encontrado"));
+        //El usuario inexistente no fue encontrado
+        assertEquals(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "inexistente"), ex.getMessage());
     }
 
     @Test
@@ -189,7 +203,7 @@ class UserServiceTest {
             userService.updateUser("notFound", updatedDTO);
         });
 
-        assertTrue(ex.getMessage().contains("User no encontrado"));
+        assertTrue(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "notFound").contains("notFound"));
     }
 
     @Test
@@ -199,7 +213,7 @@ class UserServiceTest {
         userService.registerAirline(new AirlineDTO("air2", "Air2", "a2@mail.com", "desc234567", "www.air2.com"));
 
         // WHEN
-        List<AirlineDTO> result = userService.getAllAirlines();
+        List<AirlineDTO> result = userService.getAllAirlinesDetails();
 
         // THEN
         assertEquals(2, result.size());
@@ -241,7 +255,7 @@ class UserServiceTest {
     void getUserByNickname_shouldBeCaseInsensitive() {
         // GIVEN
         userService.registerCustomer(new CustomerDTO(
-                "TestNick", "Nombre", "mail@test.com", "Apellido", "Pais",
+                "TeStNiCk", "Nombre", "mail@test.com", "Apellido", "Pais",
                 LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI));
 
         // WHEN
@@ -249,8 +263,9 @@ class UserServiceTest {
 
         // THEN
         assertNotNull(result);
-        assertEquals("TestNick", result.getNickname());
+        assertEquals("TeStNiCk", result.getNickname());
     }
+
     @Test
     void registerCustomer_shouldThrowIfMailAlreadyExists() {
         // GIVEN

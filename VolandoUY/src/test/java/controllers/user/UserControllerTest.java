@@ -131,7 +131,7 @@ class UserControllerTest {
         AirlineDTO airline2 = new AirlineDTO();
         airline2.setNickname("air2");
 
-        when(usuarioService.getAllAirlines()).thenReturn(List.of(airline1, airline2));
+        when(usuarioService.getAllAirlinesDetails()).thenReturn(List.of(airline1, airline2));
 
         // WHEN
         List<String> result = usuarioController.getAllAirlinesNicknames();

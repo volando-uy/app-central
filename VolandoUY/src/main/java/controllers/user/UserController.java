@@ -37,8 +37,18 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public List<CustomerDTO> getAllCustomers() {
+        return userService.getAllCustomersDetails();
+    }
+
+    @Override
+    public List<AirlineDTO> getAllAirlines() {
+        return userService.getAllAirlinesDetails();
+    }
+
+    @Override
     public List<String> getAllAirlinesNicknames() {
-        return userService.getAllAirlines().stream()
+        return userService.getAllAirlinesDetails().stream()
                 .map(AirlineDTO::getNickname)
                 .toList();
     }
@@ -57,5 +67,10 @@ public class UserController implements IUserController {
     @Override
     public AirlineDTO getAirlineByNickname(String nickname) {
         return userService.getAirlineDetailsByNickname(nickname);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByNickname(String nickname) {
+        return userService.getCustomerDetailsByNickname(nickname);
     }
 }
