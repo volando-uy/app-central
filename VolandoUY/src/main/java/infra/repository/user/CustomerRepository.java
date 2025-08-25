@@ -11,6 +11,7 @@ public class CustomerRepository extends AbstractUserRepository<Customer> {
     public CustomerRepository() {
         super(Customer.class);
     }
+
     @Override
     protected String getEntityName() {
         return this.getEntityClass().getSimpleName();
@@ -42,7 +43,4 @@ public class CustomerRepository extends AbstractUserRepository<Customer> {
                     .orElse(null);
         }
     }
-
-
-
 }

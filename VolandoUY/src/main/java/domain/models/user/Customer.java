@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
 
 import java.time.LocalDate;
 
@@ -27,7 +28,7 @@ public class Customer extends User {
     private String surname;
 
     @NotNull
-    @Past(message = "La fecha de nacimiento debe ser en el pasado")
+    @Past(message = ErrorMessages.ERR_BIRTHDAY_IN_PAST)
     private LocalDate birthDate;
 
     @NotBlank

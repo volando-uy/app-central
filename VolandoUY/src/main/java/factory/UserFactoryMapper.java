@@ -7,6 +7,7 @@ import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
 import org.modelmapper.ModelMapper;
+import shared.constants.ErrorMessages;
 
 public class UserFactoryMapper {
 
@@ -22,6 +23,6 @@ public class UserFactoryMapper {
         } else if (dto instanceof AirlineDTO) {
             return modelMapper.map(dto, Airline.class);
         }
-        throw new IllegalArgumentException("Tipo de usuario no soportado: " + dto.getClass());
+        throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
     }
 }

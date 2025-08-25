@@ -11,42 +11,41 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
+import shared.constants.RegexPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class Airline extends User {
 
     @NotBlank
     @Size(min = 10, max = 500)
     private String description;
 
-    @Pattern(regexp = "(^$)|(^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$)", message = "El formato de la web no es válido")
+    @Pattern(regexp = RegexPatterns.WEB_URL, message = ErrorMessages.ERR_WEB_FORMAT)
     private String web;
 
-    @OneToMany
-    private List<Flight> flights= new ArrayList<>();
+    // RELACIÓN BIDIRECCIONAL CORRECTA: Flight -> Airline
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flight> flights = new ArrayList<>();
 
-    @OneToMany
-    private List<FlightRoute> flightRoutes=new ArrayList<>();
+    // RELACIÓN BIDIRECCIONAL CORRECTA: FlightRoute -> Airline
+    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airline(String nickname, String name, String mail, String description, String web) {
         super(nickname, name, mail);
         this.description = description;
         this.web = web;
-        this.flights = new ArrayList<>();
-        this.flightRoutes = new ArrayList<>();
     }
-
 
     @Override
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof AirlineDTO newDataCasted)) return;
-
         this.setName(newDataCasted.getName());
         this.setDescription(newDataCasted.getDescription());
         this.setWeb(newDataCasted.getWeb());
@@ -59,10 +58,7 @@ public class Airline extends User {
                 ", web='" + web + '\'' +
                 ", flights=" + flights +
                 ", flightRoutes=" + (flightRoutes == null ? "[]" :
-                flightRoutes.stream()
-                        .map(FlightRoute::getName)
-                        .toList()) +
+                flightRoutes.stream().map(FlightRoute::getName).toList()) +
                 '}';
     }
-
 }
