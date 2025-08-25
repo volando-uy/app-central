@@ -70,7 +70,7 @@ public class FlightRouteService implements IFlightRouteService {
         FlightRoute flightRoute = modelMapper.map(flightRouteDTO, FlightRoute.class);
         // Comprobar que la ruta de vuelo no exista
         if (existFlightRoute(flightRouteDTO.getName())) {
-            throw new UnsupportedOperationException("Ya existe una ruta con el nombre: " + flightRouteDTO.getName());
+            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_ALREADY_EXISTS, flightRouteDTO.getName()));
         }
         ValidatorUtil.validate(flightRoute);
 
@@ -88,7 +88,7 @@ public class FlightRouteService implements IFlightRouteService {
                     flightRoute.getCategories().add(category);
                 } else {
                     // Si no existe, lanzar una excepción
-                    throw new IllegalArgumentException("La categoría " + categoryName + " no existe.");
+                    throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CATEGORY_NOT_FOUND, categoryName));
                 }
             });
         }
