@@ -1,5 +1,6 @@
 package domain.services.flightRoute;
 
+import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
@@ -32,6 +33,13 @@ public class FlightRouteService implements IFlightRouteService {
         this.cityService = cityService;
     }
 
+    @Override
+    public List<FlightDTO> getFlightsByRouteName(String routeName) {
+        FlightRoute flightRoute = getFlightRouteByName(routeName);
+        return flightRoute.getFlights().stream()
+                .map(flight -> modelMapper.map(flight, FlightDTO.class))
+                .toList();
+    }
     @Override
     public boolean existFlightRoute(String name) {
         return this.flightRouteList.stream().anyMatch(flightRoute -> flightRoute.getName().equalsIgnoreCase(name));
