@@ -7,9 +7,11 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
+import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import gui.flight.FlightPanel;
 import gui.flightRoute.FlightRoutePanel;
 import gui.flightRoutePackage.FlightRoutePackagePanel;
 import gui.others.OtherPanel;
@@ -26,6 +28,7 @@ public class MainFrame extends JFrame {
     private ICategoryController categoryController;
     private ICityController cityController;
     private IFlightRoutePackageController flightRoutePackageController;
+    private IFlightController flightController;
 
     private SideBar sideBar;
     private JPanel mainPanel;
@@ -35,7 +38,8 @@ public class MainFrame extends JFrame {
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
                      ICategoryController categoryController, ICityController cityController,
-                     IFlightRoutePackageController flightRoutePackageController) {
+                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController) {
+        this.flightController = flightController;
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.categoryController = categoryController;
@@ -115,7 +119,15 @@ public class MainFrame extends JFrame {
             }
         };
 
-        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener);
+        MouseListener flightManagementBtnListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Flight Management button clicked");
+                updateMainPanel(new FlightPanel(flightController, flightRouteController, userController), 4);
+            }
+        };
+
+        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener, flightManagementBtnListener);
     }
 
 }

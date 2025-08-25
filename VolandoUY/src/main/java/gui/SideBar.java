@@ -7,12 +7,8 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.GroupLayout;
-import javax.swing.border.*;
-import shared.constants.GUIConstants;
 
 import lombok.Setter;
-import org.postgresql.util.ReaderInputStream;
 
 /**
  * @author ignac
@@ -24,15 +20,18 @@ public class SideBar extends JPanel {
     private MouseListener flightRouteManagementBtnListener;
     private MouseListener othersManagementBtnListener;
     private MouseListener flightRoutePackageManagementBtnListener;
+    private MouseListener flightManagementBtnListener;
 
     public SideBar(MouseListener userManagementBtnListener,
                    MouseListener flightRouteManagementBtnListener,
                    MouseListener othersManagementBtnListener,
-                   MouseListener flightRoutePackageManagementBtnListener) {
+                   MouseListener flightRoutePackageManagementBtnListener, MouseListener flightManagementBtnListener) {
         this.userManagementBtnListener = userManagementBtnListener;
         this.flightRouteManagementBtnListener = flightRouteManagementBtnListener;
         this.othersManagementBtnListener = othersManagementBtnListener;
         this.flightRoutePackageManagementBtnListener = flightRoutePackageManagementBtnListener;
+        this.flightManagementBtnListener = flightManagementBtnListener;
+
         initComponents();
         initListeners();
         try {
@@ -50,6 +49,7 @@ public class SideBar extends JPanel {
         FlightRouteManagementBtn.addMouseListener(flightRouteManagementBtnListener);
         FlightRoutePackageManagementBtn.addMouseListener(flightRoutePackageManagementBtnListener);
         OthersManagementBtn.addMouseListener(othersManagementBtnListener);
+        FlightManagementBtn.addMouseListener(flightManagementBtnListener);
     }
 
     private void initComponents() {

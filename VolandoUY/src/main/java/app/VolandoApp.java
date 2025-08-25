@@ -5,6 +5,7 @@ import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import controllers.flight.IFlightController;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
@@ -29,6 +30,7 @@ public class VolandoApp {
 
         IUserController usuarioController = ControllerFactory.getUserController();
         IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
+        IFlightController flightController = ControllerFactory.getFlightController();
         ICategoryController categoryController = ControllerFactory.getCategoryController();
         ICityController cityController = ControllerFactory.getCityController();
         IFlightRoutePackageController flightRoutePackageController = ControllerFactory.getFlightRoutePackageController();
@@ -70,7 +72,7 @@ public class VolandoApp {
 //        ));
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController, flightRoutePackageController);
+            MainFrame mainFrame = new MainFrame(usuarioController, flightRouteController, categoryController, cityController, flightRoutePackageController , flightController);
             mainFrame.setVisible(true);
         });
 
