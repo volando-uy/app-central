@@ -1,6 +1,7 @@
 package domain.services.city;
 
 import domain.dtos.city.CityDTO;
+
 import domain.models.city.City;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
@@ -8,6 +9,7 @@ import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CityService implements ICityService {
@@ -68,4 +70,11 @@ public class CityService implements ICityService {
                 .anyMatch(airport -> airport.getName().equalsIgnoreCase(airportName));
     }
 
+
+    @Override
+    public List<String> getAllCities() {
+        return cities.stream()
+                .map(City::getName)
+                .collect(Collectors.toList());
+    }
 }

@@ -3,6 +3,8 @@ package gui.others;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.user.IUserController;
+import gui.others.GetCategory.GetCategoryPanel;
+import gui.others.GetCity.GetCityPanel;
 import gui.others.createCategory.CreateCategoryPanel;
 import gui.others.createCity.CreateCityPanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
@@ -23,7 +25,8 @@ public class OtherPanel extends JPanel {
 
     private MouseListener createCategoryPanelListener;
     private MouseListener createCityPanelListener;
-
+    private MouseListener listCategoryPanelListener;
+    private MouseListener listCityPanelListener;
     private ICategoryController categoryController;
     private ICityController cityController;
     
@@ -63,6 +66,37 @@ public class OtherPanel extends JPanel {
             }
         };
 
+        listCategoryPanelListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    if (contentPanel instanceof GetCategoryPanel) {return;
+                    }
+                    remove(contentPanel);
+                }
+                System.out.println("List Category button clicked");
+                contentPanel = new GetCategoryPanel(categoryController);
+                add(contentPanel); // <-- importante
+                revalidate();
+                repaint();
+            }
+            };
+         listCityPanelListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    if (contentPanel instanceof GetCityPanel) {return;
+                    }
+                    remove(contentPanel);
+                }
+                System.out.println("List City button clicked");
+                contentPanel = new GetCityPanel(cityController);
+                add(contentPanel); // <-- importante
+                revalidate();
+                repaint();
+            }
+            };
+
         // Listener para el botón de registro de aerolínea
         createCityPanelListener = new MouseAdapter() {
             @Override
@@ -83,39 +117,41 @@ public class OtherPanel extends JPanel {
             }
         };
 
+        listCityBtn1.addMouseListener(listCityPanelListener);
+        listCategoryBtn2.addMouseListener(listCategoryPanelListener);
         createCategoryBtn.addMouseListener(createCategoryPanelListener);
         createCityBtn.addMouseListener(createCityPanelListener);
     }
-  
+
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createCityBtn;
     private JButton createCategoryBtn;
-    private JButton noBtn1;
-    private JButton noBtn2;
+    private JButton listCityBtn1;
+    private JButton listCategoryBtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createCityBtn = new JButton();
         createCategoryBtn = new JButton();
-        noBtn1 = new JButton();
-        noBtn2 = new JButton();
+        listCityBtn1 = new JButton();
+        listCategoryBtn2 = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border
-        .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax
-        . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,
-        12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans
-        .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e.
-        getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
+        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
+        getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -135,13 +171,13 @@ public class OtherPanel extends JPanel {
             createCategoryBtn.setText("Crear Categoria");
             NavPanel.add(createCategoryBtn);
 
-            //---- noBtn1 ----
-            noBtn1.setText("-----");
-            NavPanel.add(noBtn1);
+            //---- listCityBtn1 ----
+            listCityBtn1.setText("Listar Ciudad");
+            NavPanel.add(listCityBtn1);
 
-            //---- noBtn2 ----
-            noBtn2.setText("-----");
-            NavPanel.add(noBtn2);
+            //---- listCategoryBtn2 ----
+            listCategoryBtn2.setText("Listar Categoria");
+            NavPanel.add(listCategoryBtn2);
         }
         add(NavPanel, BorderLayout.NORTH);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
