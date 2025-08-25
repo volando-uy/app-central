@@ -35,15 +35,16 @@ public class FlightService implements IFlightService {
         Flight originalFlight = modelMapper.map(flightDTO, Flight.class);
         // Verificar si el vuelo ya existe
         if (_flightExists(originalFlight)) {
-            throw new UnsupportedOperationException("Flight already exists: " + originalFlight.getName());
+            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ALREADY_EXISTS, originalFlight.getName()));
         }
         ValidatorUtil.validate(originalFlight);
 
         // Mapear Airline desde nickname
         Airline airline = userService.getAirlineByNickname(flightDTO.getAirlineNickname());
-        if (airline == null) {
-            throw new IllegalArgumentException("Airline not found: " + flightDTO.getAirlineNickname());
-        }
+        // No es necesario esta validacion porque si la aerolinea no existe, ya throwea en getAirlineByNickname
+//        if (airline == null) {
+//            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, flightDTO.getAirlineNickname()));
+//        }
 
         // Agregar el vuelo a la aerolínea y viceversa
         originalFlight.setAirline(airline);
@@ -92,9 +93,10 @@ public class FlightService implements IFlightService {
     @Override
     public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
         Airline airline = userService.getAirlineByNickname(airlineNickname);
-        if (airline == null) {
-            throw new IllegalArgumentException("Airline not found: " + airlineNickname);
-        }
+        //No es necesario esta validacion porque si la aerolinea no existe, ya throwea en getAirlineByNickname
+//        if (airline == null) {
+//            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, airlineNickname));
+//        }
         return flights.stream()
                 .filter(flight -> flight.getAirline().equals(airline))
                 .map(flight -> modelMapper.map(flight, FlightDTO.class))
@@ -105,7 +107,5 @@ public class FlightService implements IFlightService {
         return flights.stream()
                 .anyMatch(existingFlight -> existingFlight.getName().equalsIgnoreCase(flight.getName()));
     }
-
-
-
+    
 }

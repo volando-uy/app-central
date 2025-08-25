@@ -8,6 +8,7 @@ import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
 import org.modelmapper.ModelMapper;
+import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class UserMapper {
         } else if (user instanceof Airline) {
             return modelMapper.map(user, AirlineDTO.class);
         }
-        throw new IllegalArgumentException("Tipo de user desconocido: " + user.getClass());
+        throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
     }
 
     public User fromDTO(UserDTO updatedUserDTO) {
@@ -36,7 +37,7 @@ public class UserMapper {
         } else if (updatedUserDTO instanceof AirlineDTO airlineDTO) {
             return modelMapper.map(airlineDTO, Airline.class);
         }
-        throw new IllegalArgumentException("Tipo de UserDTO desconocido: " + updatedUserDTO.getClass());
+        throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
     }
     public AirlineDTO toAirlineDTO(Airline airline) {
         AirlineDTO dto = new AirlineDTO();

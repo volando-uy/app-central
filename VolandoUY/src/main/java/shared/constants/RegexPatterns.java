@@ -4,4 +4,5 @@ public class RegexPatterns {
     public static final String EMAIL = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
     public static final String SOLO_NUMEROS = "\\d+";
     public static final String SOLO_LETRAS = "^[a-zA-Z\\s]+$";
+    public static final String WEB_URL = "(^$)|(^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/.*)?$)";
 }

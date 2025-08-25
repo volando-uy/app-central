@@ -4,6 +4,7 @@ import domain.models.user.User;
 import domain.models.user.Customer;
 import domain.models.user.Airline;
 import infra.repository.BaseRepository;
+import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
         } else if (user instanceof Airline) {
             airlineRepo.save((Airline) user);
         } else {
-            throw new IllegalArgumentException("Tipo de usuario no soportado");
+            throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
         }
     }
 

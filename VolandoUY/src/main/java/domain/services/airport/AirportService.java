@@ -31,7 +31,7 @@ public class AirportService implements IAirportService {
         }
 
         if (airportExists(dto.getCode())) {
-            throw new IllegalArgumentException("Ya existe un aeropuerto con el código " + dto.getCode());
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_CODE_ALREADY_EXISTS, dto.getCode()));
         }
 
         Airport airport = modelMapper.map(dto, Airport.class);

@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
 @Data
@@ -23,13 +24,13 @@ public class Airport {
     @ManyToOne
     private City city;
 
-    @NotBlank(message = "El nombre del aeropuerto es obligatorio")
+    @NotBlank(message = ErrorMessages.ERR_AIRPORT_NAME_MANDATORY)
     @Size(min = 2, max = 100)
     private String name;
 
     @Id
-    @NotBlank(message = "El código IATA es obligatorio")
-    @Pattern(regexp = "^[A-Z]{3}$", message = "El código IATA debe ser 3 letras mayúsculas")
+    @NotBlank(message = ErrorMessages.ERR_AIRPORT_CODE_MANDATORY)
+    @Pattern(regexp = "^[A-Z]{3}$", message = ErrorMessages.ERR_AIRPORT_CODE_FORMAT)
     private String code;
 
     public Airport(String name, String code) {

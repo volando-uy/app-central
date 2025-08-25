@@ -130,7 +130,7 @@ public class UserService implements IUserService {
         if (user instanceof Airline airline) {
             return airline;
         }
-        throw new IllegalArgumentException("No se encontró una aerolínea con ese nickname.");
+        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, nickname));
     }
 
 
@@ -141,7 +141,7 @@ public class UserService implements IUserService {
         if (user instanceof Customer customer) {
             return userMapper.toCustomerDTO(customer);
         }
-        throw new IllegalArgumentException("No se encontró un cliente con ese nickname.");
+        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
 
     }
 

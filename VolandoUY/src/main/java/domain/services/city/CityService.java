@@ -23,7 +23,7 @@ public class CityService implements ICityService {
     public CityDTO createCity(CityDTO cityDTO) {
         City city = modelMapper.map(cityDTO, City.class);
         if (cityExists(city.getName())) {
-            throw new IllegalArgumentException("City already exists");
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_ALREADY_EXISTS, city.getName()));
         }
         ValidatorUtil.validate(city);
 
