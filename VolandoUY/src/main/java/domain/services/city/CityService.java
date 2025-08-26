@@ -1,6 +1,7 @@
 package domain.services.city;
 
 import domain.dtos.city.CityDTO;
+
 import domain.models.city.City;
 import infra.repository.city.CityRepository;
 import infra.repository.city.ICityRepository;
@@ -10,6 +11,7 @@ import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CityService implements ICityService {
@@ -78,4 +80,11 @@ public class CityService implements ICityService {
         return cityRepository.existsAirportInCity(cityName, airportName);
     }
 
+
+    @Override
+    public List<String> getAllCities() {
+        return cities.stream()
+                .map(City::getName)
+                .collect(Collectors.toList());
+    }
 }

@@ -4,6 +4,8 @@ import domain.dtos.city.CityDTO;
 import domain.services.city.ICityService;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class CityController implements ICityController {
     private ICityService cityService;
@@ -31,5 +33,7 @@ public class CityController implements ICityController {
     @Override
     public CityDTO getCityDetailsByName(String name) {
         return this.cityService.getCityDetailsByName(name);
+    public List<String> getAllCities(  ){;
+        return this.cityService.getAllCities();
     }
 }
