@@ -83,7 +83,7 @@ public class CityService implements ICityService {
 
     @Override
     public List<String> getAllCities() {
-        return cities.stream()
+        return cityRepository.findAll().stream()
                 .map(City::getName)
                 .collect(Collectors.toList());
     }
