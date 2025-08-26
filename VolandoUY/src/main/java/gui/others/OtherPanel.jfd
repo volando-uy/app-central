@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -25,12 +25,12 @@ new FormModel {
 					"text": "Crear Categoria"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "noBtn1"
-					"text": "-----"
+					name: "listCityBtn1"
+					"text": "Listar Ciudad"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "noBtn2"
-					"text": "-----"
+					name: "listCategoryBtn2"
+					"text": "Listar Categoria"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
