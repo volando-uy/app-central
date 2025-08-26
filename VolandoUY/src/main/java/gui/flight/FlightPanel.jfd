@@ -21,8 +21,8 @@ new FormModel {
 					"text": "Crear Vuelo"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "registerAirlineBtn"
-					"text": "---"
+					name: "listFlightBtn"
+					"text": "Listar Vuelos"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "updateUserBtn"

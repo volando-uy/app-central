@@ -6,6 +6,7 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import gui.flightRoutePackage.addFlightRouteToPackage.AddFlightRouteToPackagePanel;
 import gui.flightRoutePackage.createFlightRoutePackage.CreateFlightRoutePackagePanel;
+import gui.flightRoutePackage.getFlightRoutePackage.GetFlightRoutePackagePanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -21,7 +22,7 @@ public class FlightRoutePackagePanel extends JPanel {
 
     private MouseListener createFlightRoutePackagePanelListener;
     private MouseListener addFlightRouteToPackagePanelListener;
-
+    private MouseListener listPackagesPanelListener;
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightRouteController flightRouteController;
     private IUserController userController;
@@ -32,6 +33,7 @@ public class FlightRoutePackagePanel extends JPanel {
             IFlightRoutePackageController flightRoutePackageController,
             IFlightRouteController flightRouteController,
             IUserController userController
+
     ) {
         this.flightRoutePackageController = flightRoutePackageController;
         this.flightRouteController = flightRouteController;
@@ -66,7 +68,21 @@ public class FlightRoutePackagePanel extends JPanel {
                 repaint();
             }
         };
-        
+
+        listPackagesPanelListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    if (contentPanel instanceof GetFlightRoutePackagePanel) return;
+                    remove(contentPanel);
+                }
+                System.out.println("List Flight Route Packages button clicked");
+                contentPanel = new GetFlightRoutePackagePanel(flightRoutePackageController);
+                add(contentPanel, BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
+        };
         addFlightRouteToPackagePanelListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -90,25 +106,26 @@ public class FlightRoutePackagePanel extends JPanel {
 
         createFlightRoutePackageBtn.addMouseListener(createFlightRoutePackagePanelListener);
         addFlightRouteToPackageBtn.addMouseListener(addFlightRouteToPackagePanelListener);
+        getPackageBtn.addMouseListener(listPackagesPanelListener);
         //button3.addMouseListener(getUserListener);
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createFlightRoutePackageBtn;
     private JButton addFlightRouteToPackageBtn;
-    private JButton updateUserBtn;
+    private JButton getPackageBtn;
     private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createFlightRoutePackageBtn = new JButton();
         addFlightRouteToPackageBtn = new JButton();
-        updateUserBtn = new JButton();
+        getPackageBtn = new JButton();
         getUserBtn = new JButton();
 
         //======== this ========
@@ -116,12 +133,12 @@ public class FlightRoutePackagePanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+        (0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+        .TitledBorder.BOTTOM,new java.awt.Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt
+        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+        propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -141,9 +158,9 @@ public class FlightRoutePackagePanel extends JPanel {
             addFlightRouteToPackageBtn.setText("A\u00f1adir R.V. a Paquete");
             NavPanel.add(addFlightRouteToPackageBtn);
 
-            //---- updateUserBtn ----
-            updateUserBtn.setText("---");
-            NavPanel.add(updateUserBtn);
+            //---- getPackageBtn ----
+            getPackageBtn.setText("Listar Paquetes");
+            NavPanel.add(getPackageBtn);
 
             //---- getUserBtn ----
             getUserBtn.setText("---");

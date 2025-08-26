@@ -9,6 +9,7 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import gui.flight.createFlight.createFlightPanel;
+import gui.flight.getFlight.GetFlightPanel;
 import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
 
 import java.awt.*;
@@ -25,6 +26,7 @@ import javax.swing.border.*;
  */
 public class FlightPanel extends JPanel {
     private MouseListener createFlightListener;
+    private MouseListener listFlightListener;
     private IFlightController flightController;
     private IFlightRouteController flightRouteController;
     private IUserController userController;
@@ -64,15 +66,32 @@ public class FlightPanel extends JPanel {
                 repaint();
             }
         };
-        createFlightBtn.addMouseListener(createFlightListener); 
-     }
+
+        listFlightListener = new MouseAdapter() {   // <--- nuevo
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    if (contentPanel instanceof GetFlightPanel) return;
+                    remove(contentPanel);
+                }
+                System.out.println("List Flight button clicked");
+                contentPanel = new GetFlightPanel(flightController);
+                add(contentPanel);
+                revalidate();
+                repaint();
+            }
+        };
+
+        createFlightBtn.addMouseListener(createFlightListener);
+        listFlightBtn.addMouseListener(listFlightListener);
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createFlightBtn = new JButton();
-        registerAirlineBtn = new JButton();
+        listFlightBtn = new JButton();
         updateUserBtn = new JButton();
         getUserBtn = new JButton();
 
@@ -81,12 +100,12 @@ public class FlightPanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-        EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-        . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
-        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )
-        throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.
+        border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER
+        ,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font
+        .BOLD,12),java.awt.Color.red), getBorder())); addPropertyChangeListener(
+        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r"
+        .equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -102,9 +121,9 @@ public class FlightPanel extends JPanel {
             createFlightBtn.setText("Crear Vuelo");
             NavPanel.add(createFlightBtn);
 
-            //---- registerAirlineBtn ----
-            registerAirlineBtn.setText("---");
-            NavPanel.add(registerAirlineBtn);
+            //---- listFlightBtn ----
+            listFlightBtn.setText("Listar Vuelos");
+            NavPanel.add(listFlightBtn);
 
             //---- updateUserBtn ----
             updateUserBtn.setText("---");
@@ -122,7 +141,7 @@ public class FlightPanel extends JPanel {
     // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createFlightBtn;
-    private JButton registerAirlineBtn;
+    private JButton listFlightBtn;
     private JButton updateUserBtn;
     private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

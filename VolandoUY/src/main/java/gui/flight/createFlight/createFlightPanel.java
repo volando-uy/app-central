@@ -10,8 +10,10 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.flight.FlightDTO;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
@@ -27,15 +29,18 @@ public class createFlightPanel extends JPanel {
      IFlightController flightController;
      IFlightRouteController flightRouteController;
      IUserController userController;
-
-    AirlineDTO selectedAirline;
+     private static final String PH_CREATED_AT = "dd/MM/yyyy HH:mm";
+     private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
+     AirlineDTO selectedAirline;
 
     public createFlightPanel(IFlightController flightController, IFlightRouteController flightRouteController , IUserController userController) {
         this.flightController = flightController;
         this.flightRouteController = flightRouteController ;
         this.userController = userController;
         initComponents();
-        initAirlineList() ;
+        initAirlineList();
+        initPlaceholders();
+        initListeners();
         try {
             setBorder(null);
         } catch (Exception ignored) {
@@ -70,7 +75,9 @@ public class createFlightPanel extends JPanel {
             tableModel.addRow(rowData);
         }
 
+        flightRouteTable.setModel(tableModel);
         flightRouteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        flightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Adjust column widths based on content
         for (int col = 0; col < flightRouteTable.getColumnCount(); col++) {
@@ -102,10 +109,178 @@ public class createFlightPanel extends JPanel {
 
         flightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     }
-
     private void initListeners() {
-        
+        loadAirlineBtn.addActionListener(e -> {
+            try {
+                String selectedNickname = (String) airlineComboBox.getSelectedItem();
+                if (selectedNickname == null || selectedNickname.isEmpty()) {
+                    throw new IllegalArgumentException("Debe seleccionar una aerolínea.");
+                }
 
+                selectedAirline = userController.getAirlineByNickname(selectedNickname);
+                if (selectedAirline == null) {
+                    throw new IllegalStateException("La aerolínea seleccionada no existe.");
+                }
+
+                loadFlightRouteList(selectedAirline.getNickname());
+                JOptionPane.showMessageDialog(this, "Aerolínea cargada correctamente.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la aerolínea: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        createFlightBtn.addActionListener(e -> {
+            try {
+                // Validar selección de ruta
+                int selectedRow = flightRouteTable.getSelectedRow();
+                if (selectedRow == -1) {
+                    throw new IllegalArgumentException("Debe seleccionar una ruta de vuelo de la tabla.");
+                }
+                String selectedFlightRouteName = (String) flightRouteTable.getValueAt(selectedRow, 0);
+
+                // Validar aerolínea cargada
+                if (selectedAirline == null) {
+                    throw new IllegalStateException("Primero debe cargar una aerolínea.");
+                }
+
+                // Validar campos básicos
+                String flightName = nameTextField.getText().trim();
+                if (flightName.isEmpty()) {
+                    throw new IllegalArgumentException("El nombre del vuelo no puede estar vacío.");
+                }
+
+                long durationMinutes;
+                int seatsBusiness;
+                int seatsEconomy;
+
+                try {
+                    durationMinutes = Long.parseLong(durationTextField.getText().trim());
+                } catch (NumberFormatException nfe) {
+                    throw new IllegalArgumentException("Duración inválida. Debe ser un número (minutos).");
+                }
+                try {
+                    seatsBusiness = Integer.parseInt(ejecutiveTextField.getText().trim());
+                } catch (NumberFormatException nfe) {
+                    throw new IllegalArgumentException("Asientos ejecutivos inválidos. Debe ser un entero.");
+                }
+                try {
+                    seatsEconomy = Integer.parseInt(turistTextField.getText().trim());
+                } catch (NumberFormatException nfe) {
+                    throw new IllegalArgumentException("Asientos turista inválidos. Debe ser un entero.");
+                }
+
+
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+
+                LocalDateTime departureTime;
+                if (isPlaceholderOrEmpty(dateFlightTextField, PH_DEPARTURE)) {
+                    throw new IllegalArgumentException("La fecha de vuelo es obligatoria (formato: dd/MM/yyyy HH:mm).");
+                }
+                try {
+                    departureTime = LocalDateTime.parse(dateFlightTextField.getText().trim(), fmt);
+                } catch (Exception pe) {
+                    throw new IllegalArgumentException("Fecha de vuelo inválida. Formato esperado: dd/MM/yyyy HH:mm");
+                }
+
+                 LocalDateTime createdAt;
+                if (isPlaceholderOrEmpty(createdDateAtTextField, PH_CREATED_AT)) {
+                    createdAt = LocalDateTime.now();
+                } else {
+                    try {
+                        createdAt = LocalDateTime.parse(createdDateAtTextField.getText().trim(), fmt);
+                    } catch (Exception pe) {
+                        throw new IllegalArgumentException("Fecha de alta inválida. Formato esperado: dd/MM/yyyy HH:mm");
+                    }
+                }
+
+
+                // Construcción del DTO
+                FlightDTO flightDTO = new FlightDTO();
+                flightDTO.setName(flightName);
+                flightDTO.setDuration(durationMinutes);
+                flightDTO.setMaxBusinessSeats(seatsBusiness);
+                flightDTO.setMaxEconomySeats(seatsEconomy);
+                flightDTO.setDepartureTime(departureTime);
+                flightDTO.setCreatedAt(createdAt);
+                flightDTO.setAirlineNickname(selectedAirline.getNickname());
+                FlightRouteDTO route = flightRouteController.getFlightRouteByName(selectedFlightRouteName);
+                flightDTO.setFlightRouteName(route.getName());
+
+                // Llamada al controlador
+                flightController.createFlight(flightDTO);
+
+                JOptionPane.showMessageDialog(this,
+                        "Vuelo creado con éxito.",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                // (Opcional) limpiar campos
+                nameTextField.setText("");
+                durationTextField.setText("");
+                ejecutiveTextField.setText("");
+                turistTextField.setText("");
+                dateFlightTextField.setText("");
+                flightRouteTable.clearSelection();
+                createdDateAtTextField.setText("");
+                dateFlightTextField.setText("");
+
+                if (createdDateAtTextField.getText().isEmpty()) {
+                    createdDateAtTextField.setForeground(new Color(150,150,150));
+                    createdDateAtTextField.setText(PH_CREATED_AT);
+                    createdDateAtTextField.setCaretPosition(0);
+                }
+                if (dateFlightTextField.getText().isEmpty()) {
+                    dateFlightTextField.setForeground(new Color(150,150,150));
+                    dateFlightTextField.setText(PH_DEPARTURE);
+                    dateFlightTextField.setCaretPosition(0);
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al crear el vuelo: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+    private void initPlaceholders() {
+        setPlaceholder(createdDateAtTextField, PH_CREATED_AT);
+        setPlaceholder(dateFlightTextField, PH_DEPARTURE);
+    }
+    private void setPlaceholder(JTextField textField, String placeholder) {
+        // estado inicial
+        textField.setForeground(new Color(150,150,150)); // gris un poco más visible
+        textField.setText(placeholder);
+        textField.setCaretPosition(0);                   // <-- clave: mostrar desde el inicio
+
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                    textField.setCaretPosition(0);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(new Color(150,150,150));
+                    textField.setText(placeholder);
+                    textField.setCaretPosition(0);       // <-- reponer al inicio
+                }
+            }
+        });
+    }
+
+
+    private boolean isPlaceholderOrEmpty(JTextField tf, String placeholder) {
+        String t = tf.getText().trim();
+        return t.isEmpty() || t.equals(placeholder);
     }
 
     private void initComponents() {
@@ -154,13 +329,12 @@ public class createFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border
-        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg"
-        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
-        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-        .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException
-        ( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+        . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
+        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
+        throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0};

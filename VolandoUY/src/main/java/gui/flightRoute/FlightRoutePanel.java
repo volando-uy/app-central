@@ -7,6 +7,7 @@ import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
 import gui.user.updateUser.UpdateUserPanel;
+import gui.flightRoute.getFlightRoute.GetFlightRoutePanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -21,6 +22,7 @@ import java.awt.event.MouseListener;
 public class FlightRoutePanel extends JPanel {
 
     private MouseListener createFlightRoutePanelListener;
+    private MouseListener listFlightRoutePanelListener;
 
     private IFlightRouteController flightRouteController;
     private IUserController userController;
@@ -62,26 +64,41 @@ public class FlightRoutePanel extends JPanel {
                 repaint();
             }
         };
+        // Listar Rutas de Vuelo (con combo de aerolíneas)
+        listFlightRoutePanelListener = new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) {
+                if (contentPanel != null) {
+                    if (contentPanel instanceof GetFlightRoutePanel) return;
+                    remove(contentPanel);
+                }
+                System.out.println("List Flight Routes button clicked");
+                contentPanel = new GetFlightRoutePanel(flightRouteController, userController);
+                add(contentPanel, BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
+        };
 
         createFlightRouteBtn.addMouseListener(createFlightRoutePanelListener);
+        getFlightRouteBtn.addMouseListener(listFlightRoutePanelListener);
         //button3.addMouseListener(getUserListener);
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createFlightRouteBtn;
-    private JButton registerAirlineBtn;
+    private JButton getFlightRouteBtn;
     private JButton updateUserBtn;
     private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createFlightRouteBtn = new JButton();
-        registerAirlineBtn = new JButton();
+        getFlightRouteBtn = new JButton();
         updateUserBtn = new JButton();
         getUserBtn = new JButton();
 
@@ -111,9 +128,9 @@ public class FlightRoutePanel extends JPanel {
             createFlightRouteBtn.setText("Crear Ruta de Vuelo");
             NavPanel.add(createFlightRouteBtn);
 
-            //---- registerAirlineBtn ----
-            registerAirlineBtn.setText("---");
-            NavPanel.add(registerAirlineBtn);
+            //---- getFlightRouteBtn ----
+            getFlightRouteBtn.setText("Listar Rutas de vuelo");
+            NavPanel.add(getFlightRouteBtn);
 
             //---- updateUserBtn ----
             updateUserBtn.setText("---");
