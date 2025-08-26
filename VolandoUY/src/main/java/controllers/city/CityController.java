@@ -22,4 +22,14 @@ public class CityController implements ICityController {
     public boolean cityExists(String cityName) {
         return this.cityService.cityExists(cityName);
     }
+
+    @Override
+    public boolean isAirportInCity(String city, String airportName) {
+        return this.cityService.isAirportInCity(city, airportName);
+    }
+
+    @Override
+    public CityDTO getCityDetailsByName(String name) {
+        return this.cityService.getCityDetailsByName(name);
+    }
 }

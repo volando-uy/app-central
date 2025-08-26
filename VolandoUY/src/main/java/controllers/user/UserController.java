@@ -73,4 +73,6 @@ public class UserController implements IUserController {
     public CustomerDTO getCustomerByNickname(String nickname) {
         return userService.getCustomerDetailsByNickname(nickname);
     }
+
+
 }

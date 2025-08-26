@@ -124,7 +124,8 @@ public class CreateFlightRoutePanel extends JPanel {
                     originCityTextField.getText(),
                     destinationCityTextField.getText(),
                     selectedAirline.getNickname(),
-                    selectedCategories
+                    selectedCategories,
+                    new ArrayList<>() //TODO: Cambiar esto porque ni idea lo que hace, por ahora lo puse temporal para que compile
                 );
 
                 // Call the controller to create the flight route

@@ -1,5 +1,7 @@
 package factory;
 
+import domain.services.airport.AirportService;
+import domain.services.airport.IAirportService;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
 import domain.services.city.CityService;
@@ -20,7 +22,7 @@ public class ServiceFactory {
     private static ICategoryService categoryService;
     private static ICityService cityService;
     private static IFlightRoutePackageService packageService;
-
+    private static IAirportService airportService;
 
     // ############ USER SERVICE ############
 
@@ -95,4 +97,12 @@ public class ServiceFactory {
     }
 
     // ##########################################
+
+    // ############ AIRPORT SERVICE ############
+    public static IAirportService getAirportService() {
+        if(airportService == null) {
+            airportService = new AirportService(ControllerFactory.getModelMapper(), getCityService());
+        }
+        return airportService;
+    }
 }

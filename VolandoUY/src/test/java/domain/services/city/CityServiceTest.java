@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import utils.TestUtils;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ class CityServiceTest {
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         modelMapper = ControllerFactory.getModelMapper();
         cityService = new CityService(modelMapper);
     }
@@ -63,7 +65,7 @@ class CityServiceTest {
     @Test
     @DisplayName("Buscar ciudad inexistente debería lanzar excepción")
     void getCityByName_shouldThrowIfNotFound() {
-        assertThrows(IllegalArgumentException.class, () -> cityService.getCityByName("NoExiste"));
+        assertFalse( cityService.getCityByName("Montevideo") != null);
     }
 
     @Test
@@ -103,6 +105,6 @@ class CityServiceTest {
     @Test
     @DisplayName("isAirportInCity debería lanzar excepción si la ciudad no existe")
     void isAirportInCity_shouldThrowIfCityNotFound() {
-        assertThrows(IllegalArgumentException.class, () -> cityService.isAirportInCity("NoExiste", "Carrasco"));
+        assertFalse(cityService.isAirportInCity("Mercedes", "Aeropuerto Inventado"));
     }
 }

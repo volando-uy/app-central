@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import utils.TestUtils;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,10 @@ class AirportServiceTest {
     private CityService cityService;
     private ModelMapper modelMapper;
 
+
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         modelMapper = new ModelMapper();
         cityService = new CityService(modelMapper);
         airportService = new AirportService(modelMapper, cityService);

@@ -7,6 +7,7 @@ import domain.services.flightRoute.IFlightRouteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import utils.TestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+//cual  era este caso y porque funciona
 class FlightRouteControllerDetailTest {
 
     private IFlightRouteService flightRouteService;
@@ -22,6 +24,7 @@ class FlightRouteControllerDetailTest {
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         flightRouteService = Mockito.mock(IFlightRouteService.class);
         controller = new FlightRouteController(flightRouteService);
     }

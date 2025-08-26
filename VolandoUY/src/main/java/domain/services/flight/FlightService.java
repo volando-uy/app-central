@@ -6,12 +6,14 @@ import domain.models.user.Airline;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
+import infra.repository.flight.FlightRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FlightService implements IFlightService {
 
@@ -21,12 +23,13 @@ public class FlightService implements IFlightService {
 
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
-    private List<Flight> flights = new ArrayList<>();
+    private FlightRepository flightRepository;
 
     // Constructor
     public FlightService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         this.userService = ServiceFactory.getUserService();
+        this.flightRepository = new FlightRepository();
     }
 
     @Override
@@ -51,8 +54,9 @@ public class FlightService implements IFlightService {
         airline.getFlights().add(originalFlight);
 
         // Agregar el vuelo a la lista de vuelos
-        flights.add(originalFlight);
-        System.out.println(flights);
+//        flights.add(originalFlight);
+        flightRepository.save(originalFlight);
+//        System.out.println(flights);
 
         // Mapear el DTO del vuelo creado
         FlightDTO createdFlightDTO = modelMapper.map(originalFlight, FlightDTO.class);
@@ -64,30 +68,38 @@ public class FlightService implements IFlightService {
 
     @Override
     public List<FlightDTO> getAllFlights() {
-        return flights.stream()
-                .map(flight -> modelMapper.map(flight, FlightDTO.class))
-                .toList();
+//        return flights.stream()
+//                .map(flight -> modelMapper.map(flight, FlightDTO.class))
+//                .toList();
+        return flightRepository.findAll().stream().map(flight -> modelMapper.map(flight, FlightDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public FlightDTO getFlightDetailsByName(String name) {
-        Flight flight = flights.stream()
-                .filter(f -> f.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
-        if (flight == null) {
-            return null;
-        }
-        FlightDTO flightDTO = modelMapper.map(flight, FlightDTO.class);
-        return flightDTO;
+//        Flight flight = flights.stream()
+//                .filter(f -> f.getName().equalsIgnoreCase(name))
+//                .findFirst()
+//                .orElse(null);
+//        if (flight == null) {
+//            return null;
+//        }
+//        FlightDTO flightDTO = modelMapper.map(flight, FlightDTO.class);
+//        return flightDTO;
+        Flight flight = getFlightByName(name);
+        return modelMapper.map(flight, FlightDTO.class);
     }
 
     @Override
     public Flight getFlightByName(String flightName) {
-        return flights.stream()
-                .filter(flight -> flight.getName().equalsIgnoreCase(flightName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName)));
+//        return flights.stream()
+//                .filter(flight -> flight.getName().equalsIgnoreCase(flightName))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName)));
+        Flight flight = flightRepository.getFlightByName(flightName);
+        if (flight == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName));
+        }
+        return flight;
     }
 
     @Override
@@ -97,15 +109,17 @@ public class FlightService implements IFlightService {
 //        if (airline == null) {
 //            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, airlineNickname));
 //        }
-        return flights.stream()
-                .filter(flight -> flight.getAirline().equals(airline))
-                .map(flight -> modelMapper.map(flight, FlightDTO.class))
-                .toList();
+//        return flights.stream()
+//                .filter(flight -> flight.getAirline().equals(airline))
+//                .map(flight -> modelMapper.map(flight, FlightDTO.class))
+//                .toList();
+        return flightRepository.getAllByAirlineNickname(airlineNickname).stream().map(flight -> modelMapper.map(flight, FlightDTO.class)).collect(Collectors.toList());
     }
 
     private boolean _flightExists(Flight flight) {
-        return flights.stream()
-                .anyMatch(existingFlight -> existingFlight.getName().equalsIgnoreCase(flight.getName()));
+//        return flights.stream()
+//                .anyMatch(existingFlight -> existingFlight.getName().equalsIgnoreCase(flight.getName()));
+        return flightRepository.existsByName(flight.getName());
     }
     
 }

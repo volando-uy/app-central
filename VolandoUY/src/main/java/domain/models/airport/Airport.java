@@ -2,6 +2,7 @@ package domain.models.airport;
 
 import domain.models.city.City;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ import shared.utils.ValidatorUtil;
 @Entity
 public class Airport {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private City city;
 
     @NotBlank(message = ErrorMessages.ERR_AIRPORT_NAME_MANDATORY)

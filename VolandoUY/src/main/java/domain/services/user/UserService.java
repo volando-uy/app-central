@@ -51,7 +51,7 @@ public class UserService implements IUserService {
     // REGISTRO DE CUSTOMER
     @Override
     public CustomerDTO registerCustomer(CustomerDTO dto) {
-        if (_nicknameExists(dto.getNickname()) || _emailExists(dto.getMail())) {
+        if (existsUserByNickname(dto.getNickname()) || _emailExists(dto.getMail())) {
             throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
         }
 
@@ -67,7 +67,7 @@ public class UserService implements IUserService {
     // REGISTRO DE AEROLINEA
     @Override
     public AirlineDTO registerAirline(AirlineDTO dto) {
-        if (_nicknameExists(dto.getNickname()) || _emailExists(dto.getMail())) {
+        if (existsUserByNickname(dto.getNickname()) || _emailExists(dto.getMail())) {
             throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
         }
 
@@ -157,17 +157,13 @@ public class UserService implements IUserService {
     }
 
 
-    // Métodos privados auxiliares
-    private boolean _nicknameExists(String nickname) {
-        return userRepository.existsByNickname(nickname);
-    }
-
     private boolean _emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
 
-
-
-
+    @Override
+    public boolean existsUserByNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }
 
