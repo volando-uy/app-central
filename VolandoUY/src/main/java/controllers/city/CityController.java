@@ -33,7 +33,10 @@ public class CityController implements ICityController {
     @Override
     public CityDTO getCityDetailsByName(String name) {
         return this.cityService.getCityDetailsByName(name);
-    public List<String> getAllCities(  ){;
+    }
+
+    @Override
+    public List<String> getAllCities(){;
         return this.cityService.getAllCities();
     }
 }

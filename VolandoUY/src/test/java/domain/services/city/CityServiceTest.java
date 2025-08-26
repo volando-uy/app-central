@@ -107,4 +107,34 @@ class CityServiceTest {
     void isAirportInCity_shouldThrowIfCityNotFound() {
         assertFalse(cityService.isAirportInCity("Mercedes", "Aeropuerto Inventado"));
     }
+
+    //Testear getAllCities
+    @Test
+    @DisplayName("GIVEN a list of cities WHEN getAllCities THEN return the list of city names")
+    void getAllCities_shouldReturnListOfCityNames() {
+        cityService.createCity(crearCiudadBasica("Ciudad1"));
+        cityService.createCity(crearCiudadBasica("Ciudad2"));
+        cityService.createCity(crearCiudadBasica("Ciudad3"));
+
+        var cities = cityService.getAllCities();
+
+        assertEquals(3, cities.size());
+        assertTrue(cities.contains("Ciudad1"));
+        assertTrue(cities.contains("Ciudad2"));
+        assertTrue(cities.contains("Ciudad3"));
+        assertTrue(cities.get(0).contains("Ciudad1"));
+        assertTrue(cities.get(1).contains("Ciudad2"));
+        assertTrue(cities.get(2).contains("Ciudad3"));
+    }
+
+    @Test
+    @DisplayName("GIVEN no cities WHEN getAllCities THEN return empty list")
+    void getAllCities_shouldReturnEmptyListIfNoCities() {
+        var cities = cityService.getAllCities();
+
+        assertNotNull(cities);
+        assertTrue(cities.isEmpty());
+    }
+
+
 }
