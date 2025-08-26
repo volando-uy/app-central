@@ -28,4 +28,5 @@ public class FlightRouteDTO {
     private String destinationCityName;
     private String airlineNickname;
     private List<String> categories;
+    private List<String> flightsNames;
 }

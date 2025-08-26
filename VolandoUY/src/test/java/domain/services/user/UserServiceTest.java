@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
+import utils.TestUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,19 +26,10 @@ class UserServiceTest {
 
     private UserService userService;
 
-    @BeforeEach
-    void cleanDB() {
-        EntityManager em = DBConnection.getEntityManager();
-        em.getTransaction().begin();
-        em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
-        em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
-        // otras tablas si aplican
-        em.getTransaction().commit();
-        em.close();
-    }
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         ModelMapper modelMapper = new ModelMapper();
         UserMapper userMapper = new UserMapper(modelMapper);
         userService = new UserService(modelMapper, userMapper);

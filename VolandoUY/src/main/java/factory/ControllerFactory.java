@@ -1,5 +1,7 @@
 package factory;
 
+import controllers.airport.AirportController;
+import controllers.airport.IAirportController;
 import controllers.category.CategoryController;
 import controllers.category.ICategoryController;
 import controllers.city.CityController;
@@ -41,6 +43,7 @@ public class ControllerFactory {
     private static ICategoryController categoryController;
     private static ICityController cityController;
     private static IFlightRoutePackageController packageController;
+    private static IAirportController airportController;
 
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
@@ -143,6 +146,14 @@ public class ControllerFactory {
         return cityController;
     }
 
+    // ############### AIRPORT CONTROLLER & SERVICE #################
+
+    public static IAirportController getAirportController(){
+        if(airportController == null){
+            airportController = new AirportController(ServiceFactory.getAirportService());
+        }
+        return airportController;
+    }
 
 
 }

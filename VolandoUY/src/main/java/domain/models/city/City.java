@@ -1,9 +1,7 @@
 package domain.models.city;
 
 import domain.models.airport.Airport;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -21,15 +19,17 @@ import java.util.Map;
 @AllArgsConstructor
 @Entity
 public class City {
-
-    @Valid // valida cada Airport dentro de la lista
-    @OneToMany(mappedBy = "city")
-    private List<Airport> airports = new ArrayList<>();
-
     @Id
+    @Column(name = "name", nullable = false, unique = true)
     @NotBlank
     @Size(min = 2, max = 100)
     private String name;
+
+
+    @Valid // valida cada Airport dentro de la lista
+    @OneToMany(mappedBy = "city", fetch = FetchType.EAGER)
+    private List<Airport> airports = new ArrayList<>();
+
 
     @NotBlank
     @Size(min = 2, max = 100)

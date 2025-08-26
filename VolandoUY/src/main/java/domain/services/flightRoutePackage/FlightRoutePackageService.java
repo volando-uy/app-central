@@ -4,6 +4,7 @@ import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.services.flightRoute.IFlightRouteService;
+import infra.repository.flightroutepackage.FlightRoutePackageRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -13,13 +14,14 @@ import java.util.List;
 
 
 public class FlightRoutePackageService implements IFlightRoutePackageService {
-    private List<FlightRoutePackage> flightRoutePackages;
+
+    private FlightRoutePackageRepository flightRoutePackageRepository;
 
     private IFlightRouteService flightRouteService;
     private ModelMapper modelMapper;
 
     public FlightRoutePackageService(IFlightRouteService flightRouteService, ModelMapper modelMapper) {
-        flightRoutePackages = new ArrayList<>();
+        flightRoutePackageRepository = new FlightRoutePackageRepository();
         this.flightRouteService = flightRouteService;
         this.modelMapper = modelMapper;
     }
@@ -34,53 +36,82 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
         pack.setFlightRoutes(new ArrayList<>());
 
-        flightRoutePackages.add(pack);
-        System.out.println(flightRoutePackages);
+//        flightRoutePackages.add(pack);
+        flightRoutePackageRepository.save(pack);
         return modelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 
     @Override
     public FlightRoutePackageDTO getFlightRoutePackageByName(String flightRoutePackageName) {
-        return flightRoutePackages.stream()
-                .filter(pack -> pack.getName().equalsIgnoreCase(flightRoutePackageName))
-                .findFirst()
-                .map(pack -> modelMapper.map(pack, FlightRoutePackageDTO.class))
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName)));
+//        return flightRoutePackages.stream()
+//                .filter(pack -> pack.getName().equalsIgnoreCase(flightRoutePackageName))
+//                .findFirst()
+//                .map(pack -> modelMapper.map(pack, FlightRoutePackageDTO.class))
+//                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName)));
+        FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
+        if (pack == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
+        }
+        return modelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 
     @Override
     public boolean flightRoutePackageExists(String packageName) {
-        return flightRoutePackages.stream()
-                .anyMatch(pack -> pack.getName().equalsIgnoreCase(packageName));
+//        return flightRoutePackages.stream()
+//                .anyMatch(pack -> pack.getName().equalsIgnoreCase(packageName));
+        return flightRoutePackageRepository.existsByName(packageName);
     }
 
     @Override
     public List<String> getAllNotBoughtFlightRoutePackagesNames() {
         // We have no way of know if a package has been bought for now.
         // So we return all the packages names.
-        return flightRoutePackages.stream()
-                .map(FlightRoutePackage::getName)
-                .toList();
+//        return flightRoutePackages.stream()
+//                .map(FlightRoutePackage::getName)
+//                .toList();
+        return flightRoutePackageRepository.findAll().stream().map(FlightRoutePackage::getName).toList();
     }
 
     @Override
     public void addFlightRouteToPackage(String packageName, String flightRouteName, Integer quantity) {
-        FlightRoutePackage pack = flightRoutePackages.stream()
-                .filter(p -> p.getName().equalsIgnoreCase(packageName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, packageName)));
-
-        // Throw exception if the flight route does not exist
-        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
-
+//        FlightRoutePackage pack = flightRoutePackages.stream()
+//                .filter(p -> p.getName().equalsIgnoreCase(packageName))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, packageName)));
+//
+//        // Throw exception if the flight route does not exist
+//        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
+//
+//        if (quantity <= 0) {
+//            throw new IllegalArgumentException(ErrorMessages.ERR_QUANTITY_MUST_BE_GREATER_THAN_ZERO);
+//        }
+//
+//        for (int i = 0; i < quantity; i++) {
+//            pack.getFlightRoutes().add(flightRoute);
+//            System.out.println("Added flight route " + flightRouteName + " to package " + packageName);
+//        }
         if (quantity <= 0) {
             throw new IllegalArgumentException(ErrorMessages.ERR_QUANTITY_MUST_BE_GREATER_THAN_ZERO);
         }
-        
+
+        FlightRoutePackage flightRoutePackage = flightRoutePackageRepository.getFlightRoutePackageByName(packageName);
+        if (flightRoutePackage == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, packageName));
+        }
+        // Throw exception if the flight route does not exist
+        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
+        if( flightRoute == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, flightRouteName));
+        }
+
         for (int i = 0; i < quantity; i++) {
-            pack.getFlightRoutes().add(flightRoute);
+            flightRoutePackage.getFlightRoutes().add(flightRoute);
             System.out.println("Added flight route " + flightRouteName + " to package " + packageName);
         }
+
+        flightRoutePackageRepository.update(flightRoutePackage);
+
+
 
     }
 }

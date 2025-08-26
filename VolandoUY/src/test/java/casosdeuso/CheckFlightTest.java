@@ -7,6 +7,7 @@ import domain.dtos.user.AirlineDTO;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.TestUtils;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +20,7 @@ public class CheckFlightTest {
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         userController = ControllerFactory.getUserController();
         flightController = ControllerFactory.getFlightController();
         AirlineDTO airlineDTO = new AirlineDTO();

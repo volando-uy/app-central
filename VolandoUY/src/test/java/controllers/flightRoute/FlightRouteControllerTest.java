@@ -46,7 +46,8 @@ class FlightRouteControllerTest {
                 100.0, 150.0, 30.0,
                 "Montevideo", "Buenos Aires",
                 "air123",
-                List.of("Económica", "Business")
+                List.of("Económica", "Business"),
+                List.of("Vuelo1", "Vuelo2")
         );
 
         when(flightRouteService.createFlightRoute(dto)).thenReturn(dto);
@@ -69,7 +70,8 @@ class FlightRouteControllerTest {
                 90.0, 140.0, 25.0,
                 "Montevideo", "Santiago",
                 "flyuy",
-                List.of("Económica")
+                List.of("Económica"),
+                List.of("VueloA")
         );
         when(flightRouteService.getFlightRouteDetailsByName("Ruta 1")).thenReturn(dto);
 
@@ -88,8 +90,8 @@ class FlightRouteControllerTest {
     void getAllFlightRoutesByAirlineNickname_shouldReturnListFromService() {
         // GIVEN
         List<FlightRouteDTO> mockRoutes = List.of(
-                new FlightRouteDTO("Ruta A", "Desc A", LocalDate.now(), 90.0, 130.0, 20.0, "MVD", "BUE", "air123", List.of()),
-                new FlightRouteDTO("Ruta B", "Desc B", LocalDate.now(), 110.0, 160.0, 25.0, "MVD", "RIO", "air123", List.of())
+                new FlightRouteDTO("Ruta A", "Desc A", LocalDate.now(), 90.0, 130.0, 20.0, "MVD", "BUE", "air123", List.of(), List.of()),
+                new FlightRouteDTO("Ruta B", "Desc B", LocalDate.now(), 110.0, 160.0, 25.0, "MVD", "RIO", "air123", List.of(), List.of())
         );
 
         when(flightRouteService.getAllFlightRoutesDetailsByAirlineNickname("air123")).thenReturn(mockRoutes);

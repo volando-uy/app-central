@@ -25,6 +25,14 @@ public class CityController implements ICityController {
         return this.cityService.cityExists(cityName);
     }
 
+    @Override
+    public boolean isAirportInCity(String city, String airportName) {
+        return this.cityService.isAirportInCity(city, airportName);
+    }
+
+    @Override
+    public CityDTO getCityDetailsByName(String name) {
+        return this.cityService.getCityDetailsByName(name);
     public List<String> getAllCities(  ){;
         return this.cityService.getAllCities();
     }
