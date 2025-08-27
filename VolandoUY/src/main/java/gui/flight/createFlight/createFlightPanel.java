@@ -15,6 +15,7 @@ import domain.dtos.flight.FlightDTO;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -31,14 +32,15 @@ public class createFlightPanel extends JPanel {
      IUserController userController;
      private static final String PH_CREATED_AT = "dd/MM/yyyy HH:mm";
      private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
-     AirlineDTO selectedAirline;
+
+     List<AirlineDTO> airlines = new ArrayList<>();
 
     public createFlightPanel(IFlightController flightController, IFlightRouteController flightRouteController , IUserController userController) {
         this.flightController = flightController;
         this.flightRouteController = flightRouteController ;
         this.userController = userController;
         initComponents();
-        initAirlineList();
+        loadAirlinesIntoCombo();
         initPlaceholders();
         initListeners();
         try {
@@ -46,12 +48,31 @@ public class createFlightPanel extends JPanel {
         } catch (Exception ignored) {
         }
     }
-    private void initAirlineList() {
-        List<String> airlinesNickanmes = userController.getAllAirlinesNicknames();
-        for (String nickname : airlinesNickanmes) {
-            airlineComboBox.addItem(nickname);
+
+    private void loadAirlinesIntoCombo() {
+        airlines.clear();
+        airlineComboBox.removeAllItems();
+
+        // asumo que tu IUserController tiene getAllAirlines()
+        List<AirlineDTO> list = userController.getAllAirlines();
+        if (list == null) return;
+
+        airlines.addAll(list);
+        for (AirlineDTO a : airlines) {
+            // Muestra “Nombre (nickname)”
+            String display = a.getName() + " (" + a.getNickname() + ")";
+            airlineComboBox.addItem(display);
         }
+
+        if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
     }
+
+    private String getSelectedAirlineNickname() {
+        int idx = airlineComboBox.getSelectedIndex();
+        if (idx < 0 || idx >= airlines.size()) return null;
+        return airlines.get(idx).getNickname(); // lo que necesita tu método
+    }
+
     private void loadFlightRouteList(String airlineNickname) {
         List<FlightRouteDTO> flightRoutes = flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
 
@@ -109,20 +130,16 @@ public class createFlightPanel extends JPanel {
 
         flightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     }
+
     private void initListeners() {
         loadAirlineBtn.addActionListener(e -> {
             try {
-                String selectedNickname = (String) airlineComboBox.getSelectedItem();
-                if (selectedNickname == null || selectedNickname.isEmpty()) {
+                String selectedAirlineNickname = getSelectedAirlineNickname();
+                if (selectedAirlineNickname == null || selectedAirlineNickname.isEmpty()) {
                     throw new IllegalArgumentException("Debe seleccionar una aerolínea.");
                 }
 
-                selectedAirline = userController.getAirlineByNickname(selectedNickname);
-                if (selectedAirline == null) {
-                    throw new IllegalStateException("La aerolínea seleccionada no existe.");
-                }
-
-                loadFlightRouteList(selectedAirline.getNickname());
+                loadFlightRouteList(selectedAirlineNickname);
                 JOptionPane.showMessageDialog(this, "Aerolínea cargada correctamente.",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -142,9 +159,9 @@ public class createFlightPanel extends JPanel {
                 }
                 String selectedFlightRouteName = (String) flightRouteTable.getValueAt(selectedRow, 0);
 
-                // Validar aerolínea cargada
-                if (selectedAirline == null) {
-                    throw new IllegalStateException("Primero debe cargar una aerolínea.");
+                String selectedAirlineNickname = getSelectedAirlineNickname();
+                if (selectedAirlineNickname == null || selectedAirlineNickname.isEmpty()) {
+                    throw new IllegalArgumentException("Debe seleccionar una aerolínea.");
                 }
 
                 // Validar campos básicos
@@ -200,16 +217,16 @@ public class createFlightPanel extends JPanel {
 
 
                 // Construcción del DTO
-                FlightDTO flightDTO = new FlightDTO();
-                flightDTO.setName(flightName);
-                flightDTO.setDuration(durationMinutes);
-                flightDTO.setMaxBusinessSeats(seatsBusiness);
-                flightDTO.setMaxEconomySeats(seatsEconomy);
-                flightDTO.setDepartureTime(departureTime);
-                flightDTO.setCreatedAt(createdAt);
-                flightDTO.setAirlineNickname(selectedAirline.getNickname());
-                FlightRouteDTO route = flightRouteController.getFlightRouteByName(selectedFlightRouteName);
-                flightDTO.setFlightRouteName(route.getName());
+                FlightDTO flightDTO = new FlightDTO(
+                        flightName,
+                        departureTime,
+                        durationMinutes,
+                        seatsEconomy,
+                        seatsBusiness,
+                        createdAt,
+                        selectedAirlineNickname,
+                        selectedFlightRouteName
+                );
 
                 // Llamada al controlador
                 flightController.createFlight(flightDTO);
@@ -217,27 +234,6 @@ public class createFlightPanel extends JPanel {
                 JOptionPane.showMessageDialog(this,
                         "Vuelo creado con éxito.",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                // (Opcional) limpiar campos
-                nameTextField.setText("");
-                durationTextField.setText("");
-                ejecutiveTextField.setText("");
-                turistTextField.setText("");
-                dateFlightTextField.setText("");
-                flightRouteTable.clearSelection();
-                createdDateAtTextField.setText("");
-                dateFlightTextField.setText("");
-
-                if (createdDateAtTextField.getText().isEmpty()) {
-                    createdDateAtTextField.setForeground(new Color(150,150,150));
-                    createdDateAtTextField.setText(PH_CREATED_AT);
-                    createdDateAtTextField.setCaretPosition(0);
-                }
-                if (dateFlightTextField.getText().isEmpty()) {
-                    dateFlightTextField.setForeground(new Color(150,150,150));
-                    dateFlightTextField.setText(PH_DEPARTURE);
-                    dateFlightTextField.setCaretPosition(0);
-                }
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,

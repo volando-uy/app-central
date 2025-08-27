@@ -18,11 +18,12 @@ import java.util.List;
 /**
  * @author AparicioQuian
  */
-public class GetFlightPanel extends JPanel {
+public class GetFlightsPanel extends JPanel {
 
     private IFlightController flightController;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    public GetFlightPanel(IFlightController flightController) {
+
+    public GetFlightsPanel(IFlightController flightController) {
         if (flightController == null) throw new IllegalArgumentException("IFlightController es null");
         this.flightController = flightController;
         initComponents();
