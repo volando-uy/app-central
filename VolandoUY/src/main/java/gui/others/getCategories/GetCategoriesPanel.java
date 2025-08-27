@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Mon Aug 25 17:17:14 UYT 2025
  */
 
-package gui.others.GetCategory;
+package gui.others.getCategories;
 
 import controllers.category.ICategoryController;
 
@@ -17,13 +17,13 @@ import java.util.List;
 /**
  * @author AparicioQuian
  */
-public class GetCategoryPanel extends JPanel {
+public class GetCategoriesPanel extends JPanel {
     ICategoryController categoryController;
 
     // el JTable 'categoryTable' y el JScrollPane 'categoryScrollPane'
     // los genera JFormDesigner en initComponents()
 
-    public GetCategoryPanel(ICategoryController categoryController) {
+    public GetCategoriesPanel(ICategoryController categoryController) {
         this.categoryController = categoryController;
         initComponents();          // generado por JFormDesigner (debe crear categoryTable)
         loadCategoriesTable();     // misma idea que en GetUsersPanel

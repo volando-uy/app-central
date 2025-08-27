@@ -22,11 +22,8 @@ public class CreateCityPanel extends JPanel {
     public CreateCityPanel(ICityController cityController) {
         this.cityController = cityController;
         initComponents();
-        // initComponentsManually();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
+        try { setBorder(null); } catch ( Exception ignored ) {
         }
     }
     
