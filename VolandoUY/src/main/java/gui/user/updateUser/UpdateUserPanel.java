@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -22,29 +23,46 @@ public class UpdateUserPanel extends JPanel {
     IUserController userController;
     UserDTO selectedUser;
 
+    List<UserDTO> users = new ArrayList<>();
+
     public UpdateUserPanel(IUserController uController) {
         userController = uController;
         initComponents();
         initListeners();
-        initUserList();
+        loadUserList();
         initPlaceholderForTextField(variableTextField4, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(null); } catch ( Exception ignored ) {}
     }
 
-    private void initUserList() {
-        List<String> usersNicknames = userController.getAllUsersNicknames();
-        for (String nickname : usersNicknames) {
-            userComboBox.addItem(nickname);
+    private void loadUserList() {
+        userComboBox.removeAllItems();
+
+        List<UserDTO> usersDTOs = userController.getAllUsers();
+        for (UserDTO user : usersDTOs) {
+            userComboBox.addItem(user.getName() + " (" + user.getNickname() + ")");
         }
+        this.users = usersDTOs;
+        userComboBox.setSelectedIndex(1);
+    }
+
+    private String getSelectedUserNickname() {
+        Integer selectedUserIndex = userComboBox.getSelectedIndex();
+        UserDTO selectedUser = users.get(selectedUserIndex);
+        return selectedUser.getNickname();
     }
 
     private void initListeners() {
+        // Add action listener to the JLabel
+        reloadUsersBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadUserList();
+            }
+        });
+
         loadUserBtn.addActionListener(e -> {
             try {
-                String selectedNickname = (String) userComboBox.getSelectedItem();
+                String selectedNickname = getSelectedUserNickname();
                 // If user doesn't exist, throw exception
                 selectedUser = userController.getUserByNickname(selectedNickname);
                 nameTextField.setText(selectedUser.getName());
@@ -169,6 +187,7 @@ public class UpdateUserPanel extends JPanel {
         selectUserPanel = new JPanel();
         userLabel = new JLabel();
         userComboBox = new JComboBox<>();
+        reloadUsersBtn = new JLabel();
         loadUserBtn = new JButton();
         InfoUserPanel = new JPanel();
         hSpacer5 = new JPanel(null);
@@ -203,13 +222,13 @@ public class UpdateUserPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax
-        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-        . awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
-        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .
-        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -218,20 +237,43 @@ public class UpdateUserPanel extends JPanel {
 
         //======== selectUserPanel ========
         {
-            selectUserPanel.setLayout(new GridLayout(1, 3));
+            selectUserPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)selectUserPanel.getLayout()).columnWidths = new int[] {0, 0, 14, 0, 0};
+            ((GridBagLayout)selectUserPanel.getLayout()).rowHeights = new int[] {0, 0};
+            ((GridBagLayout)selectUserPanel.getLayout()).columnWeights = new double[] {1.0, 1.0, 0.0, 1.0, 1.0E-4};
+            ((GridBagLayout)selectUserPanel.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
 
             //---- userLabel ----
             userLabel.setText("Selecciona usuario:");
-            selectUserPanel.add(userLabel);
+            selectUserPanel.add(userLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
             //---- userComboBox ----
             userComboBox.setMinimumSize(new Dimension(100, 30));
             userComboBox.setPreferredSize(new Dimension(100, 30));
-            selectUserPanel.add(userComboBox);
+            selectUserPanel.add(userComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- reloadUsersBtn ----
+            reloadUsersBtn.setText("\ud83d\udd04");
+            reloadUsersBtn.setPreferredSize(new Dimension(34, 34));
+            reloadUsersBtn.setMaximumSize(new Dimension(34, 34));
+            reloadUsersBtn.setMinimumSize(new Dimension(34, 34));
+            reloadUsersBtn.setBorder(null);
+            reloadUsersBtn.setHorizontalAlignment(SwingConstants.CENTER);
+            reloadUsersBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+            reloadUsersBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            selectUserPanel.add(reloadUsersBtn, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
             //---- loadUserBtn ----
             loadUserBtn.setText("Cargar usuario");
-            selectUserPanel.add(loadUserBtn);
+            selectUserPanel.add(loadUserBtn, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
         }
         add(selectUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -460,6 +502,7 @@ public class UpdateUserPanel extends JPanel {
     private JPanel selectUserPanel;
     private JLabel userLabel;
     private JComboBox<String> userComboBox;
+    private JLabel reloadUsersBtn;
     private JButton loadUserBtn;
     private JPanel InfoUserPanel;
     private JPanel hSpacer5;

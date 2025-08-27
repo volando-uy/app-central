@@ -45,6 +45,7 @@ public class GetFlightRoutePanel extends JPanel {
         clearTable();                 // deja la tabla vacía hasta que elijas
         try { setBorder(null); } catch (Exception ignored) {}
     }
+
     private void initListeners() {
         loadAirlineBtn.addActionListener(e -> {
             String nickname = getSelectedAirlineNickname();
@@ -55,7 +56,9 @@ public class GetFlightRoutePanel extends JPanel {
             }
             loadFlightRoutesTable(nickname);
         });
-    } private void loadAirlinesIntoCombo() {
+    }
+
+    private void loadAirlinesIntoCombo() {
         airlines.clear();
         airlineComboBox.removeAllItems();
 

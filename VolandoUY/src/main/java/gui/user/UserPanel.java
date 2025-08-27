@@ -18,12 +18,18 @@ import java.lang.reflect.InvocationTargetException;
 public class UserPanel extends JPanel {
 
     private IUserController userController;
+
+    private JPanel registerCustomerPanel;
+    private JPanel registerAirlinePanel;
+    private JPanel updateUserPanel;
+    private JPanel getUsersPanel;
     
     private JPanel contentPanel;
 
     public UserPanel(IUserController userController) {
         this.userController = userController;
         initComponents();
+        initPanels();
         initListeners();
         try {
             setBorder(new EtchedBorder(EtchedBorder.LOWERED));
@@ -31,34 +37,36 @@ public class UserPanel extends JPanel {
         }
     }
 
-    private void initListeners() {
-        registerCustomerBtn.addMouseListener(createListener(RegisterCustomerPanel.class));
-        registerAirlineBtn.addMouseListener(createListener(RegisterAirlinePanel.class));
-        updateUserBtn.addMouseListener(createListener(UpdateUserPanel.class));
-        getUsersBtn.addMouseListener(createListener(GetUsersPanel.class));
+    private void initPanels() {
+        registerCustomerPanel = new RegisterCustomerPanel(userController);
+        registerAirlinePanel = new RegisterAirlinePanel(userController);
+        updateUserPanel = new UpdateUserPanel(userController);
+        getUsersPanel = new GetUsersPanel(userController);
     }
 
-    private MouseAdapter createListener(Class<? extends JPanel> panelClass) {
+    private void initListeners() {
+        registerCustomerBtn.addMouseListener(createListener(registerCustomerPanel));
+        registerAirlineBtn.addMouseListener(createListener(registerAirlinePanel));
+        updateUserBtn.addMouseListener(createListener(updateUserPanel));
+        getUsersBtn.addMouseListener(createListener(getUsersPanel));
+    }
+
+    private MouseAdapter createListener(JPanel panel) {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
                     // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
-                    if (contentPanel.getClass().equals(panelClass)) {
+                    if (contentPanel.getClass().equals(panel.getClass())) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println(panelClass.getSimpleName() + " button clicked");
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
                 // Crear el nuevo contentPanel con el contenido del panel proporcionado
-                try {
-                    contentPanel = panelClass.getDeclaredConstructor(IUserController.class).newInstance(userController);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException ex) {
-                    throw new RuntimeException(ex);
-                }
+                contentPanel = panel;
                 add(contentPanel);
                 revalidate();
                 repaint();
