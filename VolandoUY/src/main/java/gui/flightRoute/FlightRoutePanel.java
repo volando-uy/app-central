@@ -4,10 +4,10 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
+import gui.flightRoute.getFlightRoute.GetFlightRoutePanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
 import gui.user.updateUser.UpdateUserPanel;
-import gui.flightRoute.getFlightRoute.GetFlightRoutePanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -23,7 +23,6 @@ public class FlightRoutePanel extends JPanel {
 
     private MouseListener createFlightRoutePanelListener;
     private MouseListener listFlightRoutePanelListener;
-
     private IFlightRouteController flightRouteController;
     private IUserController userController;
     private ICategoryController categoryController;
@@ -64,7 +63,6 @@ public class FlightRoutePanel extends JPanel {
                 repaint();
             }
         };
-        // Listar Rutas de Vuelo (con combo de aerolíneas)
         listFlightRoutePanelListener = new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 if (contentPanel != null) {
@@ -73,14 +71,13 @@ public class FlightRoutePanel extends JPanel {
                 }
                 System.out.println("List Flight Routes button clicked");
                 contentPanel = new GetFlightRoutePanel(flightRouteController, userController);
-                add(contentPanel, BorderLayout.CENTER);
+                add(contentPanel, BorderLayout.CENTER);      // <-- CENTER
                 revalidate();
                 repaint();
             }
         };
-
-        createFlightRouteBtn.addMouseListener(createFlightRoutePanelListener);
         getFlightRouteBtn.addMouseListener(listFlightRoutePanelListener);
+        createFlightRouteBtn.addMouseListener(createFlightRoutePanelListener);
         //button3.addMouseListener(getUserListener);
     }
   
@@ -107,12 +104,11 @@ public class FlightRoutePanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-        (0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-        .TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt
-        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-        propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
-        ;}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
