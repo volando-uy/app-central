@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -25,12 +25,12 @@ new FormModel {
 					"text": "Añadir R.V. a Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "getPackageBtn"
-					"text": "Listar Paquetes"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getUserBtn"
 					"text": "---"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "getFlightRoutePackagesBtn"
+					"text": "Listar Paquetes"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

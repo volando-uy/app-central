@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue Aug 26 18:34:36 UYT 2025
  */
 
-package gui.flightRoutePackage.getFlightRoutePackage;
+package gui.flightRoutePackage.getFlightRoutesPackages;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * @author AparicioQuian
  */
-public class GetFlightRoutePackagePanel extends JPanel {
+public class GetFlightRoutesPackagesPanel extends JPanel {
     private IFlightRoutePackageController flightRoutePackageController;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public GetFlightRoutePackagePanel(IFlightRoutePackageController flightRoutePackageController ) {
+    public GetFlightRoutesPackagesPanel(IFlightRoutePackageController flightRoutePackageController ) {
         if (flightRoutePackageController == null) {
             throw new IllegalArgumentException("IFlightRoutePackageController es null");
         }

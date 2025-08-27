@@ -53,7 +53,7 @@ public class AirportService implements IAirportService {
 //
 //        for (Airport airport : airports) {
 //            if (airport.getCode().equals(code)) {
-//                City city = airport.getCity();
+//                City city = airport.getCities();
 //                if (city != null && city.getAirports() != null) {
 //                    city.getAirports().removeIf(a -> a.getCode().equals(code));
 //                }
@@ -77,7 +77,7 @@ public class AirportService implements IAirportService {
 //        for (Airport airport : airports) {
 //            if (airport.getCode().equals(code)) {
 //                // Remover de la ciudad anterior
-//                City oldCity = airport.getCity();
+//                City oldCity = airport.getCities();
 //                if (oldCity != null && oldCity.getAirports() != null) {
 //                    oldCity.getAirports().remove(airport);
 //                }

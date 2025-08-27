@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Mon Aug 25 17:16:09 UYT 2025
  */
 
-package gui.others.GetCity;
+package gui.others.getCities;
 
 import controllers.city.ICityController;
 
@@ -16,9 +16,9 @@ import java.util.List;
 /**
  * @author AparicioQuian
  */
-public class GetCityPanel extends JPanel {
+public class GetCitiesPanel extends JPanel {
     ICityController cityController;
-    public GetCityPanel(ICityController cityController) {
+    public GetCitiesPanel(ICityController cityController) {
         if (cityController == null) {
             throw new IllegalArgumentException("ICityController es null");
         }

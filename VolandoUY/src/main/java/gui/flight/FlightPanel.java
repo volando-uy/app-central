@@ -6,11 +6,9 @@ package gui.flight;
 
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
-import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import gui.flight.createFlight.createFlightPanel;
-import gui.flight.getFlight.GetFlightPanel;
-import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
+import gui.flight.getFlight.GetFlightsPanel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -25,11 +23,13 @@ import javax.swing.border.*;
  *         //button3.addMouseListener(getUserListener);
  */
 public class FlightPanel extends JPanel {
-    private MouseListener createFlightListener;
-    private MouseListener listFlightListener;
+
     private IFlightController flightController;
     private IFlightRouteController flightRouteController;
     private IUserController userController;
+
+    private JPanel createFlightPanel;
+    private JPanel getFlightsPanel;
 
     private JPanel contentPanel;
 
@@ -38,52 +38,43 @@ public class FlightPanel extends JPanel {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         initComponents();
+        initPanels();
         initListeners();
-        try {
-            setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-        } catch (Exception ignored) {
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch ( Exception ignored ) {
         }
     }
+
+    private void initPanels() {
+        createFlightPanel = new createFlightPanel(flightController, flightRouteController, userController);
+        getFlightsPanel = new GetFlightsPanel(flightController);
+    }
+
     private void initListeners() {
-        // Listener para el botón de creacion de ruta de vuelo
-        createFlightListener = new MouseAdapter() {
+        createFlightBtn.addMouseListener(createListener(createFlightPanel));
+        listFlightBtn.addMouseListener(createListener(getFlightsPanel));
+    }
+
+    private MouseAdapter createListener(JPanel panel) {
+        return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo CreateFlightRoutePanel
-                    if (contentPanel instanceof createFlightPanel) {
+                    // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
+                    if (contentPanel.getClass().equals(panel.getClass())) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println("Create Flight button clicked");
-                // Crear el nuevo contentPanel con el contenido de creacoion de ruta de vuelo
-                contentPanel = new createFlightPanel(flightController, flightRouteController, userController);
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
+                // Crear el nuevo contentPanel con el contenido del panel proporcionado
+                contentPanel = panel;
                 add(contentPanel);
                 revalidate();
                 repaint();
             }
         };
-
-        listFlightListener = new MouseAdapter() {   // <--- nuevo
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (contentPanel != null) {
-                    if (contentPanel instanceof GetFlightPanel) return;
-                    remove(contentPanel);
-                }
-                System.out.println("List Flight button clicked");
-                contentPanel = new GetFlightPanel(flightController);
-                add(contentPanel);
-                revalidate();
-                repaint();
-            }
-        };
-
-        createFlightBtn.addMouseListener(createFlightListener);
-        listFlightBtn.addMouseListener(listFlightListener);
     }
 
     private void initComponents() {

@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue Aug 26 18:34:01 UYT 2025
  */
 
-package gui.flightRoute.getFlightRoute;
+package gui.flightRoute.getFlightRoutes;
 
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author AparicioQuian
  */
-public class GetFlightRoutePanel extends JPanel {
+public class GetFlightRoutesPanel extends JPanel {
     private  IFlightRouteController flightRouteController;
     private  IUserController userController;
 
@@ -31,8 +31,8 @@ public class GetFlightRoutePanel extends JPanel {
     private static  DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
-    public GetFlightRoutePanel(IFlightRouteController flightRouteController,
-                               IUserController userController)
+    public GetFlightRoutesPanel(IFlightRouteController flightRouteController,
+                                IUserController userController)
     {
         if (flightRouteController == null) throw new IllegalArgumentException("IFlightRouteController es null");
         if (userController == null)         throw new IllegalArgumentException("IUserController es null");
@@ -45,6 +45,7 @@ public class GetFlightRoutePanel extends JPanel {
         clearTable();                 // deja la tabla vacía hasta que elijas
         try { setBorder(null); } catch (Exception ignored) {}
     }
+
     private void initListeners() {
         loadAirlineBtn.addActionListener(e -> {
             String nickname = getSelectedAirlineNickname();
@@ -55,7 +56,9 @@ public class GetFlightRoutePanel extends JPanel {
             }
             loadFlightRoutesTable(nickname);
         });
-    } private void loadAirlinesIntoCombo() {
+    }
+
+    private void loadAirlinesIntoCombo() {
         airlines.clear();
         airlineComboBox.removeAllItems();
 
