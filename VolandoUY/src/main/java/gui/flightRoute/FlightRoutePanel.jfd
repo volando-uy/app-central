@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -21,8 +21,8 @@ new FormModel {
 					"text": "Crear Ruta de Vuelo"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "registerAirlineBtn"
-					"text": "---"
+					name: "getFlightRouteBtn"
+					"text": "Listar Rutas de vuelo"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "updateUserBtn"
