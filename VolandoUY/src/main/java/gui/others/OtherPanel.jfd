@@ -8,7 +8,7 @@ new FormModel {
 			"preferredSize": new java.awt.Dimension( 640, 600 )
 			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
-			"background": new java.awt.Color( 204, 204, 204, 255 )
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
 				"minimumSize": new java.awt.Dimension( 640, 60 )
@@ -18,19 +18,19 @@ new FormModel {
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createCityBtn"
-					"text": "Crear Ciudad"
+					"text": "+ Registrar Ciudad"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createCategoryBtn"
-					"text": "Crear Categoria"
+					"text": "+ Crear Categoria"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getCitiesBtn"
-					"text": "Listar Ciudad"
+					"text": "\ud83d\udcc4 Listar Ciudades"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getCatgoriesBtn"
-					"text": "Listar Categoria"
+					"text": "\ud83d\udcc4 Listar Categorias"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
