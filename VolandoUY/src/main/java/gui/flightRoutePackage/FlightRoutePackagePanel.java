@@ -1,5 +1,6 @@
 package gui.flightRoutePackage;
 
+import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
@@ -8,7 +9,10 @@ import gui.flightRoutePackage.createFlightRoutePackage.CreateFlightRoutePackageP
 import gui.flightRoutePackage.getFlightRoutesPackages.GetFlightRoutesPackagesPanel;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -64,6 +68,31 @@ public class FlightRoutePackagePanel extends JPanel {
                 repaint();
             }
         };
+
+        addFlightRouteToPackagePanelListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Remover solo si ya existe un contentPanel
+                if (contentPanel != null) {
+                    // Verificar si el contentPanel ya es de tipo AddFlightRouteToPackagePanel
+                    if (contentPanel instanceof AddFlightRouteToPackagePanel) {
+                        return;
+                    }
+                    remove(contentPanel);
+                }
+
+                System.out.println("Add Flight Route to Package button clicked");
+                // Crear el nuevo contentPanel con el contenido de adición de ruta de vuelo a paquete
+                contentPanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
+                add(contentPanel);
+                revalidate();
+                repaint();
+            }
+        };
+
+        createFlightRoutePackageBtn.addMouseListener(createFlightRoutePackagePanelListener);
+        addFlightRouteToPackageBtn.addMouseListener(addFlightRouteToPackagePanelListener);
+        //button3.addMouseListener(getUserListener);
         // Añadir Ruta de Vuelo a Paquete
         addFlightRouteToPackagePanelListener = new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
@@ -125,13 +154,11 @@ public class FlightRoutePackagePanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xcccccc));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
-        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-        . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
-        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
-        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========

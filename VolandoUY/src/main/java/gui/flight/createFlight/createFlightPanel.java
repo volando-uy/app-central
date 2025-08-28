@@ -30,107 +30,79 @@ public class createFlightPanel extends JPanel {
      IFlightController flightController;
      IFlightRouteController flightRouteController;
      IUserController userController;
-     private static final String PH_CREATED_AT = "dd/MM/yyyy HH:mm";
-     private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
 
      List<AirlineDTO> airlines = new ArrayList<>();
-
-    public createFlightPanel(IFlightController flightController, IFlightRouteController flightRouteController , IUserController userController) {
+    AirlineDTO selectedAirline;
+    private static final String PH_CREATED_AT = "dd/MM/yyyy HH:mm";
+    private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
+    public createFlightPanel(IFlightController flightController,
+                             IFlightRouteController flightRouteController,
+                             IUserController userController) {
         this.flightController = flightController;
-        this.flightRouteController = flightRouteController ;
+        this.flightRouteController = flightRouteController;
         this.userController = userController;
+
         initComponents();
-        loadAirlinesIntoCombo();
+        loadAirlinesIntoCombo();   // carga nicknames
         initPlaceholders();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+
+        try { setBorder(null); } catch (Exception ignored) {}
     }
-
     private void loadAirlinesIntoCombo() {
-        airlines.clear();
         airlineComboBox.removeAllItems();
-
-        // asumo que tu IUserController tiene getAllAirlines()
-        List<AirlineDTO> list = userController.getAllAirlines();
-        if (list == null) return;
-
-        airlines.addAll(list);
-        for (AirlineDTO a : airlines) {
-            // Muestra “Nombre (nickname)”
-            String display = a.getName() + " (" + a.getNickname() + ")";
-            airlineComboBox.addItem(display);
+        List<String> nicknames = userController.getAllAirlinesNicknames();
+        if (nicknames != null) {
+            for (String n : nicknames) airlineComboBox.addItem(n);
         }
-
-        if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
+        if (airlineComboBox.getItemCount() > 0) {
+            airlineComboBox.setSelectedIndex(0);
+        }
     }
 
     private String getSelectedAirlineNickname() {
-        int idx = airlineComboBox.getSelectedIndex();
-        if (idx < 0 || idx >= airlines.size()) return null;
-        return airlines.get(idx).getNickname(); // lo que necesita tu método
+        Object sel = airlineComboBox.getSelectedItem();
+        return (sel == null) ? null : sel.toString();
     }
 
+    /** Carga la tabla de rutas para la aerolínea seleccionada */
     private void loadFlightRouteList(String airlineNickname) {
-        List<FlightRouteDTO> flightRoutes = flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
+        List<FlightRouteDTO> flightRoutes =
+                flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
 
-        // Create table model and set column names
         DefaultTableModel tableModel = new DefaultTableModel();
-        String[] columnNames = {"Nombre", "Descripcion", "Ciudad Origen", "Ciudad Destino", "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"};
+        String[] columnNames = {
+                "Nombre", "Descripción", "Ciudad Origen", "Ciudad Destino",
+                "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"
+        };
         tableModel.setColumnIdentifiers(columnNames);
 
-        // Add rows to the table model
-        for (FlightRouteDTO flightRoute : flightRoutes) {
-            Object[] rowData = {
-                    flightRoute.getName(),
-                    flightRoute.getDescription(),
-                    flightRoute.getOriginCityName(),
-                    flightRoute.getDestinationCityName(),
-                    "$" + flightRoute.getPriceTouristClass(),
-                    "$" + flightRoute.getPriceBusinessClass(),
-                    "$" + flightRoute.getPriceExtraUnitBaggage(),
-                    flightRoute.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            };
-            tableModel.addRow(rowData);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        if (flightRoutes != null) {
+            for (FlightRouteDTO fr : flightRoutes) {
+                Object[] rowData = {
+                        nz(fr.getName()),
+                        nz(fr.getDescription()),
+                        nz(fr.getOriginCityName()),
+                        nz(fr.getDestinationCityName()),
+                        money(fr.getPriceTouristClass()),
+                        money(fr.getPriceBusinessClass()),
+                        money(fr.getPriceExtraUnitBaggage()),
+                        fr.getCreatedAt() != null ? fr.getCreatedAt().format(df) : ""
+                };
+                tableModel.addRow(rowData);
+            }
         }
 
         flightRouteTable.setModel(tableModel);
         flightRouteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         flightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // Adjust column widths based on content
-        for (int col = 0; col < flightRouteTable.getColumnCount(); col++) {
-            TableColumn column = flightRouteTable.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = flightRouteTable.getRowCount();
-
-            TableCellRenderer headerRenderer = flightRouteTable.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(flightRouteTable, column.getHeaderValue(), false, false, 0, col);
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = flightRouteTable.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(flightRouteTable, flightRouteTable.getValueAt(row, col), false, false, row, col);
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10); // add some padding
-        }
-
-        // Set the model to the table
-        flightRouteTable.setModel(tableModel);
-
-        // Dynamic height
-        int maxRows = 4;
-        int visibleRows = Math.max(flightRouteTable.getRowCount(), maxRows);
-        flightRouteTable.setPreferredSize(
-                new Dimension(flightRouteTable.getPreferredSize().width, visibleRows * flightRouteTable.getRowHeight())
-        );
-
-        flightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        adjustColumnsToContent(flightRouteTable);
+        adjustTableHeight(flightRouteTable, 4);
     }
 
+    /** Listeners de UI */
     private void initListeners() {
         loadAirlineBtn.addActionListener(e -> {
             try {
@@ -138,11 +110,9 @@ public class createFlightPanel extends JPanel {
                 if (selectedAirlineNickname == null || selectedAirlineNickname.isEmpty()) {
                     throw new IllegalArgumentException("Debe seleccionar una aerolínea.");
                 }
-
                 loadFlightRouteList(selectedAirlineNickname);
                 JOptionPane.showMessageDialog(this, "Aerolínea cargada correctamente.",
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error al cargar la aerolínea: " + ex.getMessage(),
@@ -190,10 +160,9 @@ public class createFlightPanel extends JPanel {
                     throw new IllegalArgumentException("Asientos turista inválidos. Debe ser un entero.");
                 }
 
-
                 DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-
+                // Fecha de vuelo (obligatoria)
                 LocalDateTime departureTime;
                 if (isPlaceholderOrEmpty(dateFlightTextField, PH_DEPARTURE)) {
                     throw new IllegalArgumentException("La fecha de vuelo es obligatoria (formato: dd/MM/yyyy HH:mm).");
@@ -204,7 +173,8 @@ public class createFlightPanel extends JPanel {
                     throw new IllegalArgumentException("Fecha de vuelo inválida. Formato esperado: dd/MM/yyyy HH:mm");
                 }
 
-                 LocalDateTime createdAt;
+                // Fecha de alta (opcional => por defecto ahora)
+                LocalDateTime createdAt;
                 if (isPlaceholderOrEmpty(createdDateAtTextField, PH_CREATED_AT)) {
                     createdAt = LocalDateTime.now();
                 } else {
@@ -214,7 +184,6 @@ public class createFlightPanel extends JPanel {
                         throw new IllegalArgumentException("Fecha de alta inválida. Formato esperado: dd/MM/yyyy HH:mm");
                     }
                 }
-
 
                 // Construcción del DTO
                 FlightDTO flightDTO = new FlightDTO(
@@ -242,15 +211,17 @@ public class createFlightPanel extends JPanel {
             }
         });
     }
+
+    /** Placeholders */
     private void initPlaceholders() {
         setPlaceholder(createdDateAtTextField, PH_CREATED_AT);
         setPlaceholder(dateFlightTextField, PH_DEPARTURE);
     }
+
     private void setPlaceholder(JTextField textField, String placeholder) {
-        // estado inicial
-        textField.setForeground(new Color(150,150,150)); // gris un poco más visible
+        textField.setForeground(new Color(150, 150, 150));
         textField.setText(placeholder);
-        textField.setCaretPosition(0);                   // <-- clave: mostrar desde el inicio
+        textField.setCaretPosition(0);
 
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -265,18 +236,54 @@ public class createFlightPanel extends JPanel {
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 if (textField.getText().isEmpty()) {
-                    textField.setForeground(new Color(150,150,150));
+                    textField.setForeground(new Color(150, 150, 150));
                     textField.setText(placeholder);
-                    textField.setCaretPosition(0);       // <-- reponer al inicio
+                    textField.setCaretPosition(0);
                 }
             }
         });
     }
 
-
     private boolean isPlaceholderOrEmpty(JTextField tf, String placeholder) {
         String t = tf.getText().trim();
         return t.isEmpty() || t.equals(placeholder);
+    }
+
+    private String nz(String s) {
+        return (s == null) ? "" : s;
+    }
+
+    private String money(Double d) {
+        return (d == null) ? "" : String.format("$ %.2f", d);
+    }
+
+    private void adjustColumnsToContent(JTable table) {
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            TableColumn column = table.getColumnModel().getColumn(col);
+            int preferredWidth = 0;
+
+            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    table, column.getHeaderValue(), false, false, 0, col
+            );
+            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
+                Component c = cellRenderer.getTableCellRendererComponent(
+                        table, table.getValueAt(row, col), false, false, row, col
+                );
+                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
+            }
+            column.setPreferredWidth(preferredWidth + 10);
+        }
+    }
+
+    private void adjustTableHeight(JTable table, int minRows) {
+        int visibleRows = Math.max(table.getRowCount(), minRows);
+        table.setPreferredSize(
+                new Dimension(table.getPreferredSize().width, visibleRows * table.getRowHeight())
+        );
     }
 
     private void initComponents() {
@@ -325,12 +332,12 @@ public class createFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-        . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
-        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
-        throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,
+        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .
+        getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0};
