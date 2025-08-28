@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -6,13 +6,14 @@ new FormModel {
 		add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 			name: "vSpacer19"
 			"preferredSize": new java.awt.Dimension( 10, 100 )
+			"opaque": false
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 305, 475 )
 			"size": new java.awt.Dimension( 635, 0 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "0:1.0, 0, 0"
+			"$columnSpecs": "0, 0:1.0, 0"
+			"$rowSpecs": "0:1.0, 0, 0, 0, 0"
 			"$alignTop": true
 			"$alignLeft": true
 		} ) {
@@ -25,22 +26,44 @@ new FormModel {
 			"opaque": false
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
-				"$rowSpecs": "0, 0, 20, top:38, 0, 0, 0, 30, 0, 0, 0, 0"
+				"$rowSpecs": "0, 0, top:38, 0, 0, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
 				"$vGap": 5
 			} ) {
 				name: "InfoFlightRoutePackagePanel"
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "titleLabel"
+					"text": "Crear vuelo"
+					"font": new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 0
+					"insets": new java.awt.Insets( 10, 0, 0, 0 )
+					"gridx": 1
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer18"
+					"preferredSize": new java.awt.Dimension( 10, 50 )
+					"minimumSize": new java.awt.Dimension( 12, 50 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"weighty": 1.0
+					"gridy": 1
+					"gridx": 1
+				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer5"
 					"preferredSize": new java.awt.Dimension( 40, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 3
+					"gridy": 2
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 3
 				} ) {
 					name: "selectPackagePanel"
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "packageLabel"
 						"text": "Selecciona el Aerolinea:"
@@ -49,6 +72,7 @@ new FormModel {
 						name: "airlineComboBox"
 						"minimumSize": new java.awt.Dimension( 100, 30 )
 						"preferredSize": new java.awt.Dimension( 100, 30 )
+						"opaque": false
 						auxiliary() {
 							"JavaCodeGenerator.typeParameters": "String"
 						}
@@ -56,17 +80,19 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "loadAirlineBtn"
 						"text": "Cargar Aerolinea"
+						"opaque": false
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
-					"gridy": 3
+					"gridy": 2
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer6"
 					"preferredSize": new java.awt.Dimension( 40, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
-					"gridy": 3
+					"gridy": 2
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "120, 376"
@@ -79,6 +105,7 @@ new FormModel {
 					"preferredSize": new java.awt.Dimension( 510, 100 )
 					"minimumSize": new java.awt.Dimension( 510, 100 )
 					"maximumSize": new java.awt.Dimension( 510, 510 )
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "flightRouteLabel"
 						"text": "Rutas de vuelo:"
@@ -94,15 +121,17 @@ new FormModel {
 						"minimumSize": new java.awt.Dimension( 300, 100 )
 						"maximumSize": new java.awt.Dimension( 300, 100 )
 						"enabled": false
+						"opaque": false
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "flightRouteTable"
+							"opaque": false
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
-					"gridy": 6
+					"gridy": 3
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "120, 0, 120, 110"
@@ -114,6 +143,7 @@ new FormModel {
 					name: "firstRowPanel"
 					"preferredSize": new java.awt.Dimension( 510, 30 )
 					"minimumSize": new java.awt.Dimension( 510, 30 )
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "nameLabel"
 						"text": "Nombre:"
@@ -128,6 +158,7 @@ new FormModel {
 						"preferredSize": new java.awt.Dimension( 120, 30 )
 						"minimumSize": &Dimension0 new java.awt.Dimension( 100, 30 )
 						"maximumSize": new java.awt.Dimension( 100, 30 )
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -147,12 +178,13 @@ new FormModel {
 						"preferredSize": &Dimension4 new java.awt.Dimension( 120, 30 )
 						"minimumSize": #Dimension0
 						"maximumSize": &Dimension5 new java.awt.Dimension( 100, 30 )
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 3
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
-					"gridy": 8
+					"gridy": 4
 					"vAlign": 0
 					"hAlign": 2
 				} )
@@ -167,6 +199,7 @@ new FormModel {
 					"preferredSize": &Dimension6 new java.awt.Dimension( 510, 30 )
 					"minimumSize": &Dimension7 new java.awt.Dimension( 510, 30 )
 					"maximumSize": &Dimension8 new java.awt.Dimension( 510, 510 )
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "ejecutiveLabel"
 						"text": "Asientos ejecutivo:"
@@ -181,6 +214,7 @@ new FormModel {
 						"preferredSize": &Dimension12 new java.awt.Dimension( 120, 30 )
 						"minimumSize": #Dimension0
 						"maximumSize": &Dimension13 new java.awt.Dimension( 100, 30 )
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -200,12 +234,13 @@ new FormModel {
 						"preferredSize": #Dimension4
 						"minimumSize": #Dimension0
 						"maximumSize": #Dimension5
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 3
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
-					"gridy": 9
+					"gridy": 5
 					"hAlign": 2
 					"vAlign": 0
 				} )
@@ -220,6 +255,7 @@ new FormModel {
 					"preferredSize": #Dimension6
 					"minimumSize": #Dimension7
 					"maximumSize": #Dimension8
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "createdDateAtLabel"
 						"text": "Fecha de alta:"
@@ -234,6 +270,7 @@ new FormModel {
 						"preferredSize": #Dimension12
 						"minimumSize": #Dimension0
 						"maximumSize": #Dimension13
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -253,44 +290,63 @@ new FormModel {
 						"preferredSize": new java.awt.Dimension( 120, 30 )
 						"minimumSize": #Dimension0
 						"maximumSize": new java.awt.Dimension( 100, 30 )
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 3
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 10
+					"gridy": 6
 					"hAlign": 2
 					"vAlign": 0
 					"gridx": 1
 				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer20"
+				"preferredSize": new java.awt.Dimension( 10, 20 )
+				"minimumSize": new java.awt.Dimension( 12, 20 )
+				"opaque": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+				"gridx": 1
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "createBtnPanel"
+				"opaque": false
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer1"
 					"preferredSize": new java.awt.Dimension( 200, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Before"
+					"value": "West"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createFlightBtn"
+					"text": "+ Crear Vuelo"
+					"opaque": false
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer2"
 					"preferredSize": new java.awt.Dimension( 200, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "After"
+					"value": "East"
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "createFlightBtn"
-					"text": "Crear Vuelo."
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 1
-			} )
-			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-				name: "vSpacer20"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 2
-				"weighty": 2.0
+				"gridx": 1
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer14"
+				"opaque": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 3
+				"weighty": 200.0
+				"gridx": 1
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 85, 80 )

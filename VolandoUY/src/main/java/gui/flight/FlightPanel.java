@@ -79,24 +79,22 @@ public class FlightPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - dotto
         NavPanel = new JPanel();
         createFlightBtn = new JButton();
         listFlightBtn = new JButton();
-        updateUserBtn = new JButton();
-        getUserBtn = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
-        setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.
-        border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER
-        ,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font
-        .BOLD,12),java.awt.Color.red), getBorder())); addPropertyChangeListener(
-        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r"
-        .equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBackground(new Color(0xeeeeee));
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
+        ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
+        .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
+        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
+        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+        ;} } );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -109,31 +107,21 @@ public class FlightPanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- createFlightBtn ----
-            createFlightBtn.setText("Crear Vuelo");
+            createFlightBtn.setText("+ Crear Vuelo");
             NavPanel.add(createFlightBtn);
 
             //---- listFlightBtn ----
-            listFlightBtn.setText("Listar Vuelos");
+            listFlightBtn.setText("\ud83d\udcc4 Listar Vuelos");
             NavPanel.add(listFlightBtn);
-
-            //---- updateUserBtn ----
-            updateUserBtn.setText("---");
-            NavPanel.add(updateUserBtn);
-
-            //---- getUserBtn ----
-            getUserBtn.setText("---");
-            NavPanel.add(getUserBtn);
         }
         add(NavPanel, BorderLayout.NORTH);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - dotto
     private JPanel NavPanel;
     private JButton createFlightBtn;
     private JButton listFlightBtn;
-    private JButton updateUserBtn;
-    private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

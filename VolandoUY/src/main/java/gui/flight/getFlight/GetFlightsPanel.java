@@ -113,7 +113,7 @@ public class GetFlightsPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - dotto
         vSpacer17 = new JPanel(null);
         FlightInfoPanel = new JPanel();
         FlightLabel = new JLabel();
@@ -131,12 +131,12 @@ public class GetFlightsPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax
-        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,
-        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
-        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .
-        getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+        EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+        . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
+        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )
+        throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -146,6 +146,7 @@ public class GetFlightsPanel extends JPanel {
         //---- vSpacer17 ----
         vSpacer17.setMinimumSize(new Dimension(12, 20));
         vSpacer17.setPreferredSize(new Dimension(10, 20));
+        vSpacer17.setOpaque(false);
         add(vSpacer17, new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -155,6 +156,7 @@ public class GetFlightsPanel extends JPanel {
             FlightInfoPanel.setPreferredSize(new Dimension(640, 180));
             FlightInfoPanel.setMinimumSize(new Dimension(640, 180));
             FlightInfoPanel.setMaximumSize(new Dimension(640, 180));
+            FlightInfoPanel.setOpaque(false);
             FlightInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)FlightInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)FlightInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
@@ -175,6 +177,7 @@ public class GetFlightsPanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             FlightInfoPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -184,6 +187,7 @@ public class GetFlightsPanel extends JPanel {
                 FlightTablePanel.setPreferredSize(new Dimension(560, 150));
                 FlightTablePanel.setMinimumSize(new Dimension(560, 150));
                 FlightTablePanel.setMaximumSize(new Dimension(560, 150));
+                FlightTablePanel.setOpaque(false);
                 FlightTablePanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)FlightTablePanel.getLayout()).columnWidths = new int[] {612, 0};
                 ((GridBagLayout)FlightTablePanel.getLayout()).rowHeights = new int[] {67, 0};
@@ -196,12 +200,14 @@ public class GetFlightsPanel extends JPanel {
                     FlightScrollPane.setMinimumSize(new Dimension(560, 150));
                     FlightScrollPane.setMaximumSize(new Dimension(560, 150));
                     FlightScrollPane.setEnabled(false);
+                    FlightScrollPane.setOpaque(false);
 
                     //---- FlightTable ----
                     FlightTable.setPreferredSize(new Dimension(560, 150));
                     FlightTable.setMaximumSize(new Dimension(560, 150));
                     FlightTable.setMinimumSize(new Dimension(560, 150));
                     FlightTable.setEnabled(false);
+                    FlightTable.setOpaque(false);
                     FlightScrollPane.setViewportView(FlightTable);
                 }
                 FlightTablePanel.add(FlightScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -214,6 +220,7 @@ public class GetFlightsPanel extends JPanel {
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             FlightInfoPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -225,6 +232,7 @@ public class GetFlightsPanel extends JPanel {
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 14));
         vSpacer19.setMinimumSize(new Dimension(12, 20));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -232,7 +240,7 @@ public class GetFlightsPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - dotto
     private JPanel vSpacer17;
     private JPanel FlightInfoPanel;
     private JLabel FlightLabel;
