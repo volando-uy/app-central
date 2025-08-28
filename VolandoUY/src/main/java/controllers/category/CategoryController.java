@@ -16,11 +16,13 @@ public class CategoryController implements ICategoryController {
     public CategoryDTO createCategory(CategoryDTO category) {
         return categoryService.createCategory(category);
     }
+
     @Override
     public CategoryDTO getCategoryByName(String categoryName) {
         return categoryService.getCategoryDetailsByName(categoryName);
     }
 
+    @Override
     public List<String> getAllCategoriesNames() {
         return categoryService.getAllCategoriesNames();
     }

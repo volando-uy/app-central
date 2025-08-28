@@ -8,7 +8,7 @@ new FormModel {
 			"preferredSize": new java.awt.Dimension( 640, 600 )
 			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
-			"background": new java.awt.Color( 204, 204, 204, 255 )
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
 				"minimumSize": new java.awt.Dimension( 640, 60 )
@@ -18,19 +18,19 @@ new FormModel {
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "registerCustomerBtn"
-					"text": "Registrar Cliente"
+					"text": "+ Registrar Cliente"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "registerAirlineBtn"
-					"text": "Registrar Aerolinea"
+					"text": "+ Registrar Aerolinea"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "updateUserBtn"
-					"text": "Modificar Usuario"
+					"text": "⟳ Modificar Usuario"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getUsersBtn"
-					"text": "Listar Clientes"
+					"text": "\ud83d\udcc4 Listar Clientes"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

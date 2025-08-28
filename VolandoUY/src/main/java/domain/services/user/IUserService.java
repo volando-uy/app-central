@@ -27,4 +27,6 @@ public interface IUserService {
     UserDTO updateUser(String nickname, UserDTO userDTO);
     void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute);
     Airline getAirlineByNickname(String nickname);
+
+    boolean existsUserByNickname(String nickname);
 }

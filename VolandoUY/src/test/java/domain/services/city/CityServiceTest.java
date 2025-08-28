@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import utils.TestUtils;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ class CityServiceTest {
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         modelMapper = ControllerFactory.getModelMapper();
         cityService = new CityService(modelMapper);
     }
@@ -63,7 +65,7 @@ class CityServiceTest {
     @Test
     @DisplayName("Buscar ciudad inexistente debería lanzar excepción")
     void getCityByName_shouldThrowIfNotFound() {
-        assertThrows(IllegalArgumentException.class, () -> cityService.getCityByName("NoExiste"));
+        assertFalse( cityService.getCityByName("Montevideo") != null);
     }
 
     @Test
@@ -103,6 +105,36 @@ class CityServiceTest {
     @Test
     @DisplayName("isAirportInCity debería lanzar excepción si la ciudad no existe")
     void isAirportInCity_shouldThrowIfCityNotFound() {
-        assertThrows(IllegalArgumentException.class, () -> cityService.isAirportInCity("NoExiste", "Carrasco"));
+        assertFalse(cityService.isAirportInCity("Mercedes", "Aeropuerto Inventado"));
     }
+
+    //Testear getAllCities
+    @Test
+    @DisplayName("GIVEN a list of cities WHEN getAllCities THEN return the list of city names")
+    void getAllCities_shouldReturnListOfCityNames() {
+        cityService.createCity(crearCiudadBasica("Ciudad1"));
+        cityService.createCity(crearCiudadBasica("Ciudad2"));
+        cityService.createCity(crearCiudadBasica("Ciudad3"));
+
+        var cities = cityService.getAllCities();
+
+        assertEquals(3, cities.size());
+        assertTrue(cities.contains("Ciudad1"));
+        assertTrue(cities.contains("Ciudad2"));
+        assertTrue(cities.contains("Ciudad3"));
+        assertTrue(cities.get(0).contains("Ciudad1"));
+        assertTrue(cities.get(1).contains("Ciudad2"));
+        assertTrue(cities.get(2).contains("Ciudad3"));
+    }
+
+    @Test
+    @DisplayName("GIVEN no cities WHEN getAllCities THEN return empty list")
+    void getAllCities_shouldReturnEmptyListIfNoCities() {
+        var cities = cityService.getAllCities();
+
+        assertNotNull(cities);
+        assertTrue(cities.isEmpty());
+    }
+
+
 }

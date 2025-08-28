@@ -8,7 +8,7 @@ new FormModel {
 			"preferredSize": new java.awt.Dimension( 640, 600 )
 			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
-			"background": new java.awt.Color( 204, 204, 204, 255 )
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
 				"minimumSize": new java.awt.Dimension( 640, 60 )
@@ -18,19 +18,15 @@ new FormModel {
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createFlightRoutePackageBtn"
-					"text": "Crear Paquete"
+					"text": "+ Crear Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addFlightRouteToPackageBtn"
-					"text": "Añadir R.V. a Paquete"
+					"text": "➜ Añadir R.V. a Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "updateUserBtn"
-					"text": "---"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "getUserBtn"
-					"text": "---"
+					name: "getFlightRoutePackageBtn"
+					"text": "\ud83d\udcc4  Listar Paquetes"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

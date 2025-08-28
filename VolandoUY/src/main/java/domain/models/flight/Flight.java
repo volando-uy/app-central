@@ -2,10 +2,7 @@ package domain.models.flight;
 
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +18,7 @@ import java.time.LocalDateTime;
 public class Flight {
 
     @ManyToOne
+    @JoinColumn(name = "flightroute_name", referencedColumnName = "name")
     private FlightRoute flightRoute;
 
     @ManyToOne

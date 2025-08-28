@@ -1,7 +1,9 @@
 package domain.services.flightroute;
 
+import app.DBConnection;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
+import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.models.category.Category;
@@ -15,10 +17,11 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
+import utils.TestUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FlightRouteServiceTest {
 
     private IFlightRouteService flightRouteService;
@@ -33,8 +37,22 @@ class FlightRouteServiceTest {
     private ICategoryService categoryService;
     private ICityService cityService;
 
-    @BeforeEach
+
+    void fillDB() {
+        // Registramos datos base
+        userService.registerAirline(new AirlineDTO(
+                "air123", "Test Airline", "test@air.com", "Aerolínea de prueba", "https://testair.com"
+        ));
+
+        categoryService.createCategory(new CategoryDTO("Promo"));
+
+        cityService.createCity(new CityDTO("Montevideo", "Uruguay", -34.9, -56.2, new ArrayList<>()));
+        cityService.createCity(new CityDTO("Buenos Aires", "Argentina", -34.6, -58.4, new ArrayList<>()));
+    }
+
+    @BeforeAll
     void setUp() {
+        TestUtils.cleanDB();
         ModelMapper modelMapper = new ModelMapper();
 
         // Instanciamos los servicios reales (en memoria)
@@ -44,16 +62,7 @@ class FlightRouteServiceTest {
 
         // Creamos el servicio a testear con sus dependencias reales
         flightRouteService = new FlightRouteService(modelMapper, categoryService, userService, cityService);
-
-        // Registramos datos base
-        userService.registerAirline(new AirlineDTO(
-                "air123", "Test Airline", "test@air.com", "Aerolínea de prueba", "https://testair.com"
-        ));
-
-        categoryService.createCategory(new CategoryDTO("Promo"));
-
-        cityService.createCity(new CityDTO("Montevideo", "Uruguay", -34.9, -56.2,new ArrayList<>()));
-        cityService.createCity(new CityDTO("Buenos Aires", "Argentina", -34.6, -58.4,new ArrayList<>()));
+        this.fillDB();
     }
 
     @Test
@@ -73,6 +82,10 @@ class FlightRouteServiceTest {
         dto.setCategories(List.of("Promo"));
 
         // WHEN
+        //Preguntar si existe la aereolinea
+        boolean existsAirline = userService.existsUserByNickname(dto.getAirlineNickname());
+        assertTrue(existsAirline);
+
         FlightRouteDTO created = flightRouteService.createFlightRoute(dto);
 
         // THEN
@@ -108,6 +121,7 @@ class FlightRouteServiceTest {
 
         assertEquals("Ya existe una ruta con el nombre: Duplicada", ex.getMessage());
     }
+
     @Test
     @DisplayName("GIVEN existing route WHEN getFlightRouteByName THEN return model")
     void getFlightRouteByName_shouldReturnRoute() {
@@ -116,7 +130,8 @@ class FlightRouteServiceTest {
                 "RutaX", "Desc", LocalDate.now(),
                 100.0, 200.0, 20.0,
                 "Montevideo", "Buenos Aires", "air123",
-                List.of("Promo")
+                List.of("Promo"),
+                List.of("Vuelo1")
         );
         flightRouteService.createFlightRoute(dto);
 
@@ -127,16 +142,17 @@ class FlightRouteServiceTest {
         assertNotNull(route);
         assertEquals("RutaX", route.getName());
     }
+
     @Test
     @DisplayName("GIVEN nonexistent route WHEN getFlightRouteByName THEN throw exception")
     void getFlightRouteByName_shouldThrowIfNotFound() {
         // WHEN + THEN
-        var ex = assertThrows(IllegalArgumentException.class, () -> {
+        var ex = assertThrows(NoResultException.class, () -> {
             flightRouteService.getFlightRouteByName("Inexistente");
         });
-
-        assertTrue(ex.getMessage().contains("Inexistente"));
+        assertTrue(ex.getMessage().contains("No result found for query"));
     }
+
     @Test
     @DisplayName("GIVEN existing route WHEN getFlightRouteDetailsByName THEN return DTO")
     void getFlightRouteDetailsByName_shouldReturnDTO() {
@@ -145,7 +161,8 @@ class FlightRouteServiceTest {
                 "RutaDetalle", "Detalles", LocalDate.now(),
                 120.0, 250.0, 30.0,
                 "Montevideo", "Buenos Aires", "air123",
-                List.of("Promo")
+                List.of("Promo"),
+                List.of("Vuelo1")
         );
         flightRouteService.createFlightRoute(dto);
 
@@ -159,16 +176,18 @@ class FlightRouteServiceTest {
         assertEquals("Buenos Aires", found.getDestinationCityName());
         assertEquals(List.of("Promo"), found.getCategories());
     }
+
     @Test
     @DisplayName("GIVEN nonexistent route WHEN getFlightRouteDetailsByName THEN throw exception")
     void getFlightRouteDetailsByName_shouldThrowIfNotFound() {
         // WHEN + THEN
-        var ex = assertThrows(IllegalArgumentException.class, () -> {
+        var ex = assertThrows(NoResultException.class, () -> {
             flightRouteService.getFlightRouteDetailsByName("Inexistente");
         });
 
-        assertTrue(ex.getMessage().contains("Inexistente"));
+        assertTrue(ex.getMessage().contains("No result found for query"));
     }
+
     @Test
     @DisplayName("GIVEN route created WHEN existFlightRoute THEN return true")
     void existFlightRoute_shouldReturnTrueIfExists() {
@@ -177,7 +196,8 @@ class FlightRouteServiceTest {
                 "RutaExistente", "Desc", LocalDate.now(),
                 90.0, 190.0, 15.0,
                 "Montevideo", "Buenos Aires", "air123",
-                List.of("Promo")
+                List.of("Promo"),
+                List.of("Vuelo1")
         );
         flightRouteService.createFlightRoute(dto);
 
@@ -185,22 +205,27 @@ class FlightRouteServiceTest {
         assertTrue(flightRouteService.existFlightRoute("RutaExistente"));
         assertFalse(flightRouteService.existFlightRoute("NoExiste"));
     }
+
     @Test
     @DisplayName("GIVEN multiple routes WHEN getAllFlightRoutesDetailsByAirlineNickname THEN return correct list")
     void getAllRoutesByAirline_shouldReturnCorrectData() {
+        TestUtils.cleanDB();
+        this.fillDB();
         // GIVEN
         flightRouteService.createFlightRoute(new FlightRouteDTO(
                 "Ruta1", "Desc1", LocalDate.now(),
                 80.0, 160.0, 10.0,
                 "Montevideo", "Buenos Aires", "air123",
-                List.of("Promo")
+                List.of("Promo"),
+                List.of("Vuelo1")
         ));
 
         flightRouteService.createFlightRoute(new FlightRouteDTO(
                 "Ruta2", "Desc2", LocalDate.now(),
                 150.0, 300.0, 40.0,
                 "Montevideo", "Buenos Aires", "air123",
-                List.of("Promo")
+                List.of("Promo"),
+                List.of("Vuelo2")
         ));
 
         // WHEN
@@ -211,4 +236,24 @@ class FlightRouteServiceTest {
         assertEquals("Ruta1", routes.get(0).getName());
         assertEquals("Ruta2", routes.get(1).getName());
     }
+
+    @Test
+    @DisplayName("GIVEN route with no flights WHEN getFlightsByRouteName THEN return empty list")
+    void getFlightsByRouteName_shouldReturnEmptyListIfNoFlights() {
+        // GIVEN
+        FlightRouteDTO dto = new FlightRouteDTO(
+                "RutaSinVuelos", "Desc", LocalDate.now(),
+                110.0, 220.0, 35.0,
+                "Montevideo", "Buenos Aires", "air123",
+                List.of("Promo"),
+                List.of("VueloA")
+        );
+        flightRouteService.createFlightRoute(dto);
+        // WHEN
+        List<FlightDTO> flights = flightRouteService.getFlightsByRouteName("RutaSinVuelos");
+        // THEN
+        assertNotNull(flights);
+        assertTrue(flights.isEmpty());
+    }
+
 }

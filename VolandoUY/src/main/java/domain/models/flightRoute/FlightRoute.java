@@ -21,20 +21,26 @@ import java.util.List;
 @AllArgsConstructor
 public class FlightRoute {
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
-    @OneToMany(mappedBy = "flightRoute", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "flightRoute",
+//            cascade = CascadeType.MERGE,   // o sin cascada
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
     private List<Flight> flights = new ArrayList<>();
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Airline airline;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private City originCity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private City destinationCity;
 
     @Id

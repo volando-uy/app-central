@@ -4,6 +4,8 @@ package domain.services.city;
 import domain.dtos.city.CityDTO;
 import domain.models.city.City;
 
+import java.util.List;
+
 /**
  *     private List<Airport> airports;
  *     private String name;
@@ -18,5 +20,6 @@ public interface ICityService {
     CityDTO getCityDetailsByName(String cityName);
     boolean cityExists(String cityName);
     boolean isAirportInCity(String cityName, String airportName);
+    List<String> getAllCities();
 
 }

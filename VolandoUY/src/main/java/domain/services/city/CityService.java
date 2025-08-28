@@ -1,22 +1,27 @@
 package domain.services.city;
 
 import domain.dtos.city.CityDTO;
+
 import domain.models.city.City;
+import infra.repository.city.CityRepository;
+import infra.repository.city.ICityRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CityService implements ICityService {
-    private List<City> cities;
+
+    private CityRepository cityRepository;
     private ModelMapper modelMapper;
 
     public CityService(ModelMapper modelMapper) {
-        this.cities = new ArrayList<>();
         this.modelMapper = modelMapper;
+        this.cityRepository = new CityRepository();
     }
 
     @Override
@@ -31,41 +36,55 @@ public class CityService implements ICityService {
             city.setAirports(new ArrayList<>());
         }
 
-        cities.add(city);
-        System.out.println(cities);
+        cityRepository.save(city);
 
         return modelMapper.map(city, CityDTO.class);
     }
 
     @Override
     public City getCityByName(String cityName) {
-        return cities.stream()
-                .filter(city -> city.getName().equalsIgnoreCase(cityName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName)));
+        return cityRepository.getCityByName(cityName);
     }
 
     @Override
     public CityDTO getCityDetailsByName(String cityName) {
-        return cities.stream()
-                .filter(city -> city.getName().equalsIgnoreCase(cityName))
-                .findFirst()
-                .map(city -> modelMapper.map(city, CityDTO.class))
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName)));
+        City city = cityRepository.getCityByName(cityName);
+        if (city == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName));
+        }
+
+        // Map manual de airportNames
+        CityDTO dto = modelMapper.map(city, CityDTO.class);
+        if (city.getAirports() != null) {
+            dto.setAirportNames(
+                    city.getAirports().stream()
+                            .map(airport -> airport.getName())
+                            .toList()
+            );
+        } else {
+            dto.setAirportNames(List.of()); // evitar null
+        }
+
+        return dto;
     }
+
 
     @Override
     public boolean cityExists(String cityName) {
-        return cities.stream()
-                .anyMatch(city -> city.getName().equalsIgnoreCase(cityName));
+        return cityRepository.existsByName(cityName);
     }
 
 
     @Override
     public boolean isAirportInCity(String cityName, String airportName) {
-        City city = this.getCityByName(cityName);
-        return city.getAirports().stream()
-                .anyMatch(airport -> airport.getName().equalsIgnoreCase(airportName));
+        return cityRepository.existsAirportInCity(cityName, airportName);
     }
 
+
+    @Override
+    public List<String> getAllCities() {
+        return cityRepository.findAll().stream()
+                .map(City::getName)
+                .collect(Collectors.toList());
+    }
 }

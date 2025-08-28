@@ -7,7 +7,6 @@
     <persistence-unit name="Volando" transaction-type="RESOURCE_LOCAL">
         <!-- Proveedor JPA: Hibernate -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
         <properties>
             <!-- Configuración de conexión JDBC para PostgreSQL -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/volandodb"/>

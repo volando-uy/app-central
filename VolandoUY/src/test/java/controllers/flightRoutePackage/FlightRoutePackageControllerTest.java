@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ class FlightRoutePackageControllerTest {
     @DisplayName("Debe delegar la creación del paquete de ruta de vuelo al servicio")
     void createFlightRoutePackage_shouldCallService() {
         // GIVEN
-        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descuento especial", 30, 10.0, LocalDate.now(), EnumTipoAsiento.TURISTA);
+        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descuento especial", 30, 10.0, LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>());
 
         when(packageService.createFlightRoutePackage(dto)).thenReturn(dto);
 
@@ -45,7 +46,7 @@ class FlightRoutePackageControllerTest {
     @DisplayName("Debe retornar el paquete por nombre desde el servicio")
     void getFlightRoutePackageByName_shouldReturnFromService() {
         // GIVEN
-        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descripción", 30, 5.0, LocalDate.now(), EnumTipoAsiento.EJECUTIVO);
+        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descripción", 30, 5.0, LocalDate.now(), EnumTipoAsiento.EJECUTIVO, new ArrayList<>());
 
         when(packageService.getFlightRoutePackageByName("Promo Verano")).thenReturn(dto);
 

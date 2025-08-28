@@ -8,10 +8,12 @@ import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -21,30 +23,54 @@ public class UpdateUserPanel extends JPanel {
 
     IUserController userController;
     UserDTO selectedUser;
+    
+    private boolean isLoadingUsers = false;
+    
+    List<UserDTO> users = new ArrayList<>();
 
     public UpdateUserPanel(IUserController uController) {
         userController = uController;
         initComponents();
+        loadUserList();
         initListeners();
-        initUserList();
         initPlaceholderForTextField(variableTextField4, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
-    private void initUserList() {
-        List<String> usersNicknames = userController.getAllUsersNicknames();
-        for (String nickname : usersNicknames) {
-            userComboBox.addItem(nickname);
+    private void loadUserList() {
+        isLoadingUsers = true;
+        userComboBox.removeAllItems();
+
+        List<UserDTO> usersDTOs = userController.getAllUsers();
+        for (UserDTO user : usersDTOs) {
+            userComboBox.addItem(user.getName() + " (" + user.getNickname() + ")");
         }
+        this.users = usersDTOs;
+        if (!users.isEmpty()) {
+            userComboBox.setSelectedIndex(0);
+        }
+        isLoadingUsers = false;
+    }
+
+    private String getSelectedUserNickname() {
+        Integer selectedUserIndex = userComboBox.getSelectedIndex();
+        UserDTO selectedUser = users.get(selectedUserIndex);
+        return selectedUser.getNickname();
     }
 
     private void initListeners() {
-        loadUserBtn.addActionListener(e -> {
+        // Add action listener to the JLabel
+        reloadUsersBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadUserList();
+            }
+        });
+
+        userComboBox.addActionListener(e -> {
+            if (isLoadingUsers) return;
             try {
-                String selectedNickname = (String) userComboBox.getSelectedItem();
+                String selectedNickname = getSelectedUserNickname();
                 // If user doesn't exist, throw exception
                 selectedUser = userController.getUserByNickname(selectedNickname);
                 nameTextField.setText(selectedUser.getName());
@@ -166,14 +192,16 @@ public class UpdateUserPanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
+        titleLabel = new JLabel();
+        vSpacer18 = new JPanel(null);
         selectUserPanel = new JPanel();
         userLabel = new JLabel();
         userComboBox = new JComboBox<>();
-        loadUserBtn = new JButton();
+        reloadUsersBtn = new JLabel();
         InfoUserPanel = new JPanel();
         hSpacer5 = new JPanel(null);
-        vSpacer17 = new JPanel(null);
         hSpacer6 = new JPanel(null);
+        vSpacer14 = new JPanel(null);
         firstRowPanel = new JPanel();
         nameLabel = new JLabel();
         nameTextField = new JTextField();
@@ -200,67 +228,101 @@ public class UpdateUserPanel extends JPanel {
         setPreferredSize(new Dimension(640, 540));
         setMinimumSize(new Dimension(640, 540));
         setMaximumSize(new Dimension(640, 540));
-        setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax
-        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-        . awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
-        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .
-        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+        //---- titleLabel ----
+        titleLabel.setText("Modificar usuario");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
+
+        //---- vSpacer18 ----
+        vSpacer18.setMinimumSize(new Dimension(12, 70));
+        vSpacer18.setPreferredSize(new Dimension(10, 100));
+        vSpacer18.setOpaque(false);
+        add(vSpacer18, new GridBagConstraints(0, 1, 1, 1, 0.0, 1.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
 
         //======== selectUserPanel ========
         {
-            selectUserPanel.setLayout(new GridLayout(1, 3));
+            selectUserPanel.setOpaque(false);
+            selectUserPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)selectUserPanel.getLayout()).columnWidths = new int[] {0, 0, 14, 0, 0};
+            ((GridBagLayout)selectUserPanel.getLayout()).rowHeights = new int[] {0, 0};
+            ((GridBagLayout)selectUserPanel.getLayout()).columnWeights = new double[] {1.0, 1.0, 0.0, 1.0, 1.0E-4};
+            ((GridBagLayout)selectUserPanel.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
 
             //---- userLabel ----
             userLabel.setText("Selecciona usuario:");
-            selectUserPanel.add(userLabel);
+            selectUserPanel.add(userLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 0, 10), 0, 0));
 
             //---- userComboBox ----
             userComboBox.setMinimumSize(new Dimension(100, 30));
             userComboBox.setPreferredSize(new Dimension(100, 30));
-            selectUserPanel.add(userComboBox);
+            userComboBox.setOpaque(false);
+            selectUserPanel.add(userComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
-            //---- loadUserBtn ----
-            loadUserBtn.setText("Cargar usuario");
-            selectUserPanel.add(loadUserBtn);
+            //---- reloadUsersBtn ----
+            reloadUsersBtn.setText("\ud83d\udd04");
+            reloadUsersBtn.setPreferredSize(new Dimension(34, 34));
+            reloadUsersBtn.setMaximumSize(new Dimension(34, 34));
+            reloadUsersBtn.setMinimumSize(new Dimension(34, 34));
+            reloadUsersBtn.setBorder(null);
+            reloadUsersBtn.setHorizontalAlignment(SwingConstants.CENTER);
+            reloadUsersBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+            reloadUsersBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            selectUserPanel.add(reloadUsersBtn, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
         }
-        add(selectUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+        add(selectUserPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //======== InfoUserPanel ========
         {
+            InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 104, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 0, 20, 38, 104, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //---- vSpacer17 ----
-            vSpacer17.setMinimumSize(new Dimension(12, 70));
-            vSpacer17.setPreferredSize(new Dimension(10, 100));
-            InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer14 ----
+            vSpacer14.setOpaque(false);
+            InfoUserPanel.add(vSpacer14, new GridBagConstraints(1, 1, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
@@ -268,6 +330,7 @@ public class UpdateUserPanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -289,6 +352,7 @@ public class UpdateUserPanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -308,11 +372,12 @@ public class UpdateUserPanel extends JPanel {
                 variableTextField1.setPreferredSize(new Dimension(120, 30));
                 variableTextField1.setMinimumSize(new Dimension(100, 30));
                 variableTextField1.setMaximumSize(new Dimension(100, 30));
+                variableTextField1.setOpaque(false);
                 firstRowPanel.add(variableTextField1, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
 
@@ -321,6 +386,7 @@ public class UpdateUserPanel extends JPanel {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -342,6 +408,7 @@ public class UpdateUserPanel extends JPanel {
                 variableTextField2.setPreferredSize(new Dimension(120, 30));
                 variableTextField2.setMinimumSize(new Dimension(100, 30));
                 variableTextField2.setMaximumSize(new Dimension(100, 30));
+                variableTextField2.setOpaque(false);
                 secondRowPanel.add(variableTextField2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -361,11 +428,12 @@ public class UpdateUserPanel extends JPanel {
                 variableTextField3.setPreferredSize(new Dimension(120, 30));
                 variableTextField3.setMinimumSize(new Dimension(100, 30));
                 variableTextField3.setMaximumSize(new Dimension(100, 30));
+                variableTextField3.setOpaque(false);
                 secondRowPanel.add(variableTextField3, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
 
@@ -374,6 +442,7 @@ public class UpdateUserPanel extends JPanel {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
                 thirdRowPanel.setMaximumSize(new Dimension(510, 30));
+                thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {20, 0};
@@ -395,6 +464,7 @@ public class UpdateUserPanel extends JPanel {
                 variableTextField4.setPreferredSize(new Dimension(100, 30));
                 variableTextField4.setMinimumSize(new Dimension(100, 30));
                 variableTextField4.setText("dd/mm/yyyy");
+                variableTextField4.setOpaque(false);
                 thirdRowPanel.add(variableTextField4, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -412,44 +482,53 @@ public class UpdateUserPanel extends JPanel {
                 //---- idTypeComboBox ----
                 idTypeComboBox.setMinimumSize(new Dimension(100, 30));
                 idTypeComboBox.setPreferredSize(new Dimension(100, 30));
+                idTypeComboBox.setOpaque(false);
                 thirdRowPanel.add(idTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 4, 1, 1, 0.0, 200.0,
+
+            //---- vSpacer13 ----
+            vSpacer13.setOpaque(false);
+            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 5, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
-        add(InfoUserPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+        add(InfoUserPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //======== updateBtnPanel ========
         {
+            updateBtnPanel.setOpaque(false);
             updateBtnPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
+            hSpacer1.setOpaque(false);
             updateBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
+            hSpacer2.setOpaque(false);
             updateBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
 
             //---- updateUserBtn ----
-            updateUserBtn.setText("Modificar usuario");
+            updateUserBtn.setText("\u27f3 Modificar usuario");
+            updateUserBtn.setOpaque(false);
             updateBtnPanel.add(updateUserBtn, BorderLayout.CENTER);
         }
-        add(updateBtnPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+        add(updateBtnPanel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
-        add(vSpacer19, new GridBagConstraints(0, 4, 1, 1, 0.0, 2.0,
+        vSpacer19.setOpaque(false);
+        add(vSpacer19, new GridBagConstraints(0, 5, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -457,14 +536,16 @@ public class UpdateUserPanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
+    private JLabel titleLabel;
+    private JPanel vSpacer18;
     private JPanel selectUserPanel;
     private JLabel userLabel;
     private JComboBox<String> userComboBox;
-    private JButton loadUserBtn;
+    private JLabel reloadUsersBtn;
     private JPanel InfoUserPanel;
     private JPanel hSpacer5;
-    private JPanel vSpacer17;
     private JPanel hSpacer6;
+    private JPanel vSpacer14;
     private JPanel firstRowPanel;
     private JLabel nameLabel;
     private JTextField nameTextField;

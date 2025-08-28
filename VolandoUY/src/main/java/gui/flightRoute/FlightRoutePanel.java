@@ -4,9 +4,7 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
-import gui.user.registerAirline.RegisterAirlinePanel;
-import gui.user.registerCustomer.RegisterCustomerPanel;
-import gui.user.updateUser.UpdateUserPanel;
+import gui.flightRoute.getFlightRoutes.GetFlightRoutesPanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -19,12 +17,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class FlightRoutePanel extends JPanel {
-
-    private MouseListener createFlightRoutePanelListener;
+ 
 
     private IFlightRouteController flightRouteController;
     private IUserController userController;
     private ICategoryController categoryController;
+
+    private JPanel createFlightRoutePanel;
+    private JPanel getFlightsRoutesPanel;
 
     private JPanel contentPanel;
 
@@ -33,47 +33,49 @@ public class FlightRoutePanel extends JPanel {
         this.userController = userController;
         this.categoryController = categoryController;
         initComponents();
+        initPanels();
         initListeners();
-        try {
-            setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch ( Exception ignored ) {}
+    }
+
+    private void initPanels() {
+        createFlightRoutePanel = new CreateFlightRoutePanel(flightRouteController, userController, categoryController);
+        getFlightsRoutesPanel = new GetFlightRoutesPanel(flightRouteController, userController);
     }
 
     private void initListeners() {
-        // Listener para el botón de creacion de ruta de vuelo
-        createFlightRoutePanelListener = new MouseAdapter() {
+        createFlightRouteBtn.addMouseListener(createListener(createFlightRoutePanel));
+        getFlightRouteBtn.addMouseListener(createListener(getFlightsRoutesPanel));
+    }
+
+    private MouseAdapter createListener(JPanel panel) {
+        return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo CreateFlightRoutePanel
-                    if (contentPanel instanceof CreateFlightRoutePanel) {
+                    // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
+                    if (contentPanel.getClass().equals(panel.getClass())) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println("Create Flight Route button clicked");
-                // Crear el nuevo contentPanel con el contenido de creacoion de ruta de vuelo
-                contentPanel = new CreateFlightRoutePanel(flightRouteController, userController, categoryController);
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
+                // Crear el nuevo contentPanel con el contenido del panel proporcionado
+                contentPanel = panel;
                 add(contentPanel);
                 revalidate();
                 repaint();
             }
         };
-
-        createFlightRouteBtn.addMouseListener(createFlightRoutePanelListener);
-        //button3.addMouseListener(getUserListener);
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
     private JPanel NavPanel;
     private JButton createFlightRouteBtn;
-    private JButton registerAirlineBtn;
-    private JButton updateUserBtn;
-    private JButton getUserBtn;
+    private JButton getFlightRouteBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
@@ -81,21 +83,18 @@ public class FlightRoutePanel extends JPanel {
         // Generated using JFormDesigner Evaluation license - dotto
         NavPanel = new JPanel();
         createFlightRouteBtn = new JButton();
-        registerAirlineBtn = new JButton();
-        updateUserBtn = new JButton();
-        getUserBtn = new JButton();
+        getFlightRouteBtn = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
-        setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-        (0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-        .TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt
-        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-        propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
-        ;}});
+        setBackground(new Color(0xeeeeee));
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -108,20 +107,12 @@ public class FlightRoutePanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- createFlightRouteBtn ----
-            createFlightRouteBtn.setText("Crear Ruta de Vuelo");
+            createFlightRouteBtn.setText("+ Crear Ruta de Vuelo");
             NavPanel.add(createFlightRouteBtn);
 
-            //---- registerAirlineBtn ----
-            registerAirlineBtn.setText("---");
-            NavPanel.add(registerAirlineBtn);
-
-            //---- updateUserBtn ----
-            updateUserBtn.setText("---");
-            NavPanel.add(updateUserBtn);
-
-            //---- getUserBtn ----
-            getUserBtn.setText("---");
-            NavPanel.add(getUserBtn);
+            //---- getFlightRouteBtn ----
+            getFlightRouteBtn.setText("\ud83d\udcc4 Listar Rutas de vuelo");
+            NavPanel.add(getFlightRouteBtn);
         }
         add(NavPanel, BorderLayout.NORTH);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on

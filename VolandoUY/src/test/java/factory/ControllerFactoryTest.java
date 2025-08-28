@@ -1,5 +1,6 @@
 package factory;
 
+import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
@@ -144,6 +145,17 @@ class ControllerFactoryTest {
         // GIVEN
         ICityController controller1 = ControllerFactory.getCityController();
         ICityController controller2 = ControllerFactory.getCityController();
+
+        // THEN
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+
+    @Test
+    void getAirportController_shouldReturnSingletonInstance() {
+        // GIVEN
+        IAirportController controller1 = ControllerFactory.getAirportController();
+        IAirportController controller2 = ControllerFactory.getAirportController();
 
         // THEN
         assertNotNull(controller1);

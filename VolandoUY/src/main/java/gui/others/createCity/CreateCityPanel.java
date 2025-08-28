@@ -22,12 +22,8 @@ public class CreateCityPanel extends JPanel {
     public CreateCityPanel(ICityController cityController) {
         this.cityController = cityController;
         initComponents();
-        // initComponentsManually();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     
     private void initListeners() {
@@ -59,7 +55,8 @@ public class CreateCityPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - dotto
+        titleLabel = new JLabel();
         InfoCityPanel = new JPanel();
         hSpacer5 = new JPanel(null);
         vSpacer17 = new JPanel(null);
@@ -88,21 +85,29 @@ public class CreateCityPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
-        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
-        ) )) throw new RuntimeException( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
+        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax
+        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
+        . awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt
+        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
+        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .
+        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
         ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
+        //---- titleLabel ----
+        titleLabel.setText("Registrar nueva ciudad");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
+
         //======== InfoCityPanel ========
         {
+            InfoCityPanel.setOpaque(false);
             InfoCityPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoCityPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)InfoCityPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 0, 0, 0, 0};
@@ -111,6 +116,7 @@ public class CreateCityPanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             InfoCityPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -118,15 +124,20 @@ public class CreateCityPanel extends JPanel {
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
             vSpacer17.setPreferredSize(new Dimension(10, 100));
+            vSpacer17.setOpaque(false);
             InfoCityPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             InfoCityPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer13 ----
+            vSpacer13.setOpaque(false);
             InfoCityPanel.add(vSpacer13, new GridBagConstraints(1, 4, 1, 1, 0.0, 400.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -135,6 +146,7 @@ public class CreateCityPanel extends JPanel {
             {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -156,6 +168,7 @@ public class CreateCityPanel extends JPanel {
                 latitudeTextField.setPreferredSize(new Dimension(120, 30));
                 latitudeTextField.setMinimumSize(new Dimension(100, 30));
                 latitudeTextField.setMaximumSize(new Dimension(100, 30));
+                latitudeTextField.setOpaque(false);
                 secondRowPanel.add(latitudeTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -175,6 +188,7 @@ public class CreateCityPanel extends JPanel {
                 longitudeTextField.setPreferredSize(new Dimension(120, 30));
                 longitudeTextField.setMinimumSize(new Dimension(100, 30));
                 longitudeTextField.setMaximumSize(new Dimension(100, 30));
+                longitudeTextField.setOpaque(false);
                 secondRowPanel.add(longitudeTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -187,6 +201,7 @@ public class CreateCityPanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -208,6 +223,7 @@ public class CreateCityPanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -227,6 +243,7 @@ public class CreateCityPanel extends JPanel {
                 countryTextField.setPreferredSize(new Dimension(120, 30));
                 countryTextField.setMinimumSize(new Dimension(100, 30));
                 countryTextField.setMaximumSize(new Dimension(100, 30));
+                countryTextField.setOpaque(false);
                 firstRowPanel.add(countryTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -241,18 +258,22 @@ public class CreateCityPanel extends JPanel {
 
         //======== createNewCityPanel ========
         {
+            createNewCityPanel.setOpaque(false);
             createNewCityPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
+            hSpacer1.setOpaque(false);
             createNewCityPanel.add(hSpacer1, BorderLayout.LINE_START);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
+            hSpacer2.setOpaque(false);
             createNewCityPanel.add(hSpacer2, BorderLayout.LINE_END);
 
             //---- createNewCityBtn ----
-            createNewCityBtn.setText("Crear nueva ciudad");
+            createNewCityBtn.setText("+ Registrar ciudad");
+            createNewCityBtn.setOpaque(false);
             createNewCityPanel.add(createNewCityBtn, BorderLayout.CENTER);
         }
         add(createNewCityPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -261,6 +282,7 @@ public class CreateCityPanel extends JPanel {
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -268,7 +290,8 @@ public class CreateCityPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - dotto
+    private JLabel titleLabel;
     private JPanel InfoCityPanel;
     private JPanel hSpacer5;
     private JPanel vSpacer17;

@@ -4,6 +4,7 @@ import domain.dtos.airport.AirportDTO;
 import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
+import infra.repository.airport.AirportRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -13,14 +14,14 @@ import java.util.List;
 
 
 public class AirportService implements IAirportService {
-    private List<Airport> airports;
+    private AirportRepository airportRepository;
     private ModelMapper modelMapper;
     private ICityService cityService;
 
     public AirportService(ModelMapper modelMapper, ICityService cityService) {
         this.modelMapper = modelMapper;
         this.cityService = cityService;
-        this.airports = new ArrayList<>();
+        this.airportRepository = new AirportRepository();
     }
 
     public AirportDTO createAirport(AirportDTO dto, String cityName) {
@@ -35,11 +36,12 @@ public class AirportService implements IAirportService {
         }
 
         Airport airport = modelMapper.map(dto, Airport.class);
-        System.out.println("Airportes before adding: " + airports);
+//        System.out.println("Airportes before adding: " + airports);
         airport.setCity(city);
         ValidatorUtil.validate(airport);
-        airports.add(airport);
-        System.out.println("Airport after setting city: " + airports);
+//        airports.add(airport);
+        airportRepository.save(airport);
+//        System.out.println("Airport after setting city: " + airports);
         city.getAirports().add(airport);
 
         return modelMapper.map(airport, AirportDTO.class);
@@ -51,7 +53,7 @@ public class AirportService implements IAirportService {
 //
 //        for (Airport airport : airports) {
 //            if (airport.getCode().equals(code)) {
-//                City city = airport.getCity();
+//                City city = airport.getCities();
 //                if (city != null && city.getAirports() != null) {
 //                    city.getAirports().removeIf(a -> a.getCode().equals(code));
 //                }
@@ -75,7 +77,7 @@ public class AirportService implements IAirportService {
 //        for (Airport airport : airports) {
 //            if (airport.getCode().equals(code)) {
 //                // Remover de la ciudad anterior
-//                City oldCity = airport.getCity();
+//                City oldCity = airport.getCities();
 //                if (oldCity != null && oldCity.getAirports() != null) {
 //                    oldCity.getAirports().remove(airport);
 //                }
@@ -99,11 +101,12 @@ public class AirportService implements IAirportService {
 
     @Override
     public Airport getAirportByCode(String code) {
-        System.out.println("airports: " + airports);
-        return airports.stream()
-                .filter(airport -> airport.getCode().equalsIgnoreCase(code))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code)));
+        Airport airport = airportRepository.getAirportByCode(code);
+        if(airport == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code));
+        }
+        return airport;
+
     }
 
     @Override
@@ -113,6 +116,6 @@ public class AirportService implements IAirportService {
 
     @Override
     public boolean airportExists(String code) {
-        return airports.stream().anyMatch(airport -> airport.getCode().equals(code));
+        return airportRepository.existsAirportByCode(code);
     }
 }

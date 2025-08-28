@@ -3,6 +3,7 @@ package domain.models.flightRoutePackage;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.*;
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 public class FlightRoutePackage {
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes;
 
     @Id

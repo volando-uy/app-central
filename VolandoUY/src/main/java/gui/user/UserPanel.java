@@ -18,12 +18,18 @@ import java.lang.reflect.InvocationTargetException;
 public class UserPanel extends JPanel {
 
     private IUserController userController;
+
+    private JPanel registerCustomerPanel;
+    private JPanel registerAirlinePanel;
+    private JPanel updateUserPanel;
+    private JPanel getUsersPanel;
     
     private JPanel contentPanel;
 
     public UserPanel(IUserController userController) {
         this.userController = userController;
         initComponents();
+        initPanels();
         initListeners();
         try {
             setBorder(new EtchedBorder(EtchedBorder.LOWERED));
@@ -31,34 +37,36 @@ public class UserPanel extends JPanel {
         }
     }
 
-    private void initListeners() {
-        registerCustomerBtn.addMouseListener(createListener(RegisterCustomerPanel.class));
-        registerAirlineBtn.addMouseListener(createListener(RegisterAirlinePanel.class));
-        updateUserBtn.addMouseListener(createListener(UpdateUserPanel.class));
-        getUsersBtn.addMouseListener(createListener(GetUsersPanel.class));
+    private void initPanels() {
+        registerCustomerPanel = new RegisterCustomerPanel(userController);
+        registerAirlinePanel = new RegisterAirlinePanel(userController);
+        updateUserPanel = new UpdateUserPanel(userController);
+        getUsersPanel = new GetUsersPanel(userController);
     }
 
-    private MouseAdapter createListener(Class<? extends JPanel> panelClass) {
+    private void initListeners() {
+        registerCustomerBtn.addMouseListener(createListener(registerCustomerPanel));
+        registerAirlineBtn.addMouseListener(createListener(registerAirlinePanel));
+        updateUserBtn.addMouseListener(createListener(updateUserPanel));
+        getUsersBtn.addMouseListener(createListener(getUsersPanel));
+    }
+
+    private MouseAdapter createListener(JPanel panel) {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
                     // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
-                    if (contentPanel.getClass().equals(panelClass)) {
+                    if (contentPanel.getClass().equals(panel.getClass())) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println(panelClass.getSimpleName() + " button clicked");
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
                 // Crear el nuevo contentPanel con el contenido del panel proporcionado
-                try {
-                    contentPanel = panelClass.getDeclaredConstructor(IUserController.class).newInstance(userController);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException ex) {
-                    throw new RuntimeException(ex);
-                }
+                contentPanel = panel;
                 add(contentPanel);
                 revalidate();
                 repaint();
@@ -88,15 +96,14 @@ public class UserPanel extends JPanel {
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
-        setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
-        new javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e"
-        ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12)
-        ,java.awt.Color.red), getBorder())); addPropertyChangeListener(
-        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
-        ;}});
+        setBackground(new Color(0xeeeeee));
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new
+        javax.swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax
+        .swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java
+        .awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
+        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.
+        PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".
+        equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -109,19 +116,19 @@ public class UserPanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- registerCustomerBtn ----
-            registerCustomerBtn.setText("Registrar Cliente");
+            registerCustomerBtn.setText("+ Registrar Cliente");
             NavPanel.add(registerCustomerBtn);
 
             //---- registerAirlineBtn ----
-            registerAirlineBtn.setText("Registrar Aerolinea");
+            registerAirlineBtn.setText("+ Registrar Aerolinea");
             NavPanel.add(registerAirlineBtn);
 
             //---- updateUserBtn ----
-            updateUserBtn.setText("Modificar Usuario");
+            updateUserBtn.setText("\u27f3 Modificar Usuario");
             NavPanel.add(updateUserBtn);
 
             //---- getUsersBtn ----
-            getUsersBtn.setText("Listar Clientes");
+            getUsersBtn.setText("\ud83d\udcc4 Listar Clientes");
             NavPanel.add(getUsersBtn);
         }
         add(NavPanel, BorderLayout.NORTH);

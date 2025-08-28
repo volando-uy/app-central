@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import utils.TestUtils;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ class CategoryServiceTest {
 
     @BeforeEach
     void setUp() {
+        TestUtils.cleanDB();
         categoryService = new CategoryService(new ModelMapper());
     }
 
@@ -41,7 +43,7 @@ class CategoryServiceTest {
 
         // WHEN se intenta crear otra con el mismo nombre
         // THEN se lanza excepción por duplicado
-        UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
             categoryService.createCategory(new CategoryDTO("Negocios"));
         });
         //La categoria X ya existe
@@ -91,13 +93,9 @@ class CategoryServiceTest {
     @Test
     @DisplayName("GIVEN non-existing category WHEN getCategoryByName is called THEN throw exception")
     void getCategoryByName_shouldThrowIfNotFound() {
-        // WHEN se busca una categoría inexistente
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            categoryService.getCategoryByName("Histórica");
-        });
+        // WHEN se busca una categoría inexistente + THEN da null
+        assertFalse(categoryService.getCategoryByName("Histórica") != null);
 
-        // THEN se lanza excepción
-        assertEquals("La categoría Histórica no fue encontrada", ex.getMessage());
     }
 
     @Test

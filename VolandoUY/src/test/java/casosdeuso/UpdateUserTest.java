@@ -1,196 +1,129 @@
-//package casosdeuso;
-//
-//import controllers.user.IUserController;
-//import controllers.user.UserController;
-//import domain.dtos.user.AirlineDTO;
-//import domain.dtos.user.CustomerDTO;
-//import domain.dtos.user.UserDTO;
-//import domain.models.user.Airline;
-//import domain.models.user.Customer;
-//import domain.models.enums.EnumTipoDocumento;
-//import domain.models.user.mapper.UserMapper;
-//import domain.services.user.IUserService;
-//import domain.services.user.UserService;
-//import factory.UserFactoryMapper;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.modelmapper.ModelMapper;
-//
-//import java.time.LocalDate;
-//import java.util.List;
-//
-//import static org.mockito.Mockito.mock;
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//public class UpdateUserTest {
-//    private IUserService usuarioService;
-//    private ModelMapper modelMapper;
-//    private UserMapper userMapper;
-//    private UserFactoryMapper userFactoryMapper;
-//    private IUserController usuarioController;
-//
-//
-//    @BeforeEach
-//    void setUp() {
-//        modelMapper = new ModelMapper();
-//        userMapper = new UserMapper(modelMapper);
-//        usuarioService = new UserService(modelMapper, userMapper); // o podés mockearlo si querés
-//        usuarioController = new UserController(usuarioService);
-//
-//        CustomerDTO customerDTO = new CustomerDTO();
-//        customerDTO.setNickname("Nickname");
-//        customerDTO.setMail("mail@gmail.com");
-//        customerDTO.setName("Customer");
-//        customerDTO.setSurname("Apellido");
-//        customerDTO.setCitizenship("Nacionalidad");
-//        customerDTO.setId("55906938");
-//        customerDTO.setIdType(EnumTipoDocumento.CI);
-//        customerDTO.setBirthDate(LocalDate.now());
-//        usuarioController.registerCustomer(customerDTO);
-//    }
-//
-//    @Test
-//    public void modificarDatosCliente() {
-//        // Paso 1: Listar usuarios (ya hay uno cargado en @BeforeEach)
-//        List<String> nicknames = usuarioController.getAllUsersNicknames();
-//        assertFalse(nicknames.isEmpty());
-//
-//        // Paso 2: Seleccionar usuario original
-//        String nickname = nicknames.get(0);
-//        UserDTO originalUserDTO = usuarioController.getUserByNickname(nickname);
-//        assertEquals("Nickname", originalUserDTO.getNickname());
-//        System.out.println("Original: " + originalUserDTO);
-//
-//        // Paso 3: Crear versión temp modificada
-//        CustomerDTO modifiedCustomerDTO = new CustomerDTO(); // O usar un UserDTO si estás usando uno genérico
-//        modifiedCustomerDTO.setNickname(originalUserDTO.getNickname()); // campo que no cambia
-//        modifiedCustomerDTO.setMail(originalUserDTO.getMail());         // campo que no cambia
-//        modifiedCustomerDTO.setName("NuevoNombre");
-//        modifiedCustomerDTO.setSurname("NuevoApellido");
-//        modifiedCustomerDTO.setCitizenship("Uruguaya");
-//        modifiedCustomerDTO.setId("987654321");
-//        modifiedCustomerDTO.setBirthDate(LocalDate.of(2000, 1, 1));
-//        modifiedCustomerDTO.setIdType(EnumTipoDocumento.RUT);
-//
-//        UserDTO temp = usuarioController.updateTemporalUser(modifiedCustomerDTO);
-//        System.out.println("No Temporal: " + originalUserDTO);
-//        System.out.println("Temporal: " + temp);
-//
-//        // Paso 4: Confirmar edición
-//        usuarioController.updateUser(nickname, temp);
-//
-//        // Paso 5: Volver a obtener y verificar cambios
-//        CustomerDTO finalDTO = (CustomerDTO) usuarioController.getUserByNickname(nickname);
-//        System.out.println("Final: " + finalDTO);
-//
-//        assertEquals("NuevoNombre", finalDTO.getName());
-//        assertEquals("NuevoApellido", finalDTO.getSurname());
-//        assertEquals("Uruguaya", finalDTO.getCitizenship());
-//        assertEquals("987654321", finalDTO.getId());
-//        assertEquals(EnumTipoDocumento.RUT, finalDTO.getIdType());
-//
-//        // Verificar campos inmutables
-//        assertEquals("Nickname", finalDTO.getNickname());
-//        assertEquals("mail@gmail.com", finalDTO.getMail());
-//    }
-//
-//    @Test
-//    public void updateAirline() {
-//        // Paso 1: Crear una aerolínea originalAirlineDTO y darla de alta
-//        AirlineDTO originalAirlineDTO = new AirlineDTO();
-//        originalAirlineDTO.setNickname("FlyTest");
-//        originalAirlineDTO.setMail("a@gmail.com");
-//        originalAirlineDTO.setName("NombreOriginal");
-//        originalAirlineDTO.setWeb("webOriginal.com");
-//        originalAirlineDTO.setDescription("Descripcion originalAirlineDTO");
-//
-//        usuarioController.registerAirline(originalAirlineDTO);
-//
-//        // Paso 2: Obtener el usuario originalAirlineDTO
-//        List<String> nicknames = usuarioController.getAllUsersNicknames();
-//        assertFalse(nicknames.isEmpty());
-//
-//        String nickname = nicknames.get(1);
-//        UserDTO usuarioOriginalDTO = usuarioController.getUserByNickname(nickname);
-//        assertEquals("FlyTest", usuarioOriginalDTO.getNickname());
-//        System.out.println("Original: " + usuarioOriginalDTO);
-//
-//        // Paso 3: Crear versión temporal modifiedAirlineDTO
-//        AirlineDTO modifiedAirlineDTO = new AirlineDTO();
-//        modifiedAirlineDTO.setNickname(usuarioOriginalDTO.getNickname()); // campo inmutable
-//        modifiedAirlineDTO.setMail(usuarioOriginalDTO.getMail());         // campo inmutable
-//        modifiedAirlineDTO.setName("NombreTEMP");
-//        modifiedAirlineDTO.setWeb("webTEMP.com");
-//        modifiedAirlineDTO.setDescription("DescripcionTEMP");
-//
-//        UserDTO temporal = usuarioController.updateTemporalUser(modifiedAirlineDTO);
-//        System.out.println("No Temporal: " + originalAirlineDTO);
-//        System.out.println("Temporal: " + temporal);
-//
-//        // Paso 4: Confirmar edición
-//        usuarioController.updateUser(nickname, temporal);
-//
-//        // Paso 5: Verificar cambios
-//        AirlineDTO finalDTO = (AirlineDTO) usuarioController.getUserByNickname(nickname);
-//        System.out.println("Final: " + finalDTO);
-//
-//        assertEquals("NombreTEMP", finalDTO.getName());
-//        assertEquals("webTEMP.com", finalDTO.getWeb());
-//        assertEquals("DescripcionTEMP", finalDTO.getDescription());
-//
-//        // Verificar campos inmutables
-//        assertEquals("FlyTest", finalDTO.getNickname());
-//        assertEquals("a@gmail.com", finalDTO.getMail());
-//    }
-////
-////    public void updateAirline () {
-////        Airline aerolinea = createAirline("test");
-////
-////        //Given
-////        AirlineDTO aerolineaTempDTO = new AirlineDTO();
-////        aerolineaTempDTO.setNickname(aerolinea.getNickname());
-////        aerolineaTempDTO.setMail(aerolinea.getMail());
-////
-////
-////        //When
-////        when(modelMapper.map(aerolinea, Airline.class)).thenReturn(aerolinea);
-////        when(usuarioService.getAllUsers()).thenReturn(List.of(modelMapper.map(aerolinea, AirlineDTO.class)));
-////        when(usuarioService.getUserByNickname(aerolinea.getNickname())).thenReturn(modelMapper.map(aerolinea, AirlineDTO.class);
-////
-////        //Then
-////        // Ya es seguro modificar AerolineTemp
-////        aerolineaTempDTO.setNombre("NombreTEMP");
-////        aerolineaTempDTO.setWeb("webTEMP");
-////        aerolineaTempDTO.setDescripcion("descripcionTEMP");
-////
-////        System.out.println("Airline " + aerolinea);
-////        System.out.println("AerolineaTemp " + aerolineaTempDTO);
-////
-////        //Supongamos que desea confirmar
-////        aerolinea.updateDataFrom(aerolineaTempDTO);
-////        assertEquals(modelMapper.map(aerolineaTempDTO, Airline.class), aerolinea);
-////    }
-//
-//    Customer createCustomer(String nick) {
-//        Customer c = new Customer();
-//        c.setNickname(nick);
-//        c.setName("Juan");
-//        c.setSurname("Pérez");
-//        c.setMail("juan@example.com");
-//        c.setId("123");
-//        c.setBirthDate(LocalDate.of(1990, 1, 1));
-//        c.setIdType(EnumTipoDocumento.CI);
-//        return c;
-//    }
-//
-//
-//    Airline createAirline(String nick) {
-//        Airline a = new Airline();
-//        a.setNickname(nick);
-//        a.setName("Juan");
-//        a.setWeb("www.google.com");
-//        a.setDescription("desc");
-//        a.setMail("a@gmail.com");
-//        return a;
-//    }
-//}
+package casosdeuso;
+
+import app.DBConnection;
+import controllers.user.IUserController;
+import controllers.user.UserController;
+import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.UserDTO;
+import domain.models.enums.EnumTipoDocumento;
+import domain.models.user.mapper.UserMapper;
+import domain.services.user.IUserService;
+import domain.services.user.UserService;
+import factory.UserFactoryMapper;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.*;
+import org.modelmapper.ModelMapper;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // IMPORTANTE para que el @BeforeAll no sea estático, y se haga 1 unica instasncia de la clase
+class UpdateUserTest {
+
+    private IUserController userController;
+
+    @BeforeAll
+    void cleanDBAndSetUpOnce() {
+        // Limpiar la base de datos
+        EntityManager em = DBConnection.getEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
+        em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+
+        // Inicializar dependencias solo una vez
+        ModelMapper modelMapper = new ModelMapper();
+        UserMapper userMapper = new UserMapper(modelMapper);
+        IUserService userService = new UserService(modelMapper, userMapper);
+        userController = new UserController(userService);
+
+        // Crear datos base una sola vez
+        CustomerDTO customerDTO = new CustomerDTO("gyabisito", "Jose", "gyabisito@mail.com", "Gonzalez", "Uruguay",
+                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI);
+        userController.registerCustomer(customerDTO);
+
+        AirlineDTO airlineDTO = new AirlineDTO("flyuy", "FlyUY", "flyuy@mail.com", "Low cost123123123", "www.flyuy.com");
+        userController.registerAirline(airlineDTO);
+    }
+
+
+
+    @Test
+    @DisplayName("Actualizar cliente: se deben reflejar los cambios en la entidad persistida")
+    void updateCustomer_shouldReflectChanges() {
+        // GIVEN
+        String nickname = "gyabisito";
+        CustomerDTO original = (CustomerDTO) userController.getUserByNickname(nickname);
+        assertEquals("Jose", original.getName());
+
+        // WHEN
+        CustomerDTO modificado = new CustomerDTO();
+        modificado.setNickname(nickname);
+        modificado.setMail(original.getMail()); // inmutable
+        modificado.setName("Carlos");
+        modificado.setSurname("Martinez");
+        modificado.setId("87654321");
+        modificado.setCitizenship("Argentina");
+        modificado.setBirthDate(LocalDate.of(1995, 5, 15));
+        modificado.setIdType(EnumTipoDocumento.RUT);
+
+        userController.updateUser(nickname, modificado);
+
+        // THEN
+        CustomerDTO actualizado = (CustomerDTO) userController.getUserByNickname(nickname);
+        assertEquals("Carlos", actualizado.getName());
+        assertEquals("Martinez", actualizado.getSurname());
+        assertEquals("87654321", actualizado.getId());
+        assertEquals("Argentina", actualizado.getCitizenship());
+        assertEquals(LocalDate.of(1995, 5, 15), actualizado.getBirthDate());
+        assertEquals(EnumTipoDocumento.RUT, actualizado.getIdType());
+
+        // Campos inmutables
+        assertEquals("gyabisito", actualizado.getNickname());
+        assertEquals("gyabisito@mail.com", actualizado.getMail());
+    }
+
+    @Test
+    @DisplayName("Actualizar aerolínea: se deben reflejar los cambios correctamente")
+    void updateAirline_shouldReflectChanges() {
+        // GIVEN
+        String nickname = "flyuy";
+        AirlineDTO original = (AirlineDTO) userController.getUserByNickname(nickname);
+        assertEquals("FlyUY", original.getName());
+
+        // WHEN
+        AirlineDTO modificado = new AirlineDTO();
+        modificado.setNickname(nickname);
+        modificado.setMail(original.getMail()); // inmutable
+        modificado.setName("FlyUruguay");
+        modificado.setDescription("Nueva descripción");
+        modificado.setWeb("www.flyuy.net");
+
+        userController.updateUser(nickname, modificado);
+
+        // THEN
+        AirlineDTO actualizado = (AirlineDTO) userController.getUserByNickname(nickname);
+        assertEquals("FlyUruguay", actualizado.getName());
+        assertEquals("Nueva descripción", actualizado.getDescription());
+        assertEquals("www.flyuy.net", actualizado.getWeb());
+
+        // Campos inmutables
+        assertEquals("flyuy", actualizado.getNickname());
+        assertEquals("flyuy@mail.com", actualizado.getMail());
+    }
+
+    @AfterAll
+    void cleanDBAfterAll() {
+        // Limpiar la base de datos
+        EntityManager em = DBConnection.getEntityManager();
+        em.getTransaction().begin();
+        em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
+        em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+    }
+}

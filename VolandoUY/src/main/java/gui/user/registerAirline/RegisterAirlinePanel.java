@@ -19,10 +19,7 @@ public class RegisterAirlinePanel extends JPanel {
         initComponents();
         // initComponentsManually();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     
     private void initListeners() {
@@ -57,6 +54,7 @@ public class RegisterAirlinePanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
+        titleLabel = new JLabel();
         InfoUserPanel = new JPanel();
         hSpacer5 = new JPanel(null);
         vSpacer17 = new JPanel(null);
@@ -88,19 +86,28 @@ public class RegisterAirlinePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-        0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-        . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-        beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
         ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
+        //---- titleLabel ----
+        titleLabel.setText("Crear nueva aerolinea");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
+
         //======== InfoUserPanel ========
         {
+            InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 0, 0, 0, 0};
@@ -109,6 +116,7 @@ public class RegisterAirlinePanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -116,12 +124,14 @@ public class RegisterAirlinePanel extends JPanel {
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
             vSpacer17.setPreferredSize(new Dimension(10, 100));
+            vSpacer17.setOpaque(false);
             InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -130,6 +140,7 @@ public class RegisterAirlinePanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -151,6 +162,7 @@ public class RegisterAirlinePanel extends JPanel {
                 nicknameTextField.setPreferredSize(new Dimension(120, 30));
                 nicknameTextField.setMinimumSize(new Dimension(100, 30));
                 nicknameTextField.setMaximumSize(new Dimension(100, 30));
+                nicknameTextField.setOpaque(false);
                 firstRowPanel.add(nicknameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -170,6 +182,7 @@ public class RegisterAirlinePanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -183,6 +196,7 @@ public class RegisterAirlinePanel extends JPanel {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 380, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -204,13 +218,17 @@ public class RegisterAirlinePanel extends JPanel {
                 descriptionTextField.setPreferredSize(new Dimension(120, 30));
                 descriptionTextField.setMinimumSize(new Dimension(100, 30));
                 descriptionTextField.setMaximumSize(new Dimension(100, 30));
+                descriptionTextField.setOpaque(false);
                 secondRowPanel.add(descriptionTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer13 ----
+            vSpacer13.setOpaque(false);
             InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 4, 1, 1, 0.0, 400.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -220,6 +238,7 @@ public class RegisterAirlinePanel extends JPanel {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
                 thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -241,6 +260,7 @@ public class RegisterAirlinePanel extends JPanel {
                 mailTextField.setPreferredSize(new Dimension(120, 30));
                 mailTextField.setMinimumSize(new Dimension(100, 30));
                 mailTextField.setMaximumSize(new Dimension(100, 30));
+                mailTextField.setOpaque(false);
                 thirdRowPanel.add(mailTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -260,11 +280,12 @@ public class RegisterAirlinePanel extends JPanel {
                 webTextField.setPreferredSize(new Dimension(120, 30));
                 webTextField.setMinimumSize(new Dimension(100, 30));
                 webTextField.setMaximumSize(new Dimension(100, 30));
+                webTextField.setOpaque(false);
                 thirdRowPanel.add(webTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
@@ -274,18 +295,22 @@ public class RegisterAirlinePanel extends JPanel {
 
         //======== updateBtnPanel ========
         {
+            updateBtnPanel.setOpaque(false);
             updateBtnPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
+            hSpacer1.setOpaque(false);
             updateBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
+            hSpacer2.setOpaque(false);
             updateBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
 
             //---- createNewAirlineBtn ----
-            createNewAirlineBtn.setText("Crear nueva aerolinea");
+            createNewAirlineBtn.setText("+ Crear aerolinea");
+            createNewAirlineBtn.setOpaque(false);
             updateBtnPanel.add(createNewAirlineBtn, BorderLayout.CENTER);
         }
         add(updateBtnPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -294,6 +319,7 @@ public class RegisterAirlinePanel extends JPanel {
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -302,6 +328,7 @@ public class RegisterAirlinePanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
+    private JLabel titleLabel;
     private JPanel InfoUserPanel;
     private JPanel hSpacer5;
     private JPanel vSpacer17;

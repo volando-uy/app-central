@@ -27,7 +27,7 @@ class FlightControllerTest {
     @DisplayName("GIVEN valid FlightDTO WHEN createFlight is called THEN it should return created FlightDTO")
     void createFlight_shouldDelegateToServiceAndReturnDTO() {
         // GIVEN
-        FlightDTO flightDTO = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123");
+        FlightDTO flightDTO = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123","A");
 
         when(flightService.createFlight(flightDTO)).thenReturn(flightDTO);
 
@@ -45,8 +45,8 @@ class FlightControllerTest {
     void getAllFlights_shouldReturnListFromService() {
         // GIVEN
         List<FlightDTO> mockFlights = List.of(
-                new FlightDTO("Vuelo A", LocalDateTime.now(), 90L, 80, 40, null, "air123"),
-                new FlightDTO("Vuelo B", LocalDateTime.now(), 60L, 70, 35, null, "air123")
+                new FlightDTO("Vuelo A", LocalDateTime.now(), 90L, 80, 40, null, "air123","A"),
+                new FlightDTO("Vuelo B", LocalDateTime.now(), 60L, 70, 35, null, "air123","A")
         );
         when(flightService.getAllFlights()).thenReturn(mockFlights);
 
@@ -63,7 +63,7 @@ class FlightControllerTest {
     @DisplayName("GIVEN flight name WHEN getFlightByName is called THEN return correct DTO")
     void getFlightByName_shouldReturnFlightDTO() {
         // GIVEN
-        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now(), 120L, 100, 50, null, "air123");
+        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now(), 120L, 100, 50, null, "air123","A");
 
         when(flightService.getFlightDetailsByName("Vuelo 1")).thenReturn(dto);
 
@@ -81,8 +81,8 @@ class FlightControllerTest {
     void getAllFlightsByAirline_shouldReturnFlightsForAirline() {
         // GIVEN
         List<FlightDTO> flights = List.of(
-                new FlightDTO("Vuelo X", LocalDateTime.now(), 90L, 80, 40, null, "flyuy"),
-                new FlightDTO("Vuelo Y", LocalDateTime.now(), 100L, 90, 45, null, "flyuy")
+                new FlightDTO("Vuelo X", LocalDateTime.now(), 90L, 80, 40, null, "flyuy","A"),
+                new FlightDTO("Vuelo Y", LocalDateTime.now(), 100L, 90, 45, null, "flyuy","A")
         );
         when(flightService.getAllFlightsByAirline("flyuy")).thenReturn(flights);
 
