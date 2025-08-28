@@ -20,6 +20,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -32,6 +33,8 @@ public class AddFlightRouteToPackagePanel extends JPanel {
     AirlineDTO selectedAirline;
     FlightRoutePackageDTO selectedPackage;
 
+    List<AirlineDTO> airlines = new ArrayList<>();
+
     public AddFlightRouteToPackagePanel(IFlightRoutePackageController flightRoutePackageController, IFlightRouteController flightRouteController, IUserController userController) {
         this.flightRoutePackageController = flightRoutePackageController;
         this.flightRouteController = flightRouteController;
@@ -39,7 +42,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         initComponents();
         initListeners();
         initNotBoughtPackagesList();
-        initAirlineList();
+        loadAirlinesIntoCombo();
         try {
             setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         } catch (Exception ignored) {
@@ -53,11 +56,28 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         }
     }
 
-    private void initAirlineList() {
-        List<String> airlinesNickanmes = userController.getAllAirlinesNicknames();
-        for (String nickname : airlinesNickanmes) {
-            airlineComboBox.addItem(nickname);
+    private void loadAirlinesIntoCombo() {
+        airlines.clear();
+        airlineComboBox.removeAllItems();
+
+        // asumo que tu IUserController tiene getAllAirlines()
+        List<AirlineDTO> list = userController.getAllAirlines();
+        if (list == null) return;
+
+        airlines.addAll(list);
+        for (AirlineDTO a : airlines) {
+            // Muestra “Nombre (nickname)”
+            String display = a.getName() + " (" + a.getNickname() + ")";
+            airlineComboBox.addItem(display);
         }
+
+        if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
+    }
+
+    private String getSelectedAirlineNickname() {
+        int idx = airlineComboBox.getSelectedIndex();
+        if (idx < 0 || idx >= airlines.size()) return null;
+        return airlines.get(idx).getNickname();
     }
 
     private void loadFlightRouteList(String airlineNickname) {
@@ -135,7 +155,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
 
         loadAirlineBtn.addActionListener(e -> {
             try {
-                String selectedNickname = (String) airlineComboBox.getSelectedItem();
+                String selectedNickname = getSelectedAirlineNickname();
                 // If ariline doesn't exist, throw exception
                 selectedAirline = userController.getAirlineByNickname(selectedNickname);
                 loadFlightRouteList(selectedAirline.getNickname());

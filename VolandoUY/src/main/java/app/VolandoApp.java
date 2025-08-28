@@ -50,18 +50,18 @@ public class VolandoApp {
 //        ));
 
         /* Creates flight route packages */
-        flightRoutePackageController.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "package1", "Paquete de vuelo 1", 10, 50.0, LocalDate.now(), EnumTipoAsiento.TURISTA
-        ));
-        flightRoutePackageController.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "package2", "Paquete de vuelo 2", 20, 100.0, LocalDate.now().plusDays(1), EnumTipoAsiento.EJECUTIVO
-        ));
+//        flightRoutePackageController.createFlightRoutePackage(new FlightRoutePackageDTO(
+//                "package1", "Paquete de vuelo 1", 10, 50.0, LocalDate.now(), EnumTipoAsiento.TURISTA
+//        ));
+//        flightRoutePackageController.createFlightRoutePackage(new FlightRoutePackageDTO(
+//                "package2", "Paquete de vuelo 2", 20, 100.0, LocalDate.now().plusDays(1), EnumTipoAsiento.EJECUTIVO
+//        ));
 
         /* Creates categories y ciudad*/
-        categoryController.createCategory(new CategoryDTO("category1"));
-        categoryController.createCategory(new CategoryDTO("category2"));
-        cityController.createCity(new CityDTO("San José", "Uruguay", 50.0, 50.0, new ArrayList<>()));
-        cityController.createCity(new CityDTO("Montevideo", "Uruguay", 60.0, 60.0, new ArrayList<>()));
+//        categoryController.createCategory(new CategoryDTO("category1"));
+//        categoryController.createCategory(new CategoryDTO("category2"));
+//        cityController.createCity(new CityDTO("San José", "Uruguay", 50.0, 50.0, new ArrayList<>()));
+//        cityController.createCity(new CityDTO("Montevideo", "Uruguay", 60.0, 60.0, new ArrayList<>()));
 
         /* Creates flight routes */
 //        flightRouteController.createFlightRoute(new FlightRouteDTO(

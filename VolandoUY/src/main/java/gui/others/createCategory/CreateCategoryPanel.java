@@ -21,11 +21,8 @@ public class CreateCategoryPanel extends JPanel {
     public CreateCategoryPanel(ICategoryController categoryController) {
         this.categoryController = categoryController;
         initComponents();
-        // initComponentsManually();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
+        try { setBorder(null); } catch ( Exception ignored ) {
         }
     }
     

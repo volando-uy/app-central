@@ -25,12 +25,12 @@ new FormModel {
 					"text": "Añadir R.V. a Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "getPackageBtn"
-					"text": "Listar Paquetes"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getUserBtn"
 					"text": "---"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "getNada"
+					"text": "...."
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

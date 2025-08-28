@@ -25,7 +25,7 @@ public class CreateFlightRoutePanel extends JPanel {
     IUserController userController;
     ICategoryController categoryController;
 
-    AirlineDTO selectedAirline;
+    private List<AirlineDTO> airlines = new ArrayList<>();
 
     public CreateFlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController) {
         this.flightRouteController = flightRouteController;
@@ -34,21 +34,52 @@ public class CreateFlightRoutePanel extends JPanel {
         initComponents();
         initComponentsManually();
         initListeners();
-        initAirlineList();
+        loadAirlinesIntoCombo();
         initCategoryList();
         initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
         try {
             setBorder(null);
         } catch (Exception ignored) {
         }
+
+        // No me deja cambiar nada en el JFormDesigner
+        // TODO: Poner todo habilitado desde el inicio
+        // TODO: Eliminar el botón de cargar aerolinea
+        nameTextField.setEnabled(true);
+        descriptionTextField.setEnabled(true);
+        createdAtTextField.setEnabled(true);
+        additionalLuggageCostTextField.setEnabled(true);
+        touristCostTextField.setEnabled(true);
+        businessCostTextField.setEnabled(true);
+        originCityTextField.setEnabled(true);
+        destinationCityTextField.setEnabled(true);
+        categoriesTable.setEnabled(true);
     }
 
-    private void initAirlineList() {
-        List<String> airlinesNickanmes = userController.getAllAirlinesNicknames();
-        for (String nickname : airlinesNickanmes) {
-            airlineComboBox.addItem(nickname);
+    private void loadAirlinesIntoCombo() {
+        airlines.clear();
+        airlineComboBox.removeAllItems();
+
+        // asumo que tu IUserController tiene getAllAirlines()
+        List<AirlineDTO> list = userController.getAllAirlines();
+        if (list == null) return;
+
+        airlines.addAll(list);
+        for (AirlineDTO a : airlines) {
+            // Muestra “Nombre (nickname)”
+            String display = a.getName() + " (" + a.getNickname() + ")";
+            airlineComboBox.addItem(display);
         }
+
+        if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
     }
+
+    private String getSelectedAirlineNickname() {
+        int idx = airlineComboBox.getSelectedIndex();
+        if (idx < 0 || idx >= airlines.size()) return null;
+        return airlines.get(idx).getNickname(); // lo que necesita tu método
+    }
+
 
     private void initCategoryList() {
         List<String> categoriesNames = categoryController.getAllCategoriesNames();
@@ -79,30 +110,12 @@ public class CreateFlightRoutePanel extends JPanel {
     }
 
     private void initListeners() {
-        loadAirlineBtn.addActionListener(e -> {
-            try {
-                String selectedNickname = (String) airlineComboBox.getSelectedItem();
-                // If ariline doesn't exist, throw exception
-                selectedAirline = userController.getAirlineByNickname(selectedNickname);
-                nameTextField.setEnabled(true);
-                descriptionTextField.setEnabled(true);
-                createdAtTextField.setEnabled(true);
-                additionalLuggageCostTextField.setEnabled(true);
-                touristCostTextField.setEnabled(true);
-                businessCostTextField.setEnabled(true);
-                originCityTextField.setEnabled(true);
-                destinationCityTextField.setEnabled(true);
-                categoriesTable.setEnabled(true);
-                JOptionPane.showMessageDialog(this, "Aerolinea seleccionada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al cargar la aerolinea: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
 
         createFlightRouteBtn.addActionListener(e -> {
             try {
+                String selectedAirline = getSelectedAirlineNickname();
                 if (selectedAirline == null) {
-                    JOptionPane.showMessageDialog(this, "Por favor, carga una aerolinea primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Por favor, selecciona una aerolinea", "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
@@ -123,9 +136,9 @@ public class CreateFlightRoutePanel extends JPanel {
                     Double.parseDouble(businessCostTextField.getText()),
                     originCityTextField.getText(),
                     destinationCityTextField.getText(),
-                    selectedAirline.getNickname(),
+                    selectedAirline,
                     selectedCategories,
-                    new ArrayList<>() //TODO: Cambiar esto porque ni idea lo que hace, por ahora lo puse temporal para que compile
+                    new ArrayList<>()
                 );
 
                 // Call the controller to create the flight route
@@ -143,7 +156,7 @@ public class CreateFlightRoutePanel extends JPanel {
                         "\nCosto ejecutivo: " + createdFlightRouteDTO.getPriceBusinessClass() +
                         "\nCiudad origen: " + createdFlightRouteDTO.getOriginCityName() +
                         "\nCiudad destino: " + createdFlightRouteDTO.getDestinationCityName() +
-                        "\nCategorías: " + String.join(", ", createdFlightRouteDTO.getCategories()),
+                        (createdFlightRouteDTO.getCategories().isEmpty() ? "\n" : "\nCategorías:" + String.join(", ", createdFlightRouteDTO.getCategories())),
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE)
                 ;
