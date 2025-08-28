@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "0, 0:1.0, 0, 0"
+			"$rowSpecs": "0, 0:1.0, 0, 0, 0"
 			"$alignTop": true
 			"$alignLeft": true
 		} ) {
@@ -16,6 +16,14 @@ new FormModel {
 			"background": new java.awt.Color( 81, 126, 214, 255 )
 			"border": new javax.swing.border.EtchedBorder( 1, null, null )
 			"opaque": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "titleLabel"
+				"text": "Crear nuevo cliente"
+				"font": new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"hAlign": 0
+				"insets": new java.awt.Insets( 10, 0, 0, 0 )
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
 				"$rowSpecs": "0, 20, top:38, 15:1.0, 0, 0, 0"
@@ -280,7 +288,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createNewCustomerBtn"
-					"text": "Crear nuevo cliente"
+					"text": "+ Crear cliente"
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"
 				} )

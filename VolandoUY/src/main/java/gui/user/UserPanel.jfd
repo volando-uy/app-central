@@ -8,7 +8,7 @@ new FormModel {
 			"preferredSize": new java.awt.Dimension( 640, 600 )
 			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
-			"background": new java.awt.Color( 204, 204, 204, 255 )
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
 				"minimumSize": new java.awt.Dimension( 640, 60 )
