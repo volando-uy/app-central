@@ -104,11 +104,12 @@ public class GetCitiesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-        0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-        . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-        beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+        (0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+        .TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
+        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+        propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -118,6 +119,7 @@ public class GetCitiesPanel extends JPanel {
         //---- vSpacer17 ----
         vSpacer17.setMinimumSize(new Dimension(12, 20));
         vSpacer17.setPreferredSize(new Dimension(10, 20));
+        vSpacer17.setOpaque(false);
         add(vSpacer17, new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -127,6 +129,7 @@ public class GetCitiesPanel extends JPanel {
             cityInfoPanel.setPreferredSize(new Dimension(640, 180));
             cityInfoPanel.setMinimumSize(new Dimension(640, 180));
             cityInfoPanel.setMaximumSize(new Dimension(640, 180));
+            cityInfoPanel.setOpaque(false);
             cityInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)cityInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)cityInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
@@ -147,6 +150,7 @@ public class GetCitiesPanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             cityInfoPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -156,6 +160,7 @@ public class GetCitiesPanel extends JPanel {
                 cityTablePanel.setPreferredSize(new Dimension(560, 150));
                 cityTablePanel.setMinimumSize(new Dimension(560, 150));
                 cityTablePanel.setMaximumSize(new Dimension(560, 150));
+                cityTablePanel.setOpaque(false);
                 cityTablePanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)cityTablePanel.getLayout()).columnWidths = new int[] {612, 0};
                 ((GridBagLayout)cityTablePanel.getLayout()).rowHeights = new int[] {67, 0};
@@ -168,12 +173,14 @@ public class GetCitiesPanel extends JPanel {
                     cityScrollPane.setMinimumSize(new Dimension(560, 150));
                     cityScrollPane.setMaximumSize(new Dimension(560, 150));
                     cityScrollPane.setEnabled(false);
+                    cityScrollPane.setOpaque(false);
 
                     //---- cityTable ----
                     cityTable.setPreferredSize(new Dimension(560, 150));
                     cityTable.setMaximumSize(new Dimension(560, 150));
                     cityTable.setMinimumSize(new Dimension(560, 150));
                     cityTable.setEnabled(false);
+                    cityTable.setOpaque(false);
                     cityScrollPane.setViewportView(cityTable);
                 }
                 cityTablePanel.add(cityScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -186,6 +193,7 @@ public class GetCitiesPanel extends JPanel {
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             cityInfoPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -197,6 +205,7 @@ public class GetCitiesPanel extends JPanel {
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 20));
         vSpacer19.setMinimumSize(new Dimension(12, 20));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));

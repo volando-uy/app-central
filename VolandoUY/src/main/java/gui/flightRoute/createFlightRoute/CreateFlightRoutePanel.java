@@ -27,12 +27,12 @@ public class CreateFlightRoutePanel extends JPanel {
 
     private List<AirlineDTO> airlines = new ArrayList<>();
 
+
     public CreateFlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController) {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.categoryController = categoryController;
         initComponents();
-        initComponentsManually();
         initListeners();
         loadAirlinesIntoCombo();
         initCategoryList();
@@ -167,12 +167,9 @@ public class CreateFlightRoutePanel extends JPanel {
         });
     }
 
-    private void initComponentsManually() {
-        createdAtTextField.setText("dd/mm/yyyy");
-    }
-
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
         textField.setForeground(Color.GRAY);
+        textField.setText(placeholder);
 
         // Set the placeholder text when the field loses focus
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -197,13 +194,14 @@ public class CreateFlightRoutePanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
-        selectUserPanel = new JPanel();
-        userLabel = new JLabel();
+        titleLabel = new JLabel();
+        vSpacer18 = new JPanel(null);
+        selectAirlinePanel = new JPanel();
+        airlineLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
-        loadAirlineBtn = new JButton();
         InfoUserPanel = new JPanel();
-        hSpacer5 = new JPanel(null);
         vSpacer17 = new JPanel(null);
+        hSpacer5 = new JPanel(null);
         hSpacer6 = new JPanel(null);
         firstRowPanel = new JPanel();
         nameLabel = new JLabel();
@@ -215,25 +213,23 @@ public class CreateFlightRoutePanel extends JPanel {
         createdAtTextField = new JTextField();
         additionalLuggageCostLabel = new JLabel();
         additionalLuggageCostTextField = new JTextField();
-        fourthRowPanel = new JPanel();
-        originCityLabel = new JLabel();
-        originCityTextField = new JTextField();
-        destinationCityLabel = new JLabel();
-        destinationCityTextField = new JTextField();
+        vSpacer13 = new JPanel(null);
         thirdRowPanel = new JPanel();
         touristCostLabel = new JLabel();
         touristCostTextField = new JTextField();
         businessCostLabel = new JLabel();
         businessCostTextField = new JTextField();
-        fourthRowPanel2 = new JPanel();
+        fourthRowPanel = new JPanel();
+        originCityLabel = new JLabel();
+        originCityTextField = new JTextField();
+        destinationCityLabel = new JLabel();
+        destinationCityTextField = new JTextField();
+        CategoriesTablePanel = new JPanel();
         categoriesLabel = new JLabel();
-        categoriesScrollPane = new JScrollPane();
+        CategoriesScrollPane = new JScrollPane();
         categoriesTable = new JTable();
-        updateBtnPanel = new JPanel();
-        hSpacer1 = new JPanel(null);
-        hSpacer2 = new JPanel(null);
+        vSpacer14 = new JPanel(null);
         createFlightRouteBtn = new JButton();
-        vSpacer19 = new JPanel(null);
 
         //======== this ========
         setPreferredSize(new Dimension(640, 540));
@@ -242,70 +238,87 @@ public class CreateFlightRoutePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing.
-        border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER
-        ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font
-        . BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
-        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order"
-        .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing .border
+        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dialo\u0067"
+        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
+        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+        . beans. PropertyChangeEvent e) { if( "borde\u0072" .equals ( e. getPropertyName () ) )throw new RuntimeException
+        ( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
-        //======== selectUserPanel ========
-        {
-            selectUserPanel.setLayout(new GridLayout(1, 3));
+        //---- titleLabel ----
+        titleLabel.setText("Crear ruta de vuelo");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
 
-            //---- userLabel ----
-            userLabel.setText("Selecciona aerolinea:");
-            selectUserPanel.add(userLabel);
-
-            //---- airlineComboBox ----
-            airlineComboBox.setMinimumSize(new Dimension(100, 30));
-            airlineComboBox.setPreferredSize(new Dimension(100, 30));
-            selectUserPanel.add(airlineComboBox);
-
-            //---- loadAirlineBtn ----
-            loadAirlineBtn.setText("Cargar aerolinea");
-            selectUserPanel.add(loadAirlineBtn);
-        }
-        add(selectUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+        //---- vSpacer18 ----
+        vSpacer18.setOpaque(false);
+        add(vSpacer18, new GridBagConstraints(0, 1, 1, 1, 0.0, 1.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
+        //======== selectAirlinePanel ========
+        {
+            selectAirlinePanel.setOpaque(false);
+            selectAirlinePanel.setLayout(new GridLayout(1, 3, 10, 0));
+
+            //---- airlineLabel ----
+            airlineLabel.setText("Selecciona la Aerolinea:");
+            selectAirlinePanel.add(airlineLabel);
+
+            //---- airlineComboBox ----
+            airlineComboBox.setMinimumSize(new Dimension(150, 30));
+            airlineComboBox.setPreferredSize(new Dimension(150, 30));
+            airlineComboBox.setOpaque(false);
+            selectAirlinePanel.add(airlineComboBox);
+        }
+        add(selectAirlinePanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
+
         //======== InfoUserPanel ========
         {
+            InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 25, 43, 35, 35, 0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 0, 22, 40, 17, 0, 0, 0, 0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- vSpacer17 ----
+            vSpacer17.setMinimumSize(new Dimension(12, 20));
+            vSpacer17.setPreferredSize(new Dimension(10, 20));
+            vSpacer17.setOpaque(false);
+            InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
-            InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            hSpacer5.setOpaque(false);
+            InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //---- vSpacer17 ----
-            vSpacer17.setMinimumSize(new Dimension(12, 70));
-            vSpacer17.setPreferredSize(new Dimension(10, 100));
-            InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
-            InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+            hSpacer6.setOpaque(false);
+            InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //======== firstRowPanel ========
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -327,13 +340,13 @@ public class CreateFlightRoutePanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
-                nameTextField.setEnabled(false);
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
                 //---- descriptionLabel ----
-                descriptionLabel.setText("Descripci\u00f3n:");
+                descriptionLabel.setText("Descripcion:");
                 descriptionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 descriptionLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
                 descriptionLabel.setPreferredSize(new Dimension(120, 30));
@@ -347,20 +360,21 @@ public class CreateFlightRoutePanel extends JPanel {
                 descriptionTextField.setPreferredSize(new Dimension(120, 30));
                 descriptionTextField.setMinimumSize(new Dimension(100, 30));
                 descriptionTextField.setMaximumSize(new Dimension(100, 30));
-                descriptionTextField.setEnabled(false);
+                descriptionTextField.setOpaque(false);
                 firstRowPanel.add(descriptionTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //======== secondRowPanel ========
             {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
-                secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setMaximumSize(new Dimension(510, 30));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -382,13 +396,14 @@ public class CreateFlightRoutePanel extends JPanel {
                 createdAtTextField.setPreferredSize(new Dimension(120, 30));
                 createdAtTextField.setMinimumSize(new Dimension(100, 30));
                 createdAtTextField.setMaximumSize(new Dimension(100, 30));
-                createdAtTextField.setEnabled(false);
+                createdAtTextField.setText("dd/mm/yyyy");
+                createdAtTextField.setOpaque(false);
                 secondRowPanel.add(createdAtTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
                 //---- additionalLuggageCostLabel ----
-                additionalLuggageCostLabel.setText("Costo Equi. Extra:");
+                additionalLuggageCostLabel.setText("$ Equipaje extra:");
                 additionalLuggageCostLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 additionalLuggageCostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
                 additionalLuggageCostLabel.setPreferredSize(new Dimension(120, 30));
@@ -402,20 +417,83 @@ public class CreateFlightRoutePanel extends JPanel {
                 additionalLuggageCostTextField.setPreferredSize(new Dimension(120, 30));
                 additionalLuggageCostTextField.setMinimumSize(new Dimension(100, 30));
                 additionalLuggageCostTextField.setMaximumSize(new Dimension(100, 30));
-                additionalLuggageCostTextField.setEnabled(false);
+                additionalLuggageCostTextField.setOpaque(false);
                 secondRowPanel.add(additionalLuggageCostTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
+
+            //---- vSpacer13 ----
+            vSpacer13.setOpaque(false);
+            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 9, 1, 1, 0.0, 200.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 2, 0), 0, 0));
+
+            //======== thirdRowPanel ========
+            {
+                thirdRowPanel.setPreferredSize(new Dimension(510, 30));
+                thirdRowPanel.setMinimumSize(new Dimension(510, 30));
+                thirdRowPanel.setMaximumSize(new Dimension(510, 30));
+                thirdRowPanel.setOpaque(false);
+                thirdRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- touristCostLabel ----
+                touristCostLabel.setText("$ Asiento turista:");
+                touristCostLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                touristCostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                touristCostLabel.setPreferredSize(new Dimension(120, 30));
+                touristCostLabel.setMaximumSize(new Dimension(70, 15));
+                touristCostLabel.setMinimumSize(new Dimension(70, 15));
+                thirdRowPanel.add(touristCostLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- touristCostTextField ----
+                touristCostTextField.setPreferredSize(new Dimension(120, 30));
+                touristCostTextField.setMinimumSize(new Dimension(100, 30));
+                touristCostTextField.setMaximumSize(new Dimension(100, 30));
+                touristCostTextField.setOpaque(false);
+                thirdRowPanel.add(touristCostTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- businessCostLabel ----
+                businessCostLabel.setText("$ Asiento ejecutivo:");
+                businessCostLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                businessCostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                businessCostLabel.setPreferredSize(new Dimension(120, 30));
+                businessCostLabel.setMaximumSize(new Dimension(70, 15));
+                businessCostLabel.setMinimumSize(new Dimension(70, 15));
+                thirdRowPanel.add(businessCostLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- businessCostTextField ----
+                businessCostTextField.setPreferredSize(new Dimension(120, 30));
+                businessCostTextField.setMinimumSize(new Dimension(100, 30));
+                businessCostTextField.setMaximumSize(new Dimension(100, 30));
+                businessCostTextField.setOpaque(false);
+                thirdRowPanel.add(businessCostTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //======== fourthRowPanel ========
             {
                 fourthRowPanel.setPreferredSize(new Dimension(510, 30));
                 fourthRowPanel.setMinimumSize(new Dimension(510, 30));
-                fourthRowPanel.setMaximumSize(new Dimension(510, 510));
+                fourthRowPanel.setMaximumSize(new Dimension(510, 30));
+                fourthRowPanel.setOpaque(false);
                 fourthRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)fourthRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)fourthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -437,13 +515,13 @@ public class CreateFlightRoutePanel extends JPanel {
                 originCityTextField.setPreferredSize(new Dimension(120, 30));
                 originCityTextField.setMinimumSize(new Dimension(100, 30));
                 originCityTextField.setMaximumSize(new Dimension(100, 30));
-                originCityTextField.setEnabled(false);
+                originCityTextField.setOpaque(false);
                 fourthRowPanel.add(originCityTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
                 //---- destinationCityLabel ----
-                destinationCityLabel.setText("Ciudad destino");
+                destinationCityLabel.setText("Ciudad destino:");
                 destinationCityLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 destinationCityLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
                 destinationCityLabel.setPreferredSize(new Dimension(120, 30));
@@ -457,80 +535,26 @@ public class CreateFlightRoutePanel extends JPanel {
                 destinationCityTextField.setPreferredSize(new Dimension(120, 30));
                 destinationCityTextField.setMinimumSize(new Dimension(100, 30));
                 destinationCityTextField.setMaximumSize(new Dimension(100, 30));
-                destinationCityTextField.setEnabled(false);
+                destinationCityTextField.setOpaque(false);
                 fourthRowPanel.add(destinationCityTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
 
-            //======== thirdRowPanel ========
+            //======== CategoriesTablePanel ========
             {
-                thirdRowPanel.setPreferredSize(new Dimension(510, 30));
-                thirdRowPanel.setMinimumSize(new Dimension(510, 30));
-                thirdRowPanel.setMaximumSize(new Dimension(510, 510));
-                thirdRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
-                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
-                ((GridBagLayout)thirdRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)thirdRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
-
-                //---- touristCostLabel ----
-                touristCostLabel.setText("Costo Turista:");
-                touristCostLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                touristCostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                touristCostLabel.setPreferredSize(new Dimension(120, 30));
-                touristCostLabel.setMaximumSize(new Dimension(70, 15));
-                touristCostLabel.setMinimumSize(new Dimension(70, 15));
-                thirdRowPanel.add(touristCostLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- touristCostTextField ----
-                touristCostTextField.setPreferredSize(new Dimension(120, 30));
-                touristCostTextField.setMinimumSize(new Dimension(100, 30));
-                touristCostTextField.setMaximumSize(new Dimension(100, 30));
-                touristCostTextField.setEnabled(false);
-                thirdRowPanel.add(touristCostTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- businessCostLabel ----
-                businessCostLabel.setText("Costo Ejecutivo");
-                businessCostLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                businessCostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                businessCostLabel.setPreferredSize(new Dimension(120, 30));
-                businessCostLabel.setMaximumSize(new Dimension(70, 15));
-                businessCostLabel.setMinimumSize(new Dimension(70, 15));
-                thirdRowPanel.add(businessCostLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- businessCostTextField ----
-                businessCostTextField.setPreferredSize(new Dimension(120, 30));
-                businessCostTextField.setMinimumSize(new Dimension(100, 30));
-                businessCostTextField.setMaximumSize(new Dimension(100, 30));
-                businessCostTextField.setEnabled(false);
-                thirdRowPanel.add(businessCostTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== fourthRowPanel2 ========
-            {
-                fourthRowPanel2.setPreferredSize(new Dimension(510, 100));
-                fourthRowPanel2.setMinimumSize(new Dimension(510, 100));
-                fourthRowPanel2.setMaximumSize(new Dimension(510, 510));
-                fourthRowPanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)fourthRowPanel2.getLayout()).columnWidths = new int[] {130, 376, 0};
-                ((GridBagLayout)fourthRowPanel2.getLayout()).rowHeights = new int[] {67, 0};
-                ((GridBagLayout)fourthRowPanel2.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)fourthRowPanel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+                CategoriesTablePanel.setPreferredSize(new Dimension(510, 100));
+                CategoriesTablePanel.setMinimumSize(new Dimension(510, 100));
+                CategoriesTablePanel.setMaximumSize(new Dimension(510, 510));
+                CategoriesTablePanel.setOpaque(false);
+                CategoriesTablePanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)CategoriesTablePanel.getLayout()).columnWidths = new int[] {130, 376, 0};
+                ((GridBagLayout)CategoriesTablePanel.getLayout()).rowHeights = new int[] {67, 0};
+                ((GridBagLayout)CategoriesTablePanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)CategoriesTablePanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- categoriesLabel ----
                 categoriesLabel.setText("Categorias:");
@@ -539,59 +563,44 @@ public class CreateFlightRoutePanel extends JPanel {
                 categoriesLabel.setPreferredSize(new Dimension(120, 30));
                 categoriesLabel.setMaximumSize(new Dimension(120, 30));
                 categoriesLabel.setMinimumSize(new Dimension(120, 30));
-                fourthRowPanel2.add(categoriesLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                CategoriesTablePanel.add(categoriesLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //======== categoriesScrollPane ========
+                //======== CategoriesScrollPane ========
                 {
-                    categoriesScrollPane.setPreferredSize(new Dimension(300, 100));
-                    categoriesScrollPane.setMinimumSize(new Dimension(300, 100));
-                    categoriesScrollPane.setMaximumSize(new Dimension(300, 100));
-                    categoriesScrollPane.setEnabled(false);
+                    CategoriesScrollPane.setPreferredSize(new Dimension(300, 100));
+                    CategoriesScrollPane.setMinimumSize(new Dimension(300, 100));
+                    CategoriesScrollPane.setMaximumSize(new Dimension(300, 100));
+                    CategoriesScrollPane.setEnabled(false);
+                    CategoriesScrollPane.setOpaque(false);
 
                     //---- categoriesTable ----
-                    categoriesTable.setPreferredSize(new Dimension(300, 100));
-                    categoriesTable.setMaximumSize(new Dimension(300, 100));
-                    categoriesTable.setMinimumSize(new Dimension(300, 100));
-                    categoriesTable.setEnabled(false);
-                    categoriesScrollPane.setViewportView(categoriesTable);
+                    categoriesTable.setOpaque(false);
+                    CategoriesScrollPane.setViewportView(categoriesTable);
                 }
-                fourthRowPanel2.add(categoriesScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                CategoriesTablePanel.add(CategoriesScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(fourthRowPanel2, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(CategoriesTablePanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
-        }
-        add(InfoUserPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-            new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 2, 0), 0, 0));
 
-        //======== updateBtnPanel ========
-        {
-            updateBtnPanel.setLayout(new BorderLayout());
-
-            //---- hSpacer1 ----
-            hSpacer1.setPreferredSize(new Dimension(200, 10));
-            updateBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
-
-            //---- hSpacer2 ----
-            hSpacer2.setPreferredSize(new Dimension(200, 10));
-            updateBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
+            //---- vSpacer14 ----
+            vSpacer14.setOpaque(false);
+            InfoUserPanel.add(vSpacer14, new GridBagConstraints(1, 7, 1, 1, 0.0, 200.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 2, 0), 0, 0));
 
             //---- createFlightRouteBtn ----
-            createFlightRouteBtn.setText("Crear ruta de vuelo");
-            updateBtnPanel.add(createFlightRouteBtn, BorderLayout.CENTER);
+            createFlightRouteBtn.setText("+ Crear Ruta de Vuelo");
+            createFlightRouteBtn.setOpaque(false);
+            InfoUserPanel.add(createFlightRouteBtn, new GridBagConstraints(1, 8, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 2, 0), 0, 0));
         }
-        add(updateBtnPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
-            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-            new Insets(0, 0, 0, 0), 0, 0));
-
-        //---- vSpacer19 ----
-        vSpacer19.setPreferredSize(new Dimension(10, 100));
-        add(vSpacer19, new GridBagConstraints(0, 4, 1, 1, 0.0, 2.0,
+        add(InfoUserPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -599,13 +608,14 @@ public class CreateFlightRoutePanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
-    private JPanel selectUserPanel;
-    private JLabel userLabel;
+    private JLabel titleLabel;
+    private JPanel vSpacer18;
+    private JPanel selectAirlinePanel;
+    private JLabel airlineLabel;
     private JComboBox<String> airlineComboBox;
-    private JButton loadAirlineBtn;
     private JPanel InfoUserPanel;
-    private JPanel hSpacer5;
     private JPanel vSpacer17;
+    private JPanel hSpacer5;
     private JPanel hSpacer6;
     private JPanel firstRowPanel;
     private JLabel nameLabel;
@@ -617,24 +627,22 @@ public class CreateFlightRoutePanel extends JPanel {
     private JTextField createdAtTextField;
     private JLabel additionalLuggageCostLabel;
     private JTextField additionalLuggageCostTextField;
-    private JPanel fourthRowPanel;
-    private JLabel originCityLabel;
-    private JTextField originCityTextField;
-    private JLabel destinationCityLabel;
-    private JTextField destinationCityTextField;
+    private JPanel vSpacer13;
     private JPanel thirdRowPanel;
     private JLabel touristCostLabel;
     private JTextField touristCostTextField;
     private JLabel businessCostLabel;
     private JTextField businessCostTextField;
-    private JPanel fourthRowPanel2;
+    private JPanel fourthRowPanel;
+    private JLabel originCityLabel;
+    private JTextField originCityTextField;
+    private JLabel destinationCityLabel;
+    private JTextField destinationCityTextField;
+    private JPanel CategoriesTablePanel;
     private JLabel categoriesLabel;
-    private JScrollPane categoriesScrollPane;
+    private JScrollPane CategoriesScrollPane;
     private JTable categoriesTable;
-    private JPanel updateBtnPanel;
-    private JPanel hSpacer1;
-    private JPanel hSpacer2;
+    private JPanel vSpacer14;
     private JButton createFlightRouteBtn;
-    private JPanel vSpacer19;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

@@ -93,7 +93,7 @@ public class GetCategoriesPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - dotto
         vSpacer17 = new JPanel(null);
         categoryInfoPanel = new JPanel();
         categoryLabel = new JLabel();
@@ -111,12 +111,12 @@ public class GetCategoriesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-        (0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-        .TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt
-        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-        propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
-        ;}});
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+        . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
+        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )
+        throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -126,6 +126,7 @@ public class GetCategoriesPanel extends JPanel {
         //---- vSpacer17 ----
         vSpacer17.setMinimumSize(new Dimension(12, 20));
         vSpacer17.setPreferredSize(new Dimension(10, 20));
+        vSpacer17.setOpaque(false);
         add(vSpacer17, new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -135,6 +136,7 @@ public class GetCategoriesPanel extends JPanel {
             categoryInfoPanel.setPreferredSize(new Dimension(640, 180));
             categoryInfoPanel.setMinimumSize(new Dimension(640, 180));
             categoryInfoPanel.setMaximumSize(new Dimension(640, 180));
+            categoryInfoPanel.setOpaque(false);
             categoryInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)categoryInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)categoryInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
@@ -155,6 +157,7 @@ public class GetCategoriesPanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             categoryInfoPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -164,6 +167,7 @@ public class GetCategoriesPanel extends JPanel {
                 categoryTablePanel.setPreferredSize(new Dimension(560, 150));
                 categoryTablePanel.setMinimumSize(new Dimension(560, 150));
                 categoryTablePanel.setMaximumSize(new Dimension(560, 150));
+                categoryTablePanel.setOpaque(false);
                 categoryTablePanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)categoryTablePanel.getLayout()).columnWidths = new int[] {612, 0};
                 ((GridBagLayout)categoryTablePanel.getLayout()).rowHeights = new int[] {67, 0};
@@ -176,12 +180,14 @@ public class GetCategoriesPanel extends JPanel {
                     categoryScrollPane.setMinimumSize(new Dimension(560, 150));
                     categoryScrollPane.setMaximumSize(new Dimension(560, 150));
                     categoryScrollPane.setEnabled(false);
+                    categoryScrollPane.setOpaque(false);
 
                     //---- categoryTable ----
                     categoryTable.setPreferredSize(new Dimension(560, 150));
                     categoryTable.setMaximumSize(new Dimension(560, 150));
                     categoryTable.setMinimumSize(new Dimension(560, 150));
                     categoryTable.setEnabled(false);
+                    categoryTable.setOpaque(false);
                     categoryScrollPane.setViewportView(categoryTable);
                 }
                 categoryTablePanel.add(categoryScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -194,6 +200,7 @@ public class GetCategoriesPanel extends JPanel {
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             categoryInfoPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -205,6 +212,7 @@ public class GetCategoriesPanel extends JPanel {
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 20));
         vSpacer19.setMinimumSize(new Dimension(12, 20));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -212,7 +220,7 @@ public class GetCategoriesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - dotto
     private JPanel vSpacer17;
     private JPanel categoryInfoPanel;
     private JLabel categoryLabel;
