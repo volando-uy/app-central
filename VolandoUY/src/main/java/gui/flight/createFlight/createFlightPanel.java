@@ -34,6 +34,8 @@ public class createFlightPanel extends JPanel {
      private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
 
      List<AirlineDTO> airlines = new ArrayList<>();
+     
+     private boolean areAirlinesLoading = false;
 
     public createFlightPanel(IFlightController flightController, IFlightRouteController flightRouteController , IUserController userController) {
         this.flightController = flightController;
@@ -43,13 +45,11 @@ public class createFlightPanel extends JPanel {
         loadAirlinesIntoCombo();
         initPlaceholders();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void loadAirlinesIntoCombo() {
+        areAirlinesLoading = true;
         airlines.clear();
         airlineComboBox.removeAllItems();
 
@@ -64,6 +64,7 @@ public class createFlightPanel extends JPanel {
             airlineComboBox.addItem(display);
         }
 
+        areAirlinesLoading = false;
         if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
     }
 
@@ -132,7 +133,8 @@ public class createFlightPanel extends JPanel {
     }
 
     private void initListeners() {
-        loadAirlineBtn.addActionListener(e -> {
+        airlineComboBox.addActionListener(e -> {
+            if (areAirlinesLoading) return;
             try {
                 String selectedAirlineNickname = getSelectedAirlineNickname();
                 if (selectedAirlineNickname == null || selectedAirlineNickname.isEmpty()) {
@@ -140,9 +142,6 @@ public class createFlightPanel extends JPanel {
                 }
 
                 loadFlightRouteList(selectedAirlineNickname);
-                JOptionPane.showMessageDialog(this, "Aerolínea cargada correctamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error al cargar la aerolínea: " + ex.getMessage(),
@@ -242,6 +241,7 @@ public class createFlightPanel extends JPanel {
             }
         });
     }
+
     private void initPlaceholders() {
         setPlaceholder(createdDateAtTextField, PH_CREATED_AT);
         setPlaceholder(dateFlightTextField, PH_DEPARTURE);
@@ -281,14 +281,15 @@ public class createFlightPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - dotto
         vSpacer19 = new JPanel(null);
         InfoFlightRoutePackagePanel = new JPanel();
+        titleLabel = new JLabel();
+        vSpacer18 = new JPanel(null);
         hSpacer5 = new JPanel(null);
         selectPackagePanel = new JPanel();
         packageLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
-        loadAirlineBtn = new JButton();
         hSpacer6 = new JPanel(null);
         firstRowPanel2 = new JPanel();
         flightRouteLabel = new JLabel();
@@ -309,14 +310,16 @@ public class createFlightPanel extends JPanel {
         createdDateAtTextField = new JTextField();
         dateFlightLabel = new JLabel();
         dateFlightTextField = new JTextField();
+        vSpacer20 = new JPanel(null);
         createBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
-        hSpacer2 = new JPanel(null);
         createFlightBtn = new JButton();
-        vSpacer20 = new JPanel(null);
+        hSpacer2 = new JPanel(null);
+        vSpacer14 = new JPanel(null);
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
+        vSpacer19.setOpaque(false);
 
         //======== this ========
         setPreferredSize(new Dimension(640, 540));
@@ -325,35 +328,52 @@ public class createFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-        . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
-        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
-        throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
-        ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0};
-        ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {1.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
         //======== InfoFlightRoutePackagePanel ========
         {
+            InfoFlightRoutePackagePanel.setOpaque(false);
             InfoFlightRoutePackagePanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).rowHeights = new int[] {0, 0, 25, 43, 0, 0, 0, 35, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).rowHeights = new int[] {0, 0, 43, 0, 0, 0, 0, 0};
             ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- titleLabel ----
+            titleLabel.setText("Crear vuelo");
+            titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+            InfoFlightRoutePackagePanel.add(titleLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(10, 0, 5, 0), 0, 0));
+
+            //---- vSpacer18 ----
+            vSpacer18.setPreferredSize(new Dimension(10, 50));
+            vSpacer18.setMinimumSize(new Dimension(12, 50));
+            vSpacer18.setOpaque(false);
+            InfoFlightRoutePackagePanel.add(vSpacer18, new GridBagConstraints(1, 1, 1, 1, 0.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
-            InfoFlightRoutePackagePanel.add(hSpacer5, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+            hSpacer5.setOpaque(false);
+            InfoFlightRoutePackagePanel.add(hSpacer5, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //======== selectPackagePanel ========
             {
-                selectPackagePanel.setLayout(new GridLayout(1, 3));
+                selectPackagePanel.setOpaque(false);
+                selectPackagePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
                 //---- packageLabel ----
                 packageLabel.setText("Selecciona el Aerolinea:");
@@ -362,19 +382,17 @@ public class createFlightPanel extends JPanel {
                 //---- airlineComboBox ----
                 airlineComboBox.setMinimumSize(new Dimension(100, 30));
                 airlineComboBox.setPreferredSize(new Dimension(100, 30));
+                airlineComboBox.setOpaque(false);
                 selectPackagePanel.add(airlineComboBox);
-
-                //---- loadAirlineBtn ----
-                loadAirlineBtn.setText("Cargar Aerolinea");
-                selectPackagePanel.add(loadAirlineBtn);
             }
-            InfoFlightRoutePackagePanel.add(selectPackagePanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+            InfoFlightRoutePackagePanel.add(selectPackagePanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.NORTH, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
-            InfoFlightRoutePackagePanel.add(hSpacer6, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
+            hSpacer6.setOpaque(false);
+            InfoFlightRoutePackagePanel.add(hSpacer6, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -383,6 +401,7 @@ public class createFlightPanel extends JPanel {
                 firstRowPanel2.setPreferredSize(new Dimension(510, 100));
                 firstRowPanel2.setMinimumSize(new Dimension(510, 100));
                 firstRowPanel2.setMaximumSize(new Dimension(510, 510));
+                firstRowPanel2.setOpaque(false);
                 firstRowPanel2.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel2.getLayout()).columnWidths = new int[] {130, 376, 0};
                 ((GridBagLayout)firstRowPanel2.getLayout()).rowHeights = new int[] {67, 0};
@@ -406,13 +425,17 @@ public class createFlightPanel extends JPanel {
                     flightRouteScrollPane.setMinimumSize(new Dimension(300, 100));
                     flightRouteScrollPane.setMaximumSize(new Dimension(300, 100));
                     flightRouteScrollPane.setEnabled(false);
+                    flightRouteScrollPane.setOpaque(false);
+
+                    //---- flightRouteTable ----
+                    flightRouteTable.setOpaque(false);
                     flightRouteScrollPane.setViewportView(flightRouteTable);
                 }
                 firstRowPanel2.add(flightRouteScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightRoutePackagePanel.add(firstRowPanel2, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePackagePanel.add(firstRowPanel2, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -420,6 +443,7 @@ public class createFlightPanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 130, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -441,6 +465,7 @@ public class createFlightPanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -460,11 +485,12 @@ public class createFlightPanel extends JPanel {
                 durationTextField.setPreferredSize(new Dimension(120, 30));
                 durationTextField.setMinimumSize(new Dimension(100, 30));
                 durationTextField.setMaximumSize(new Dimension(100, 30));
+                durationTextField.setOpaque(false);
                 firstRowPanel.add(durationTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightRoutePackagePanel.add(firstRowPanel, new GridBagConstraints(1, 8, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePackagePanel.add(firstRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -473,6 +499,7 @@ public class createFlightPanel extends JPanel {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -494,6 +521,7 @@ public class createFlightPanel extends JPanel {
                 ejecutiveTextField.setPreferredSize(new Dimension(120, 30));
                 ejecutiveTextField.setMinimumSize(new Dimension(100, 30));
                 ejecutiveTextField.setMaximumSize(new Dimension(100, 30));
+                ejecutiveTextField.setOpaque(false);
                 secondRowPanel.add(ejecutiveTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -513,11 +541,12 @@ public class createFlightPanel extends JPanel {
                 turistTextField.setPreferredSize(new Dimension(120, 30));
                 turistTextField.setMinimumSize(new Dimension(100, 30));
                 turistTextField.setMaximumSize(new Dimension(100, 30));
+                turistTextField.setOpaque(false);
                 secondRowPanel.add(turistTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightRoutePackagePanel.add(secondRowPanel, new GridBagConstraints(1, 9, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePackagePanel.add(secondRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -526,6 +555,7 @@ public class createFlightPanel extends JPanel {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
                 thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -547,6 +577,7 @@ public class createFlightPanel extends JPanel {
                 createdDateAtTextField.setPreferredSize(new Dimension(120, 30));
                 createdDateAtTextField.setMinimumSize(new Dimension(100, 30));
                 createdDateAtTextField.setMaximumSize(new Dimension(100, 30));
+                createdDateAtTextField.setOpaque(false);
                 thirdRowPanel.add(createdDateAtTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -566,52 +597,69 @@ public class createFlightPanel extends JPanel {
                 dateFlightTextField.setPreferredSize(new Dimension(120, 30));
                 dateFlightTextField.setMinimumSize(new Dimension(100, 30));
                 dateFlightTextField.setMaximumSize(new Dimension(100, 30));
+                dateFlightTextField.setOpaque(false);
                 thirdRowPanel.add(dateFlightTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightRoutePackagePanel.add(thirdRowPanel, new GridBagConstraints(1, 10, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePackagePanel.add(thirdRowPanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 0, 0), 0, 0));
         }
-        add(InfoFlightRoutePackagePanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+        add(InfoFlightRoutePackagePanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //---- vSpacer20 ----
+        vSpacer20.setPreferredSize(new Dimension(10, 20));
+        vSpacer20.setMinimumSize(new Dimension(12, 20));
+        vSpacer20.setOpaque(false);
+        add(vSpacer20, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //======== createBtnPanel ========
         {
+            createBtnPanel.setOpaque(false);
             createBtnPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
-            createBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
+            hSpacer1.setOpaque(false);
+            createBtnPanel.add(hSpacer1, BorderLayout.WEST);
+
+            //---- createFlightBtn ----
+            createFlightBtn.setText("+ Crear Vuelo");
+            createFlightBtn.setOpaque(false);
+            createBtnPanel.add(createFlightBtn, BorderLayout.CENTER);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
-            createBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
-
-            //---- createFlightBtn ----
-            createFlightBtn.setText("Crear Vuelo.");
-            createBtnPanel.add(createFlightBtn, BorderLayout.CENTER);
+            hSpacer2.setOpaque(false);
+            createBtnPanel.add(hSpacer2, BorderLayout.EAST);
         }
-        add(createBtnPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+        add(createBtnPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
-        add(vSpacer20, new GridBagConstraints(0, 2, 1, 1, 0.0, 2.0,
+
+        //---- vSpacer14 ----
+        vSpacer14.setOpaque(false);
+        add(vSpacer14, new GridBagConstraints(1, 3, 1, 1, 0.0, 200.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - dotto
     private JPanel vSpacer19;
     private JPanel InfoFlightRoutePackagePanel;
+    private JLabel titleLabel;
+    private JPanel vSpacer18;
     private JPanel hSpacer5;
     private JPanel selectPackagePanel;
     private JLabel packageLabel;
     private JComboBox<String> airlineComboBox;
-    private JButton loadAirlineBtn;
     private JPanel hSpacer6;
     private JPanel firstRowPanel2;
     private JLabel flightRouteLabel;
@@ -632,10 +680,11 @@ public class createFlightPanel extends JPanel {
     private JTextField createdDateAtTextField;
     private JLabel dateFlightLabel;
     private JTextField dateFlightTextField;
+    private JPanel vSpacer20;
     private JPanel createBtnPanel;
     private JPanel hSpacer1;
-    private JPanel hSpacer2;
     private JButton createFlightBtn;
-    private JPanel vSpacer20;
+    private JPanel hSpacer2;
+    private JPanel vSpacer14;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

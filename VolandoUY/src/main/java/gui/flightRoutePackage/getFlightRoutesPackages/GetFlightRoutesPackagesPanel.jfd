@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -35,14 +35,14 @@ new FormModel {
 				"minimumSize": new java.awt.Dimension( 640, 180 )
 				"maximumSize": new java.awt.Dimension( 640, 180 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "PackageLabel"
-					"text": "Paquetes"
+					name: "packageLabel"
+					"text": "Paquetes (↻)"
 					"horizontalAlignment": 0
 					"horizontalTextPosition": 0
 					"preferredSize": new java.awt.Dimension( 120, 30 )
 					"maximumSize": new java.awt.Dimension( 120, 30 )
 					"minimumSize": new java.awt.Dimension( 120, 30 )
-					"font": new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
+					"font": new java.awt.Font( "Inter", 3, 20 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )

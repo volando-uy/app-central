@@ -33,10 +33,7 @@ public class RegisterCustomerPanel extends JPanel {
         initComponentsManually();
         initListeners();
         initPlaceholderForTextField(birthDateTextField, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void initListeners() {
@@ -100,6 +97,7 @@ public class RegisterCustomerPanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
+        titleLabel = new JLabel();
         InfoUserPanel = new JPanel();
         hSpacer5 = new JPanel(null);
         vSpacer17 = new JPanel(null);
@@ -135,23 +133,31 @@ public class RegisterCustomerPanel extends JPanel {
         setPreferredSize(new Dimension(640, 540));
         setMinimumSize(new Dimension(640, 540));
         setMaximumSize(new Dimension(640, 540));
-        setBackground(new Color(0x517ed6));
+        setBackground(new Color(0xeeeeee));
         setBorder(new EtchedBorder());
         setOpaque(false);
         setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+        ( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
         . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
         ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+        //---- titleLabel ----
+        titleLabel.setText("Crear nuevo cliente");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
 
         //======== InfoUserPanel ========
         {
+            InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 15, 0, 0, 0, 0};
@@ -160,6 +166,7 @@ public class RegisterCustomerPanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -167,12 +174,14 @@ public class RegisterCustomerPanel extends JPanel {
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
             vSpacer17.setPreferredSize(new Dimension(10, 100));
+            vSpacer17.setOpaque(false);
             InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -181,6 +190,7 @@ public class RegisterCustomerPanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 0, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -202,6 +212,7 @@ public class RegisterCustomerPanel extends JPanel {
                 nicknameTextField.setPreferredSize(new Dimension(120, 30));
                 nicknameTextField.setMinimumSize(new Dimension(100, 30));
                 nicknameTextField.setMaximumSize(new Dimension(100, 30));
+                nicknameTextField.setOpaque(false);
                 firstRowPanel.add(nicknameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -221,6 +232,7 @@ public class RegisterCustomerPanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -234,6 +246,7 @@ public class RegisterCustomerPanel extends JPanel {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -255,6 +268,7 @@ public class RegisterCustomerPanel extends JPanel {
                 surnameTextField.setPreferredSize(new Dimension(120, 30));
                 surnameTextField.setMinimumSize(new Dimension(100, 30));
                 surnameTextField.setMaximumSize(new Dimension(100, 30));
+                surnameTextField.setOpaque(false);
                 secondRowPanel.add(surnameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -274,6 +288,7 @@ public class RegisterCustomerPanel extends JPanel {
                 emailTextField.setPreferredSize(new Dimension(120, 30));
                 emailTextField.setMinimumSize(new Dimension(100, 30));
                 emailTextField.setMaximumSize(new Dimension(100, 30));
+                emailTextField.setOpaque(false);
                 secondRowPanel.add(emailTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -281,6 +296,9 @@ public class RegisterCustomerPanel extends JPanel {
             InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer13 ----
+            vSpacer13.setOpaque(false);
             InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 5, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -290,6 +308,7 @@ public class RegisterCustomerPanel extends JPanel {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
                 thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -311,6 +330,7 @@ public class RegisterCustomerPanel extends JPanel {
                 citizenshipTextField.setPreferredSize(new Dimension(120, 30));
                 citizenshipTextField.setMinimumSize(new Dimension(100, 30));
                 citizenshipTextField.setMaximumSize(new Dimension(100, 30));
+                citizenshipTextField.setOpaque(false);
                 thirdRowPanel.add(citizenshipTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -330,6 +350,7 @@ public class RegisterCustomerPanel extends JPanel {
                 idTextField.setPreferredSize(new Dimension(120, 30));
                 idTextField.setMinimumSize(new Dimension(100, 30));
                 idTextField.setMaximumSize(new Dimension(100, 30));
+                idTextField.setOpaque(false);
                 thirdRowPanel.add(idTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -343,6 +364,7 @@ public class RegisterCustomerPanel extends JPanel {
                 fourthRowPanel.setPreferredSize(new Dimension(510, 30));
                 fourthRowPanel.setMinimumSize(new Dimension(510, 30));
                 fourthRowPanel.setMaximumSize(new Dimension(510, 30));
+                fourthRowPanel.setOpaque(false);
                 fourthRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)fourthRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
                 ((GridBagLayout)fourthRowPanel.getLayout()).rowHeights = new int[] {20, 0};
@@ -364,6 +386,7 @@ public class RegisterCustomerPanel extends JPanel {
                 birthDateTextField.setPreferredSize(new Dimension(120, 30));
                 birthDateTextField.setMinimumSize(new Dimension(100, 30));
                 birthDateTextField.setText("dd/mm/yyyy");
+                birthDateTextField.setOpaque(false);
                 fourthRowPanel.add(birthDateTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.NONE,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -381,6 +404,7 @@ public class RegisterCustomerPanel extends JPanel {
                 //---- idTypeComboBox ----
                 idTypeComboBox.setMinimumSize(new Dimension(100, 30));
                 idTypeComboBox.setPreferredSize(new Dimension(100, 30));
+                idTypeComboBox.setOpaque(false);
                 fourthRowPanel.add(idTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -395,18 +419,22 @@ public class RegisterCustomerPanel extends JPanel {
 
         //======== updateBtnPanel ========
         {
+            updateBtnPanel.setOpaque(false);
             updateBtnPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
+            hSpacer1.setOpaque(false);
             updateBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
+            hSpacer2.setOpaque(false);
             updateBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
 
             //---- createNewCustomerBtn ----
-            createNewCustomerBtn.setText("Crear nuevo cliente");
+            createNewCustomerBtn.setText("+ Crear cliente");
+            createNewCustomerBtn.setOpaque(false);
             updateBtnPanel.add(createNewCustomerBtn, BorderLayout.CENTER);
         }
         add(updateBtnPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -415,6 +443,7 @@ public class RegisterCustomerPanel extends JPanel {
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -423,6 +452,7 @@ public class RegisterCustomerPanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
+    private JLabel titleLabel;
     private JPanel InfoUserPanel;
     private JPanel hSpacer5;
     private JPanel vSpacer17;

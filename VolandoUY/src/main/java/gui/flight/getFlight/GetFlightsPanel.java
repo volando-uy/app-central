@@ -28,9 +28,11 @@ public class GetFlightsPanel extends JPanel {
         this.flightController = flightController;
         initComponents();
         loadFlightsTable();
-        try { setBorder(null); } catch (Exception ignored) {}
+        initListeners();
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
 
     }
+
     private void loadFlightsTable() {
         // 1) Traer datos
         List<FlightDTO> flights = flightController.getAllFlights(); // usa tu método real
@@ -66,6 +68,7 @@ public class GetFlightsPanel extends JPanel {
         // 6) Selección
         FlightTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
+
     // ayuda: minutos -> "HH:mm"
     private String formatDuration(Long minutes) {
         if (minutes == null || minutes < 0) return "";
@@ -78,6 +81,7 @@ public class GetFlightsPanel extends JPanel {
     private String safeStr(String s) {
         return s == null ? "" : s;
     }
+
     // ajuste dinámico (podés usar el tuyo; dejo el mismo patrón)
     private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
         // Ancho
@@ -111,12 +115,22 @@ public class GetFlightsPanel extends JPanel {
         ));
     }
 
+    private void initListeners() {
+        // Listener to reload the flights table
+        flightLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                loadFlightsTable();
+            }
+        });
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - dotto
         vSpacer17 = new JPanel(null);
         FlightInfoPanel = new JPanel();
-        FlightLabel = new JLabel();
+        flightLabel = new JLabel();
         hSpacer5 = new JPanel(null);
         FlightTablePanel = new JPanel();
         FlightScrollPane = new JScrollPane();
@@ -132,10 +146,10 @@ public class GetFlightsPanel extends JPanel {
         setBorder(new EtchedBorder());
         setOpaque(false);
         setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax
-        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,
+        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,
         12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
-        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .
         getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
@@ -146,6 +160,7 @@ public class GetFlightsPanel extends JPanel {
         //---- vSpacer17 ----
         vSpacer17.setMinimumSize(new Dimension(12, 20));
         vSpacer17.setPreferredSize(new Dimension(10, 20));
+        vSpacer17.setOpaque(false);
         add(vSpacer17, new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -155,26 +170,28 @@ public class GetFlightsPanel extends JPanel {
             FlightInfoPanel.setPreferredSize(new Dimension(640, 180));
             FlightInfoPanel.setMinimumSize(new Dimension(640, 180));
             FlightInfoPanel.setMaximumSize(new Dimension(640, 180));
+            FlightInfoPanel.setOpaque(false);
             FlightInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)FlightInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)FlightInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
             ((GridBagLayout)FlightInfoPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)FlightInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
-            //---- FlightLabel ----
-            FlightLabel.setText("Vuelos");
-            FlightLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            FlightLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-            FlightLabel.setPreferredSize(new Dimension(120, 30));
-            FlightLabel.setMaximumSize(new Dimension(120, 30));
-            FlightLabel.setMinimumSize(new Dimension(120, 30));
-            FlightLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
-            FlightInfoPanel.add(FlightLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+            //---- flightLabel ----
+            flightLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            flightLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+            flightLabel.setPreferredSize(new Dimension(120, 30));
+            flightLabel.setMaximumSize(new Dimension(120, 30));
+            flightLabel.setMinimumSize(new Dimension(120, 30));
+            flightLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            flightLabel.setText("Vuelos (\u21bb)");
+            FlightInfoPanel.add(flightLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             FlightInfoPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -184,6 +201,7 @@ public class GetFlightsPanel extends JPanel {
                 FlightTablePanel.setPreferredSize(new Dimension(560, 150));
                 FlightTablePanel.setMinimumSize(new Dimension(560, 150));
                 FlightTablePanel.setMaximumSize(new Dimension(560, 150));
+                FlightTablePanel.setOpaque(false);
                 FlightTablePanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)FlightTablePanel.getLayout()).columnWidths = new int[] {612, 0};
                 ((GridBagLayout)FlightTablePanel.getLayout()).rowHeights = new int[] {67, 0};
@@ -196,12 +214,14 @@ public class GetFlightsPanel extends JPanel {
                     FlightScrollPane.setMinimumSize(new Dimension(560, 150));
                     FlightScrollPane.setMaximumSize(new Dimension(560, 150));
                     FlightScrollPane.setEnabled(false);
+                    FlightScrollPane.setOpaque(false);
 
                     //---- FlightTable ----
                     FlightTable.setPreferredSize(new Dimension(560, 150));
                     FlightTable.setMaximumSize(new Dimension(560, 150));
                     FlightTable.setMinimumSize(new Dimension(560, 150));
                     FlightTable.setEnabled(false);
+                    FlightTable.setOpaque(false);
                     FlightScrollPane.setViewportView(FlightTable);
                 }
                 FlightTablePanel.add(FlightScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -214,6 +234,7 @@ public class GetFlightsPanel extends JPanel {
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             FlightInfoPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -225,6 +246,7 @@ public class GetFlightsPanel extends JPanel {
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 14));
         vSpacer19.setMinimumSize(new Dimension(12, 20));
+        vSpacer19.setOpaque(false);
         add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
@@ -232,10 +254,10 @@ public class GetFlightsPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - dotto
     private JPanel vSpacer17;
     private JPanel FlightInfoPanel;
-    private JLabel FlightLabel;
+    private JLabel flightLabel;
     private JPanel hSpacer5;
     private JPanel FlightTablePanel;
     private JScrollPane FlightScrollPane;
