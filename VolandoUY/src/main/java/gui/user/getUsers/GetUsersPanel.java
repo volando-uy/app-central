@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,25 +29,19 @@ public class GetUsersPanel extends JPanel {
     public GetUsersPanel(IUserController userController) {
         this.userController = userController;
         initComponents();
-        loadUsersTables();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        loadCustomerTable();
+        loadAirlineTable();
+        loadListeners();
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
-    private void loadUsersTables() {
+    private void loadCustomerTable() {
         List<CustomerDTO> getAllCustomers = userController.getAllCustomers();
-        List<AirlineDTO> getAllAirlines = userController.getAllAirlines();
 
         // Create table model and set column names
         DefaultTableModel customerTableModel = new DefaultTableModel();
         String[] columnNames = {"Nickname", "Nombre", "Apellido", "Email", "Nacionalidad", "Fecha de nacimiento", "Tipo de identificación", "Identificación"};
         customerTableModel.setColumnIdentifiers(columnNames);
-        
-        DefaultTableModel airlineTableModel = new DefaultTableModel();
-        String[] airlineColumnNames = {"Nickname", "Nombre", "Email", "Descripción", "Web"};
-        airlineTableModel.setColumnIdentifiers(airlineColumnNames);
         
         // Add rows to the table model
         for (CustomerDTO customerDTO : getAllCustomers) {
@@ -63,24 +58,35 @@ public class GetUsersPanel extends JPanel {
             customerTableModel.addRow(rowData);
         }
         
+        customerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        adjustDynamicWidthAndHeightToTable(customerTable, customerTableModel);
+        
+        customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    
+    private void loadAirlineTable() {
+        List<AirlineDTO> getAllAirlines = userController.getAllAirlines();
+        
+        DefaultTableModel airlineTableModel = new DefaultTableModel();
+        String[] airlineColumnNames = {"Nickname", "Nombre", "Email", "Descripción", "Web"};
+        airlineTableModel.setColumnIdentifiers(airlineColumnNames);
+        
         for (AirlineDTO airlineDTO : getAllAirlines) {
             Object[] rowData = {
-                airlineDTO.getNickname(),
-                airlineDTO.getName(),
-                airlineDTO.getMail(),
-                airlineDTO.getDescription(),
-                airlineDTO.getWeb()
+                    airlineDTO.getNickname(),
+                    airlineDTO.getName(),
+                    airlineDTO.getMail(),
+                    airlineDTO.getDescription(),
+                    airlineDTO.getWeb()
             };
             airlineTableModel.addRow(rowData);
         }
-
-        customerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
         airlineTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        adjustDynamicWidthAndHeightToTable(customerTable, customerTableModel);
+        
         adjustDynamicWidthAndHeightToTable(airlineTable, airlineTableModel);
-
-        customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         airlineTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
@@ -113,6 +119,21 @@ public class GetUsersPanel extends JPanel {
         );
     }
 
+    private void loadListeners() {
+        customerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                loadCustomerTable();
+            }
+        });
+        
+        airlineLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                loadAirlineTable();
+            }
+        });
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -141,11 +162,12 @@ public class GetUsersPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
-        ,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red),
-         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
+        EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing
+        .border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),
+        java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener()
+        {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))
+        throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -166,18 +188,18 @@ public class GetUsersPanel extends JPanel {
             CustomerInfoPanel.setMaximumSize(new Dimension(640, 180));
             CustomerInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)CustomerInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)CustomerInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
+            ((GridBagLayout)CustomerInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0, 0};
             ((GridBagLayout)CustomerInfoPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)CustomerInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)CustomerInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
 
             //---- customerLabel ----
-            customerLabel.setText("Clientes");
+            customerLabel.setText("Clientes (\u21bb)");
             customerLabel.setHorizontalAlignment(SwingConstants.CENTER);
             customerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
             customerLabel.setPreferredSize(new Dimension(120, 30));
             customerLabel.setMaximumSize(new Dimension(120, 30));
             customerLabel.setMinimumSize(new Dimension(120, 30));
-            customerLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+            customerLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
             CustomerInfoPanel.add(customerLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -186,7 +208,7 @@ public class GetUsersPanel extends JPanel {
             hSpacer5.setPreferredSize(new Dimension(40, 10));
             CustomerInfoPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //======== CustomerTablePanel ========
             {
@@ -219,13 +241,13 @@ public class GetUsersPanel extends JPanel {
             }
             CustomerInfoPanel.add(CustomerTablePanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
             CustomerInfoPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
         }
         add(CustomerInfoPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -243,13 +265,13 @@ public class GetUsersPanel extends JPanel {
             ((GridBagLayout)AirlineInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
             //---- airlineLabel ----
-            airlineLabel.setText("Aerolineas");
+            airlineLabel.setText("Aerolineas (\u21bb)");
             airlineLabel.setHorizontalAlignment(SwingConstants.CENTER);
             airlineLabel.setHorizontalTextPosition(SwingConstants.CENTER);
             airlineLabel.setPreferredSize(new Dimension(120, 30));
             airlineLabel.setMaximumSize(new Dimension(120, 30));
             airlineLabel.setMinimumSize(new Dimension(120, 30));
-            airlineLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+            airlineLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
             AirlineInfoPanel.add(airlineLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));

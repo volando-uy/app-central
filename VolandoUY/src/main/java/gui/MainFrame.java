@@ -60,6 +60,7 @@ public class MainFrame extends JFrame {
         setTitle("Volando Uy");
         setSize(800, 600);
         setLocationRelativeTo(null);
+        setBackground(new Color(43,45,48));
 
         mainPanel = new JPanel(); // Default panel to initialize
         mainPanelType = 0;

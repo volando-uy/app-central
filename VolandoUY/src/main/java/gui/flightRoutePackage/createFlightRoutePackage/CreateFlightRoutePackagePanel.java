@@ -33,10 +33,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         initComponentsManually();
         initListeners();
         initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
 
@@ -107,6 +104,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
+        titleLabel = new JLabel();
         InfoFlightRoutePackagePanel = new JPanel();
         hSpacer5 = new JPanel(null);
         vSpacer17 = new JPanel(null);
@@ -139,20 +137,28 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+
+        //---- titleLabel ----
+        titleLabel.setText("Crear paquete de rutas de vuelo");
+        titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+        add(titleLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+            new Insets(10, 0, 0, 0), 0, 0));
 
         //======== InfoFlightRoutePackagePanel ========
         {
+            InfoFlightRoutePackagePanel.setOpaque(false);
             InfoFlightRoutePackagePanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
             ((GridBagLayout)InfoFlightRoutePackagePanel.getLayout()).rowHeights = new int[] {0, 25, 43, 35, 35, 0, 0, 0, 0};
@@ -161,6 +167,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
+            hSpacer5.setOpaque(false);
             InfoFlightRoutePackagePanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -168,12 +175,14 @@ public class CreateFlightRoutePackagePanel extends JPanel {
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
             vSpacer17.setPreferredSize(new Dimension(10, 100));
+            vSpacer17.setOpaque(false);
             InfoFlightRoutePackagePanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
+            hSpacer6.setOpaque(false);
             InfoFlightRoutePackagePanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -182,6 +191,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
             {
                 firstRowPanel.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel.setMinimumSize(new Dimension(510, 30));
+                firstRowPanel.setOpaque(false);
                 firstRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)firstRowPanel.getLayout()).columnWidths = new int[] {130, 0, 130, 110, 0};
                 ((GridBagLayout)firstRowPanel.getLayout()).rowHeights = new int[] {10, 0};
@@ -203,6 +213,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 nameTextField.setPreferredSize(new Dimension(120, 30));
                 nameTextField.setMinimumSize(new Dimension(100, 30));
                 nameTextField.setMaximumSize(new Dimension(100, 30));
+                nameTextField.setOpaque(false);
                 firstRowPanel.add(nameTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -222,6 +233,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 expirationTextField.setPreferredSize(new Dimension(120, 30));
                 expirationTextField.setMinimumSize(new Dimension(100, 30));
                 expirationTextField.setMaximumSize(new Dimension(100, 30));
+                expirationTextField.setOpaque(false);
                 firstRowPanel.add(expirationTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -235,6 +247,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 secondRowPanel.setPreferredSize(new Dimension(510, 30));
                 secondRowPanel.setMinimumSize(new Dimension(510, 30));
                 secondRowPanel.setMaximumSize(new Dimension(510, 510));
+                secondRowPanel.setOpaque(false);
                 secondRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)secondRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
                 ((GridBagLayout)secondRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -256,6 +269,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 descriptionTextField.setPreferredSize(new Dimension(120, 30));
                 descriptionTextField.setMinimumSize(new Dimension(100, 30));
                 descriptionTextField.setMaximumSize(new Dimension(100, 30));
+                descriptionTextField.setOpaque(false);
                 secondRowPanel.add(descriptionTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -270,6 +284,9 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 secondRowPanel.add(seatTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- seatTypeComboBox ----
+                seatTypeComboBox.setOpaque(false);
                 secondRowPanel.add(seatTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -283,6 +300,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
                 thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
@@ -304,6 +322,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 createdAtTextField.setPreferredSize(new Dimension(120, 30));
                 createdAtTextField.setMinimumSize(new Dimension(100, 30));
                 createdAtTextField.setMaximumSize(new Dimension(100, 30));
+                createdAtTextField.setOpaque(false);
                 thirdRowPanel.add(createdAtTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -323,6 +342,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 discountCostTextField.setPreferredSize(new Dimension(120, 30));
                 discountCostTextField.setMinimumSize(new Dimension(100, 30));
                 discountCostTextField.setMaximumSize(new Dimension(100, 30));
+                discountCostTextField.setOpaque(false);
                 thirdRowPanel.add(discountCostTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -331,33 +351,38 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
         }
-        add(InfoFlightRoutePackagePanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+        add(InfoFlightRoutePackagePanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //======== createBtnPanel ========
         {
+            createBtnPanel.setOpaque(false);
             createBtnPanel.setLayout(new BorderLayout());
 
             //---- hSpacer1 ----
             hSpacer1.setPreferredSize(new Dimension(200, 10));
+            hSpacer1.setOpaque(false);
             createBtnPanel.add(hSpacer1, BorderLayout.LINE_START);
 
             //---- hSpacer2 ----
             hSpacer2.setPreferredSize(new Dimension(200, 10));
+            hSpacer2.setOpaque(false);
             createBtnPanel.add(hSpacer2, BorderLayout.LINE_END);
 
             //---- createFlightRoutePackageBtn ----
-            createFlightRoutePackageBtn.setText("Crear Paquete de R.V.");
+            createFlightRoutePackageBtn.setText("+ Crear Paquete");
+            createFlightRoutePackageBtn.setOpaque(false);
             createBtnPanel.add(createFlightRoutePackageBtn, BorderLayout.CENTER);
         }
-        add(createBtnPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+        add(createBtnPanel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
         //---- vSpacer19 ----
         vSpacer19.setPreferredSize(new Dimension(10, 100));
-        add(vSpacer19, new GridBagConstraints(0, 4, 1, 1, 0.0, 2.0,
+        vSpacer19.setOpaque(false);
+        add(vSpacer19, new GridBagConstraints(0, 3, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -365,6 +390,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - dotto
+    private JLabel titleLabel;
     private JPanel InfoFlightRoutePackagePanel;
     private JPanel hSpacer5;
     private JPanel vSpacer17;

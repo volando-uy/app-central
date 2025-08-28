@@ -17,9 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class FlightRoutePanel extends JPanel {
-
-    private MouseListener createFlightRoutePanelListener;
-    private MouseListener listFlightRoutePanelListener;
+ 
 
     private IFlightRouteController flightRouteController;
     private IUserController userController;
