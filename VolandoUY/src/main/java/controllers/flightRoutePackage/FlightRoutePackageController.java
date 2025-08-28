@@ -4,6 +4,7 @@ package controllers.flightRoutePackage;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import lombok.AllArgsConstructor;
 
@@ -38,5 +39,8 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
         return packageService.flightRoutePackageExists(packageName);
     }
 
-
+    @Override
+    public List<FlightRoutePackage> getAllFlightRoutePackages() {
+        return packageService.getAllFlightRoutePackages();
+    }
 }

@@ -4,11 +4,13 @@ import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
+import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
+import infra.repository.flight.FlightRepository;
 import infra.repository.flightroute.FlightRouteRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class FlightRouteService implements IFlightRouteService {
 
     FlightRouteRepository flightRouteRepository;
+    FlightRepository flightRepository;
     private ICategoryService categoryService;
     private ICityService cityService;
     private ModelMapper modelMapper;
@@ -32,6 +35,7 @@ public class FlightRouteService implements IFlightRouteService {
         this.userService = userService;
         this.cityService = cityService;
         this.flightRouteRepository = new FlightRouteRepository();
+        this.flightRepository = new FlightRepository();
     }
 
     @Override
@@ -55,41 +59,35 @@ public class FlightRouteService implements IFlightRouteService {
                 .map(this::mapFlightRouteToDTO)
                 .collect(Collectors.toList());
     }
-
     @Override
     public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO) {
-        // Comprobar que la ruta de vuelo no exista
+        // 1) Existencia
         if (existFlightRoute(flightRouteDTO.getName())) {
             throw new UnsupportedOperationException(
                     String.format(ErrorMessages.ERR_FLIGHT_ROUTE_ALREADY_EXISTS, flightRouteDTO.getName()));
         }
 
-        // Obtener entidades relacionadas
+        // 2) Relacionadas
         Airline airline = userService.getAirlineByNickname(flightRouteDTO.getAirlineNickname());
 
         City originCity = cityService.getCityByName(flightRouteDTO.getOriginCityName());
-        if (originCity == null) {
-            throw new IllegalArgumentException("Ciudad de origen no encontrada: " + flightRouteDTO.getOriginCityName());
-        }
+        if (originCity == null) throw new IllegalArgumentException("Ciudad de origen no encontrada: " + flightRouteDTO.getOriginCityName());
 
         City destinationCity = cityService.getCityByName(flightRouteDTO.getDestinationCityName());
-        if (destinationCity == null) {
-            throw new IllegalArgumentException("Ciudad de destino no encontrada: " + flightRouteDTO.getDestinationCityName());
-        }
+        if (destinationCity == null) throw new IllegalArgumentException("Ciudad de destino no encontrada: " + flightRouteDTO.getDestinationCityName());
 
         List<Category> categories = new ArrayList<>();
         if (flightRouteDTO.getCategories() != null) {
             for (String categoryName : flightRouteDTO.getCategories()) {
                 Category category = categoryService.getCategoryByName(categoryName);
                 if (category == null) {
-                    throw new IllegalArgumentException(
-                            String.format(ErrorMessages.ERR_CATEGORY_NOT_FOUND, categoryName));
+                    throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CATEGORY_NOT_FOUND, categoryName));
                 }
                 categories.add(category);
             }
         }
 
-        // Crear entidad FlightRoute manualmente
+        // 3) Crear la ruta (sin vuelos todavía)
         FlightRoute flightRoute = new FlightRoute();
         flightRoute.setName(flightRouteDTO.getName());
         flightRoute.setDescription(flightRouteDTO.getDescription());
@@ -101,18 +99,37 @@ public class FlightRouteService implements IFlightRouteService {
         flightRoute.setDestinationCity(destinationCity);
         flightRoute.setAirline(airline);
         flightRoute.setCategories(categories);
-        flightRoute.setFlights(new ArrayList<>());
+        flightRoute.setFlights(new ArrayList<>()); // arranco vacío
 
-        // Validar
+        // Validar antes del primer save
         ValidatorUtil.validate(flightRoute);
 
-        // Añadir a la aerolínea
+        // Guardar/mergear ruta para tenerla managed
+        flightRoute = flightRouteRepository.saveOrUpdate(flightRoute);
+
+        // 4) Vincular vuelos existentes (lado dueño) y mergear cada uno
+        List<Flight> attachedFlights = new ArrayList<>();
+        if (flightRouteDTO.getFlightsNames() != null) {
+            for (String fname : flightRouteDTO.getFlightsNames()) {
+                Flight f = flightRepository.getFlightByName(fname);
+                if (f == null) {
+                    throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, fname));
+                }
+                // seteo FK en el dueño
+                f.setFlightRoute(flightRoute);
+                f = flightRepository.saveOrUpdate(f); // MERGE
+                attachedFlights.add(f);
+            }
+        }
+
+        // 5) Reflejar lado inverso y mergear la ruta (consistencia en memoria)
+        flightRoute.setFlights(attachedFlights);
+        flightRoute = flightRouteRepository.saveOrUpdate(flightRoute);
+
+        // 6) Mantener relación con aerolínea (en memoria)
         airline.getFlightRoutes().add(flightRoute);
 
-        // Guardar
-        flightRouteRepository.save(flightRoute);
-
-        // Devolver DTO
+        // 7) DTO de salida
         FlightRouteDTO resultDTO = new FlightRouteDTO();
         resultDTO.setName(flightRoute.getName());
         resultDTO.setDescription(flightRoute.getDescription());
@@ -124,7 +141,7 @@ public class FlightRouteService implements IFlightRouteService {
         resultDTO.setDestinationCityName(flightRoute.getDestinationCity().getName());
         resultDTO.setAirlineNickname(flightRoute.getAirline().getNickname());
         resultDTO.setCategories(flightRoute.getCategories().stream().map(Category::getName).toList());
-
+        resultDTO.setFlightsNames(flightRoute.getFlights().stream().map(Flight::getName).toList());
         return resultDTO;
     }
 
@@ -155,10 +172,10 @@ public class FlightRouteService implements IFlightRouteService {
         flightRouteDTO.setOriginCityName(flightRoute.getOriginCity().getName());
         flightRouteDTO.setDestinationCityName(flightRoute.getDestinationCity().getName());
 
-        // 🔥 Setear los nombres de los vuelos
+        // Setear los nombres de los vuelos
         flightRouteDTO.setFlightsNames(
                 flightRoute.getFlights().stream()
-                        .map(flight -> flight.getName())
+                        .map(Flight::getName)
                         .toList()
         );
 

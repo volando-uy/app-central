@@ -30,11 +30,11 @@ public class Airline extends User {
     private String web;
 
     // RELACIÓN BIDIRECCIONAL CORRECTA: Flight -> Airline
-    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airline", orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Flight> flights = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL CORRECTA: FlightRoute -> Airline
-    @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airline", orphanRemoval = true,fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airline(String nickname, String name, String mail, String description, String web) {

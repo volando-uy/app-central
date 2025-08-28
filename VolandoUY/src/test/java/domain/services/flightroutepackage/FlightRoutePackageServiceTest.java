@@ -25,6 +25,7 @@ import shared.constants.ErrorMessages;
 import utils.TestUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,7 +98,7 @@ class FlightRoutePackageServiceTest {
         // GIVEN
         FlightRoutePackageDTO dto = new FlightRoutePackageDTO(
                 "Pack A", "Descripción del paquete", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         );
 
         // WHEN
@@ -114,14 +115,14 @@ class FlightRoutePackageServiceTest {
         // GIVEN un paquete ya creado
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack B", "Otro paquete", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
 
         // WHEN se intenta crear otro con el mismo nombre
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
             packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                     "Pack B", "Duplicado", 5, 10.0,
-                    LocalDate.now(), EnumTipoAsiento.TURISTA
+                    LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
             ));
         });
 
@@ -135,7 +136,7 @@ class FlightRoutePackageServiceTest {
         // GIVEN un paquete creado
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack C", "Descripción C", 7, 5.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
 
         // WHEN se busca por nombre
@@ -164,12 +165,12 @@ class FlightRoutePackageServiceTest {
         // GIVEN varios paquetes creados
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack D", "DD", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
 
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack E", "EE", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
 
         // WHEN se piden los nombres
@@ -188,7 +189,7 @@ class FlightRoutePackageServiceTest {
 
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack F", "Paquete FF", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
     //org.opentest4j.AssertionFailedError: Unexpected exception thrown: jakarta.persistence.EntityNotFoundException: Unable to find domain.models.flightRoute.FlightRoute with id Ruta A
         // WHEN se agrega una ruta válida
@@ -203,7 +204,7 @@ class FlightRoutePackageServiceTest {
         // GIVEN paquete válido
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack G", "GG", 10, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA
+                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
         ));
 
         // WHEN se pasa cantidad inválida
