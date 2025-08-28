@@ -25,8 +25,14 @@ public class FlightRoute {
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
-    @OneToMany(mappedBy = "flightRoute", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "flightRoute",
+//            cascade = CascadeType.MERGE,   // o sin cascada
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
     private List<Flight> flights = new ArrayList<>();
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Airline airline;

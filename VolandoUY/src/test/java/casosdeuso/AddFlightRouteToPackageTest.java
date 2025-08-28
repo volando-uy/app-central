@@ -66,7 +66,8 @@ public class AddFlightRouteToPackageTest {
                 15,
                 20.0,
                 LocalDate.now(),
-                EnumTipoAsiento.TURISTA
+                EnumTipoAsiento.TURISTA,
+                List.of()
         ));
     }
 

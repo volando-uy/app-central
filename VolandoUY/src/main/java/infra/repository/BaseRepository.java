@@ -23,7 +23,19 @@ public class BaseRepository<T> {
             tx.commit();
         }
     }
-
+    public T saveOrUpdate(T entity) {
+        EntityManager em = DBConnection.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try (em) {
+            tx.begin();
+            T managed = em.merge(entity);  // 👈 clave: merge, no persist
+            tx.commit();
+            return managed;
+        } catch (RuntimeException e) {
+            if (tx.isActive()) tx.rollback();
+            throw e;
+        }
+    }
     public T update(T entity) {
         EntityManager em = DBConnection.getEntityManager();
         EntityTransaction tx = null;

@@ -20,6 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -49,7 +50,7 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
 
                 FlightRoutePackageDTO flightRoutePackageDTO = new FlightRoutePackageDTO(
-                        name, description, expirationInDays, discount, createdAt, seatType
+                        name, description, expirationInDays, discount, createdAt, seatType, new ArrayList<>()
                 );
 
                 // Throws exception if something is invalid
