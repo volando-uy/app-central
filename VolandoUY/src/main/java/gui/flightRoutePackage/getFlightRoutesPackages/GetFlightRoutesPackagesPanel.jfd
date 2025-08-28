@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -36,7 +36,7 @@ new FormModel {
 				"maximumSize": new java.awt.Dimension( 640, 180 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "PackageLabel"
-					"text": "Paquetes"
+					"text": "Paquetes de Rutas de Vuelo"
 					"horizontalAlignment": 0
 					"horizontalTextPosition": 0
 					"preferredSize": new java.awt.Dimension( 120, 30 )

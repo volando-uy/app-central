@@ -82,7 +82,6 @@ public class FlightRoutePackagePanel extends JPanel {
     private JPanel NavPanel;
     private JButton createFlightRoutePackageBtn;
     private JButton addFlightRouteToPackageBtn;
-    private JButton getUserBtn;
     private JButton getFlightRoutePackagesBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
@@ -92,21 +91,20 @@ public class FlightRoutePackagePanel extends JPanel {
         NavPanel = new JPanel();
         createFlightRoutePackageBtn = new JButton();
         addFlightRouteToPackageBtn = new JButton();
-        getUserBtn = new JButton();
         getFlightRoutePackagesBtn = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
-        setBackground(new Color(0xcccccc));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new
-        javax.swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax
-        .swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java
-        .awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
-        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.
-        PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".
-        equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBackground(new Color(0xeeeeee));
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
+        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
+        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
+        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+        .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
+        ( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -119,19 +117,15 @@ public class FlightRoutePackagePanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- createFlightRoutePackageBtn ----
-            createFlightRoutePackageBtn.setText("Crear Paquete");
+            createFlightRoutePackageBtn.setText("+ Crear Paquete");
             NavPanel.add(createFlightRoutePackageBtn);
 
             //---- addFlightRouteToPackageBtn ----
-            addFlightRouteToPackageBtn.setText("A\u00f1adir R.V. a Paquete");
+            addFlightRouteToPackageBtn.setText("\u279c A\u00f1adir R.V. a Paquete");
             NavPanel.add(addFlightRouteToPackageBtn);
 
-            //---- getUserBtn ----
-            getUserBtn.setText("---");
-            NavPanel.add(getUserBtn);
-
             //---- getFlightRoutePackagesBtn ----
-            getFlightRoutePackagesBtn.setText("Listar Paquetes");
+            getFlightRoutePackagesBtn.setText("\ud83d\udcc4 Listar Paquetes");
             NavPanel.add(getFlightRoutePackagesBtn);
         }
         add(NavPanel, BorderLayout.NORTH);

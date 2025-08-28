@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "0, 0, 0, 31, 0, 0, 0"
+			"$rowSpecs": "0, 0, 0, 0, 31, 0, 0, 0, 0"
 			"$alignTop": true
 			"$alignLeft": true
 		} ) {
@@ -16,70 +16,99 @@ new FormModel {
 			"background": new java.awt.Color( 81, 126, 214, 255 )
 			"border": new javax.swing.border.EtchedBorder( 1, null, null )
 			"opaque": false
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
-				"columns": 3
-			} ) {
-				name: "selectPackagePanel"
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "packageLabel"
-					"text": "Selecciona el Paquete de R.V.:"
-				} )
-				add( new FormComponent( "javax.swing.JComboBox" ) {
-					name: "packageComboBox"
-					"minimumSize": &Dimension0 new java.awt.Dimension( 100, 30 )
-					"preferredSize": &Dimension1 new java.awt.Dimension( 100, 30 )
-					auxiliary() {
-						"JavaCodeGenerator.typeParameters": "String"
-					}
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "loadPackageBtn"
-					"text": "Cargar paquete"
-				} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "titleLabel"
+				"text": "Añadir ruta de vuelo a paquete"
+				"font": new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"hAlign": 0
+				"insets": new java.awt.Insets( 10, 0, 0, 0 )
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer18"
+				"minimumSize": new java.awt.Dimension( 12, 70 )
+				"preferredSize": new java.awt.Dimension( 10, 100 )
+				"opaque": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"weighty": 1.0
 				"gridy": 1
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 				"columns": 3
+				"hgap": 10
 			} ) {
-				name: "selectAirlinePanel"
+				name: "selectPackagePanel"
+				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "airlineLabel"
-					"text": "Selecciona la Aerolinea:"
+					name: "packageLabel"
+					"text": "Selecciona el Paquete:"
+					"horizontalAlignment": 11
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
-					name: "airlineComboBox"
-					"minimumSize": #Dimension0
-					"preferredSize": #Dimension1
-					"enabled": false
+					name: "packageComboBox"
+					"minimumSize": new java.awt.Dimension( 150, 30 )
+					"preferredSize": new java.awt.Dimension( 150, 30 )
+					"opaque": false
 					auxiliary() {
 						"JavaCodeGenerator.typeParameters": "String"
 					}
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "loadAirlineBtn"
-					"text": "Cargar aerolinea"
-					"enabled": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 2
+				"hAlign": 0
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer20"
+				"minimumSize": new java.awt.Dimension( 12, 5 )
+				"preferredSize": new java.awt.Dimension( 10, 5 )
+				"opaque": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"weighty": 1.0
+				"gridy": 3
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 3
+				"hgap": 10
+			} ) {
+				name: "selectAirlinePanel"
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "airlineLabel"
+					"text": "Selecciona la Aerolinea:"
+					"horizontalAlignment": 11
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "airlineComboBox"
+					"minimumSize": new java.awt.Dimension( 150, 30 )
+					"preferredSize": new java.awt.Dimension( 150, 30 )
+					"opaque": false
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "String"
+					}
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 3
+				"gridy": 4
+				"hAlign": 0
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
-				"$rowSpecs": "0, 20, top:38"
+				"$rowSpecs": "0, 20, top:38, 0"
 				"$alignTop": true
 				"$alignLeft": true
 				"$vGap": 5
 			} ) {
 				name: "InfoUserPanel"
+				"opaque": false
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer5"
 					"preferredSize": new java.awt.Dimension( 40, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 					name: "vSpacer17"
-					"minimumSize": new java.awt.Dimension( 12, 70 )
-					"preferredSize": new java.awt.Dimension( 10, 100 )
+					"minimumSize": new java.awt.Dimension( 12, 20 )
+					"preferredSize": new java.awt.Dimension( 10, 20 )
+					"opaque": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"weighty": 1.0
@@ -87,6 +116,7 @@ new FormModel {
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer6"
 					"preferredSize": new java.awt.Dimension( 40, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
 				} )
@@ -100,7 +130,8 @@ new FormModel {
 					name: "firstRowPanel"
 					"preferredSize": new java.awt.Dimension( 510, 100 )
 					"minimumSize": new java.awt.Dimension( 510, 100 )
-					"maximumSize": &Dimension2 new java.awt.Dimension( 510, 510 )
+					"maximumSize": &Dimension0 new java.awt.Dimension( 510, 510 )
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "flightRouteLabel"
 						"text": "Rutas de vuelo:"
@@ -116,8 +147,10 @@ new FormModel {
 						"minimumSize": new java.awt.Dimension( 300, 100 )
 						"maximumSize": new java.awt.Dimension( 300, 100 )
 						"enabled": false
+						"opaque": false
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "flightRouteTable"
+							"opaque": false
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
@@ -138,7 +171,8 @@ new FormModel {
 					name: "secondRowPanel"
 					"preferredSize": new java.awt.Dimension( 510, 30 )
 					"minimumSize": new java.awt.Dimension( 510, 30 )
-					"maximumSize": #Dimension2
+					"maximumSize": #Dimension0
+					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "quantityLabel"
 						"text": "Cantidad a añadir:"
@@ -148,12 +182,16 @@ new FormModel {
 						"maximumSize": new java.awt.Dimension( 70, 15 )
 						"minimumSize": new java.awt.Dimension( 70, 15 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "quantityTextField"
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "quantitySpinner"
 						"preferredSize": new java.awt.Dimension( 120, 30 )
 						"minimumSize": new java.awt.Dimension( 100, 30 )
 						"maximumSize": new java.awt.Dimension( 100, 30 )
-						"enabled": false
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 1
+							value: 1
+						}
+						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -163,20 +201,34 @@ new FormModel {
 					"hAlign": 2
 					"vAlign": 0
 				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer21"
+					"minimumSize": new java.awt.Dimension( 12, 20 )
+					"preferredSize": new java.awt.Dimension( 10, 20 )
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"weighty": 1.0
+					"gridy": 3
+					"gridx": 1
+				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 4
+				"gridy": 5
+				"hAlign": 0
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "addBtnPanel"
+				"opaque": false
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer1"
 					"preferredSize": new java.awt.Dimension( 200, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Before"
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer2"
 					"preferredSize": new java.awt.Dimension( 200, 10 )
+					"opaque": false
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "After"
 				} )
@@ -184,17 +236,19 @@ new FormModel {
 					name: "addFlightRouteToPackageBtn"
 					"text": "Aañadir R.V. a Paquete"
 					"enabled": false
+					"opaque": false
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 5
+				"gridy": 6
 			} )
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 				name: "vSpacer19"
 				"preferredSize": new java.awt.Dimension( 10, 100 )
+				"opaque": false
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 6
+				"gridy": 7
 				"weighty": 2.0
 			} )
 		}, new FormLayoutConstraints( null ) {
