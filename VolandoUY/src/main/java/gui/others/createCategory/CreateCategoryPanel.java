@@ -22,8 +22,7 @@ public class CreateCategoryPanel extends JPanel {
         this.categoryController = categoryController;
         initComponents();
         initListeners();
-        try { setBorder(null); } catch ( Exception ignored ) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     
     private void initListeners() {

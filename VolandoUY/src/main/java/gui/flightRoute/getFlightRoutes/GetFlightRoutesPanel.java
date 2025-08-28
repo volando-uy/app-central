@@ -10,6 +10,8 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -36,19 +38,17 @@ public class GetFlightRoutesPanel extends JPanel {
     public GetFlightRoutesPanel(IFlightRouteController flightRouteController,
                                 IUserController userController)
     {
-        if (flightRouteController == null) throw new IllegalArgumentException("IFlightRouteController es null");
-        if (userController == null)         throw new IllegalArgumentException("IUserController es null");
         this.flightRouteController = flightRouteController;
         this.userController = userController;
-
         initComponents();
         initListeners();
         loadAirlinesIntoCombo();      // llena el combo al iniciar
         clearTable();                 // deja la tabla vacía hasta que elijas
-        try { setBorder(null); } catch (Exception ignored) {}
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void initListeners() {
+
         airlineComboBox.addActionListener(e -> {
             if (areAirlinesLoading) return;
             try {
@@ -63,6 +63,14 @@ public class GetFlightRoutesPanel extends JPanel {
                 JOptionPane.showMessageDialog(this,
                         "Error cargando las rutas de vuelo: " + ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Reload flight routes table
+        flightRouteLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                airlineComboBox.getActionListeners()[0].actionPerformed(null);
             }
         });
     }
@@ -197,7 +205,7 @@ public class GetFlightRoutesPanel extends JPanel {
         airlineComboBox = new JComboBox<>();
         vSpacer14 = new JPanel(null);
         FlightRouteInfoPanel = new JPanel();
-        FlightRouteLabel = new JLabel();
+        flightRouteLabel = new JLabel();
         hSpacer7 = new JPanel(null);
         FlightRouteTablePanel = new JPanel();
         FlightRouteScrollPane = new JScrollPane();
@@ -212,12 +220,13 @@ public class GetFlightRoutesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
+        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder
+        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .
+        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
+        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+        ) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
+        ;
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -263,15 +272,15 @@ public class GetFlightRoutesPanel extends JPanel {
             ((GridBagLayout)FlightRouteInfoPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)FlightRouteInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
-            //---- FlightRouteLabel ----
-            FlightRouteLabel.setText("Rutas de vuelo");
-            FlightRouteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            FlightRouteLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-            FlightRouteLabel.setPreferredSize(new Dimension(120, 30));
-            FlightRouteLabel.setMaximumSize(new Dimension(120, 30));
-            FlightRouteLabel.setMinimumSize(new Dimension(120, 30));
-            FlightRouteLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
-            FlightRouteInfoPanel.add(FlightRouteLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+            //---- flightRouteLabel ----
+            flightRouteLabel.setText("Rutas de vuelo (\u21bb)");
+            flightRouteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            flightRouteLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+            flightRouteLabel.setPreferredSize(new Dimension(120, 30));
+            flightRouteLabel.setMaximumSize(new Dimension(120, 30));
+            flightRouteLabel.setMinimumSize(new Dimension(120, 30));
+            flightRouteLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            FlightRouteInfoPanel.add(flightRouteLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -346,7 +355,7 @@ public class GetFlightRoutesPanel extends JPanel {
     private JComboBox<String> airlineComboBox;
     private JPanel vSpacer14;
     private JPanel FlightRouteInfoPanel;
-    private JLabel FlightRouteLabel;
+    private JLabel flightRouteLabel;
     private JPanel hSpacer7;
     private JPanel FlightRouteTablePanel;
     private JScrollPane FlightRouteScrollPane;

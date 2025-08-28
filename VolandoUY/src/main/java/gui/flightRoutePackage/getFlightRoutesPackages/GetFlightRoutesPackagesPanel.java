@@ -8,6 +8,8 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -22,12 +24,10 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     private IFlightRoutePackageController flightRoutePackageController;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     public GetFlightRoutesPackagesPanel(IFlightRoutePackageController flightRoutePackageController ) {
-        if (flightRoutePackageController == null) {
-            throw new IllegalArgumentException("IFlightRoutePackageController es null");
-        }
         this.flightRoutePackageController = flightRoutePackageController;
         initComponents();     // TU UI generada
         loadPackagesTable();  // Carga de datos -> misma lógica que UsersPanel
+        initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
@@ -107,12 +107,24 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
                 visibleRows * table.getRowHeight()
         ));
     }
+    
+    private void initListeners() {
+        // Listener to reload packages table
+        packageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadPackagesTable();
+            }
+        });
+        
+    }
+    
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
         vSpacer17 = new JPanel(null);
         PackageinfoPanel = new JPanel();
-        PackageLabel = new JLabel();
+        packageLabel = new JLabel();
         hSpacer5 = new JPanel(null);
         PackageTablePanel = new JPanel();
         PackageScrollPane = new JScrollPane();
@@ -127,13 +139,14 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
-        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border
-        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog"
-        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
-        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
-        . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException
-        ( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (
+        new javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn"
+        , javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+        , new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 )
+        , java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
+        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -158,15 +171,15 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
             ((GridBagLayout)PackageinfoPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)PackageinfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
-            //---- PackageLabel ----
-            PackageLabel.setText("Paquetes de Rutas de Vuelo");
-            PackageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            PackageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-            PackageLabel.setPreferredSize(new Dimension(120, 30));
-            PackageLabel.setMaximumSize(new Dimension(120, 30));
-            PackageLabel.setMinimumSize(new Dimension(120, 30));
-            PackageLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
-            PackageinfoPanel.add(PackageLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+            //---- packageLabel ----
+            packageLabel.setText("Paquetes (\u21bb)");
+            packageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            packageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+            packageLabel.setPreferredSize(new Dimension(120, 30));
+            packageLabel.setMaximumSize(new Dimension(120, 30));
+            packageLabel.setMinimumSize(new Dimension(120, 30));
+            packageLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            PackageinfoPanel.add(packageLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -232,7 +245,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     // Generated using JFormDesigner Evaluation license - dotto
     private JPanel vSpacer17;
     private JPanel PackageinfoPanel;
-    private JLabel PackageLabel;
+    private JLabel packageLabel;
     private JPanel hSpacer5;
     private JPanel PackageTablePanel;
     private JScrollPane PackageScrollPane;

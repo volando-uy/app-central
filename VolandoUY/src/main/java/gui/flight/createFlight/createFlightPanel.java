@@ -34,6 +34,8 @@ public class createFlightPanel extends JPanel {
      private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
 
      List<AirlineDTO> airlines = new ArrayList<>();
+     
+     private boolean areAirlinesLoading = false;
 
     public createFlightPanel(IFlightController flightController, IFlightRouteController flightRouteController , IUserController userController) {
         this.flightController = flightController;
@@ -43,13 +45,11 @@ public class createFlightPanel extends JPanel {
         loadAirlinesIntoCombo();
         initPlaceholders();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void loadAirlinesIntoCombo() {
+        areAirlinesLoading = true;
         airlines.clear();
         airlineComboBox.removeAllItems();
 
@@ -64,6 +64,7 @@ public class createFlightPanel extends JPanel {
             airlineComboBox.addItem(display);
         }
 
+        areAirlinesLoading = false;
         if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
     }
 
@@ -132,7 +133,8 @@ public class createFlightPanel extends JPanel {
     }
 
     private void initListeners() {
-        loadAirlineBtn.addActionListener(e -> {
+        airlineComboBox.addActionListener(e -> {
+            if (areAirlinesLoading) return;
             try {
                 String selectedAirlineNickname = getSelectedAirlineNickname();
                 if (selectedAirlineNickname == null || selectedAirlineNickname.isEmpty()) {
@@ -140,9 +142,6 @@ public class createFlightPanel extends JPanel {
                 }
 
                 loadFlightRouteList(selectedAirlineNickname);
-                JOptionPane.showMessageDialog(this, "Aerolínea cargada correctamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error al cargar la aerolínea: " + ex.getMessage(),
@@ -242,6 +241,7 @@ public class createFlightPanel extends JPanel {
             }
         });
     }
+
     private void initPlaceholders() {
         setPlaceholder(createdDateAtTextField, PH_CREATED_AT);
         setPlaceholder(dateFlightTextField, PH_DEPARTURE);
@@ -290,7 +290,6 @@ public class createFlightPanel extends JPanel {
         selectPackagePanel = new JPanel();
         packageLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
-        loadAirlineBtn = new JButton();
         hSpacer6 = new JPanel(null);
         firstRowPanel2 = new JPanel();
         flightRouteLabel = new JLabel();
@@ -329,12 +328,11 @@ public class createFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -375,7 +373,7 @@ public class createFlightPanel extends JPanel {
             //======== selectPackagePanel ========
             {
                 selectPackagePanel.setOpaque(false);
-                selectPackagePanel.setLayout(new GridLayout(1, 3));
+                selectPackagePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
                 //---- packageLabel ----
                 packageLabel.setText("Selecciona el Aerolinea:");
@@ -386,14 +384,9 @@ public class createFlightPanel extends JPanel {
                 airlineComboBox.setPreferredSize(new Dimension(100, 30));
                 airlineComboBox.setOpaque(false);
                 selectPackagePanel.add(airlineComboBox);
-
-                //---- loadAirlineBtn ----
-                loadAirlineBtn.setText("Cargar Aerolinea");
-                loadAirlineBtn.setOpaque(false);
-                selectPackagePanel.add(loadAirlineBtn);
             }
             InfoFlightRoutePackagePanel.add(selectPackagePanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                GridBagConstraints.NORTH, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- hSpacer6 ----
@@ -667,7 +660,6 @@ public class createFlightPanel extends JPanel {
     private JPanel selectPackagePanel;
     private JLabel packageLabel;
     private JComboBox<String> airlineComboBox;
-    private JButton loadAirlineBtn;
     private JPanel hSpacer6;
     private JPanel firstRowPanel2;
     private JLabel flightRouteLabel;

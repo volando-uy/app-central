@@ -33,10 +33,7 @@ public class RegisterCustomerPanel extends JPanel {
         initComponentsManually();
         initListeners();
         initPlaceholderForTextField(birthDateTextField, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void initListeners() {

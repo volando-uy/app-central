@@ -13,6 +13,8 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 /**
  * @author AparicioQuian
@@ -27,9 +29,8 @@ public class GetCategoriesPanel extends JPanel {
         this.categoryController = categoryController;
         initComponents();          // generado por JFormDesigner (debe crear categoryTable)
         loadCategoriesTable();     // misma idea que en GetUsersPanel
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {}
+        initListeners();
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void loadCategoriesTable() {
@@ -91,6 +92,16 @@ public class GetCategoriesPanel extends JPanel {
         );
     }
 
+    private void initListeners() {
+        // Listener to reload categories
+        categoryLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadCategoriesTable();
+            }
+        });
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
@@ -111,12 +122,13 @@ public class GetCategoriesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-        EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-        . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
-        java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-        { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )
-        throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
+        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax
+        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
+        .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
+        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .
+        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -144,13 +156,13 @@ public class GetCategoriesPanel extends JPanel {
             ((GridBagLayout)categoryInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
             //---- categoryLabel ----
-            categoryLabel.setText("Categoria");
+            categoryLabel.setText("Categorias (\u21bb)");
             categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
             categoryLabel.setHorizontalTextPosition(SwingConstants.CENTER);
             categoryLabel.setPreferredSize(new Dimension(120, 30));
             categoryLabel.setMaximumSize(new Dimension(120, 30));
             categoryLabel.setMinimumSize(new Dimension(120, 30));
-            categoryLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+            categoryLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
             categoryInfoPanel.add(categoryLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));

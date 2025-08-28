@@ -61,6 +61,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 3
+					"hgap": 10
 				} ) {
 					name: "selectPackagePanel"
 					"opaque": false
@@ -77,14 +78,10 @@ new FormModel {
 							"JavaCodeGenerator.typeParameters": "String"
 						}
 					} )
-					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "loadAirlineBtn"
-						"text": "Cargar Aerolinea"
-						"opaque": false
-					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 2
+					"hAlign": 0
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer6"

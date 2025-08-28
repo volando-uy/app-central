@@ -12,6 +12,8 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 /**
  * @author AparicioQuian
@@ -25,7 +27,8 @@ public class GetCitiesPanel extends JPanel {
         this.cityController = cityController;
         initComponents();
         loadCitiesTable();
-        try { setBorder(null); } catch (Exception ignored) {}
+        initListeners();
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void loadCitiesTable() {
@@ -52,6 +55,7 @@ public class GetCitiesPanel extends JPanel {
         // 6) Modo de selección
         cityTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
+    
     private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
         // Dynamic width
         for (int col = 0; col < table.getColumnCount(); col++) {
@@ -84,6 +88,17 @@ public class GetCitiesPanel extends JPanel {
                 new Dimension(table.getPreferredSize().width, visibleRows * table.getRowHeight())
         );
     }
+    
+    private void initListeners() {
+        // Listener to reload table
+        cityLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadCitiesTable();
+            }
+        });
+    }
+    
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - dotto
@@ -104,12 +119,12 @@ public class GetCitiesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-        (0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-        .TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
-        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-        propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
-        ;}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -137,13 +152,13 @@ public class GetCitiesPanel extends JPanel {
             ((GridBagLayout)cityInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
             //---- cityLabel ----
-            cityLabel.setText("Ciudades");
+            cityLabel.setText("Ciudades (\u21bb)");
             cityLabel.setHorizontalAlignment(SwingConstants.CENTER);
             cityLabel.setHorizontalTextPosition(SwingConstants.CENTER);
             cityLabel.setPreferredSize(new Dimension(120, 30));
             cityLabel.setMaximumSize(new Dimension(120, 30));
             cityLabel.setMinimumSize(new Dimension(120, 30));
-            cityLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
+            cityLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
             cityInfoPanel.add(cityLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));

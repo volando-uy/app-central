@@ -19,10 +19,7 @@ public class RegisterAirlinePanel extends JPanel {
         initComponents();
         // initComponentsManually();
         initListeners();
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     
     private void initListeners() {

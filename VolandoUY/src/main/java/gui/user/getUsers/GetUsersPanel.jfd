@@ -25,7 +25,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
-				"$rowSpecs": "30, 0"
+				"$rowSpecs": "30, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
 				"$vGap": 5
@@ -36,13 +36,13 @@ new FormModel {
 				"maximumSize": &Dimension2 new java.awt.Dimension( 640, 180 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "customerLabel"
-					"text": "Clientes"
+					"text": "Clientes (↻)"
 					"horizontalAlignment": 0
 					"horizontalTextPosition": 0
 					"preferredSize": &Dimension3 new java.awt.Dimension( 120, 30 )
 					"maximumSize": &Dimension4 new java.awt.Dimension( 120, 30 )
 					"minimumSize": &Dimension5 new java.awt.Dimension( 120, 30 )
-					"font": &Font0 new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
+					"font": &Font0 new java.awt.Font( "Inter", 3, 20 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
@@ -108,7 +108,7 @@ new FormModel {
 				"maximumSize": #Dimension2
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "airlineLabel"
-					"text": "Aerolineas"
+					"text": "Aerolineas (↻)"
 					"horizontalAlignment": 0
 					"horizontalTextPosition": 0
 					"preferredSize": #Dimension3

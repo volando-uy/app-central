@@ -37,23 +37,7 @@ public class CreateFlightRoutePanel extends JPanel {
         loadAirlinesIntoCombo();
         initCategoryList();
         initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
-        try {
-            setBorder(null);
-        } catch (Exception ignored) {
-        }
-
-        // No me deja cambiar nada en el JFormDesigner
-        // TODO: Poner todo habilitado desde el inicio
-        // TODO: Eliminar el botón de cargar aerolinea
-        nameTextField.setEnabled(true);
-        descriptionTextField.setEnabled(true);
-        createdAtTextField.setEnabled(true);
-        additionalLuggageCostTextField.setEnabled(true);
-        touristCostTextField.setEnabled(true);
-        businessCostTextField.setEnabled(true);
-        originCityTextField.setEnabled(true);
-        destinationCityTextField.setEnabled(true);
-        categoriesTable.setEnabled(true);
+        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
     private void loadAirlinesIntoCombo() {
