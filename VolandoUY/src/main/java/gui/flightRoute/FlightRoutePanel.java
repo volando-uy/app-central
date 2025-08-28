@@ -7,13 +7,17 @@ import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
 import gui.flightRoute.getFlightRoutes.GetFlightRoutesPanel;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class FlightRoutePanel extends JPanel {
+ 
 
     private IFlightRouteController flightRouteController;
     private IUserController userController;
@@ -68,30 +72,34 @@ public class FlightRoutePanel extends JPanel {
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createFlightRouteBtn;
     private JButton getFlightRouteBtn;
+    private JButton updateUserBtn;
+    private JButton getUserBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createFlightRouteBtn = new JButton();
         getFlightRouteBtn = new JButton();
+        updateUserBtn = new JButton();
+        getUserBtn = new JButton();
 
         //======== this ========
         setPreferredSize(new Dimension(640, 600));
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
-        setBackground(new Color(0xeeeeee));
+        setBackground(new Color(0xcccccc));
         setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
-        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
+        . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
         awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
         ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
         ;
         setLayout(new BorderLayout());
 
@@ -105,12 +113,20 @@ public class FlightRoutePanel extends JPanel {
             NavPanel.setLayout(new GridLayout());
 
             //---- createFlightRouteBtn ----
-            createFlightRouteBtn.setText("+ Crear Ruta de Vuelo");
+            createFlightRouteBtn.setText("Crear Ruta de Vuelo");
             NavPanel.add(createFlightRouteBtn);
 
             //---- getFlightRouteBtn ----
-            getFlightRouteBtn.setText("\ud83d\udcc4 Listar Rutas de vuelo");
+            getFlightRouteBtn.setText("Listar Rutas de vuelo");
             NavPanel.add(getFlightRouteBtn);
+
+            //---- updateUserBtn ----
+            updateUserBtn.setText("---");
+            NavPanel.add(updateUserBtn);
+
+            //---- getUserBtn ----
+            getUserBtn.setText("---");
+            NavPanel.add(getUserBtn);
         }
         add(NavPanel, BorderLayout.NORTH);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
