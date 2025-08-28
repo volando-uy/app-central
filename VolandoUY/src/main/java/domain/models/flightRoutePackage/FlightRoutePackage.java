@@ -9,10 +9,10 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import shared.utils.ValidatorUtil;
-import java.util.List;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -44,4 +44,16 @@ public class FlightRoutePackage {
 
     @NotNull
     private EnumTipoAsiento seatType;
+
+    // 🔹 Método helper para obtener la fecha de expiración
+    public LocalDateTime getExpirationDate() {
+        return this.creationDate
+                .plusDays(this.validityPeriodDays)
+                .atStartOfDay();
+    }
+
+    // 🔹 Método helper para verificar si ya expiró
+    public boolean isExpired() {
+        return getExpirationDate().isBefore(LocalDateTime.now());
+    }
 }
