@@ -30,6 +30,12 @@ public class MainFrame extends JFrame {
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightController flightController;
 
+    private JPanel userPanel;
+    private JPanel flightRoutePanel;
+    private JPanel flightRoutePackagePanel;
+    private JPanel flightPanel;
+    private JPanel otherPanel;
+
     private SideBar sideBar;
     private JPanel mainPanel;
 
@@ -56,6 +62,28 @@ public class MainFrame extends JFrame {
     }
 
     private void initUI() {
+
+        // Obtener el splash. Se tiene que pasar por comando
+        final SplashScreen splash = SplashScreen.getSplashScreen();
+        if (splash == null) {
+            System.out.println("SplashScreen.getSplashScreen() returned null");
+        }
+//        Graphics2D g = splash.createGraphics();
+//        if (g == null) {
+//            System.out.println("g is null");
+//        }
+
+        // Esto permite agregar cosas al splash y fixear el tiempo que se ve
+//        for(int i=0; i<100; i++) {
+//            renderSplashFrame(g, i);
+//            splash.update();
+//            try {
+//                Thread.sleep(50);
+//            }
+//            catch(InterruptedException e) {
+//            }
+//        }
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Volando Uy");
         setSize(800, 600);
@@ -71,6 +99,20 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
         add(sideBar, BorderLayout.WEST);
         add(mainPanel, BorderLayout.CENTER);
+
+        splash.close();
+        setVisible(true);
+        toFront();
+    }
+
+    // Permite renderizar en el splash
+    static void renderSplashFrame(Graphics2D g, int frame) {
+        final String[] comps = {"Volando Uy", "Loading DB", "Starting UI"};
+        g.setComposite(AlphaComposite.Clear);
+        g.fillRect(120, 140, 200, 40);
+        g.setPaintMode();
+        g.setColor(Color.WHITE);
+        g.drawString("Loading " + comps[(frame / 5) % 3] + "...", 120, 150);
     }
 
     private void updateMainPanel(JPanel panel, Integer panelType) {
@@ -88,11 +130,17 @@ public class MainFrame extends JFrame {
 
 
     private SideBar createSideBar() {
+        userPanel = new UserPanel(userController);
+        flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController);
+        flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController);
+        flightPanel = new FlightPanel(flightController, flightRouteController, userController);
+        otherPanel = new OtherPanel(categoryController, cityController);
+
         MouseListener userManagementBtnListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("User Management button clicked");
-                updateMainPanel(new UserPanel(userController), 1);
+                updateMainPanel(userPanel, 1);
             }
         };
 
@@ -100,7 +148,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Others Management button clicked");
-                updateMainPanel(new OtherPanel(categoryController, cityController), 6);
+                updateMainPanel(otherPanel, 6);
             }
         };
 
@@ -108,7 +156,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Routes Management button clicked");
-                updateMainPanel(new FlightRoutePanel(flightRouteController, userController, categoryController), 3);
+                updateMainPanel(flightRoutePanel, 3);
             }
         };
 
@@ -116,7 +164,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Route Packages Management button clicked");
-                updateMainPanel(new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController), 4);
+                updateMainPanel(flightRoutePackagePanel, 4);
             }
         };
 
@@ -124,7 +172,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Management button clicked");
-                updateMainPanel(new FlightPanel(flightController, flightRouteController, userController), 4);
+                updateMainPanel(flightPanel, 4);
             }
         };
 

@@ -32,7 +32,9 @@ public class VolandoApp {
 
 
     public static void main(String[] args) {
-        // lanzar UI primero
+
+        new DBInitThread().start();
+
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(
                     ControllerFactory.getUserController(),
@@ -42,10 +44,7 @@ public class VolandoApp {
                     ControllerFactory.getFlightRoutePackageController(),
                     ControllerFactory.getFlightController()
             );
-            mainFrame.setVisible(true);
         });
 
-        // luego inicializar DB en segundo plano
-        new DBInitThread().start();
     }
 }
