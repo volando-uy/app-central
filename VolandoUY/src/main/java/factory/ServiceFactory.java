@@ -12,8 +12,11 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.packagePurchaseService.IPackagePurchaseService;
+import domain.services.packagePurchaseService.PackagePurchaseService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import infra.repository.compraPaquete.PackagePurchaseRepository;
 
 public class ServiceFactory {
     private static IUserService userService;
@@ -23,6 +26,7 @@ public class ServiceFactory {
     private static ICityService cityService;
     private static IFlightRoutePackageService packageService;
     private static IAirportService airportService;
+    private static IPackagePurchaseService packagePurchaseService;
 
     // ############ USER SERVICE ############
 
@@ -105,4 +109,18 @@ public class ServiceFactory {
         }
         return airportService;
     }
+    // ############### Package purchase #################
+
+    public static IPackagePurchaseService getPackagePurchaseService() {
+        if (packagePurchaseService == null) {
+            packagePurchaseService = new PackagePurchaseService(
+                    new PackagePurchaseRepository(),
+                    getUserService(),
+                    getFlightRoutePackageService(),
+                    ControllerFactory.getModelMapper()
+            );
+        }
+        return packagePurchaseService;
+    }
+
 }
