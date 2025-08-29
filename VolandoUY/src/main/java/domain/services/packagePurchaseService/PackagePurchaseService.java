@@ -3,6 +3,7 @@ package domain.services.packagePurchaseService;
 import domain.models.packagePurchase.PackagePurchase;
 import domain.models.user.Customer;
 import domain.models.flightRoutePackage.FlightRoutePackage;
+import infra.repository.compraPaquete.IPackagePurchaseRepository;
 import infra.repository.compraPaquete.PackagePurchaseRepository;
 import domain.services.user.IUserService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
@@ -10,12 +11,12 @@ import org.modelmapper.ModelMapper;
 
 public class PackagePurchaseService implements IPackagePurchaseService {
 
-    private final PackagePurchaseRepository packagePurchaseRepository;
+    private final IPackagePurchaseRepository packagePurchaseRepository;
     private final IUserService userService;
     private final IFlightRoutePackageService flightRoutePackageService;
     private final ModelMapper modelMapper;
 
-    public PackagePurchaseService(PackagePurchaseRepository packagePurchaseRepository,
+    public PackagePurchaseService(IPackagePurchaseRepository packagePurchaseRepository,
                                   IUserService userService,
                                   IFlightRoutePackageService flightRoutePackageService,
                                   ModelMapper modelMapper) {
@@ -53,7 +54,7 @@ public class PackagePurchaseService implements IPackagePurchaseService {
             );
         }
 
-        // Crear compra (el constructor valida y setea fechas)
+        // Crear compra
         PackagePurchase purchase = new PackagePurchase(customer, flightRoutePackage);
 
         // Guardar
