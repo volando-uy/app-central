@@ -11,6 +11,7 @@ public interface IFlightRoutePackageService {
     boolean flightRoutePackageExists(String flightRoutePackageName);
     List<String> getAllNotBoughtFlightRoutePackagesNames();
     void addFlightRouteToPackage(String packageName, String flightRouteName, Integer quantity);
+    List<FlightRoutePackageDTO> getPackagesWithFlightRoutes();
 
     List<FlightRoutePackage> getAllFlightRoutePackages();
 }

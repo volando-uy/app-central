@@ -106,6 +106,22 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     }
 
     @Override
+    public List<FlightRoutePackageDTO> getPackagesWithFlightRoutes() {
+        return flightRoutePackageRepository.findAll()
+                .stream()
+                .filter(pack -> pack.getFlightRoutes() != null && !pack.getFlightRoutes().isEmpty())
+                .map(pack -> {
+                    FlightRoutePackageDTO dto = modelMapper.map(pack, FlightRoutePackageDTO.class);
+                    dto.setFlightRouteNames(pack.getFlightRoutes()
+                            .stream()
+                            .map(FlightRoute::getName)
+                            .toList());
+                    return dto;
+                })
+                .toList();
+    }
+
+    @Override
     public List<FlightRoutePackage> getAllFlightRoutePackages() {
         return flightRoutePackageRepository.findAll();
     }

@@ -40,6 +40,11 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     }
 
     @Override
+    public List<FlightRoutePackageDTO> getPackagesWithFlightRoutes() {
+        return packageService.getPackagesWithFlightRoutes();
+    }
+
+    @Override
     public List<FlightRoutePackage> getAllFlightRoutePackages() {
         return packageService.getAllFlightRoutePackages();
     }
