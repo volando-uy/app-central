@@ -1,0 +1,43 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 640, 600 )
+			"minimumSize": new java.awt.Dimension( 640, 600 )
+			"maximumSize": new java.awt.Dimension( 640, 600 )
+			"background": new java.awt.Color( 238, 238, 238, 255 )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
+				name: "NavPanel"
+				"minimumSize": new java.awt.Dimension( 640, 60 )
+				"preferredSize": new java.awt.Dimension( 640, 60 )
+				"maximumSize": new java.awt.Dimension( 640, 60 )
+				"background": new java.awt.Color( 56, 106, 172, 255 )
+				"border": new javax.swing.border.EtchedBorder( 1, null, null )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createReservationBtn"
+					"text": "+ Reserva Vuelo"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "packagePurchaseBtn"
+					"text": "+ Comprar Paquete"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "nullBtn"
+					"text": "..."
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "null01Btn"
+					"text": "..."
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 105, 25 )
+			"size": new java.awt.Dimension( 640, 600 )
+		} )
+	}
+}

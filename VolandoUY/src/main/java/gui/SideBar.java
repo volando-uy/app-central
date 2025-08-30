@@ -21,16 +21,19 @@ public class SideBar extends JPanel {
     private MouseListener othersManagementBtnListener;
     private MouseListener flightRoutePackageManagementBtnListener;
     private MouseListener flightManagementBtnListener;
+    private MouseListener reservationsManagementBtnListener;
 
     public SideBar(MouseListener userManagementBtnListener,
                    MouseListener flightRouteManagementBtnListener,
                    MouseListener othersManagementBtnListener,
-                   MouseListener flightRoutePackageManagementBtnListener, MouseListener flightManagementBtnListener) {
+                   MouseListener flightRoutePackageManagementBtnListener, MouseListener flightManagementBtnListener,
+                   MouseListener reservationsManagementBtnListener) {
         this.userManagementBtnListener = userManagementBtnListener;
         this.flightRouteManagementBtnListener = flightRouteManagementBtnListener;
         this.othersManagementBtnListener = othersManagementBtnListener;
         this.flightRoutePackageManagementBtnListener = flightRoutePackageManagementBtnListener;
         this.flightManagementBtnListener = flightManagementBtnListener;
+        this.reservationsManagementBtnListener = reservationsManagementBtnListener;
 
         initComponents();
         initListeners();
@@ -50,11 +53,12 @@ public class SideBar extends JPanel {
         FlightRoutePackageManagementBtn.addMouseListener(flightRoutePackageManagementBtnListener);
         OthersManagementBtn.addMouseListener(othersManagementBtnListener);
         FlightManagementBtn.addMouseListener(flightManagementBtnListener);
+        ReservationsManagementBtn.addMouseListener(reservationsManagementBtnListener);
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         MenuPanel = new JPanel();
         invisibleLabel = new JLabel();
         Icon = new JLabel();
@@ -70,13 +74,12 @@ public class SideBar extends JPanel {
         setPreferredSize(new Dimension(160, 600));
         setMinimumSize(new Dimension(80, 300));
         setMaximumSize(new Dimension(160, 600));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
-        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-        .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
-        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
-        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+        border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
+        , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
+        .BOLD ,12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
+        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
+        .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== MenuPanel ========
@@ -177,7 +180,7 @@ public class SideBar extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel MenuPanel;
     private JLabel invisibleLabel;
     private JLabel Icon;

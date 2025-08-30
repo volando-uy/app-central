@@ -10,11 +10,13 @@ import controllers.city.ICityController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.packagePurchase.IPackagePurchaseController;
 import controllers.user.IUserController;
 import gui.flight.FlightPanel;
 import gui.flightRoute.FlightRoutePanel;
 import gui.flightRoutePackage.FlightRoutePackagePanel;
 import gui.others.OtherPanel;
+import gui.reservations.ReservationPanel;
 import gui.user.UserPanel;
 
 /**
@@ -29,6 +31,7 @@ public class MainFrame extends JFrame {
     private ICityController cityController;
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightController flightController;
+    private IPackagePurchaseController packagePurchaseController;
 
     private JPanel userPanel;
     private JPanel flightRoutePanel;
@@ -44,13 +47,15 @@ public class MainFrame extends JFrame {
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
                      ICategoryController categoryController, ICityController cityController,
-                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController) {
+                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController,
+                     IPackagePurchaseController packagePurchaseController) {
         this.flightController = flightController;
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.categoryController = categoryController;
         this.cityController = cityController;
         this.flightRoutePackageController = flightRoutePackageController;
+        this.packagePurchaseController = packagePurchaseController;
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
         } catch( Exception ex ) {
@@ -175,8 +180,14 @@ public class MainFrame extends JFrame {
                 updateMainPanel(flightPanel, 4);
             }
         };
-
-        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener, flightManagementBtnListener);
+        MouseListener reservationsManagementBtnListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Reservations Management button clicked");
+                updateMainPanel(new ReservationPanel(userController, flightRoutePackageController, packagePurchaseController), 5);
+            }
+        };
+        return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener, flightManagementBtnListener, reservationsManagementBtnListener);
     }
 
 }
