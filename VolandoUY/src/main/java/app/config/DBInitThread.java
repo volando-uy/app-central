@@ -205,8 +205,8 @@ public class DBInitThread extends Thread {
         customerDTO1.setMail("waza@gmail.com");
         customerDTO1.setCitizenship("uruguayo");
         customerDTO1.setBirthDate(LocalDate.of(2004, 12, 12));
-        customerDTO1.setId("123123123");
-        customerDTO1.setIdType(EnumTipoDocumento.CI);
+        customerDTO1.setNumDoc("123123123");
+        customerDTO1.setDocType(EnumTipoDocumento.CI);
         userController.registerCustomer(customerDTO1);
 
         CustomerDTO customerDTO2 = new CustomerDTO();
@@ -216,8 +216,8 @@ public class DBInitThread extends Thread {
         customerDTO2.setMail("waza2@gmail.com");
         customerDTO2.setCitizenship("uruguayo");
         customerDTO2.setBirthDate(LocalDate.of(2003, 1, 1));
-        customerDTO2.setId("123123124");
-        customerDTO2.setIdType(EnumTipoDocumento.CI);
+        customerDTO2.setNumDoc("123123124");
+        customerDTO2.setDocType(EnumTipoDocumento.CI);
         userController.registerCustomer(customerDTO2);
 
 // Crear aerolíneas

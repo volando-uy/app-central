@@ -10,6 +10,8 @@ import domain.models.user.Airline;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
+import domain.services.user.UserService;
+import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
 import infra.repository.flightroute.FlightRouteRepository;
 import lombok.Setter;
@@ -33,6 +35,9 @@ public class FlightRouteService implements IFlightRouteService {
 
     public FlightRouteService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+        this.userService = ServiceFactory.getUserService();
+        this.categoryService = ServiceFactory.getCategoryService();
+        this.cityService = ServiceFactory.getCityService();
         this.flightRouteRepository = new FlightRouteRepository();
         this.flightRepository = new FlightRepository();
     }

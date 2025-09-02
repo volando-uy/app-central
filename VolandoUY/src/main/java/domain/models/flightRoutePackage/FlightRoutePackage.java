@@ -1,5 +1,6 @@
 package domain.models.flightRoutePackage;
 
+import domain.models.buypackage.BuyPackage;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Customer;
@@ -23,7 +24,7 @@ public class FlightRoutePackage {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Customer> buyers;
 
     @Id
@@ -47,6 +48,11 @@ public class FlightRoutePackage {
 
     @NotNull
     private EnumTipoAsiento seatType;
+
+    //Tiene muchos compras de paquete
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<BuyPackage> buyPackages;
+
 
     // 🔹 Método helper para obtener la fecha de expiración
     public LocalDateTime getExpirationDate() {

@@ -16,6 +16,7 @@ import shared.constants.RegexPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -30,11 +31,11 @@ public class Airline extends User {
     private String web;
 
     // RELACIÓN BIDIRECCIONAL CORRECTA: Flight -> Airline
-    @OneToMany(mappedBy = "airline", orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airline", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Flight> flights = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL CORRECTA: FlightRoute -> Airline
-    @OneToMany(mappedBy = "airline", orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airline", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes = new ArrayList<>();
 
     public Airline(String nickname, String name, String mail, String description, String web) {
@@ -56,9 +57,8 @@ public class Airline extends User {
         return "Airline{" +
                 "description='" + description + '\'' +
                 ", web='" + web + '\'' +
-                ", flights=" + flights +
-                ", flightRoutes=" + (flightRoutes == null ? "[]" :
-                flightRoutes.stream().map(FlightRoute::getName).toList()) +
-                '}';
+                ", flights=" + (flights != null ? flights.stream().map(Flight::getName).toList() : "[]") +
+                ", flightRoutes=" + (flightRoutes != null ? flightRoutes.stream().map(FlightRoute::getName).toList() : "[]") +
+                "} " + super.toString();
     }
 }

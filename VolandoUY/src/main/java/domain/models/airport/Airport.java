@@ -22,17 +22,20 @@ import shared.utils.ValidatorUtil;
 @Entity
 public class Airport {
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private City city;
+    @Id
+    @NotBlank(message = ErrorMessages.ERR_AIRPORT_CODE_MANDATORY)
+    @Pattern(regexp = "^[A-Z]{3}$", message = ErrorMessages.ERR_AIRPORT_CODE_FORMAT)
+    private String code;
 
     @NotBlank(message = ErrorMessages.ERR_AIRPORT_NAME_MANDATORY)
     @Size(min = 2, max = 100)
     private String name;
 
-    @Id
-    @NotBlank(message = ErrorMessages.ERR_AIRPORT_CODE_MANDATORY)
-    @Pattern(regexp = "^[A-Z]{3}$", message = ErrorMessages.ERR_AIRPORT_CODE_FORMAT)
-    private String code;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City city;
+
+
 
     public Airport(String name, String code) {
         this.name = name;

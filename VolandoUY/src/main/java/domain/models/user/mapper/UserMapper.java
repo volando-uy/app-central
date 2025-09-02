@@ -56,8 +56,8 @@ public class UserMapper {
         dto.setName(customer.getName());
         dto.setSurname(customer.getSurname());
         dto.setMail(customer.getMail());
-        dto.setIdType(customer.getIdType());
-        dto.setId(customer.getId());
+        dto.setDocType(customer.getDocType());
+        dto.setNumDoc(customer.getNumDoc());
         dto.setBirthDate(customer.getBirthDate());
         dto.setCitizenship(customer.getCitizenship());
 

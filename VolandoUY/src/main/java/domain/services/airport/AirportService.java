@@ -4,6 +4,8 @@ import domain.dtos.airport.AirportDTO;
 import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
+import factory.ControllerFactory;
+import factory.ServiceFactory;
 import infra.repository.airport.AirportRepository;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,7 @@ public class AirportService implements IAirportService {
 
     public AirportService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+        this.cityService= ServiceFactory.getCityService();
         this.airportRepository = new AirportRepository();
     }
 

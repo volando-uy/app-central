@@ -9,19 +9,28 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class CustomerDTO extends UserDTO {
+
     private String surname;
     private String citizenship;
     private LocalDate birthDate;
-    private String id;
-    private EnumTipoDocumento idType;
+    private String numDoc; // corregido
+    private EnumTipoDocumento docType; // corregido
 
-    public CustomerDTO(String nickname, String name, String email, String surname, String citizenship, LocalDate birthDate, String id, EnumTipoDocumento idType) {
+    public CustomerDTO(
+            String nickname,
+            String name,
+            String email,
+            String surname,
+            String citizenship,
+            LocalDate birthDate,
+            String numDoc,
+            EnumTipoDocumento docType
+    ) {
         super(nickname, name, email);
         this.surname = surname;
         this.citizenship = citizenship;
         this.birthDate = birthDate;
-        this.id = id;
-        this.idType = idType;
+        this.numDoc = numDoc;
+        this.docType = docType;
     }
-
 }
