@@ -21,7 +21,7 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     }
     @Override
     public FlightRoutePackageDTO getFlightRoutePackageByName(String packageName) {
-        return packageService.getFlightRoutePackageByName(packageName);
+        return packageService.getFlightRoutePackageDetailsByName(packageName);
     }
 
     @Override

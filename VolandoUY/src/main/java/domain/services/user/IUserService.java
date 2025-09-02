@@ -6,6 +6,8 @@ import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
+import domain.models.user.Customer;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 
 import java.util.List;
 
@@ -26,7 +28,13 @@ public interface IUserService {
     UserDTO getUserByNickname(String nickname);
     UserDTO updateUser(String nickname, UserDTO userDTO);
     void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute);
+
     Airline getAirlineByNickname(String nickname);
+    Customer getCustomerByNickname(String nickname);
+
+    void addFlightRoutePackageToCustomer(String customerNickname, String packageName);
 
     boolean existsUserByNickname(String nickname);
+
+    void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
 }

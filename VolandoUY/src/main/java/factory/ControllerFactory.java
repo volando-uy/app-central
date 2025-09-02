@@ -10,8 +10,6 @@ import controllers.flight.FlightController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
-import controllers.packagePurchase.IPackagePurchaseController;
-import controllers.packagePurchase.PackagePurchaseController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
 import controllers.flightRoutePackage.FlightRoutePackageController;
@@ -46,7 +44,6 @@ public class ControllerFactory {
     private static ICityController cityController;
     private static IFlightRoutePackageController packageController;
     private static IAirportController airportController;
-    private static IPackagePurchaseController packagePurchaseController;
 
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
@@ -156,15 +153,6 @@ public class ControllerFactory {
             airportController = new AirportController(ServiceFactory.getAirportService());
         }
         return airportController;
-    }
-    // ############### Package purchase #################
-    public static IPackagePurchaseController getPackagePurchaseController() {
-        if (packagePurchaseController == null) {
-            packagePurchaseController = new PackagePurchaseController(
-                    ServiceFactory.getPackagePurchaseService()
-            );
-        }
-        return packagePurchaseController;
     }
 
 }

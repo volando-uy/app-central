@@ -5,6 +5,10 @@ package domain.services.flightRoute;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flightRoute.FlightRoute;
+import domain.services.category.ICategoryService;
+import domain.services.city.ICityService;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.user.IUserService;
 
 import java.util.List;
 
@@ -15,4 +19,8 @@ public interface IFlightRouteService {
     boolean existFlightRoute(String name);
     List<FlightRouteDTO> getAllFlightRoutesDetailsByAirlineNickname(String airlineNickname);
     List<FlightDTO> getFlightsByRouteName(String routeName);
+
+    void setCategoryService(ICategoryService categoryService);
+    void setCityService(ICityService cityService);
+    void setUserService(IUserService userService);
 }

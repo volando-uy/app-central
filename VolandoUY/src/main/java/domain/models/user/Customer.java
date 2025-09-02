@@ -4,6 +4,7 @@ package domain.models.user;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.enums.EnumTipoDocumento;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +24,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name="customer")
 public class Customer extends User {
+
+    @ManyToMany
+    private List<FlightRoutePackage> boughtPackages;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -39,8 +44,6 @@ public class Customer extends User {
 
     @NotBlank
     private String id;
-
-
 
     @Override
     public void updateDataFrom(UserDTO newData) {

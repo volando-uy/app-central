@@ -24,4 +24,6 @@ public interface IUserController {
     UserDTO getUserByNickname(String nickname);
     AirlineDTO getAirlineByNickname(String nickname);
     CustomerDTO getCustomerByNickname(String nickname);
+
+    void addFlightRoutePackageToCustomer(String customerNickname, String packageName);
 }

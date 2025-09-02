@@ -5,7 +5,6 @@
 package gui.reservations.packagePurchase;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
-import controllers.packagePurchase.IPackagePurchaseController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.services.user.IUserService;
@@ -21,12 +20,10 @@ import javax.swing.border.*;
 public class PackagePurchasePanel extends JPanel {
     private IUserController userController;
     private IFlightRoutePackageController flightRoutePackageController;
-    private IPackagePurchaseController packagePurchaseController;
     private List<FlightRoutePackageDTO> availablePackages;
-    public PackagePurchasePanel(IUserController uController, IFlightRoutePackageController frpController, IPackagePurchaseController ppController) {
-        this.userController = uController;
-        this.flightRoutePackageController = frpController;
-        this.packagePurchaseController = ppController;
+    public PackagePurchasePanel(IUserController userController, IFlightRoutePackageController flightRoutePackageController) {
+        this.userController = userController;
+        this.flightRoutePackageController = flightRoutePackageController;
         initComponents();
         loadPackagesWithRoutes();
         loadClients();
@@ -75,7 +72,7 @@ public class PackagePurchasePanel extends JPanel {
                 String nickname = clientText.substring(clientText.lastIndexOf("(") + 1, clientText.length() - 1);
 
                 // llamar al controlador
-                packagePurchaseController.purchasePackage(nickname, selectedPackageName);
+                userController.addFlightRoutePackageToCustomer(nickname, selectedPackageName);
 
                 JOptionPane.showMessageDialog(this,
                         "Compra registrada con éxito",

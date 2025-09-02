@@ -5,6 +5,7 @@ import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
 import infra.repository.airport.AirportRepository;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -16,11 +17,12 @@ import java.util.List;
 public class AirportService implements IAirportService {
     private AirportRepository airportRepository;
     private ModelMapper modelMapper;
+
+    @Setter
     private ICityService cityService;
 
-    public AirportService(ModelMapper modelMapper, ICityService cityService) {
+    public AirportService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.cityService = cityService;
         this.airportRepository = new AirportRepository();
     }
 

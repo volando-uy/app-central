@@ -10,7 +10,6 @@ import controllers.city.ICityController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
-import controllers.packagePurchase.IPackagePurchaseController;
 import controllers.user.IUserController;
 import gui.flight.FlightPanel;
 import gui.flightRoute.FlightRoutePanel;
@@ -31,7 +30,6 @@ public class MainFrame extends JFrame {
     private ICityController cityController;
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightController flightController;
-    private IPackagePurchaseController packagePurchaseController;
 
     private JPanel userPanel;
     private JPanel flightRoutePanel;
@@ -48,22 +46,20 @@ public class MainFrame extends JFrame {
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
                      ICategoryController categoryController, ICityController cityController,
-                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController,
-                     IPackagePurchaseController packagePurchaseController) {
+                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController) {
         this.flightController = flightController;
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.categoryController = categoryController;
         this.cityController = cityController;
         this.flightRoutePackageController = flightRoutePackageController;
-        this.packagePurchaseController = packagePurchaseController;
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
         }
 
-// create UI here...
+        // create UI here...
         initUI();
     }
 
@@ -118,7 +114,7 @@ public class MainFrame extends JFrame {
         flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController);
         flightPanel = new FlightPanel(flightController, flightRouteController, userController);
         otherPanel = new OtherPanel(categoryController, cityController);
-        reservationPanel = new ReservationPanel(userController, flightRoutePackageController, packagePurchaseController);
+        reservationPanel = new ReservationPanel(userController, flightRoutePackageController);
 
         MouseListener userManagementBtnListener = new MouseAdapter() {
             @Override
@@ -156,7 +152,7 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Management button clicked");
-                updateMainPanel(flightPanel, 4);
+                updateMainPanel(flightPanel, 2);
             }
         };
         MouseListener reservationsManagementBtnListener = new MouseAdapter() {

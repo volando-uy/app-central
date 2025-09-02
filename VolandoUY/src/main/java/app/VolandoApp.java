@@ -36,14 +36,13 @@ public class VolandoApp {
         new DBInitThread().start();
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(
-                    ControllerFactory.getUserController(),
-                    ControllerFactory.getFlightRouteController(),
-                    ControllerFactory.getCategoryController(),
-                    ControllerFactory.getCityController(),
-                    ControllerFactory.getFlightRoutePackageController(),
-                    ControllerFactory.getFlightController(),
-                    ControllerFactory.getPackagePurchaseController()
+            new MainFrame(
+                ControllerFactory.getUserController(),
+                ControllerFactory.getFlightRouteController(),
+                ControllerFactory.getCategoryController(),
+                ControllerFactory.getCityController(),
+                ControllerFactory.getFlightRoutePackageController(),
+                ControllerFactory.getFlightController()
             );
         });
 
