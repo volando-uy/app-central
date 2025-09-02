@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import utils.TestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,7 @@ class FlightRouteServiceTest {
         cityService = new CityService(modelMapper);         // debería tener lista interna de ciudades
 
         // Creamos el servicio a testear con sus dependencias reales
-        flightRouteService = new FlightRouteService(modelMapper, categoryService, userService, cityService);
+        flightRouteService = new FlightRouteService(modelMapper);
         this.fillDB();
     }
 
@@ -157,6 +158,15 @@ class FlightRouteServiceTest {
     @DisplayName("GIVEN existing route WHEN getFlightRouteDetailsByName THEN return DTO")
     void getFlightRouteDetailsByName_shouldReturnDTO() {
         // GIVEN
+        //Crear vuelo nombre vuelo1
+
+//        flightRouteService.createFlightRoute(new FlightRouteDTO(
+//                "RutaDetalle", "Detalles", LocalDate.now(),
+//                120.0, 250.0, 30.0,
+//                "Montevideo", "Buenos Aires", "air123",
+//                List.of("Promo"),
+//                List.of("Vuelo1")
+//        ));
         FlightRouteDTO dto = new FlightRouteDTO(
                 "RutaDetalle", "Detalles", LocalDate.now(),
                 120.0, 250.0, 30.0,

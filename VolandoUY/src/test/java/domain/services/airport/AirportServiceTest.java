@@ -25,7 +25,7 @@ class AirportServiceTest {
         TestUtils.cleanDB();
         modelMapper = new ModelMapper();
         cityService = new CityService(modelMapper);
-        airportService = new AirportService(modelMapper, cityService);
+        airportService = new AirportService(modelMapper);
 
         // Ciudad base para todos los tests
         cityService.createCity(new CityDTO("Montevideo", "Uruguay", -34.9, -56.2,new ArrayList<>()));

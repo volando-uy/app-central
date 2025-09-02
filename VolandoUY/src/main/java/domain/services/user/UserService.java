@@ -172,33 +172,33 @@ public class UserService implements IUserService {
 
     @Override
     public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
-        Customer customer = this.getCustomerByNickname(customerNickname);
-        FlightRoutePackage flightRoutePackage = flightRoutePackageService.getFlightRoutePackageByName(packageName);
-
-        // Verificar si ya compró este paquete
-        customer.getBoughtPackages().stream()
-                .filter(pkg -> pkg.getName().equalsIgnoreCase(packageName))
-                .findFirst()
-                .ifPresent(pkg -> {
-                    throw new IllegalArgumentException(
-                            String.format("El cliente %s ya compró el paquete %s", customerNickname, packageName)
-                    );
-                });
-
-        // Validar que el paquete no esté vencido
-        if (flightRoutePackage.isExpired()) {
-            throw new IllegalArgumentException(
-                    String.format("El paquete %s ya expiró y no puede ser comprado", packageName)
-            );
-        }
-
-        // Añadir el paquete al cliente y viceversa
-        customer.getBoughtPackages().add(flightRoutePackage);
-        flightRoutePackage.getBuyers().add(customer);
-
-        // Guardar cambios en ambos repositorios
-        userRepository.save(customer);
-        flightRoutePackageService._updateFlightRoutePackage(flightRoutePackage);
+//        Customer customer = this.getCustomerByNickname(customerNickname);
+//        FlightRoutePackage flightRoutePackage = flightRoutePackageService.getFlightRoutePackageByName(packageName);
+//
+//        // Verificar si ya compró este paquete
+//        customer.getBoughtPackages().stream()
+//                .filter(pkg -> pkg.getName().equalsIgnoreCase(packageName))
+//                .findFirst()
+//                .ifPresent(pkg -> {
+//                    throw new IllegalArgumentException(
+//                            String.format("El cliente %s ya compró el paquete %s", customerNickname, packageName)
+//                    );
+//                });
+//
+//        // Validar que el paquete no esté vencido
+//        if (flightRoutePackage.isExpired()) {
+//            throw new IllegalArgumentException(
+//                    String.format("El paquete %s ya expiró y no puede ser comprado", packageName)
+//            );
+//        }
+//
+//        // Añadir el paquete al cliente y viceversa
+//        customer.getBoughtPackages().add(flightRoutePackage);
+//        flightRoutePackage.getBuyers().add(customer);
+//
+//        // Guardar cambios en ambos repositorios
+//        userRepository.save(customer);
+//        flightRoutePackageService._updateFlightRoutePackage(flightRoutePackage);
     }
 
 

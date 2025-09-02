@@ -25,23 +25,27 @@ public class City {
     @Size(min = 2, max = 100)
     private String name;
 
+    @NotBlank
+    @Size(min = 2, max = 100)
+    private String country;
+
+    @DecimalMin(value = "-90.0", message = ErrorMessages.ERROR_MIN_LATITUDE)
+    @DecimalMax(value = "90.0", message = ErrorMessages.ERROR_MAX_LATITUDE)
+    private double latitude;
+
+    @DecimalMin(value = "-180.0", message = ErrorMessages.ERROR_MIN_LONGITUDE)
+    @DecimalMax(value = "180.0", message = ErrorMessages.ERROR_MAX_LONGITUDE)
+    private double longitude;
+
 
     @Valid // valida cada Airport dentro de la lista
     @OneToMany(mappedBy = "city", fetch = FetchType.EAGER)
     private List<Airport> airports = new ArrayList<>();
 
 
-    @NotBlank
-    @Size(min = 2, max = 100)
-    private String country;
 
-    @DecimalMin(value = "-90.0", inclusive = true, message = ErrorMessages.ERROR_MIN_LATITUDE)
-    @DecimalMax(value = "90.0", inclusive = true, message = ErrorMessages.ERROR_MAX_LATITUDE)
-    private double latitude;
 
-    @DecimalMin(value = "-180.0", inclusive = true, message = ErrorMessages.ERROR_MIN_LONGITUDE)
-    @DecimalMax(value = "180.0", inclusive = true, message = ErrorMessages.ERROR_MAX_LONGITUDE)
-    private double longitude;
+
 
     public City(String name, String country, double latitude, double longitude) {
         this.name = name;

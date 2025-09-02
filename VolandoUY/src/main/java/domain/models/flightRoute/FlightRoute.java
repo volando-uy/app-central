@@ -21,28 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 public class FlightRoute {
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Category> categories = new ArrayList<>();
-
-    // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
-    @OneToMany(
-            mappedBy = "flightRoute",
-//            cascade = CascadeType.MERGE,   // o sin cascada
-            orphanRemoval = true,
-            fetch = FetchType.EAGER
-    )
-    private List<Flight> flights = new ArrayList<>();
-
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Airline airline;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private City originCity;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private City destinationCity;
-
     @Id
     @NotNull
     @NotEmpty
@@ -57,6 +35,7 @@ public class FlightRoute {
     @NotNull
     private LocalDate createdAt;
 
+
     @NotNull
     @PositiveOrZero()
     private Double priceTouristClass;
@@ -66,6 +45,32 @@ public class FlightRoute {
 
     @PositiveOrZero()
     private Double priceExtraUnitBaggage;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City originCity;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City destinationCity;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Category> categories = new ArrayList<>();
+
+
+    // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
+    @OneToMany(
+            mappedBy = "flightRoute",
+//            cascade = CascadeType.MERGE,   // o sin cascada
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    private List<Flight> flights = new ArrayList<>();
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Airline airline;
+
+
+
 
     public FlightRoute(String name, String description, LocalDate createdAt,
                        Double priceTouristClass, Double priceBusinessClass,

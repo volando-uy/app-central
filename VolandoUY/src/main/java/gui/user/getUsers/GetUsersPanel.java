@@ -52,8 +52,8 @@ public class GetUsersPanel extends JPanel {
                 customerDTO.getMail(),
                 customerDTO.getCitizenship(),
                 customerDTO.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                customerDTO.getIdType(),
-                customerDTO.getId()
+                customerDTO.getDocType(),
+                customerDTO.getNumDoc()
             };
             customerTableModel.addRow(rowData);
         }

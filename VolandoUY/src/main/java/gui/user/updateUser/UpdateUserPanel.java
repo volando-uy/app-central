@@ -100,12 +100,12 @@ public class UpdateUserPanel extends JPanel {
                     variableLabel2.setText("Nacionalidad:");
                     variableTextField2.setText(selectedUser.getCitizenship());
                     variableLabel3.setText("ID:");
-                    variableTextField3.setText(selectedUser.getId());
+                    variableTextField3.setText(selectedUser.getNumDoc());
                     variableLabel4.setText("Fecha de nacimiento:");
                     variableTextField4.setText(selectedUser.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     idTypeLabel.setText("Tipo de ID:");
                     idTypeComboBox.setModel(new DefaultComboBoxModel<>(EnumTipoDocumento.values()));
-                    idTypeComboBox.setSelectedItem(selectedUser.getIdType());
+                    idTypeComboBox.setSelectedItem(selectedUser.getDocType());
 
                     nameLabel.setEnabled(true);
                     nameTextField.setEnabled(true);
@@ -151,9 +151,9 @@ public class UpdateUserPanel extends JPanel {
                     customer.setName(name);
                     customer.setSurname(variable1);
                     customer.setCitizenship(variable2);
-                    customer.setId(variable3);
+                    customer.setNumDoc(variable3);
                     customer.setBirthDate(LocalDate.parse(variable4, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                    customer.setIdType((EnumTipoDocumento) idTypeComboBox.getSelectedItem());
+                    customer.setDocType((EnumTipoDocumento) idTypeComboBox.getSelectedItem());
                     userController.updateUser(customer.getNickname(), customer);
                 } else {
                     JOptionPane.showMessageDialog(this, "Error del sistema", "Error", JOptionPane.ERROR_MESSAGE);

@@ -45,8 +45,8 @@ class FlightRoutePackageServiceTest {
         var userService     = new UserService(modelMapper, new UserMapper(modelMapper));
         var cityService     = new CityService(modelMapper);
         var categoryService = new CategoryService(modelMapper);
-        flightRouteService  = new FlightRouteService(modelMapper, categoryService, userService, cityService);
-        packageService      = new FlightRoutePackageService(flightRouteService, modelMapper);
+        flightRouteService  = new FlightRouteService(modelMapper);
+        packageService      = new FlightRoutePackageService(modelMapper);
 
         // ---- Semilla mínima en DB: Airline + Cities + Category ----
         try (EntityManager em = DBConnection.getEntityManager()) {
