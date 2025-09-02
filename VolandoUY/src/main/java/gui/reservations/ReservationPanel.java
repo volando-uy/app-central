@@ -28,8 +28,8 @@ public class ReservationPanel extends JPanel {
         this.userController = userController;
         this.flightRoutePackageController = flightRoutePackageController;
         this.packagePurchaseController = packagePurchaseController;
-        initComponents();
         initPanels();
+        initComponents();
         initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
@@ -52,6 +52,7 @@ public class ReservationPanel extends JPanel {
                     remove(contentPanel);
                 }
 
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
                 contentPanel = panel;
                 add(contentPanel, BorderLayout.CENTER);
                 revalidate();
