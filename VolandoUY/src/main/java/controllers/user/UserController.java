@@ -74,5 +74,10 @@ public class UserController implements IUserController {
         return userService.getCustomerDetailsByNickname(nickname);
     }
 
+    @Override
+    public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
+        userService.addFlightRoutePackageToCustomer(customerNickname, packageName);
+    }
+
 
 }

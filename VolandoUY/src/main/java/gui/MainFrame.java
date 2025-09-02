@@ -10,7 +10,6 @@ import controllers.city.ICityController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
-import controllers.packagePurchase.IPackagePurchaseController;
 import controllers.user.IUserController;
 import gui.flight.FlightPanel;
 import gui.flightRoute.FlightRoutePanel;
@@ -31,13 +30,13 @@ public class MainFrame extends JFrame {
     private ICityController cityController;
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightController flightController;
-    private IPackagePurchaseController packagePurchaseController;
 
     private JPanel userPanel;
     private JPanel flightRoutePanel;
     private JPanel flightRoutePackagePanel;
     private JPanel flightPanel;
     private JPanel otherPanel;
+    private JPanel reservationPanel;
 
     private SideBar sideBar;
     private JPanel mainPanel;
@@ -47,22 +46,20 @@ public class MainFrame extends JFrame {
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
                      ICategoryController categoryController, ICityController cityController,
-                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController,
-                     IPackagePurchaseController packagePurchaseController) {
+                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController) {
         this.flightController = flightController;
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.categoryController = categoryController;
         this.cityController = cityController;
         this.flightRoutePackageController = flightRoutePackageController;
-        this.packagePurchaseController = packagePurchaseController;
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
         }
 
-// create UI here...
+        // create UI here...
         initUI();
     }
 
@@ -73,21 +70,6 @@ public class MainFrame extends JFrame {
         if (splash == null) {
             System.out.println("SplashScreen.getSplashScreen() returned null");
         }
-//        Graphics2D g = splash.createGraphics();
-//        if (g == null) {
-//            System.out.println("g is null");
-//        }
-
-        // Esto permite agregar cosas al splash y fixear el tiempo que se ve
-//        for(int i=0; i<100; i++) {
-//            renderSplashFrame(g, i);
-//            splash.update();
-//            try {
-//                Thread.sleep(50);
-//            }
-//            catch(InterruptedException e) {
-//            }
-//        }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Volando Uy");
@@ -105,19 +87,11 @@ public class MainFrame extends JFrame {
         add(sideBar, BorderLayout.WEST);
         add(mainPanel, BorderLayout.CENTER);
 
-        splash.close();
+        if (splash != null) {
+            splash.close();
+        }
         setVisible(true);
         toFront();
-    }
-
-    // Permite renderizar en el splash
-    static void renderSplashFrame(Graphics2D g, int frame) {
-        final String[] comps = {"Volando Uy", "Loading DB", "Starting UI"};
-        g.setComposite(AlphaComposite.Clear);
-        g.fillRect(120, 140, 200, 40);
-        g.setPaintMode();
-        g.setColor(Color.WHITE);
-        g.drawString("Loading " + comps[(frame / 5) % 3] + "...", 120, 150);
     }
 
     private void updateMainPanel(JPanel panel, Integer panelType) {
@@ -140,6 +114,7 @@ public class MainFrame extends JFrame {
         flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController);
         flightPanel = new FlightPanel(flightController, flightRouteController, userController);
         otherPanel = new OtherPanel(categoryController, cityController);
+        reservationPanel = new ReservationPanel(userController, flightRoutePackageController);
 
         MouseListener userManagementBtnListener = new MouseAdapter() {
             @Override
@@ -177,14 +152,14 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Flight Management button clicked");
-                updateMainPanel(flightPanel, 4);
+                updateMainPanel(flightPanel, 2);
             }
         };
         MouseListener reservationsManagementBtnListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Reservations Management button clicked");
-                updateMainPanel(new ReservationPanel(userController, flightRoutePackageController, packagePurchaseController), 5);
+                updateMainPanel(reservationPanel, 5);
             }
         };
         return new SideBar(userManagementBtnListener, flightRoutesManagementBtnListener, othersManagementBtnListener, flightRoutePackagesManagementBtnListener, flightManagementBtnListener, reservationsManagementBtnListener);

@@ -10,6 +10,7 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -65,26 +66,67 @@ public class GetFlightRoutesPanel extends JPanel {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        flightRouteLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                // Recarga las aerolíneas y la tabla
+                loadAirlinesIntoCombo();
+                String nickname = getSelectedAirlineNickname();
+                if (nickname != null && !nickname.isEmpty()) {
+                    loadFlightRoutesTable(nickname);
+                } else {
+                    clearTable();
+                }
+            }
+        });
     }
 
     private void loadAirlinesIntoCombo() {
         areAirlinesLoading = true;
+
+        // Guardar la seleccion si ya existe
+        String currentSelection = null;
+        if (airlineComboBox.getSelectedItem() != null) {
+            currentSelection = airlineComboBox.getSelectedItem().toString();
+            System.out.println("Recargando aerolíneas, selección actual: " + currentSelection);
+        }
+
+        // Borrar la lista y la info del comboBox
         airlines.clear();
         airlineComboBox.removeAllItems();
 
-        // asumo que tu IUserController tiene getAllAirlines()
+        // Obtener las aerolineas
         List<AirlineDTO> list = userController.getAllAirlines();
         if (list == null) return;
 
         airlines.addAll(list);
+
+        // Iterar por las aerolineas de la lista
+        Integer selectedIndex = null;
         for (AirlineDTO a : airlines) {
             // Muestra “Nombre (nickname)”
             String display = safe(a.getName()) + " (" + safe(a.getNickname()) + ")";
+
+            // Buscar si es la seleccion anterior
+            if (currentSelection != null && currentSelection.equalsIgnoreCase(display)) {
+                selectedIndex = airlineComboBox.getItemCount();
+            }
+
+            // Añadir al combo
             airlineComboBox.addItem(display);
         }
 
         areAirlinesLoading = false;
-        if (!airlines.isEmpty()) airlineComboBox.setSelectedIndex(0);
+
+        // Asignarle un valor inicial
+        if (!airlines.isEmpty()) {
+            // Si ya tenía un valor inicial y lo encontramos nuevamente, asignarle ese
+            // Si no, asignarle el primero
+            airlineComboBox.setSelectedIndex(
+                    selectedIndex != null ? selectedIndex : 0
+            );
+        }
     }
 
     private String getSelectedAirlineNickname() {
@@ -103,14 +145,13 @@ public class GetFlightRoutesPanel extends JPanel {
                 "Nombre", "Descripción", "Creado",
                 "Origen", "Destino", "Aerolínea",
                 "$ Turista", "$ Business", "$ Extra Bulto",
-                "Categorías", "Vuelos"
+                "Categorías"
         };
         model.setColumnIdentifiers(cols);
 
         for (FlightRouteDTO r : routes) {
             String created = r.getCreatedAt() != null ? r.getCreatedAt().format(DTF) : "";
             String cats    = r.getCategories()   != null ? String.join(", ", r.getCategories())   : "";
-            String flights = r.getFlightsNames() != null ? String.join(", ", r.getFlightsNames()) : "";
 
             // nombre bonito de aerolínea: buscamos en la lista ya cargada
             String airlineName = r.getAirlineNickname();
@@ -131,8 +172,7 @@ public class GetFlightRoutesPanel extends JPanel {
                     fmtMoney(r.getPriceTouristClass()),
                     fmtMoney(r.getPriceBusinessClass()),
                     fmtMoney(r.getPriceExtraUnitBaggage()),
-                    cats,
-                    flights
+                    cats
             });
         }
 
@@ -148,7 +188,7 @@ public class GetFlightRoutesPanel extends JPanel {
                 "Nombre", "Descripción", "Creado",
                 "Origen", "Destino", "Aerolínea",
                 "$ Turista", "$ Business", "$ Extra Bulto",
-                "Categorías", "Vuelos"
+                "Categorías"
         });
         FlightRouteTable.setModel(model);
     }

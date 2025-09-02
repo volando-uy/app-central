@@ -12,6 +12,7 @@ import domain.services.city.ICityService;
 import domain.services.user.IUserService;
 import infra.repository.flight.FlightRepository;
 import infra.repository.flightroute.FlightRouteRepository;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -20,20 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Setter
 public class FlightRouteService implements IFlightRouteService {
 
     FlightRouteRepository flightRouteRepository;
     FlightRepository flightRepository;
+    private ModelMapper modelMapper;
     private ICategoryService categoryService;
     private ICityService cityService;
-    private ModelMapper modelMapper;
     private IUserService userService;
 
-    public FlightRouteService(ModelMapper modelMapper, ICategoryService categoryService, IUserService userService, ICityService cityService) {
+    public FlightRouteService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.cityService = cityService;
         this.flightRouteRepository = new FlightRouteRepository();
         this.flightRepository = new FlightRepository();
     }

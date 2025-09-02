@@ -5,7 +5,6 @@
 package gui.reservations;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
-import controllers.packagePurchase.IPackagePurchaseController;
 import controllers.user.IUserController;
 import gui.reservations.packagePurchase.PackagePurchasePanel;
 
@@ -21,20 +20,18 @@ import javax.swing.border.*;
 public class ReservationPanel extends JPanel {
     private IUserController userController;
     private IFlightRoutePackageController flightRoutePackageController;
-    private IPackagePurchaseController packagePurchaseController;
     private JPanel packagePurchasePanel;
     private JPanel contentPanel;
-    public ReservationPanel(IUserController userController,IFlightRoutePackageController flightRoutePackageController,IPackagePurchaseController packagePurchaseController) {
+    public ReservationPanel(IUserController userController,IFlightRoutePackageController flightRoutePackageController) {
         this.userController = userController;
         this.flightRoutePackageController = flightRoutePackageController;
-        this.packagePurchaseController = packagePurchaseController;
-        initComponents();
         initPanels();
+        initComponents();
         initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     private void initPanels() {
-        packagePurchasePanel = new PackagePurchasePanel(userController, flightRoutePackageController, packagePurchaseController);
+        packagePurchasePanel = new PackagePurchasePanel(userController, flightRoutePackageController);
     }
     private void initListeners() {
         packagePurchaseBtn.addMouseListener(createListener(packagePurchasePanel));
@@ -52,6 +49,7 @@ public class ReservationPanel extends JPanel {
                     remove(contentPanel);
                 }
 
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
                 contentPanel = panel;
                 add(contentPanel, BorderLayout.CENTER);
                 revalidate();

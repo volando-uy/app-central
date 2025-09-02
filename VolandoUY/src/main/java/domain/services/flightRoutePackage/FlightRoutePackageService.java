@@ -5,7 +5,7 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.services.flightRoute.IFlightRouteService;
 import infra.repository.flightroutepackage.FlightRoutePackageRepository;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.ValidatorUtil;
@@ -18,12 +18,12 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     private FlightRoutePackageRepository flightRoutePackageRepository;
 
+    @Setter
     private IFlightRouteService flightRouteService;
     private ModelMapper modelMapper;
 
-    public FlightRoutePackageService(IFlightRouteService flightRouteService, ModelMapper modelMapper) {
+    public FlightRoutePackageService(ModelMapper modelMapper) {
         flightRoutePackageRepository = new FlightRoutePackageRepository();
-        this.flightRouteService = flightRouteService;
         this.modelMapper = modelMapper;
     }
 
@@ -58,7 +58,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     }
 
     @Override
-    public FlightRoutePackageDTO getFlightRoutePackageByName(String flightRoutePackageName) {
+    public FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String flightRoutePackageName) {
         FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
         if (pack == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
@@ -66,7 +66,15 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         FlightRoutePackageDTO flightRoutePackageDTO = modelMapper.map(pack, FlightRoutePackageDTO.class);
         flightRoutePackageDTO.setFlightRouteNames(pack.getFlightRoutes().stream().map(FlightRoute::getName).toList());
         return flightRoutePackageDTO;
+    }
 
+    @Override
+    public FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName) {
+        FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
+        if (pack == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
+        }
+        return pack;
     }
 
     @Override
@@ -119,6 +127,11 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
                     return dto;
                 })
                 .toList();
+    }
+
+    @Override
+    public void _updateFlightRoutePackage(FlightRoutePackage flightRoutePackage) {
+        flightRoutePackageRepository.update(flightRoutePackage);
     }
 
     @Override

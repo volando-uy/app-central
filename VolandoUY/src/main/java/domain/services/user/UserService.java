@@ -4,13 +4,17 @@ import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.flightRoute.FlightRoute;
+import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.packagePurchase.PackagePurchase;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import infra.repository.BaseRepository;
 import infra.repository.user.AirlineRepository;
 import infra.repository.user.CustomerRepository;
 import infra.repository.user.UserRepository;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import domain.models.user.mapper.UserMapper;
 import shared.constants.ErrorMessages;
@@ -24,6 +28,9 @@ public class UserService implements IUserService {
     private final ModelMapper modelMapper;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+
+    @Setter
+    private IFlightRoutePackageService flightRoutePackageService;
 
     public UserService(ModelMapper modelMapper, UserMapper userMapper) {
         this.modelMapper = modelMapper;
@@ -133,6 +140,14 @@ public class UserService implements IUserService {
         throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, nickname));
     }
 
+    @Override
+    public Customer getCustomerByNickname(String nickname) {
+        User user = userRepository.getUserByNickname(nickname);
+        if (user instanceof Customer customer) {
+            return customer;
+        }
+        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
+    }
 
 
     @Override
@@ -142,7 +157,6 @@ public class UserService implements IUserService {
             return userMapper.toCustomerDTO(customer);
         }
         throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
-
     }
 
     @Override
@@ -154,6 +168,37 @@ public class UserService implements IUserService {
     public void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute) {
         airline.getFlightRoutes().add(flightRoute);
         userRepository.save(airline);
+    }
+
+    @Override
+    public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
+        Customer customer = this.getCustomerByNickname(customerNickname);
+        FlightRoutePackage flightRoutePackage = flightRoutePackageService.getFlightRoutePackageByName(packageName);
+
+        // Verificar si ya compró este paquete
+        customer.getBoughtPackages().stream()
+                .filter(pkg -> pkg.getName().equalsIgnoreCase(packageName))
+                .findFirst()
+                .ifPresent(pkg -> {
+                    throw new IllegalArgumentException(
+                            String.format("El cliente %s ya compró el paquete %s", customerNickname, packageName)
+                    );
+                });
+
+        // Validar que el paquete no esté vencido
+        if (flightRoutePackage.isExpired()) {
+            throw new IllegalArgumentException(
+                    String.format("El paquete %s ya expiró y no puede ser comprado", packageName)
+            );
+        }
+
+        // Añadir el paquete al cliente y viceversa
+        customer.getBoughtPackages().add(flightRoutePackage);
+        flightRoutePackage.getBuyers().add(customer);
+
+        // Guardar cambios en ambos repositorios
+        userRepository.save(customer);
+        flightRoutePackageService._updateFlightRoutePackage(flightRoutePackage);
     }
 
 

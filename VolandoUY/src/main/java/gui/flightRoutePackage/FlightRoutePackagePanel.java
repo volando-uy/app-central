@@ -27,6 +27,10 @@ public class FlightRoutePackagePanel extends JPanel {
     private IFlightRouteController flightRouteController;
     private IUserController userController;
 
+    private JPanel createFlightRoutePackagePanel;
+    private JPanel addFlightRouteToPackagePanel;
+    private JPanel getFlightRoutesPackagesPanel;
+
     private JPanel contentPanel;
 
     public FlightRoutePackagePanel(
@@ -38,6 +42,7 @@ public class FlightRoutePackagePanel extends JPanel {
         this.flightRoutePackageController = flightRoutePackageController;
         this.flightRouteController = flightRouteController;
         this.userController = userController;
+        initPanels();
         initComponents();
         initListeners();
         try {
@@ -46,69 +51,39 @@ public class FlightRoutePackagePanel extends JPanel {
         }
     }
 
+    private void initPanels() {
+        createFlightRoutePackagePanel = new CreateFlightRoutePackagePanel(flightRoutePackageController);
+        addFlightRouteToPackagePanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
+        getFlightRoutesPackagesPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController);
+    }
+
     private void initListeners() {
-        // Listener para el botón de creacion de ruta de vuelo
-        createFlightRoutePackagePanelListener = new MouseAdapter() {
+        createFlightRoutePackageBtn.addMouseListener(createListener(createFlightRoutePackagePanel));
+        addFlightRouteToPackageBtn.addMouseListener(createListener(addFlightRouteToPackagePanel));
+        getFlightRoutePackageBtn.addMouseListener(createListener(getFlightRoutesPackagesPanel));
+    }
+
+    private MouseAdapter createListener(JPanel panel) {
+        return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Remover solo si ya existe un contentPanel
                 if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo CreateFlightRoutePanel
-                    if (contentPanel instanceof CreateFlightRoutePackagePanel) {
+                    // Verificar si el contentPanel ya es del mismo tipo que el nuevo panel
+                    if (contentPanel.getClass().equals(panel.getClass())) {
                         return;
                     }
                     remove(contentPanel);
                 }
 
-                System.out.println("Create Flight Route button clicked");
-                // Crear el nuevo contentPanel con el contenido de creacoion de ruta de vuelo
-                contentPanel = new CreateFlightRoutePackagePanel(flightRoutePackageController);
+                System.out.println(panel.getClass().getSimpleName() + " button clicked");
+                // Crear el nuevo contentPanel con el contenido del panel proporcionado
+                contentPanel = panel;
                 add(contentPanel);
                 revalidate();
                 repaint();
             }
         };
-
-        addFlightRouteToPackagePanelListener = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Remover solo si ya existe un contentPanel
-                if (contentPanel != null) {
-                    // Verificar si el contentPanel ya es de tipo AddFlightRouteToPackagePanel
-                    if (contentPanel instanceof AddFlightRouteToPackagePanel) {
-                        return;
-                    }
-                    remove(contentPanel);
-                }
-
-                System.out.println("Add Flight Route to Package button clicked");
-                // Crear el nuevo contentPanel con el contenido de adición de ruta de vuelo a paquete
-                contentPanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
-                add(contentPanel);
-                revalidate();
-                repaint();
-            }
-        };
-
-        // Listar Paquetes
-        getFlightRoutesPackagesPanelListener = new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                if (contentPanel != null) {
-                    if (contentPanel instanceof GetFlightRoutesPackagesPanel) return;
-                    remove(contentPanel);
-                }
-                System.out.println("List Packages clicked");
-                contentPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController);
-                add(contentPanel, BorderLayout.CENTER);           // <-- CENTER
-                revalidate();
-                repaint();
-            }
-        };
-
-        createFlightRoutePackageBtn.addMouseListener(createFlightRoutePackagePanelListener);
-        addFlightRouteToPackageBtn.addMouseListener(addFlightRouteToPackagePanelListener);
-        getFlightRoutePackageBtn.addMouseListener(getFlightRoutesPackagesPanelListener);
-
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off

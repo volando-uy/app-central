@@ -2,10 +2,9 @@ package domain.models.flightRoutePackage;
 
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import domain.models.user.Customer;
+import domain.models.user.User;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +22,9 @@ public class FlightRoutePackage {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Customer> buyers;
 
     @Id
     @NotBlank
