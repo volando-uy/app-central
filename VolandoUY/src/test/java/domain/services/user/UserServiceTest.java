@@ -32,7 +32,7 @@ class UserServiceTest {
         TestUtils.cleanDB();
         ModelMapper modelMapper = new ModelMapper();
         UserMapper userMapper = new UserMapper(modelMapper);
-        userService = new UserService(modelMapper, userMapper);
+        userService = new UserService();
     }
 
     @Test
@@ -129,7 +129,7 @@ class UserServiceTest {
         userService.registerCustomer(dto);
 
         // WHEN
-        List<UserDTO> allUsers = userService.getAllUsers();
+        List<UserDTO> allUsers = userService.getAllUsers(false);
 
         // THEN
         assertEquals(1, allUsers.size());
@@ -205,7 +205,7 @@ class UserServiceTest {
         userService.registerAirline(new AirlineDTO("air2", "Air2", "a2@mail.com", "desc234567", "www.air2.com"));
 
         // WHEN
-        List<AirlineDTO> result = userService.getAllAirlinesDetails();
+        List<AirlineDTO> result = userService.getAllAirlinesDetails(false);
 
         // THEN
         assertEquals(2, result.size());

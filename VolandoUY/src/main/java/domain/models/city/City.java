@@ -39,7 +39,7 @@ public class City {
 
 
     @Valid // valida cada Airport dentro de la lista
-    @OneToMany(mappedBy = "city", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "city")
     private List<Airport> airports = new ArrayList<>();
 
 

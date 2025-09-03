@@ -35,18 +35,14 @@ class FlightRoutePackageServiceTest {
 
     private IFlightRoutePackageService packageService;
     private IFlightRouteService flightRouteService; // Mock
-    private ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        modelMapper = new ModelMapper();
 
-        var userService     = new UserService();
-        var cityService     = new CityService();
-        var categoryService = new CategoryService();
         flightRouteService  = new FlightRouteService();
         packageService      = new FlightRoutePackageService();
+        packageService.setFlightRouteService(flightRouteService);
 
         // ---- Semilla mínima en DB: Airline + Cities + Category ----
         try (EntityManager em = DBConnection.getEntityManager()) {

@@ -30,6 +30,16 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
                     .getResultList();
         }
     }
+
+    @Override
+    public List<FlightRoute> getFullAllByAirlineNickname(String airlineNickname) {
+        try (EntityManager entityManager = DBConnection.getEntityManager()) {
+            return entityManager.createQuery("SELECT fr FROM FlightRoute fr JOIN FETCH fr.originCity JOIN FETCH fr.destinationCity JOIN FETCH fr.categories WHERE fr.airline.nickname = :nickname", FlightRoute.class)
+                    .setParameter("nickname", airlineNickname)
+                    .getResultList();
+        }
+    }
+
     @Override
     public FlightRoute getByName(String name) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
@@ -39,4 +49,21 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
         }
     }
 
+    @Override
+    public void saveFlightRouteAndAddToAirline(FlightRoute flightRoute, Airline airline) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Airline managedAirline = em.merge(airline); // Attach airline to session
+            flightRoute.setAirline(managedAirline);
+            em.persist(flightRoute);
+            managedAirline.getFlightRoutes().add(flightRoute); // Safe: session is open
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -5,6 +5,7 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
@@ -48,13 +49,14 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 LocalDate createdAt = LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 Float discount = Float.parseFloat(discountCostTextField.getText());
                 EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
+                Double totalPrice = 0.0; // Will be calculated in service
 
-                FlightRoutePackageDTO flightRoutePackageDTO = new FlightRoutePackageDTO(
-                        name, description, expirationInDays, discount, createdAt, seatType, new ArrayList<>()
+                BaseFlightRoutePackageDTO flightRoutePackageDTO = new BaseFlightRoutePackageDTO(
+                        name, description, expirationInDays, discount, createdAt, seatType, totalPrice
                 );
 
                 // Throws exception if something is invalid
-                FlightRoutePackageDTO createdFlightRoutePackageDTO = flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
+                BaseFlightRoutePackageDTO createdFlightRoutePackageDTO = flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
 
                 JOptionPane.showMessageDialog(
                         this,

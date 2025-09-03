@@ -5,12 +5,10 @@ import domain.dtos.category.CategoryDTO;
 import domain.models.category.Category;
 import factory.ControllerFactory;
 import infra.repository.category.CategoryRepository;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +35,7 @@ public class CategoryService implements ICategoryService {
 
         // Guardamos y devolvemos el DTO
         categoryRepository.save(category);
-        return customModelMapper.mapCategory(category);
+        return customModelMapper.map(category, CategoryDTO.class);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class CategoryService implements ICategoryService {
         }
 
         // Si existe, devolvemos el DTO
-        return customModelMapper.mapCategory(category);
+        return customModelMapper.map(category, CategoryDTO.class);
     }
 
     @Override

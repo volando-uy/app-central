@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 //TODO: Terminar test, esta a medias (falta los paquetes y reservas)
 public class GetUserTest {
 
-    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
-    private UserMapper userMapper = ControllerFactory.getUserMapper();
     private IUserService userService;
     private IUserController userController;
 
@@ -37,7 +35,7 @@ public class GetUserTest {
         // otras tablas si aplican
         em.getTransaction().commit();
         em.close();
-        userService = new UserService(modelMapper, userMapper);
+        userService = new UserService();
         userController = new UserController(userService);
 
     }
@@ -51,9 +49,9 @@ public class GetUserTest {
         customerDTO.setName("Juan");
         customerDTO.setSurname("Pérez");
         customerDTO.setMail("juan@example.com");
-        customerDTO.setId("123");
+        customerDTO.setNumDoc("123");
         customerDTO.setBirthDate(LocalDate.of(1990, 1, 1));
-        customerDTO.setIdType(EnumTipoDocumento.CI);
+        customerDTO.setDocType(EnumTipoDocumento.CI);
         customerDTO.setCitizenship("Uruguayo");
 
         userController.registerCustomer(customerDTO);

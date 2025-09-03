@@ -142,10 +142,9 @@ public class CheckFlightRouteTest {
         //Ver ruta de vuelo
         //Agarrar Ruta De vUELO
         System.out.println("Ruta de vuelo: " + flightRouteController.getFlightRouteByName("AA-MAD"));
-        System.out.println("Vuelos:" + flightRouteController.getFlightsFromRoute("AA-MAD"));
-        List<FlightDTO> vuelos = flightRouteController.getFlightsFromRoute("AA-MAD");
+        System.out.println("Vuelos:" + flightController.getAllFlightsByRouteName("AA-MAD"));
+        List<FlightDTO> vuelos = flightController.getAllFlightsByRouteName("AA-MAD");
         assertEquals(1, vuelos.size());
-        assertEquals(vuelos.get(0).getName(), vuelos.get(0).getName());
 
         // Paso 6: Ver datos del vuelo
         FlightDTO vuelo = vuelos.get(0);

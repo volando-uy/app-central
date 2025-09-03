@@ -27,10 +27,10 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     private EnumTipoAsiento type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Flight flight;
 
     // Un asiento va a estar relacionado a un ticket
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Ticket ticket;
 }

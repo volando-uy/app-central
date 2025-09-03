@@ -5,8 +5,6 @@ import domain.dtos.city.CityDTO;
 import domain.models.city.City;
 import factory.ControllerFactory;
 import infra.repository.city.CityRepository;
-import infra.repository.city.ICityRepository;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -42,7 +40,7 @@ public class CityService implements ICityService {
         cityRepository.save(city);
 
         // Devolvemos el DTO mapeado
-        return customModelMapper.mapCity(city);
+        return customModelMapper.mapFullCity(city);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class CityService implements ICityService {
         }
 
         // Devolvemos el DTO mapeado
-        return customModelMapper.mapCity(city);
+        return customModelMapper.mapFullCity(city);
     }
 
 

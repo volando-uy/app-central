@@ -1,14 +1,19 @@
 package casosdeuso;
 
+import controllers.city.ICityController;
 import controllers.flight.IFlightController;
+import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.city.CityDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.TestUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
@@ -17,12 +22,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CheckFlightTest {
     private IUserController userController;
     private IFlightController flightController;
+    private IFlightRouteController flightRouteController;
+    private ICityController cityController;
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
         userController = ControllerFactory.getUserController();
         flightController = ControllerFactory.getFlightController();
+        flightRouteController = ControllerFactory.getFlightRouteController();
+        cityController = ControllerFactory.getCityController();
+
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("airline1");
         airlineDTO.setName("Aerolíneas Argentinas");
@@ -30,6 +40,31 @@ public class CheckFlightTest {
         airlineDTO.setDescription("description");
         userController.registerAirline(airlineDTO);
 
+        CityDTO cityA = new CityDTO();
+        cityA.setName("City A");
+        cityA.setCountry("Country A");
+        cityA.setLatitude(-34.6037);
+        cityA.setLongitude(-58.3816);
+        cityController.createCity(cityA);
+
+        CityDTO cityB = new CityDTO();
+        cityB.setName("City B");
+        cityB.setCountry("Country B");
+        cityB.setLatitude(-34.6037);
+        cityB.setLongitude(-58.3816);
+        cityController.createCity(cityB);
+
+        FlightRouteDTO flightRouteDTO = new FlightRouteDTO();
+        flightRouteDTO.setName("Route 101");
+        flightRouteDTO.setDescription("Route from City A to City B");
+        flightRouteDTO.setOriginCityName("City A");
+        flightRouteDTO.setDestinationCityName("City B");
+        flightRouteDTO.setAirlineNickname("airline1");
+        flightRouteDTO.setCreatedAt(LocalDate.now());
+        flightRouteDTO.setPriceTouristClass(10.0);
+        flightRouteDTO.setPriceBusinessClass(20.0);
+        flightRouteDTO.setPriceExtraUnitBaggage(5.0);
+        flightRouteController.createFlightRoute(flightRouteDTO);
 
         FlightDTO flightDTO = new FlightDTO();
         flightDTO.setName("Flight 101");
@@ -38,6 +73,7 @@ public class CheckFlightTest {
         flightDTO.setMaxEconomySeats(150);
         flightDTO.setMaxBusinessSeats(30);
         flightDTO.setAirlineNickname("airline1");
+        flightDTO.setFlightRouteName("Route 101");
         flightController.createFlight(flightDTO);
     }
 
@@ -56,18 +92,33 @@ public class CheckFlightTest {
         //Listar Aerolíneas.
         userController.getAllAirlinesNicknames().forEach(System.out::println);
         assertNotNull(userController.getAllAirlinesNicknames());
+
         //Seleccionar Aerolínea.
         String airlineNickname = userController.getAllAirlinesNicknames().get(0);
         assertEquals("airline1", airlineNickname);
+
         //Listar rutas asociadas a dicha aereolinea
         flightController.getAllFlightsByAirline(airlineNickname).forEach(System.out::println);
         assertNotNull(flightController.getAllFlightsByAirline(airlineNickname));
+
         //Seleccionar ruta de vuelo
-        String flightRouteName = flightController.getAllFlightsByAirline(airlineNickname).
-                stream()
-                .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException("No hay vuelos disponibles"))
-                .getName();
-        assertNotNull(flightRouteName);
+        FlightRouteDTO flightRouteDTO = flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname).get(0);
+        assertEquals("Route 101", flightRouteDTO.getName());
+        assertEquals("City A", flightRouteDTO.getOriginCityName());
+        assertEquals("City B", flightRouteDTO.getDestinationCityName());
+
+        //Listar vuelos asociados a dicha ruta
+        flightController.getAllFlightsByRouteName(flightRouteDTO.getName()).forEach(System.out::println);
+        assertNotNull(flightController.getAllFlightsByRouteName(flightRouteDTO.getName()));
+
+        // Seleccionar vuelo
+        FlightDTO flightDTO = flightController.getAllFlightsByRouteName(flightRouteDTO.getName()).get(0);
+        assertEquals("Flight 101", flightDTO.getName());
+        assertEquals(LocalDateTime.of(2026, 8, 1, 10, 0), flightDTO.getDepartureTime());
+        assertEquals(180L, flightDTO.getDuration());
+        assertEquals(150, flightDTO.getMaxEconomySeats());
+        assertEquals(30, flightDTO.getMaxBusinessSeats());
+
+        // TODO: Agregar validación de reservas cuando se implemente esa funcionalidad
     }
 }

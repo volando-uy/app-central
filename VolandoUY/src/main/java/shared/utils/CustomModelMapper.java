@@ -3,7 +3,6 @@ package shared.utils;
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.buyPackage.BuyPackageDTO;
-import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
@@ -12,9 +11,7 @@ import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.seat.SeatDTO;
 import domain.dtos.ticket.TicketDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import domain.models.airport.Airport;
 import domain.models.bookflight.BookFlight;
 import domain.models.buypackage.BuyPackage;
@@ -33,17 +30,35 @@ import domain.models.user.User;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 
+import java.util.ArrayList;
+
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class CustomModelMapper extends ModelMapper {
 
-    public CustomerDTO mapCustomer(Customer customer) {
+    public CustomerDTO mapFullCustomer(Customer customer) {
         CustomerDTO customerDTO = this.map(customer, CustomerDTO.class);
+        if (customer.getBookFlights() != null) {
+            customerDTO.setBookFlightsIds(customer.getBookFlights()
+                    .stream()
+                    .map(BookFlight::getId)
+                    .toList());
+        }
+        if (customer.getBoughtPackages() != null) {
+            customerDTO.setBoughtPackagesIds(customer.getBoughtPackages()
+                    .stream()
+                    .map(BuyPackage::getId)
+                    .toList());
+        }
         return customerDTO;
     }
 
-    public AirlineDTO mapAirline(Airline airline) {
+    public BaseCustomerDTO mapBaseCustomer(Customer customer) {
+        return this.map(customer, BaseCustomerDTO.class);
+    }
+
+    public AirlineDTO mapFullAirline(Airline airline) {
         AirlineDTO airlineDTO = this.map(airline, AirlineDTO.class);
         airlineDTO.setFlightRoutesNames(airline.getFlightRoutes()
                 .stream()
@@ -56,29 +71,33 @@ public class CustomModelMapper extends ModelMapper {
         return airlineDTO;
     }
 
-    public FlightDTO mapFlight(Flight flight) {
+
+    public BaseAirlineDTO mapBaseAirline(Airline airline) {
+        return this.map(airline, BaseAirlineDTO.class);
+    }
+
+    public FlightDTO mapFullFlight(Flight flight) {
         FlightDTO flightDTO = this.map(flight, FlightDTO.class);
-        flightDTO.setAirlineNickname(flight.getAirline().getName());
+        flightDTO.setAirlineNickname(flight.getAirline().getNickname());
         flightDTO.setFlightRouteName(flight.getFlightRoute().getName());
         return flightDTO;
     }
 
-    public FlightRouteDTO mapFlightRoute(FlightRoute flightRoute) {
+    public FlightRouteDTO mapFullFlightRoute(FlightRoute flightRoute) {
         FlightRouteDTO flightRouteDTO = this.map(flightRoute, FlightRouteDTO.class);
         flightRouteDTO.setOriginCityName(flightRoute.getOriginCity().getName());
         flightRouteDTO.setDestinationCityName(flightRoute.getDestinationCity().getName());
         flightRouteDTO.setAirlineNickname(flightRoute.getAirline().getNickname());
-        flightRouteDTO.setCategories(flightRoute.getCategories().stream().map(Category::getName).toList());
-        flightRouteDTO.setFlightsNames(flightRoute.getFlights().stream().map(Flight::getName).toList());
+        flightRouteDTO.setCategories(
+                new ArrayList<>(flightRoute.getCategories()).stream().map(Category::getName).toList()
+        );
+        flightRouteDTO.setFlightsNames(
+                new ArrayList<>(flightRoute.getFlights()).stream().map(Flight::getName).toList()
+        );
         return flightRouteDTO;
     }
 
-    public CategoryDTO mapCategory(Category category) {
-        CategoryDTO categoryDTO = this.map(category, CategoryDTO.class);
-        return categoryDTO;
-    }
-
-    public BuyPackageDTO mapBuyPackage(BuyPackage buyPackage) {
+    public BuyPackageDTO mapFullBuyPackage(BuyPackage buyPackage) {
         BuyPackageDTO buyPackageDTO = this.map(buyPackage, BuyPackageDTO.class);
         buyPackageDTO.setCustomerNickname(buyPackage.getCustomer().getNickname());
         buyPackageDTO.setFlightRoutePackageName(buyPackage.getFlightRoutePackage().getName());
@@ -86,78 +105,91 @@ public class CustomModelMapper extends ModelMapper {
         return buyPackageDTO;
     }
 
-    public BookFlightDTO mapBookFlight(BookFlight bookFlight) {
+    public BookFlightDTO mapFullBookFlight(BookFlight bookFlight) {
         BookFlightDTO bookFlightDTO = this.map(bookFlight, BookFlightDTO.class);
         bookFlightDTO.setCustomerNickname(bookFlight.getCustomer().getNickname());
+        bookFlightDTO.setTicketIds(bookFlight.getTickets().stream().map(Ticket::getId).toList());
         return bookFlightDTO;
     }
 
-    public BasicLuggageDTO mapBasicLuggage(BasicLuggage basicLuggage) {
+    public BasicLuggageDTO mapFullBasicLuggage(BasicLuggage basicLuggage) {
         BasicLuggageDTO basicLuggageDTO = this.map(basicLuggage, BasicLuggageDTO.class);
         return basicLuggageDTO;
     }
 
-    public ExtraLuggageDTO mapExtraLuggage(ExtraLuggage extraLuggage) {
+    public ExtraLuggageDTO mapFullExtraLuggage(ExtraLuggage extraLuggage) {
         ExtraLuggageDTO extraLuggageDTO = this.map(extraLuggage, ExtraLuggageDTO.class);
         return extraLuggageDTO;
     }
 
-    public TicketDTO mapTicket(Ticket ticket) {
+    public TicketDTO mapFullTicket(Ticket ticket) {
         TicketDTO ticketDTO = this.map(ticket, TicketDTO.class);
         if (ticket.getBasicLuggages() != null) {
-            ticketDTO.setBasicLuggages(ticket.getBasicLuggages().stream().map(this::mapBasicLuggage).collect(toList()));
+            ticketDTO.setBasicLuggages(ticket.getBasicLuggages().stream().map(this::mapFullBasicLuggage).collect(toList()));
         }
         if (ticket.getExtraLuggages() != null) {
-            ticketDTO.setExtraLuggages(ticket.getExtraLuggages().stream().map(this::mapExtraLuggage).collect(toList()));
+            ticketDTO.setExtraLuggages(ticket.getExtraLuggages().stream().map(this::mapFullExtraLuggage).collect(toList()));
         }
         ticketDTO.setSeatNumber(ticket.getSeat().getNumber());
         ticketDTO.setBookFlightId(ticket.getBookFlight().getId());
         return ticketDTO;
     }
 
-    public SeatDTO mapSeat(Seat seat) {
+    public SeatDTO mapFullSeat(Seat seat) {
         SeatDTO seatDTO = this.map(seat, SeatDTO.class);
         seatDTO.setFlightName(seat.getFlight().getName());
         seatDTO.setTicketId(seat.getTicket().getId());
         return seatDTO;
     }
 
-    public AirportDTO mapAirport(Airport airport) {
+    public AirportDTO mapFullAirport(Airport airport) {
         AirportDTO airportDTO = this.map(airport, AirportDTO.class);
         airportDTO.setCityName(airport.getCity().getName());
         return airportDTO;
     }
 
-    public CityDTO mapCity(City city) {
+    public CityDTO mapFullCity(City city) {
         CityDTO cityDTO = this.map(city, CityDTO.class);
         cityDTO.setAirportNames(city.getAirports().stream().map(Airport::getName).toList());
         return cityDTO;
     }
 
-    public FlightRoutePackageDTO mapFlightRoutePackage(FlightRoutePackage flightRoutePackage) {
+    public FlightRoutePackageDTO mapFullFlightRoutePackage(FlightRoutePackage flightRoutePackage) {
         FlightRoutePackageDTO flightRoutePackageDTO = this.map(flightRoutePackage, FlightRoutePackageDTO.class);
         flightRoutePackageDTO.setFlightRouteNames(flightRoutePackage.getFlightRoutes().stream().map(FlightRoute::getName).toList());
         return flightRoutePackageDTO;
     }
 
 
+    public UserDTO mapFullUser(User user) {
+        if (user instanceof Customer) {
+            return this.mapFullCustomer((Customer) user);
+        } else if (user instanceof Airline) {
+            return this.mapFullAirline((Airline) user);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
+        }
+    }
+
     public UserDTO mapUser(User user) {
         if (user instanceof Customer) {
-            return this.mapCustomer((Customer) user);
+            return this.map(user, BaseCustomerDTO.class);
         } else if (user instanceof Airline) {
-            return this.mapAirline((Airline) user);
+            return this.map(user, BaseAirlineDTO.class);
         } else {
             throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
         }
     }
 
     public User mapUserDTO(UserDTO updatedUserDTO) {
-        if (updatedUserDTO instanceof CustomerDTO customerDTO) {
+        if (updatedUserDTO instanceof BaseCustomerDTO customerDTO) {
             return this.map(customerDTO, Customer.class);
-        } else if (updatedUserDTO instanceof AirlineDTO airlineDTO) {
+        } else if (updatedUserDTO instanceof BaseAirlineDTO airlineDTO) {
             return this.map(airlineDTO, Airline.class);
         } else {
             throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
         }
     }
+
+
 }

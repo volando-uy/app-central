@@ -18,7 +18,7 @@ class CategoryServiceTest {
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        categoryService = new CategoryService(new ModelMapper());
+        categoryService = new CategoryService();
     }
 
     @Test

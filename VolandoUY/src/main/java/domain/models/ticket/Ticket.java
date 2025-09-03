@@ -25,18 +25,18 @@ public class Ticket {
     private String numDoc;
 
     //Tiene N equpajes
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     private List<ExtraLuggage> extraLuggages=null;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     private List<BasicLuggage> basicLuggages=null;
 
     // Tiene 1 asiento
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
     //se asocia a 1 reserva
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private BookFlight bookFlight;
 }

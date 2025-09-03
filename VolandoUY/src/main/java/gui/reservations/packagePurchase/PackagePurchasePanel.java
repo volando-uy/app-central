@@ -6,7 +6,10 @@ package gui.reservations.packagePurchase;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.dtos.user.CustomerDTO;
+import domain.dtos.user.UserDTO;
 import domain.services.user.IUserService;
 
 import java.util.List;
@@ -20,7 +23,7 @@ import javax.swing.border.*;
 public class PackagePurchasePanel extends JPanel {
     private IUserController userController;
     private IFlightRoutePackageController flightRoutePackageController;
-    private List<FlightRoutePackageDTO> availablePackages;
+    private List<BaseFlightRoutePackageDTO> availablePackages;
     public PackagePurchasePanel(IUserController userController, IFlightRoutePackageController flightRoutePackageController) {
         this.userController = userController;
         this.flightRoutePackageController = flightRoutePackageController;
@@ -32,13 +35,13 @@ public class PackagePurchasePanel extends JPanel {
     }
     private void loadPackagesWithRoutes() {
         listPackageComboBox.removeAllItems();
-        availablePackages = flightRoutePackageController.getPackagesWithFlightRoutes();
+        availablePackages = flightRoutePackageController.getAllFlightRoutesPackagesSimpleDetailsWithFlightRoutes();
 
         if (availablePackages == null || availablePackages.isEmpty()) {
             return;
         }
 
-        for (FlightRoutePackageDTO dto : availablePackages) {
+        for (BaseFlightRoutePackageDTO dto : availablePackages) {
             listPackageComboBox.addItem(dto.getName()); // muestra solo el nombre
         }
     }
@@ -46,7 +49,8 @@ public class PackagePurchasePanel extends JPanel {
         listPackageComboBox.addActionListener(e -> {
             int selectedIndex = listPackageComboBox.getSelectedIndex();
             if (selectedIndex >= 0) {
-                FlightRoutePackageDTO selectedPackage = availablePackages.get(selectedIndex);
+                String packageName = availablePackages.get(selectedIndex).getName();
+                FlightRoutePackageDTO selectedPackage = flightRoutePackageController.getFlightRoutePackageDetailsByName(packageName);
                 updatePackageTable(selectedPackage);
                 registerPurchaseBtn.setEnabled(true); // habilita botón cuando hay selección
             }
@@ -102,21 +106,18 @@ public class PackagePurchasePanel extends JPanel {
         listClientComboBox.removeAllItems();
 
         try {
-            List<domain.dtos.user.UserDTO> allUsers = userController.getAllUsers();
+            List<UserDTO> allUsers = userController.getAllUsersSimpleDetails();
 
             if (allUsers == null || allUsers.isEmpty()) {
                 return;
             }
 
-            for (domain.dtos.user.UserDTO user : allUsers) {
-                if (user instanceof domain.dtos.user.CustomerDTO customer) {
+            for (UserDTO user : allUsers) {
+                if (user instanceof CustomerDTO customer) {
                     listClientComboBox.addItem(customer.getName() + " " + customer.getSurname() + " (" + customer.getNickname() + ")");
                 }
             }
 
-            if (listClientComboBox.getItemCount() == 0) {
-                JOptionPane.showMessageDialog(this, "No se encontraron usuarios de tipo cliente", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar clientes: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

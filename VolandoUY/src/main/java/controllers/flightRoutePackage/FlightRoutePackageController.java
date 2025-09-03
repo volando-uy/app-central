@@ -1,6 +1,7 @@
 
 package controllers.flightRoutePackage;
 
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
@@ -16,16 +17,21 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     private IFlightRoutePackageService packageService;
 
     @Override
-    public FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO) {
-        return packageService.createFlightRoutePackage(flightRoutePackageDTO);
+    public BaseFlightRoutePackageDTO createFlightRoutePackage(BaseFlightRoutePackageDTO baseFlightRoutePackageDTO) {
+        return packageService.createFlightRoutePackage(baseFlightRoutePackageDTO);
     }
     @Override
-    public FlightRoutePackageDTO getFlightRoutePackageByName(String packageName) {
-        return packageService.getFlightRoutePackageDetailsByName(packageName);
+    public FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String packageName) {
+        return packageService.getFlightRoutePackageDetailsByName(packageName, true);
     }
 
     @Override
-    public List<String> getAllNotBoughtFlightRoutePackagesNames() {
+    public BaseFlightRoutePackageDTO getFlightRoutePackageSimpleDetailsByName(String packageName) {
+        return packageService.getFlightRoutePackageDetailsByName(packageName, false);
+    }
+
+    @Override
+    public List<String> getAllNotBoughtFlightRoutesPackagesNames() {
         return packageService.getAllNotBoughtFlightRoutePackagesNames();
     }
 
@@ -40,12 +46,27 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
     }
 
     @Override
-    public List<FlightRoutePackageDTO> getPackagesWithFlightRoutes() {
-        return packageService.getPackagesWithFlightRoutes();
+    public List<BaseFlightRoutePackageDTO> getAllFlightRoutesPackagesSimpleDetailsWithFlightRoutes() {
+        return packageService.getAllFlightRoutePackagesWithFlightRoutes(false)
+                .stream()
+                .map(pack -> (BaseFlightRoutePackageDTO) pack)
+                .toList();
     }
 
     @Override
-    public List<FlightRoutePackage> getAllFlightRoutePackages() {
+    public List<FlightRoutePackage> getAllFlightRoutesPackages() {
         return packageService.getAllFlightRoutePackages();
+    }
+
+    @Override
+    public List<FlightRoutePackageDTO> getAllFlightRoutesPackagesDetails() {
+        return packageService.getAllFlightRoutePackagesDetails(true);
+    }
+
+    @Override
+    public List<BaseFlightRoutePackageDTO> getAllFlightRoutesPackagesSimpleDetails() {
+        return packageService.getAllFlightRoutePackagesDetails(false).stream()
+                .map(pack -> (BaseFlightRoutePackageDTO) pack)
+                .toList();
     }
 }

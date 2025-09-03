@@ -17,4 +17,6 @@ public interface IFlightService {
     List<FlightDTO> getAllFlightsByAirline(String airlineNickname);
 
     List<FlightDTO> getFlightsByRouteName(String routeName);
+
+    List<FlightDTO> getAllFlightsByRouteName(String flightRouteName);
 }

@@ -2,6 +2,7 @@ package infra.repository.airport;
 
 import app.DBConnection;
 import domain.models.airport.Airport;
+import domain.models.city.City;
 import jakarta.persistence.EntityManager;
 
 public class AirportRepository extends AirportAbstractRepository implements IAirportRepository {
@@ -27,6 +28,23 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
                     .setParameter("code", code.toLowerCase())
                     .getSingleResult();
             return count > 0;
+        }
+    }
+
+    public void saveAirportAndAddToCity(Airport airport, City city) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            city = em.merge(city);
+            airport.setCity(city);
+            em.persist(airport);
+            city.getAirports().add(airport);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
         }
     }
 }

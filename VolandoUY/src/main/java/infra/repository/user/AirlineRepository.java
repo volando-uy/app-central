@@ -7,6 +7,8 @@ import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
+import java.util.List;
+
 public class AirlineRepository extends AbstractUserRepository<Airline> {
     public AirlineRepository() {
         super(Airline.class);
@@ -37,6 +39,24 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
             return em.createQuery(
                             "SELECT a FROM Airline a WHERE LOWER(a.mail) = :mail", Airline.class)
                     .setParameter("mail", email.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    public List<Airline> findFullAll() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery("SELECT a FROM Airline a LEFT JOIN FETCH a.flights LEFT JOIN FETCH a.flightRoutes", Airline.class)
+                    .getResultList();
+        }
+    }
+
+    public Airline findFullByNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT a FROM Airline a LEFT JOIN FETCH a.flights LEFT JOIN FETCH a.flightRoutes WHERE LOWER(a.nickname) = :nickname", Airline.class)
+                    .setParameter("nickname", nickname.toLowerCase())
                     .getResultStream()
                     .findFirst()
                     .orElse(null);

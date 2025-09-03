@@ -32,7 +32,7 @@ public class Airport {
     private String name;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private City city;
 
 

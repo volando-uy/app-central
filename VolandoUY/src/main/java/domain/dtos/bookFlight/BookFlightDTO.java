@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +18,6 @@ public class BookFlightDTO {
     private LocalDateTime created_at;
 
     private String customerNickname;
+    private List<Long> ticketIds;
 
 }

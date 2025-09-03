@@ -4,11 +4,33 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DBConnection {
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("Volando");
+
+    private static final String ENVIRONMENT = System.getenv("ENVIRONMENT");
+
+    private static EntityManagerFactory emf = null;
+
+    public static EntityManagerFactory getEntityManagerFactory() {
+        String persistenceUnitName = ENVIRONMENT != null && ENVIRONMENT.equals("TEST") ? "VolandoAppTest" : "VolandoApp";
+
+        if (ENVIRONMENT != null && ENVIRONMENT.equals("PROD")) {
+            Map<String, String> properties = new HashMap<>();
+            properties.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
+            properties.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
+            properties.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
+            return Persistence.createEntityManagerFactory(persistenceUnitName, properties);
+        } else {
+            return Persistence.createEntityManagerFactory(persistenceUnitName);
+        }
+    }
 
     public static EntityManager getEntityManager() {
+        if (emf == null) {
+            emf = getEntityManagerFactory();
+        }
         return emf.createEntityManager();
     }
 

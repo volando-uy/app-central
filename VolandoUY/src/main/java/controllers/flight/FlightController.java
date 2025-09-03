@@ -30,4 +30,9 @@ public class FlightController implements IFlightController {
     public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
         return flightService.getAllFlightsByAirline(airlineNickname);
     }
+
+    @Override
+    public List<FlightDTO> getAllFlightsByRouteName(String flightRouteName) {
+        return flightService.getAllFlightsByRouteName(flightRouteName);
+    }
 }

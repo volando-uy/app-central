@@ -16,13 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CityServiceTest {
 
     private CityService cityService;
-    private ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        modelMapper = ControllerFactory.getModelMapper();
-        cityService = new CityService(modelMapper);
+        cityService = new CityService();
     }
 
     private CityDTO crearCiudadBasica(String nombre) {

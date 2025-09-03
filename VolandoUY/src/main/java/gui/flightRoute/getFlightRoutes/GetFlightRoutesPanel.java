@@ -9,6 +9,7 @@ import controllers.user.IUserController;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -31,7 +32,7 @@ public class GetFlightRoutesPanel extends JPanel {
     private boolean areAirlinesLoading = false;
 
     // --- Datos auxiliares ---
-    private  List<AirlineDTO> airlines = new ArrayList<>();
+    private  List<BaseAirlineDTO> airlines = new ArrayList<>();
     private static  DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
@@ -98,14 +99,14 @@ public class GetFlightRoutesPanel extends JPanel {
         airlineComboBox.removeAllItems();
 
         // Obtener las aerolineas
-        List<AirlineDTO> list = userController.getAllAirlines();
+        List<BaseAirlineDTO> list = userController.getAllAirlinesSimpleDetails();
         if (list == null) return;
 
         airlines.addAll(list);
 
         // Iterar por las aerolineas de la lista
         Integer selectedIndex = null;
-        for (AirlineDTO a : airlines) {
+        for (BaseAirlineDTO a : airlines) {
             // Muestra “Nombre (nickname)”
             String display = safe(a.getName()) + " (" + safe(a.getNickname()) + ")";
 
@@ -156,7 +157,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
             // nombre bonito de aerolínea: buscamos en la lista ya cargada
             String airlineName = r.getAirlineNickname();
-            for (AirlineDTO a : airlines) {
+            for (BaseAirlineDTO a : airlines) {
                 if (a.getNickname() != null && a.getNickname().equalsIgnoreCase(r.getAirlineNickname())) {
                     if (a.getName() != null) airlineName = a.getName();
                     break;

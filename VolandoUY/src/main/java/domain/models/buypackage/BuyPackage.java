@@ -27,14 +27,14 @@ public class BuyPackage {
     private double totalPrice;
 
     // Cliente que lo compró
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Customer customer;
 
     //Paquete de ruta de vuelo
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private FlightRoutePackage flightRoutePackage;
 
     //Lista de reservas
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     private List<BookFlight> bookFlights;
 }

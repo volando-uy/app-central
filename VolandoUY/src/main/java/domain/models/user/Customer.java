@@ -48,13 +48,13 @@ public class Customer extends User {
     private String numDoc;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     private List<BuyPackage> boughtPackages;
 
 
     //1 cliente reserva muchos vuelos
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<BookFlight> bookedFlights;
+    @OneToMany()
+    private List<BookFlight> bookFlights;
 
 
 
@@ -82,7 +82,7 @@ public class Customer extends User {
                 ", docType=" + docType +
                 ", numDoc='" + numDoc + '\'' +
                 ", boughtPackages=" + (boughtPackages != null ? boughtPackages.stream().map(buyPackage -> buyPackage.getFlightRoutePackage().getName()).toList() : "null") +
-                ", bookedFlights=" + (bookedFlights != null ? bookedFlights.stream().map(BookFlight::getId).toList() : "null") +
+                ", bookedFlights=" + (bookFlights != null ? bookFlights.stream().map(BookFlight::getId).toList() : "null") +
                 '}' + super.toString();
     }
 }

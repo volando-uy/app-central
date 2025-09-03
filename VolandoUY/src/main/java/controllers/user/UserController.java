@@ -1,14 +1,8 @@
 package controllers.user;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import domain.services.user.IUserService;
 import lombok.AllArgsConstructor;
-import shared.utils.AnnotationValidator;
-import shared.utils.ValidatorFactoryProvider;
-import shared.utils.ValidatorUtil;
 
 import java.util.List;
 
@@ -17,18 +11,23 @@ public class UserController implements IUserController {
     IUserService userService;
 
     @Override
-    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
+    public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO) {
         return userService.registerCustomer(customerDTO);
     }
 
     @Override
-    public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
+    public BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO) {
         return userService.registerAirline(airlineDTO);
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDTO> getAllUsersDetails() {
+        return userService.getAllUsers(true);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsersSimpleDetails() {
+        return userService.getAllUsers(false);
     }
 
     @Override
@@ -37,26 +36,44 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public List<CustomerDTO> getAllCustomers() {
-        return userService.getAllCustomersDetails();
-    }
-
-    @Override
-    public List<AirlineDTO> getAllAirlines() {
-        return userService.getAllAirlinesDetails();
-    }
-
-    @Override
-    public List<String> getAllAirlinesNicknames() {
-        return userService.getAllAirlinesDetails().stream()
-                .map(AirlineDTO::getNickname)
+    public List<CustomerDTO> getAllCustomersDetails() {
+        return userService.getAllCustomersDetails(true)
+                .stream()
+                .map(cu -> (CustomerDTO) cu)
                 .toList();
     }
 
     @Override
-    public UserDTO getUserByNickname(String nickname) {
-        UserDTO userDTO = userService.getUserByNickname(nickname);
-        return userDTO;
+    public List<BaseCustomerDTO> getAllCustomersSimpleDetails() {
+        return userService.getAllCustomersDetails(false)
+                .stream()
+                .map(c -> (BaseCustomerDTO) c)
+                .toList();
+    }
+
+    @Override
+    public List<AirlineDTO> getAllAirlinesDetails() {
+        return userService.getAllAirlinesDetails(true);
+    }
+
+    @Override
+    public List<BaseAirlineDTO> getAllAirlinesSimpleDetails() {
+        return userService.getAllAirlinesDetails(false)
+                .stream()
+                .map(a -> (BaseAirlineDTO) a)
+                .toList();
+    }
+
+    @Override
+    public List<String> getAllAirlinesNicknames() {
+        return userService.getAllAirlinesDetails(false).stream()
+                .map(BaseAirlineDTO::getNickname)
+                .toList();
+    }
+
+    @Override
+    public UserDTO getUserSimpleDetailsByNickname(String nickname) {
+        return userService.getUserDetailsByNickname(nickname, false);
     }
 
     @Override
@@ -65,13 +82,23 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public AirlineDTO getAirlineByNickname(String nickname) {
-        return userService.getAirlineDetailsByNickname(nickname);
+    public AirlineDTO getAirlineDetailsByNickname(String nickname) {
+        return userService.getAirlineDetailsByNickname(nickname, true);
     }
 
     @Override
-    public CustomerDTO getCustomerByNickname(String nickname) {
-        return userService.getCustomerDetailsByNickname(nickname);
+    public BaseAirlineDTO getAirlineSimpleDetailsByNickname(String nickname) {
+        return userService.getAirlineDetailsByNickname(nickname, false);
+    }
+
+    @Override
+    public CustomerDTO getCustomerDetailsByNickname(String nickname) {
+        return userService.getCustomerDetailsByNickname(nickname, true);
+    }
+
+    @Override
+    public BaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname) {
+        return userService.getCustomerDetailsByNickname(nickname, false);
     }
 
     @Override

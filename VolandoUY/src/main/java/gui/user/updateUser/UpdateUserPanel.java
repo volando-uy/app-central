@@ -1,9 +1,7 @@
 package gui.user.updateUser;
 
 import controllers.user.IUserController;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
 
@@ -41,7 +39,7 @@ public class UpdateUserPanel extends JPanel {
         isLoadingUsers = true;
         userComboBox.removeAllItems();
 
-        List<UserDTO> usersDTOs = userController.getAllUsers();
+        List<UserDTO> usersDTOs = userController.getAllUsersSimpleDetails();
         for (UserDTO user : usersDTOs) {
             userComboBox.addItem(user.getName() + " (" + user.getNickname() + ")");
         }
@@ -72,7 +70,7 @@ public class UpdateUserPanel extends JPanel {
             try {
                 String selectedNickname = getSelectedUserNickname();
                 // If user doesn't exist, throw exception
-                selectedUser = userController.getUserByNickname(selectedNickname);
+                selectedUser = userController.getUserSimpleDetailsByNickname(selectedNickname);
                 nameTextField.setText(selectedUser.getName());
                 if (selectedUser instanceof AirlineDTO selectedUser) {
                     variableLabel1.setText("Descripción:");
@@ -140,14 +138,12 @@ public class UpdateUserPanel extends JPanel {
                 String variable3 = variableTextField3.getText();
                 String variable4 = variableTextField4.getText();
 
-                if (selectedUser instanceof AirlineDTO) {
-                    AirlineDTO airline = (AirlineDTO) selectedUser;
+                if (selectedUser instanceof BaseAirlineDTO airline) {
                     airline.setName(name);
                     airline.setDescription(variable1);
                     airline.setWeb(variable2);
                     userController.updateUser(airline.getNickname(), airline);
-                } else if (selectedUser instanceof CustomerDTO) {
-                    CustomerDTO customer = (CustomerDTO) selectedUser;
+                } else if (selectedUser instanceof BaseCustomerDTO customer) {
                     customer.setName(name);
                     customer.setSurname(variable1);
                     customer.setCitizenship(variable2);

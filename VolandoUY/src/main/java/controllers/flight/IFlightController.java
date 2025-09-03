@@ -12,4 +12,6 @@ public interface IFlightController {
     FlightDTO getFlightByName(String name);
 
     List<FlightDTO> getAllFlightsByAirline(String airlineNickname);
+
+    List<FlightDTO> getAllFlightsByRouteName(String flightRouteName);
 }

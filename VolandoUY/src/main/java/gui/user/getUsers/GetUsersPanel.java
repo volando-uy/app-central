@@ -4,9 +4,7 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -36,7 +34,7 @@ public class GetUsersPanel extends JPanel {
     }
 
     private void loadCustomerTable() {
-        List<CustomerDTO> getAllCustomers = userController.getAllCustomers();
+        List<BaseCustomerDTO> getAllCustomers = userController.getAllCustomersSimpleDetails();
 
         // Create table model and set column names
         DefaultTableModel customerTableModel = new DefaultTableModel();
@@ -44,7 +42,7 @@ public class GetUsersPanel extends JPanel {
         customerTableModel.setColumnIdentifiers(columnNames);
         
         // Add rows to the table model
-        for (CustomerDTO customerDTO : getAllCustomers) {
+        for (BaseCustomerDTO customerDTO : getAllCustomers) {
             Object[] rowData = {
                 customerDTO.getNickname(),
                 customerDTO.getName(),
@@ -66,13 +64,13 @@ public class GetUsersPanel extends JPanel {
     }
     
     private void loadAirlineTable() {
-        List<AirlineDTO> getAllAirlines = userController.getAllAirlines();
+        List<BaseAirlineDTO> getAllAirlines = userController.getAllAirlinesSimpleDetails();
         
         DefaultTableModel airlineTableModel = new DefaultTableModel();
         String[] airlineColumnNames = {"Nickname", "Nombre", "Email", "Descripción", "Web"};
         airlineTableModel.setColumnIdentifiers(airlineColumnNames);
         
-        for (AirlineDTO airlineDTO : getAllAirlines) {
+        for (BaseAirlineDTO airlineDTO : getAllAirlines) {
             Object[] rowData = {
                     airlineDTO.getNickname(),
                     airlineDTO.getName(),

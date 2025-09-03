@@ -5,6 +5,7 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class CreateFlightRoutePanel extends JPanel {
     IUserController userController;
     ICategoryController categoryController;
 
-    private List<AirlineDTO> airlines = new ArrayList<>();
+    private List<BaseAirlineDTO> airlines = new ArrayList<>();
 
 
     public CreateFlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController) {
@@ -45,11 +46,11 @@ public class CreateFlightRoutePanel extends JPanel {
         airlineComboBox.removeAllItems();
 
         // asumo que tu IUserController tiene getAllAirlines()
-        List<AirlineDTO> list = userController.getAllAirlines();
+        List<BaseAirlineDTO> list = userController.getAllAirlinesSimpleDetails();
         if (list == null) return;
 
         airlines.addAll(list);
-        for (AirlineDTO a : airlines) {
+        for (BaseAirlineDTO a : airlines) {
             // Muestra “Nombre (nickname)”
             String display = a.getName() + " (" + a.getNickname() + ")";
             airlineComboBox.addItem(display);

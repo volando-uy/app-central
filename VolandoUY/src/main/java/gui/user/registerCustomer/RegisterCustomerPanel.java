@@ -7,6 +7,7 @@ package gui.user.registerCustomer;
 import javax.swing.border.*;
 
 import controllers.user.IUserController;
+import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
@@ -49,9 +50,9 @@ public class RegisterCustomerPanel extends JPanel {
                 String id = idTextField.getText();
                 EnumTipoDocumento idType = (EnumTipoDocumento) idTypeComboBox.getSelectedItem();
 
-                CustomerDTO customerDTO = new CustomerDTO(nickname, name, mail, surname, citizenship, birthDate, id, idType);
+                BaseCustomerDTO baseCustomerDTO = new BaseCustomerDTO(nickname, name, mail, surname, citizenship, birthDate, id, idType);
 
-                CustomerDTO createdCustomerDTO = userController.registerCustomer(customerDTO);
+                BaseCustomerDTO createdCustomerDTO = userController.registerCustomer(baseCustomerDTO);
 
                 JOptionPane.showMessageDialog(this, createdCustomerDTO, "Cliente creado exitosamente", JOptionPane.INFORMATION_MESSAGE);
 

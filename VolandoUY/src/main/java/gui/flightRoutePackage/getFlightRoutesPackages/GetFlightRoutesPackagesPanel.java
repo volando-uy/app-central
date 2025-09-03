@@ -5,6 +5,7 @@
 package gui.flightRoutePackage.getFlightRoutesPackages;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 
 import java.awt.*;
@@ -33,7 +34,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
 
     private void loadPackagesTable() {
         // 1) Traer nombres (según tu controller)
-        List<String> names = flightRoutePackageController.getAllNotBoughtFlightRoutePackagesNames();
+        List<String> names = flightRoutePackageController.getAllNotBoughtFlightRoutesPackagesNames();
 
         // 2) Modelo/columnas
         DefaultTableModel model = new DefaultTableModel();
@@ -43,7 +44,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         // 3) Por cada nombre, obtener DTO y armar fila
         for (String name : names) {
             try {
-                FlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageByName(name);
+                BaseFlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageSimpleDetailsByName(name);
                 String desc = nz(p.getDescription());
                 Integer days = p.getValidityPeriodDays();
                 String disc = formatDiscount(p.getDiscount());  // 0.15 => 15%

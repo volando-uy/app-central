@@ -47,8 +47,8 @@ class UserControllerTest {
         customerDTO.setSurname("Ramirez"); // <- obligatorio
         customerDTO.setMail("gyabisito@example.com");
         customerDTO.setBirthDate(LocalDate.of(2000, 1, 1));
-        customerDTO.setIdType(EnumTipoDocumento.CI);
-        customerDTO.setId("12345678");
+        customerDTO.setDocType(EnumTipoDocumento.CI);
+        customerDTO.setNumDoc("12345678");
         customerDTO.setCitizenship("Uruguay");
 
         Customer customerMock = new Customer();
@@ -88,9 +88,9 @@ class UserControllerTest {
         UserDTO usuario = new CustomerDTO();
         usuario.setNickname("gyabisito");
 
-        when(usuarioService.getAllUsers()).thenReturn(List.of(usuario));
+        when(usuarioService.getAllUsers(false)).thenReturn(List.of(usuario));
 
-        List<UserDTO> resultado = usuarioController.getAllUsers();
+        List<UserDTO> resultado = usuarioController.getAllUsersSimpleDetails();
 
         assertEquals(1, resultado.size());
         assertEquals("gyabisito", resultado.get(0).getNickname());
@@ -100,9 +100,9 @@ class UserControllerTest {
     @DisplayName("Debe retornar lista vacía si no hay usuarios")
     void obtenerTodosLosUsuarios_listaVacia() {
 
-        when(usuarioService.getAllUsers()).thenReturn(Collections.emptyList());
+        when(usuarioService.getAllUsers(false)).thenReturn(Collections.emptyList());
 
-        List<UserDTO> resultado = usuarioController.getAllUsers();
+        List<UserDTO> resultado = usuarioController.getAllUsersSimpleDetails();
 
         assertTrue(resultado.isEmpty());
     }
@@ -131,7 +131,7 @@ class UserControllerTest {
         AirlineDTO airline2 = new AirlineDTO();
         airline2.setNickname("air2");
 
-        when(usuarioService.getAllAirlinesDetails()).thenReturn(List.of(airline1, airline2));
+        when(usuarioService.getAllAirlinesDetails(false)).thenReturn(List.of(airline1, airline2));
 
         // WHEN
         List<String> result = usuarioController.getAllAirlinesNicknames();

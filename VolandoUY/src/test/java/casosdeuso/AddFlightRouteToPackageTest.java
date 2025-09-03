@@ -75,11 +75,11 @@ public class AddFlightRouteToPackageTest {
     @DisplayName("CU: Agregar ruta de vuelo a paquete existente exitosamente")
     void agregarRutaAVuelo_exitoso() {
         // Paso 1: Listar paquetes no comprados
-        List<String> paquetes = packageController.getAllNotBoughtFlightRoutePackagesNames();
+        List<String> paquetes = packageController.getAllNotBoughtFlightRoutesPackagesNames();
         assertTrue(paquetes.contains("Promo Paraguay"));
 
         // Paso 2: Listar aerolíneas
-        var aerolineas = userController.getAllAirlines();
+        var aerolineas = userController.getAllAirlines(false);
         assertFalse(aerolineas.isEmpty());
 
         // Paso 3: Obtener rutas de aerolínea
@@ -91,7 +91,7 @@ public class AddFlightRouteToPackageTest {
         packageController.addFlightRouteToPackage("Promo Paraguay", rutaNombre, 2);
 
         // Validar que no falla (pasa si no lanza excepción)
-        var paquete = packageController.getFlightRoutePackageByName("Promo Paraguay");
+        var paquete = packageController.getFlightRoutePackageByName("Promo Paraguay", false);
         assertNotNull(paquete);
     }
 

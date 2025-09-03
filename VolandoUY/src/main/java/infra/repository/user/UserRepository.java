@@ -7,6 +7,7 @@ import infra.repository.BaseRepository;
 import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserRepository extends BaseRepository<User> implements IUserRepository {
@@ -24,9 +25,9 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
     }
 
     @Override
-    public User getUserByNickname(String nickname) {
-        User user = customerRepo.findByNickname(nickname);
-        if (user == null) user = airlineRepo.findByNickname(nickname);
+    public User getUserByNickname(String nickname, boolean full) {
+        User user = full ? customerRepo.findFullByNickname(nickname) : customerRepo.findByNickname(nickname);
+        if (user == null) user = full ? airlineRepo.findFullByNickname(nickname) : airlineRepo.findByNickname(nickname);
         return user;
     }
 
@@ -63,4 +64,11 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
     }
     public List<Customer> getAllCustomers() {return customerRepo.findAll();}
 
+    public List<Airline> getFullAllAirlines() {
+        return airlineRepo.findFullAll();
+    }
+
+    public List<Customer> getFullAllCustomers() {
+        return customerRepo.findFullAll();
+    }
 }

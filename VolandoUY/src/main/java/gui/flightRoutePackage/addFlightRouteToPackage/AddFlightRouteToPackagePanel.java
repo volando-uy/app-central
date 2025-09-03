@@ -5,8 +5,10 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -31,12 +33,12 @@ public class AddFlightRouteToPackagePanel extends JPanel {
     IUserController userController;
 
     AirlineDTO selectedAirline;
-    FlightRoutePackageDTO selectedPackage;
+    BaseFlightRoutePackageDTO selectedPackage;
     
     private boolean arePackagesLoading = false;
     private boolean areAirlinesLoading = false;
 
-    List<AirlineDTO> airlines = new ArrayList<>();
+    List<BaseAirlineDTO> airlines = new ArrayList<>();
 
     public AddFlightRouteToPackagePanel(IFlightRoutePackageController flightRoutePackageController, IFlightRouteController flightRouteController, IUserController userController) {
         this.flightRoutePackageController = flightRoutePackageController;
@@ -51,7 +53,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
 
     private void initNotBoughtPackagesList() {
         arePackagesLoading = true;
-        List<String> notBoughtPackagesNames = flightRoutePackageController.getAllNotBoughtFlightRoutePackagesNames();
+        List<String> notBoughtPackagesNames = flightRoutePackageController.getAllNotBoughtFlightRoutesPackagesNames();
         for (String name : notBoughtPackagesNames) {
             packageComboBox.addItem(name);
         }
@@ -63,12 +65,11 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         airlines.clear();
         airlineComboBox.removeAllItems();
 
-        // asumo que tu IUserController tiene getAllAirlines()
-        List<AirlineDTO> list = userController.getAllAirlines();
+        List<BaseAirlineDTO> list = userController.getAllAirlinesSimpleDetails();
         if (list == null) return;
 
         airlines.addAll(list);
-        for (AirlineDTO a : airlines) {
+        for (BaseAirlineDTO a : airlines) {
             // Muestra “Nombre (nickname)”
             String display = a.getName() + " (" + a.getNickname() + ")";
             airlineComboBox.addItem(display);
@@ -146,7 +147,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
             try {
                 String selectedPackageName = (String) packageComboBox.getSelectedItem();
                 // If package doesn't exist, throw exception
-                selectedPackage = flightRoutePackageController.getFlightRoutePackageByName(selectedPackageName);
+                selectedPackage = flightRoutePackageController.getFlightRoutePackageSimpleDetailsByName(selectedPackageName);
 
                 JOptionPane.showMessageDialog(this, "Paquete seleccionado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
@@ -161,10 +162,11 @@ public class AddFlightRouteToPackagePanel extends JPanel {
                 if (selectedNickname == null) return;
 
                 // If ariline doesn't exist, throw exception
-                userController.getAirlineByNickname(selectedNickname);
+                userController.getAirlineSimpleDetailsByNickname(selectedNickname);
 
                 loadFlightRouteList(selectedNickname);
             } catch (Exception ex) {
+                System.out.println(ex);
                 JOptionPane.showMessageDialog(this, "Error al cargar la aerolinea: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });

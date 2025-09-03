@@ -1,30 +1,24 @@
 package domain.services.flightRoute;
 
-import domain.dtos.category.CategoryDTO;
-import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
-import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
-import domain.services.user.UserService;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
 import infra.repository.flightroute.FlightRouteRepository;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Setter
 public class FlightRouteService implements IFlightRouteService {
@@ -56,7 +50,7 @@ public class FlightRouteService implements IFlightRouteService {
 
         // Obtener todos las entidades relacionadas
         // Tira throw si ya existe
-        Airline airline = userService.getAirlineByNickname(flightRouteDTO.getAirlineNickname());
+        Airline airline = userService.getAirlineByNickname(flightRouteDTO.getAirlineNickname(), true);
         City originCity = cityService.getCityByName(flightRouteDTO.getOriginCityName());
         City destinationCity = cityService.getCityByName(flightRouteDTO.getDestinationCityName());
 
@@ -84,14 +78,10 @@ public class FlightRouteService implements IFlightRouteService {
         ValidatorUtil.validate(flightRoute);
 
         // Guardar la ruta de vuelo
-        flightRouteRepository.save(flightRoute);
-
-        // Añadir la ruta de vuelo a la aerolinea
-        airline.getFlightRoutes().add(flightRoute);
-        userService.updateAirline(airline);
+        flightRouteRepository.saveFlightRouteAndAddToAirline(flightRoute, airline);
 
         // Devolver el DTO mapeado
-        return customModelMapper.mapFlightRoute(flightRoute);
+        return customModelMapper.mapFullFlightRoute(flightRoute);
     }
 
     @Override
@@ -101,8 +91,8 @@ public class FlightRouteService implements IFlightRouteService {
 
     @Override
     public List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname) {
-        return flightRouteRepository.getAllByAirlineNickname(airlineNickname).stream()
-                .map(customModelMapper::mapFlightRoute)
+        return flightRouteRepository.getFullAllByAirlineNickname(airlineNickname).stream()
+                .map(customModelMapper::mapFullFlightRoute)
                 .toList();
     }
 
@@ -123,7 +113,7 @@ public class FlightRouteService implements IFlightRouteService {
         // Tira throw si no existe
         FlightRoute flightRoute = this.getFlightRouteByName(routeName);
 
-        return customModelMapper.mapFlightRoute(flightRoute);
+        return customModelMapper.mapFullFlightRoute(flightRoute);
     }
 }
 

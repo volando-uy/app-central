@@ -8,14 +8,9 @@ import factory.ControllerFactory;
 import factory.ServiceFactory;
 import infra.repository.airport.AirportRepository;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
-
-import javax.naming.ldap.Control;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AirportService implements IAirportService {
@@ -48,11 +43,10 @@ public class AirportService implements IAirportService {
         ValidatorUtil.validate(airport);
 
         // Si es válido, guardamos el aeropuerto y lo agregamos a la ciudad
-        airportRepository.save(airport);
-        city.getAirports().add(airport);
+        airportRepository.saveAirportAndAddToCity(airport, city);
 
         // Retornamos el DTO del aeropuerto creado
-        return customModelMapper.mapAirport(airport);
+        return customModelMapper.mapFullAirport(airport);
     }
 
     @Override
@@ -66,7 +60,7 @@ public class AirportService implements IAirportService {
 
     @Override
     public AirportDTO getAirportDetailsByCode(String code) {
-        return customModelMapper.mapAirport(this.getAirportByCode(code));
+        return customModelMapper.mapFullAirport(this.getAirportByCode(code));
     }
 
     @Override
