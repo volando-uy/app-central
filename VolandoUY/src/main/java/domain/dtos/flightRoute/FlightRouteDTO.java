@@ -24,6 +24,7 @@ public class FlightRouteDTO {
     private Double priceTouristClass;
     private Double priceBusinessClass;
     private Double priceExtraUnitBaggage;
+
     private String originCityName;
     private String destinationCityName;
     private String airlineNickname;

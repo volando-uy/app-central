@@ -5,7 +5,7 @@ import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
 import domain.models.user.Customer;
-import domain.models.bookflightticket.BookFlightTicket;
+import domain.models.ticket.Ticket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,33 +24,23 @@ public class BookFlight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Precio total de la reserva
     private double totalPrice;
 
+    // Fecha de compra
     private LocalDateTime created_at;
 
-    // Dueño de la relación
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seat_id")
-    private Seat seat;
-
-
-    //Tiene N equpajes
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<ExtraLuggage> extraLuggages=null;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<BasicLuggage> basicLuggages=null;
-
-    //Comprapaquete
+    // Si la reserva viene de un paquete o no
     @ManyToOne(fetch = FetchType.EAGER)
-    private BuyPackage buyPackage;
-    //Cliente
+    private BuyPackage buyPackage = null;
+
+    // Cliente que lo reservó
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
 
-    //tiene  muchos pasajes
+    // Tiene muchos tickets
     @OneToMany(fetch = FetchType.EAGER)
-    private List<BookFlightTicket> bookFlightTicket=null;
+    private List<Ticket> ticket =null;
 
 
 }

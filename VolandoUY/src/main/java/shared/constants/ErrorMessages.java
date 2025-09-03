@@ -70,5 +70,6 @@ public class ErrorMessages {
 
     // ================================Paquete Ruta Vuelo errors==============================
     public static final String ERR_PACKAGE_ALREADY_EXISTS = "El paquete %s ya existe";
+    public static final String ERR_INVALID_SEAT_TYPE = "El tipo de asiento %s no es válido";
     // ================================Fin Paquete Ruta Vuelo errors==============================
 }

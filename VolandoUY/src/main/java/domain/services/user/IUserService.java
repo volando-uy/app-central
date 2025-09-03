@@ -37,4 +37,6 @@ public interface IUserService {
     boolean existsUserByNickname(String nickname);
 
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
+
+    void updateAirline(Airline airline);
 }

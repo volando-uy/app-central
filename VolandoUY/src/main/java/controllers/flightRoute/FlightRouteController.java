@@ -23,18 +23,13 @@ public class FlightRouteController implements IFlightRouteController{
     }
 
     @Override
-    public List<FlightDTO> getFlightsFromRoute(String routeName) {
-        return flightRouteService.getFlightsByRouteName(routeName);
-    }
-
-    @Override
     public FlightRouteDTO getFlightRouteByName(String routeName) {
         return flightRouteService.getFlightRouteDetailsByName(routeName);
     }
 
     @Override
     public List<FlightRouteDTO> getAllFlightRoutesByAirlineNickname(String airlineNickname) {
-        return flightRouteService.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
+        return flightRouteService.getFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
     }
 }

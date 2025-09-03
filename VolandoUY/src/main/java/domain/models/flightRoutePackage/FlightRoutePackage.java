@@ -24,8 +24,9 @@ public class FlightRoutePackage {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<FlightRoute> flightRoutes;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Customer> buyers;
+    //Tiene muchos compras de paquete
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<BuyPackage> buyPackages;
 
     @Id
     @NotBlank
@@ -39,8 +40,8 @@ public class FlightRoutePackage {
     @Min(1)
     private int validityPeriodDays;
 
-    @DecimalMin(value = "0.0", inclusive = true)
-    @DecimalMax(value = "100.0", inclusive = true)
+    @DecimalMin(value = "0.0")
+    @DecimalMax(value = "100.0")
     private double discount;
 
     @NotNull
@@ -49,9 +50,9 @@ public class FlightRoutePackage {
     @NotNull
     private EnumTipoAsiento seatType;
 
-    //Tiene muchos compras de paquete
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<BuyPackage> buyPackages;
+    @NotNull
+    private Double totalPrice;
+
 
 
     // 🔹 Método helper para obtener la fecha de expiración

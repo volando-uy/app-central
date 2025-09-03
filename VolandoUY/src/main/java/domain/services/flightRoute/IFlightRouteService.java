@@ -17,8 +17,7 @@ public interface IFlightRouteService {
     FlightRouteDTO getFlightRouteDetailsByName(String routeName);
     FlightRoute getFlightRouteByName(String routeName);
     boolean existFlightRoute(String name);
-    List<FlightRouteDTO> getAllFlightRoutesDetailsByAirlineNickname(String airlineNickname);
-    List<FlightDTO> getFlightsByRouteName(String routeName);
+    List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname);
 
     void setCategoryService(ICategoryService categoryService);
     void setCityService(ICityService cityService);

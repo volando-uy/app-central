@@ -3,13 +3,15 @@ package domain.services.user;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
+import domain.models.buypackage.BuyPackage;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
-import domain.models.packagePurchase.PackagePurchase;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import factory.ControllerFactory;
 import infra.repository.BaseRepository;
 import infra.repository.user.AirlineRepository;
 import infra.repository.user.CustomerRepository;
@@ -18,23 +20,25 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import domain.models.user.mapper.UserMapper;
 import shared.constants.ErrorMessages;
+import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserService implements IUserService {
-    private final ModelMapper modelMapper;
-    private final UserMapper userMapper;
+
+    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+
     private final UserRepository userRepository;
 
     @Setter
     private IFlightRoutePackageService flightRoutePackageService;
 
-    public UserService(ModelMapper modelMapper, UserMapper userMapper) {
-        this.modelMapper = modelMapper;
-        this.userMapper = userMapper;
+    public UserService() {
         this.userRepository = new UserRepository();
     }
 
@@ -43,51 +47,58 @@ public class UserService implements IUserService {
     @Override
     public List<AirlineDTO> getAllAirlinesDetails() {
         return userRepository.getAllAirlines().stream()
-                .map(userMapper::toAirlineDTO)
+                .map(customModelMapper::mapAirline)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CustomerDTO> getAllCustomersDetails() {
         return userRepository.getAllCustomers().stream()
-                .map(userMapper::toCustomerDTO)
+                .map(customModelMapper::mapCustomer)
                 .collect(Collectors.toList());
     }
 
 
     // REGISTRO DE CUSTOMER
     @Override
-    public CustomerDTO registerCustomer(CustomerDTO dto) {
-        if (existsUserByNickname(dto.getNickname()) || _emailExists(dto.getMail())) {
+    public CustomerDTO registerCustomer(CustomerDTO customerDTO) {
+        // Comprobamos que el usuario no exista
+        if (existsUserByNickname(customerDTO.getNickname()) || _emailExists(customerDTO.getMail())) {
             throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
         }
 
-        Customer customer = modelMapper.map(dto, Customer.class);
+        // Creamos el nuevo customer
+        Customer customer = customModelMapper.map(customerDTO, Customer.class);
+
+        // Lo validamos
         ValidatorUtil.validate(customer);
+
+        // Lo guardamos en el repository
         userRepository.save(customer);
 
-        return modelMapper.map(
-                userRepository.getUserByNickname(customer.getNickname()), CustomerDTO.class
-        );
+        return customModelMapper.mapCustomer(customer);
     }
 
     // REGISTRO DE AEROLINEA
     @Override
-    public AirlineDTO registerAirline(AirlineDTO dto) {
-        if (existsUserByNickname(dto.getNickname()) || _emailExists(dto.getMail())) {
+    public AirlineDTO registerAirline(AirlineDTO airlineDTO) {
+        // Comprobamos que el usuario no exista
+        if (existsUserByNickname(airlineDTO.getNickname()) || _emailExists(airlineDTO.getMail())) {
             throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
         }
 
-        Airline airline = modelMapper.map(dto, Airline.class);
+        // Mapeamos el DTO a entidad
+        Airline airline = customModelMapper.map(airlineDTO, Airline.class);
         airline.setFlightRoutes(new ArrayList<>());
         airline.setFlights(new ArrayList<>());
 
+        // Validamos la entidad
         ValidatorUtil.validate(airline);
+
+        // Guardamos la nueva aerolinea
         userRepository.save(airline);
 
-        return modelMapper.map(
-                userRepository.getUserByNickname(airline.getNickname()), AirlineDTO.class
-        );
+        return customModelMapper.mapAirline(airline);
     }
 
     @Override
@@ -100,68 +111,90 @@ public class UserService implements IUserService {
     @Override
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(userMapper::toDTO)
+                .map(customModelMapper::mapUser)
                 .toList();
     }
 
     @Override
     public UserDTO getUserByNickname(String nickname) {
+        // Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname.toLowerCase().trim());
         if (user == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
-        return userMapper.toDTO(user);
+        return customModelMapper.mapUser(user);
     }
 
     @Override
     public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
+        // Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname);
         if (user == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
 
-        User tempUser = userMapper.fromDTO(updatedUserDTO);
+        // Creamos un usuario temporal para validar los datos nuevos
+        User tempUser = customModelMapper.mapUserDTO(updatedUserDTO);
+
+        // Validamos los datos
         ValidatorUtil.validate(tempUser);
 
+        // Actualizamos los datos del usuario original
         user.updateDataFrom(updatedUserDTO);
 
         // Guardar el update
         userRepository.update(user);
 
-        return userMapper.toDTO(user);
+        return customModelMapper.mapUser(user);
     }
 
     @Override
     public Airline getAirlineByNickname(String nickname) {
+        // Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname);
+
+        // Checkeamos que el usuario sea una aerolinea
         if (user instanceof Airline airline) {
             return airline;
+        } else {
+            // Devolvemos error si no es una aerolinea
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, nickname));
         }
-        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, nickname));
+
     }
 
     @Override
     public Customer getCustomerByNickname(String nickname) {
+        //  Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname);
+
+        // Checkeamos que el usuario sea un customer
         if (user instanceof Customer customer) {
             return customer;
+        } else {
+            // Devolvemos error si no es un customer
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
         }
-        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
     }
 
 
     @Override
     public CustomerDTO getCustomerDetailsByNickname(String nickname) {
+        // Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname);
+
+        // Checkeamos que el usuario sea un customer
         if (user instanceof Customer customer) {
-            return userMapper.toCustomerDTO(customer);
+            return customModelMapper.mapCustomer(customer);
+        } else {
+            // Devolvemos error si no es un customer
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
         }
-        throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
     }
 
     @Override
     public AirlineDTO getAirlineDetailsByNickname(String nickname) {
-        return userMapper.toAirlineDTO(getAirlineByNickname(nickname));
+        return customModelMapper.mapAirline(getAirlineByNickname(nickname));
     }
 
     @Override
@@ -173,11 +206,14 @@ public class UserService implements IUserService {
     @Override
     public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
 //        Customer customer = this.getCustomerByNickname(customerNickname);
+//
+//        // Buscar el paquete por su nombre
+//        // Tira throw si no lo encuentra
 //        FlightRoutePackage flightRoutePackage = flightRoutePackageService.getFlightRoutePackageByName(packageName);
 //
 //        // Verificar si ya compró este paquete
 //        customer.getBoughtPackages().stream()
-//                .filter(pkg -> pkg.getName().equalsIgnoreCase(packageName))
+//                .filter(pkg -> pkg.getFlightRoutePackage().getName().equalsIgnoreCase(packageName))
 //                .findFirst()
 //                .ifPresent(pkg -> {
 //                    throw new IllegalArgumentException(
@@ -192,12 +228,22 @@ public class UserService implements IUserService {
 //            );
 //        }
 //
-//        // Añadir el paquete al cliente y viceversa
-//        customer.getBoughtPackages().add(flightRoutePackage);
-//        flightRoutePackage.getBuyers().add(customer);
+//        // Creamos el buy package
+//        BuyPackage buyPackage = new BuyPackage();
+//        buyPackage.setCustomer(customer);
+//        buyPackage.setFlightRoutePackage(flightRoutePackage);
+//        buyPackage.setCreatedAt(LocalDateTime.now());
+//        buyPackage.setTotalPrice(flightRoutePackage.getTotalPrice());
+//
+//        // Añadimos el buy package al customer
+//        customer.getBoughtPackages().add(buyPackage);
+//
+//        // Añadimos el buy package al flight route package
+//        flightRoutePackage.getBuyPackages().add(buyPackage);
 //
 //        // Guardar cambios en ambos repositorios
 //        userRepository.save(customer);
+//        // buyPackageService.save(buyPackage);
 //        flightRoutePackageService._updateFlightRoutePackage(flightRoutePackage);
     }
 
@@ -209,6 +255,11 @@ public class UserService implements IUserService {
     @Override
     public boolean existsUserByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public void updateAirline(Airline airline) {
+        userRepository.update(airline);
     }
 }
 

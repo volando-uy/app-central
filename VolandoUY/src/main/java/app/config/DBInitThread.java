@@ -110,48 +110,6 @@ public class DBInitThread extends Thread {
         airportController.createAirport(airportDTO, "Madrid");
 
 
-        FlightDTO flightDTO1 = new FlightDTO();
-        flightDTO1.setName("Vuelo1");
-        flightDTO1.setDepartureTime(LocalDateTime.of(2025, 10, 1, 10, 0));
-        flightDTO1.setDuration(120L);
-        flightDTO1.setMaxEconomySeats(150);
-        flightDTO1.setMaxBusinessSeats(50);
-        flightDTO1.setCreatedAt(LocalDateTime.now());
-        flightDTO1.setAirlineNickname("Aerolineas Argentinas");
-        flightController.createFlight(flightDTO1);
-
-        FlightDTO flightDTO2 = new FlightDTO();
-        flightDTO2.setName("Vuelo2");
-        flightDTO2.setDepartureTime(LocalDateTime.of(2025, 10, 2, 15, 0));
-        flightDTO2.setDuration(130L);
-        flightDTO2.setMaxEconomySeats(160);
-        flightDTO2.setMaxBusinessSeats(40);
-        flightDTO2.setCreatedAt(LocalDateTime.now());
-        flightDTO2.setAirlineNickname("Aerolineas Argentinas");
-        flightController.createFlight(flightDTO2);
-
-
-        FlightDTO flightDTO3 = new FlightDTO();
-        flightDTO3.setName("Vuelo3");
-        flightDTO3.setDepartureTime(LocalDateTime.of(2025, 11, 1, 9, 0));
-        flightDTO3.setDuration(140L);
-        flightDTO3.setMaxEconomySeats(170);
-        flightDTO3.setMaxBusinessSeats(30);
-        flightDTO3.setCreatedAt(LocalDateTime.now());
-        flightDTO3.setAirlineNickname("Aerolineas Argentinas");
-        flightController.createFlight(flightDTO3);
-
-        FlightDTO flightDTO4 = new FlightDTO();
-        flightDTO4.setName("Vuelo4");
-        flightDTO4.setDepartureTime(LocalDateTime.of(2025, 11, 2, 14, 0));
-        flightDTO4.setDuration(150L);
-        flightDTO4.setMaxEconomySeats(180);
-        flightDTO4.setMaxBusinessSeats(20);
-        flightDTO4.setCreatedAt(LocalDateTime.now());
-        flightDTO4.setAirlineNickname("Aerolineas Argentinas");
-        flightController.createFlight(flightDTO4);
-
-
         FlightRouteDTO flightRouteDTO = new FlightRouteDTO();
         flightRouteDTO.setName("Madrid - Paris");
         flightRouteDTO.setDescription("Ruta de vuelo de Madrid a Paris");
@@ -162,7 +120,7 @@ public class DBInitThread extends Thread {
         flightRouteDTO.setOriginCityName("Madrid");
         flightRouteDTO.setDestinationCityName("Paris");
         flightRouteDTO.setAirlineNickname("Aerolineas Argentinas");
-        flightRouteDTO.setCategories(List.of("Internacional"));
+        //flightRouteDTO.setCategories(List.of("Internacional"));
         flightRouteDTO.setFlightsNames(List.of("Vuelo1", "Vuelo2"));
         flightRouteController.createFlightRoute(flightRouteDTO);
 
@@ -177,9 +135,56 @@ public class DBInitThread extends Thread {
         flightRouteDTO2.setOriginCityName("Paris");
         flightRouteDTO2.setDestinationCityName("Berlin");
         flightRouteDTO2.setAirlineNickname("Aerolineas Argentinas");
-        flightRouteDTO2.setCategories(List.of("Internacional"));
+        // flightRouteDTO2.setCategories(List.of("Internacional"));
         flightRouteDTO2.setFlightsNames(List.of("Vuelo3", "Vuelo4"));
         flightRouteController.createFlightRoute(flightRouteDTO2);
+
+
+        FlightDTO flightDTO1 = new FlightDTO();
+        flightDTO1.setName("Vuelo1");
+        flightDTO1.setDepartureTime(LocalDateTime.of(2025, 10, 1, 10, 0));
+        flightDTO1.setDuration(120L);
+        flightDTO1.setMaxEconomySeats(150);
+        flightDTO1.setMaxBusinessSeats(50);
+        flightDTO1.setCreatedAt(LocalDateTime.now());
+        flightDTO1.setAirlineNickname("Aerolineas Argentinas");
+        flightDTO1.setFlightRouteName("Paris - Berlin");
+        flightController.createFlight(flightDTO1);
+
+        FlightDTO flightDTO2 = new FlightDTO();
+        flightDTO2.setName("Vuelo2");
+        flightDTO2.setDepartureTime(LocalDateTime.of(2025, 10, 2, 15, 0));
+        flightDTO2.setDuration(130L);
+        flightDTO2.setMaxEconomySeats(160);
+        flightDTO2.setMaxBusinessSeats(40);
+        flightDTO2.setCreatedAt(LocalDateTime.now());
+        flightDTO2.setAirlineNickname("Aerolineas Argentinas");
+        flightDTO2.setFlightRouteName("Madrid - Paris");
+        flightController.createFlight(flightDTO2);
+
+
+        FlightDTO flightDTO3 = new FlightDTO();
+        flightDTO3.setName("Vuelo3");
+        flightDTO3.setDepartureTime(LocalDateTime.of(2025, 11, 1, 9, 0));
+        flightDTO3.setDuration(140L);
+        flightDTO3.setMaxEconomySeats(170);
+        flightDTO3.setMaxBusinessSeats(30);
+        flightDTO3.setCreatedAt(LocalDateTime.now());
+        flightDTO3.setAirlineNickname("Aerolineas Argentinas");
+        flightDTO3.setFlightRouteName("Madrid - Paris");
+        flightController.createFlight(flightDTO3);
+
+        FlightDTO flightDTO4 = new FlightDTO();
+        flightDTO4.setName("Vuelo4");
+        flightDTO4.setDepartureTime(LocalDateTime.of(2025, 11, 2, 14, 0));
+        flightDTO4.setDuration(150L);
+        flightDTO4.setMaxEconomySeats(180);
+        flightDTO4.setMaxBusinessSeats(20);
+        flightDTO4.setCreatedAt(LocalDateTime.now());
+        flightDTO4.setAirlineNickname("Aerolineas Argentinas");
+        flightDTO4.setFlightRouteName("Paris - Berlin");
+        flightController.createFlight(flightDTO4);
+
 
 
         // 1: Listar paquetes registrados
@@ -293,7 +298,7 @@ public class DBInitThread extends Thread {
         routeDTO1.setOriginCityName("San José");
         routeDTO1.setDestinationCityName("Montevideo");
         routeDTO1.setAirlineNickname("airline1");
-        routeDTO1.setCategories(List.of("category1", "category2"));
+        // routeDTO1.setCategories(List.of("category1", "category2"));
         flightRouteController.createFlightRoute(routeDTO1);
 
         FlightRouteDTO routeDTO2 = new FlightRouteDTO();
@@ -306,7 +311,7 @@ public class DBInitThread extends Thread {
         routeDTO2.setOriginCityName("Montevideo");
         routeDTO2.setDestinationCityName("San José");
         routeDTO2.setAirlineNickname("airline2");
-        routeDTO2.setCategories(List.of("category1"));
+        // routeDTO2.setCategories(List.of("category1"));
         flightRouteController.createFlightRoute(routeDTO2);
 
     }

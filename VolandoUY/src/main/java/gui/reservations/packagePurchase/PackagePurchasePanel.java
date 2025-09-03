@@ -35,7 +35,6 @@ public class PackagePurchasePanel extends JPanel {
         availablePackages = flightRoutePackageController.getPackagesWithFlightRoutes();
 
         if (availablePackages == null || availablePackages.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay paquetes con rutas de vuelo disponibles", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -106,7 +105,6 @@ public class PackagePurchasePanel extends JPanel {
             List<domain.dtos.user.UserDTO> allUsers = userController.getAllUsers();
 
             if (allUsers == null || allUsers.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No hay clientes disponibles", "Info", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 

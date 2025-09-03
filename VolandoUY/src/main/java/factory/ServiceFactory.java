@@ -14,7 +14,6 @@ import domain.services.flightRoutePackage.FlightRoutePackageService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import infra.repository.compraPaquete.PackagePurchaseRepository;
 
 public class ServiceFactory {
     private static IUserService userService;
@@ -31,7 +30,7 @@ public class ServiceFactory {
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
     public static IUserService getUserService() {
         if (userService == null) {
-            userService = new UserService(ControllerFactory.getModelMapper(), ControllerFactory.getUserMapper());
+            userService = new UserService();
             userService.setFlightRoutePackageService(getFlightRoutePackageService());
         }
         return userService;
@@ -45,7 +44,7 @@ public class ServiceFactory {
     // Metodo para obtener el servicio de rutas de vuelo, inicializándolo si es necesario
     public static IFlightRouteService getFlightRouteService() {
         if (flightRouteService == null) {
-            flightRouteService = new FlightRouteService(ControllerFactory.getModelMapper());
+            flightRouteService = new FlightRouteService();
             flightRouteService.setCategoryService(getCategoryService());
             flightRouteService.setCityService(getCityService());
             flightRouteService.setUserService(getUserService());
@@ -60,7 +59,7 @@ public class ServiceFactory {
 
     public static ICategoryService getCategoryService() {
         if(categoryService == null) {
-            categoryService = new CategoryService(ControllerFactory.getModelMapper());
+            categoryService = new CategoryService();
         }
         return categoryService;
     }
@@ -72,7 +71,7 @@ public class ServiceFactory {
 
     public static IFlightService getFlightService() {
         if (flightService == null) {
-            flightService = new FlightService(ControllerFactory.getModelMapper());
+            flightService = new FlightService();
         }
         return flightService;
     }
@@ -84,7 +83,7 @@ public class ServiceFactory {
 
     public static IFlightRoutePackageService getFlightRoutePackageService() {
         if (packageService == null) {
-            packageService = new FlightRoutePackageService(ControllerFactory.getModelMapper());
+            packageService = new FlightRoutePackageService();
             packageService.setFlightRouteService(getFlightRouteService());
         }
         return packageService;
@@ -97,7 +96,7 @@ public class ServiceFactory {
 
     public static ICityService getCityService() {
         if (cityService == null) {
-            cityService = new CityService(ControllerFactory.getModelMapper());
+            cityService = new CityService();
         }
         return cityService;
     }
@@ -107,7 +106,7 @@ public class ServiceFactory {
     // ############ AIRPORT SERVICE ############
     public static IAirportService getAirportService() {
         if(airportService == null) {
-            airportService = new AirportService(ControllerFactory.getModelMapper());
+            airportService = new AirportService();
             airportService.setCityService(getCityService());
         }
         return airportService;

@@ -31,14 +31,7 @@ public class UserMapper {
         throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
     }
 
-    public User fromDTO(UserDTO updatedUserDTO) {
-        if (updatedUserDTO instanceof CustomerDTO customerDTO) {
-            return modelMapper.map(customerDTO, Customer.class);
-        } else if (updatedUserDTO instanceof AirlineDTO airlineDTO) {
-            return modelMapper.map(airlineDTO, Airline.class);
-        }
-        throw new IllegalArgumentException(ErrorMessages.ERR_USER_NOT_SUPPORTED);
-    }
+
     public AirlineDTO toAirlineDTO(Airline airline) {
         AirlineDTO dto = new AirlineDTO();
         dto.setNickname(airline.getNickname());

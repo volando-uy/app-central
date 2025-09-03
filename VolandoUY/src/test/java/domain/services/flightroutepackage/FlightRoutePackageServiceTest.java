@@ -42,11 +42,11 @@ class FlightRoutePackageServiceTest {
         TestUtils.cleanDB();
         modelMapper = new ModelMapper();
 
-        var userService     = new UserService(modelMapper, new UserMapper(modelMapper));
-        var cityService     = new CityService(modelMapper);
-        var categoryService = new CategoryService(modelMapper);
-        flightRouteService  = new FlightRouteService(modelMapper);
-        packageService      = new FlightRoutePackageService(modelMapper);
+        var userService     = new UserService();
+        var cityService     = new CityService();
+        var categoryService = new CategoryService();
+        flightRouteService  = new FlightRouteService();
+        packageService      = new FlightRoutePackageService();
 
         // ---- Semilla mínima en DB: Airline + Cities + Category ----
         try (EntityManager em = DBConnection.getEntityManager()) {
