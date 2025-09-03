@@ -35,7 +35,6 @@ public class FlightRoute {
     @NotNull
     private LocalDate createdAt;
 
-
     @NotNull
     @PositiveOrZero()
     private Double priceTouristClass;
@@ -46,6 +45,7 @@ public class FlightRoute {
     @PositiveOrZero()
     private Double priceExtraUnitBaggage;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     private City originCity;
 
@@ -55,16 +55,12 @@ public class FlightRoute {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
 
-
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
     @OneToMany(
             mappedBy = "flightRoute",
-//            cascade = CascadeType.MERGE,   // o sin cascada
-            orphanRemoval = true,
             fetch = FetchType.EAGER
     )
     private List<Flight> flights = new ArrayList<>();
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Airline airline;

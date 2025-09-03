@@ -28,12 +28,12 @@ import domain.services.user.IUserService;
 import domain.services.user.UserService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
 import org.modelmapper.ModelMapper;
-
+import shared.utils.CustomModelMapper;
 
 
 public class ControllerFactory {
 
-    private static ModelMapper modelMapper;
+    private static CustomModelMapper customModelMapper;
     private static UserMapper userMapper;
     private static UserFactoryMapper userFactoryMapper;
 
@@ -48,26 +48,13 @@ public class ControllerFactory {
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
 
-    public static ModelMapper getModelMapper() {
-        if (modelMapper == null) {
-            modelMapper = new ModelMapper();
+    public static CustomModelMapper getCustomModelMapper() {
+        if (customModelMapper == null) {
+            customModelMapper = new CustomModelMapper();
         }
-        return modelMapper;
+        return customModelMapper;
     }
 
-    public static UserMapper getUserMapper() {
-        if (userMapper == null) {
-            userMapper = new UserMapper(getModelMapper());
-        }
-        return userMapper;
-    }
-
-    public static UserFactoryMapper getUsuarioFactoryMapper() {
-        if (userFactoryMapper == null) {
-            userFactoryMapper = new UserFactoryMapper(getModelMapper());
-        }
-        return userFactoryMapper;
-    }
 
     // #############################################################
 

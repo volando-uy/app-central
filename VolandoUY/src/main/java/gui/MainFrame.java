@@ -87,9 +87,6 @@ public class MainFrame extends JFrame {
         add(sideBar, BorderLayout.WEST);
         add(mainPanel, BorderLayout.CENTER);
 
-        if (splash != null) {
-            splash.close();
-        }
         setVisible(true);
         toFront();
     }

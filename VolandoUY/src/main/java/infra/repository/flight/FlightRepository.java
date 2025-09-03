@@ -4,6 +4,7 @@ import app.DBConnection;
 import domain.models.flight.Flight;
 import jakarta.persistence.EntityManager;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FlightRepository extends AbstractFlightRepository implements IFlightRepository {
@@ -39,6 +40,14 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
                     .setParameter("name", name.toLowerCase())
                     .getSingleResult();
             return count > 0;
+        }
+    }
+
+    public List<Flight> getFlightsByRouteName(String routeName) {
+        try(EntityManager em= DBConnection.getEntityManager()){
+            return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.flightRoute.name)=:name", Flight.class)
+                    .setParameter("name", routeName.toLowerCase())
+                    .getResultList();
         }
     }
 }

@@ -1,36 +1,23 @@
-package domain.models.seat;
+package domain.dtos.seat;
 
 import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
-import domain.models.ticket.Ticket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Seat {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SeatDTO {
     private Long id;
-
     private String number;
-
     private boolean isAvailable;
-
     private double price;
-
-    @Enumerated(EnumType.STRING)
     private EnumTipoAsiento type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Flight flight;
-
-    // Un asiento va a estar relacionado a un ticket
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Ticket ticket;
+    private String flightName;
+    private Long ticketId;
 }

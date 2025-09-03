@@ -43,10 +43,6 @@ public class City {
     private List<Airport> airports = new ArrayList<>();
 
 
-
-
-
-
     public City(String name, String country, double latitude, double longitude) {
         this.name = name;
         this.country = country;

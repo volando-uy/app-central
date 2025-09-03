@@ -58,11 +58,11 @@ class FlightRouteServiceTest {
 
         // Instanciamos los servicios reales (en memoria)
         userService = new UserService(modelMapper, new UserMapper(modelMapper));
-        categoryService = new CategoryService(modelMapper); // debería tener lista interna de categorías
-        cityService = new CityService(modelMapper);         // debería tener lista interna de ciudades
+        categoryService = new CategoryService(); // debería tener lista interna de categorías
+        cityService = new CityService();         // debería tener lista interna de ciudades
 
         // Creamos el servicio a testear con sus dependencias reales
-        flightRouteService = new FlightRouteService(modelMapper);
+        flightRouteService = new FlightRouteService();
         this.fillDB();
     }
 

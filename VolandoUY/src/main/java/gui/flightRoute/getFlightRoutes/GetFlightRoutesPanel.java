@@ -6,6 +6,7 @@ package gui.flightRoute.getFlightRoutes;
 
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.category.CategoryDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 

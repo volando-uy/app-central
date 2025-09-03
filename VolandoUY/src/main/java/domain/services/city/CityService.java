@@ -3,10 +3,12 @@ package domain.services.city;
 import domain.dtos.city.CityDTO;
 
 import domain.models.city.City;
+import factory.ControllerFactory;
 import infra.repository.city.CityRepository;
 import infra.repository.city.ICityRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
+import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
@@ -17,28 +19,30 @@ import java.util.stream.Collectors;
 public class CityService implements ICityService {
 
     private CityRepository cityRepository;
-    private ModelMapper modelMapper;
+    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
-    public CityService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public CityService() {
         this.cityRepository = new CityRepository();
     }
 
     @Override
     public CityDTO createCity(CityDTO cityDTO) {
-        City city = modelMapper.map(cityDTO, City.class);
+        // Cheackeamos que la ciudad no exista
+        City city = customModelMapper.map(cityDTO, City.class);
         if (cityExists(city.getName())) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_ALREADY_EXISTS, city.getName()));
         }
+        // Inicializamos la lista de aeropuertos
+        city.setAirports(new ArrayList<>());
+
+        // Validamos la ciudad
         ValidatorUtil.validate(city);
 
-        if (city.getAirports() == null) {
-            city.setAirports(new ArrayList<>());
-        }
-
+        // Guardamos la nueva ciudad
         cityRepository.save(city);
 
-        return modelMapper.map(city, CityDTO.class);
+        // Devolvemos el DTO mapeado
+        return customModelMapper.mapCity(city);
     }
 
     @Override
@@ -48,24 +52,14 @@ public class CityService implements ICityService {
 
     @Override
     public CityDTO getCityDetailsByName(String cityName) {
+        // Cheackemos que la ciudad exista
         City city = cityRepository.getCityByName(cityName);
         if (city == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName));
         }
 
-        // Map manual de airportNames
-        CityDTO dto = modelMapper.map(city, CityDTO.class);
-        if (city.getAirports() != null) {
-            dto.setAirportNames(
-                    city.getAirports().stream()
-                            .map(airport -> airport.getName())
-                            .toList()
-            );
-        } else {
-            dto.setAirportNames(List.of()); // evitar null
-        }
-
-        return dto;
+        // Devolvemos el DTO mapeado
+        return customModelMapper.mapCity(city);
     }
 
 

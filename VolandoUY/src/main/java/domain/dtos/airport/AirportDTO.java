@@ -12,5 +12,6 @@
     public class AirportDTO {
         private String name;
         private String code;
+
         private String cityName;
     }

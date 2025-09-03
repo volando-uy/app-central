@@ -10,99 +10,50 @@ import infra.repository.airport.AirportRepository;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
+import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
+import javax.naming.ldap.Control;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AirportService implements IAirportService {
     private AirportRepository airportRepository;
-    private ModelMapper modelMapper;
+    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     @Setter
     private ICityService cityService;
 
-    public AirportService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public AirportService() {
         this.cityService= ServiceFactory.getCityService();
         this.airportRepository = new AirportRepository();
     }
 
     public AirportDTO createAirport(AirportDTO dto, String cityName) {
+        // Buscamos la ciudad a la que se agrega el aeropuerto
+        // Tira throw si no encuentra
         City city = cityService.getCityByName(cityName);
-        System.out.println("City found: " + city);
-        if (city.getAirports() == null) {
-            city.setAirports(new ArrayList<>()); // 🔧 Previene la excepción
-        }
 
+        // Checkeamos que no exista un aeropuerto con el mismo código
         if (airportExists(dto.getCode())) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_CODE_ALREADY_EXISTS, dto.getCode()));
         }
 
-        Airport airport = modelMapper.map(dto, Airport.class);
-//        System.out.println("Airportes before adding: " + airports);
+        // Creamos la nueva entidad aeropuerto y le agregamos la ciudad
+        Airport airport = customModelMapper.map(dto, Airport.class);
         airport.setCity(city);
+
+        // Valudamos el aeropuerto
         ValidatorUtil.validate(airport);
-//        airports.add(airport);
+
+        // Si es válido, guardamos el aeropuerto y lo agregamos a la ciudad
         airportRepository.save(airport);
-//        System.out.println("Airport after setting city: " + airports);
         city.getAirports().add(airport);
 
-        return modelMapper.map(airport, AirportDTO.class);
+        // Retornamos el DTO del aeropuerto creado
+        return customModelMapper.mapAirport(airport);
     }
-
-//    @Override
-//    public void removeAirport(String code) {
-//        Airport toRemove = null;
-//
-//        for (Airport airport : airports) {
-//            if (airport.getCode().equals(code)) {
-//                City city = airport.getCities();
-//                if (city != null && city.getAirports() != null) {
-//                    city.getAirports().removeIf(a -> a.getCode().equals(code));
-//                }
-//                toRemove = airport;
-//                break;
-//            }
-//        }
-//
-//        if (toRemove == null) {
-//            throw new IllegalArgumentException("Airport does not exist");
-//        }
-//
-//        airports.remove(toRemove);
-//    }
-//    @Override
-//    public void updateAirport(String code, CityDTO newCityDTO) {
-//        if (!airportExists(code)) {
-//            throw new IllegalArgumentException("Airport does not exist");
-//        }
-//        City newCity = modelMapper.map(newCityDTO, City.class);
-//        for (Airport airport : airports) {
-//            if (airport.getCode().equals(code)) {
-//                // Remover de la ciudad anterior
-//                City oldCity = airport.getCities();
-//                if (oldCity != null && oldCity.getAirports() != null) {
-//                    oldCity.getAirports().remove(airport);
-//                }
-//
-//                // Asignar nueva ciudad
-//                airport.setCity(newCity);
-//
-//                // Agregar a nueva ciudad
-//                if (newCity.getAirports() == null) {
-//                    newCity.setAirports(new ArrayList<>());
-//                }
-//                if (!newCity.getAirports().contains(airport)) {
-//                    newCity.getAirports().add(airport);
-//                }
-//                return;
-//            }
-//        }
-//
-//        throw new IllegalArgumentException("Airport does not exist");
-//    }
 
     @Override
     public Airport getAirportByCode(String code) {
@@ -111,12 +62,11 @@ public class AirportService implements IAirportService {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code));
         }
         return airport;
-
     }
 
     @Override
     public AirportDTO getAirportDetailsByCode(String code) {
-        return modelMapper.map(getAirportByCode(code), AirportDTO.class);
+        return customModelMapper.mapAirport(this.getAirportByCode(code));
     }
 
     @Override

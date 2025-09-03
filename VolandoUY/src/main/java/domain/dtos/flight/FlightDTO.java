@@ -19,6 +19,7 @@ public class FlightDTO {
     private Integer maxEconomySeats;
     private Integer maxBusinessSeats;
     private LocalDateTime createdAt;
+
     private String airlineNickname;
     private String flightRouteName;
 }

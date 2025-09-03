@@ -2,6 +2,7 @@ package domain.services.flight;
 
 import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
+import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
@@ -9,6 +10,7 @@ import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
+import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class FlightService implements IFlightService {
 
-    private final ModelMapper modelMapper;
+    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     private IUserService userService;
 
@@ -26,8 +28,7 @@ public class FlightService implements IFlightService {
     private FlightRepository flightRepository;
 
     // Constructor
-    public FlightService(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public FlightService() {
         this.userService = ServiceFactory.getUserService();
         this.flightRepository = new FlightRepository();
     }
@@ -35,90 +36,72 @@ public class FlightService implements IFlightService {
     @Override
     public FlightDTO createFlight(FlightDTO flightDTO) {
 
-        Flight originalFlight = modelMapper.map(flightDTO, Flight.class);
         // Verificar si el vuelo ya existe
-        if (_flightExists(originalFlight)) {
-            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ALREADY_EXISTS, originalFlight.getName()));
+        Flight flight = customModelMapper.map(flightDTO, Flight.class);
+        if (_flightExists(flight)) {
+            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ALREADY_EXISTS, flight.getName()));
         }
-        ValidatorUtil.validate(originalFlight);
 
-        // Mapear Airline desde nickname
+        // Validar el vuelo
+        ValidatorUtil.validate(flight);
+
+        // Obtener la aerolínea por su nickname
+        // Tira throw si no existe.
         Airline airline = userService.getAirlineByNickname(flightDTO.getAirlineNickname());
-        // No es necesario esta validacion porque si la aerolinea no existe, ya throwea en getAirlineByNickname
-//        if (airline == null) {
-//            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, flightDTO.getAirlineNickname()));
-//        }
 
         // Agregar el vuelo a la aerolínea y viceversa
-        originalFlight.setAirline(airline);
-        airline.getFlights().add(originalFlight);
+        flight.setAirline(airline);
+        airline.getFlights().add(flight);
 
-        // Agregar el vuelo a la lista de vuelos
-//        flights.add(originalFlight);
-        flightRepository.save(originalFlight);
-//        System.out.println(flights);
+        // Guardamos el vuelo y actualizamos la aerolínea
+        flightRepository.save(flight);
+        userService.updateAirline(airline);
 
-        // Mapear el DTO del vuelo creado
-        FlightDTO createdFlightDTO = modelMapper.map(originalFlight, FlightDTO.class);
-        createdFlightDTO.setAirlineNickname(flightDTO.getAirlineNickname());
-
-        return createdFlightDTO;
+        return customModelMapper.mapFlight(flight);
     }
 
 
     @Override
     public List<FlightDTO> getAllFlights() {
-//        return flights.stream()
-//                .map(flight -> modelMapper.map(flight, FlightDTO.class))
-//                .toList();
-        return flightRepository.findAll().stream().map(flight -> modelMapper.map(flight, FlightDTO.class)).collect(Collectors.toList());
+        return flightRepository.findAll().stream().map(customModelMapper::mapFlight).collect(Collectors.toList());
     }
 
     @Override
     public FlightDTO getFlightDetailsByName(String name) {
-//        Flight flight = flights.stream()
-//                .filter(f -> f.getName().equalsIgnoreCase(name))
-//                .findFirst()
-//                .orElse(null);
-//        if (flight == null) {
-//            return null;
-//        }
-//        FlightDTO flightDTO = modelMapper.map(flight, FlightDTO.class);
-//        return flightDTO;
-        Flight flight = getFlightByName(name);
-        return modelMapper.map(flight, FlightDTO.class);
+        // Comrpobamos que el vuelo existe
+        // Tira throw si no existe
+        Flight flight = this.getFlightByName(name);
+
+        return customModelMapper.mapFlight(flight);
     }
 
     @Override
     public Flight getFlightByName(String flightName) {
-//        return flights.stream()
-//                .filter(flight -> flight.getName().equalsIgnoreCase(flightName))
-//                .findFirst()
-//                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName)));
+        // Comrpobamos que el vuelo existe
         Flight flight = flightRepository.getFlightByName(flightName);
         if (flight == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName));
         }
+
         return flight;
     }
 
     @Override
+    public List<FlightDTO> getFlightsByRouteName(String routeName) {
+        return flightRepository.getFlightsByRouteName(routeName).stream().map(customModelMapper::mapFlight).toList();
+    }
+
+    @Override
     public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
+        // Comrpobamos que la aerolínea existe
+        // Tira throw si no existe
         Airline airline = userService.getAirlineByNickname(airlineNickname);
-        //No es necesario esta validacion porque si la aerolinea no existe, ya throwea en getAirlineByNickname
-//        if (airline == null) {
-//            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, airlineNickname));
-//        }
-//        return flights.stream()
-//                .filter(flight -> flight.getAirline().equals(airline))
-//                .map(flight -> modelMapper.map(flight, FlightDTO.class))
-//                .toList();
-        return flightRepository.getAllByAirlineNickname(airlineNickname).stream().map(flight -> modelMapper.map(flight, FlightDTO.class)).collect(Collectors.toList());
+
+        // Retornamos el DTO de todos los vuelos de la aerolinea
+        return flightRepository.getAllByAirlineNickname(airlineNickname).stream().map(customModelMapper::mapFlight).toList();
     }
 
     private boolean _flightExists(Flight flight) {
-//        return flights.stream()
-//                .anyMatch(existingFlight -> existingFlight.getName().equalsIgnoreCase(flight.getName()));
         return flightRepository.existsByName(flight.getName());
     }
     

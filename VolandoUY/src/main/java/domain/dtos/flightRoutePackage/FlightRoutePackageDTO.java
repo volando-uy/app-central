@@ -18,5 +18,6 @@ public class FlightRoutePackageDTO {
     private double discount;
     private LocalDate creationDate;
     private EnumTipoAsiento seatType;
+
     private List<String> flightRouteNames;
 }

@@ -16,5 +16,6 @@ public class CityDTO {
     private String country;
     private double latitude;
     private double longitude;
+
     private List<String> airportNames;
 }
