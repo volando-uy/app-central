@@ -116,15 +116,14 @@ public class CreateFlightRoutePanel extends JPanel {
                     nameTextField.getText(),
                     descriptionTextField.getText(),
                     LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    Double.parseDouble(additionalLuggageCostTextField.getText()),
                     Double.parseDouble(touristCostTextField.getText()),
                     Double.parseDouble(businessCostTextField.getText()),
-                    originCityTextField.getText(),
-                    destinationCityTextField.getText(),
-                    selectedAirline,
-                    selectedCategories,
-                    new ArrayList<>()
+                    Double.parseDouble(additionalLuggageCostTextField.getText())
                 );
+                flightRouteDTO.setOriginCityName(originCityTextField.getText());
+                flightRouteDTO.setDestinationCityName(destinationCityTextField.getText());
+                flightRouteDTO.setAirlineNickname(selectedAirline);
+                flightRouteDTO.setCategories(selectedCategories);
 
                 // Call the controller to create the flight route
                 FlightRouteDTO createdFlightRouteDTO = flightRouteController.createFlightRoute(

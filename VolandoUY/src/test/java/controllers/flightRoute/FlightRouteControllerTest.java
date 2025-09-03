@@ -73,10 +73,10 @@ class FlightRouteControllerTest {
                 List.of("Económica"),
                 List.of("VueloA")
         );
-        when(flightRouteService.getFlightRouteDetailsByName("Ruta 1")).thenReturn(dto);
+        when(flightRouteService.getFlightRouteDetailsByName("Ruta 1", false)).thenReturn(dto);
 
         // WHEN
-        FlightRouteDTO result = flightRouteController.getFlightRouteByName("Ruta 1");
+        FlightRouteDTO result = flightRouteController.getFlightRouteDetailsByName("Ruta 1");
 
         // THEN
         assertNotNull(result);

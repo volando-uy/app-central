@@ -90,9 +90,9 @@ public class FlightRouteService implements IFlightRouteService {
     }
 
     @Override
-    public List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname) {
+    public List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname, boolean full) {
         return flightRouteRepository.getFullAllByAirlineNickname(airlineNickname).stream()
-                .map(customModelMapper::mapFullFlightRoute)
+                .map(fr -> full ? customModelMapper.mapFullFlightRoute(fr) : customModelMapper.map(fr, FlightRouteDTO.class))
                 .toList();
     }
 
@@ -108,12 +108,16 @@ public class FlightRouteService implements IFlightRouteService {
     }
 
     @Override
-    public FlightRouteDTO getFlightRouteDetailsByName(String routeName) {
+    public FlightRouteDTO getFlightRouteDetailsByName(String routeName, boolean full) {
         // Comprobar que la ruta de vuelo exista
         // Tira throw si no existe
         FlightRoute flightRoute = this.getFlightRouteByName(routeName);
 
-        return customModelMapper.mapFullFlightRoute(flightRoute);
+        if (full){
+            return customModelMapper.mapFullFlightRoute(flightRoute);
+        } else {
+            return customModelMapper.map(flightRoute, FlightRouteDTO.class);
+        }
     }
 }
 

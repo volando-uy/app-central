@@ -54,12 +54,20 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
 
     public Airline findFullByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
-            return em.createQuery(
-                            "SELECT a FROM Airline a LEFT JOIN FETCH a.flights LEFT JOIN FETCH a.flightRoutes WHERE LOWER(a.nickname) = :nickname", Airline.class)
+            Airline airline = em.createQuery(
+                            "SELECT a FROM Airline a WHERE LOWER(a.nickname) = :nickname", Airline.class)
                     .setParameter("nickname", nickname.toLowerCase())
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+
+            // Load flights to avoid lazy loading issues
+            if (airline != null) {
+                airline.getFlights().size();
+                airline.getFlightRoutes().size();
+            }
+
+            return airline;
         }
     }
 }

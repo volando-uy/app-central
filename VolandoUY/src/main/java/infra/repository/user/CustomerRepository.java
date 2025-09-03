@@ -56,12 +56,20 @@ public class CustomerRepository extends AbstractUserRepository<Customer> {
 
     public Customer findFullByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
-            return em.createQuery(
-                            "SELECT c FROM Customer c LEFT JOIN FETCH c.boughtPackages LEFT JOIN FETCH c.bookedFlights WHERE LOWER(c.nickname) = :nickname", Customer.class)
+            Customer customer = em.createQuery(
+                            "SELECT c FROM Customer c WHERE LOWER(c.nickname) = :nickname", Customer.class)
                     .setParameter("nickname", nickname.toLowerCase())
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+
+            // Load collections if customer is found
+            if (customer != null) {
+                customer.getBoughtPackages().size();
+                customer.getBookedFlights().size();
+            }
+
+            return customer;
         }
     }
 }

@@ -39,8 +39,8 @@ public class CustomModelMapper extends ModelMapper {
 
     public CustomerDTO mapFullCustomer(Customer customer) {
         CustomerDTO customerDTO = this.map(customer, CustomerDTO.class);
-        if (customer.getBookFlights() != null) {
-            customerDTO.setBookFlightsIds(customer.getBookFlights()
+        if (customer.getBookedFlights() != null) {
+            customerDTO.setBookFlightsIds(customer.getBookedFlights()
                     .stream()
                     .map(BookFlight::getId)
                     .toList());

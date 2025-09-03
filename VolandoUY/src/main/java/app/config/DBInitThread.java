@@ -121,7 +121,6 @@ public class DBInitThread extends Thread {
         flightRouteDTO.setDestinationCityName("Paris");
         flightRouteDTO.setAirlineNickname("Aerolineas Argentinas");
         //flightRouteDTO.setCategories(List.of("Internacional"));
-        flightRouteDTO.setFlightsNames(List.of("Vuelo1", "Vuelo2"));
         flightRouteController.createFlightRoute(flightRouteDTO);
 
 
@@ -136,7 +135,6 @@ public class DBInitThread extends Thread {
         flightRouteDTO2.setDestinationCityName("Berlin");
         flightRouteDTO2.setAirlineNickname("Aerolineas Argentinas");
         // flightRouteDTO2.setCategories(List.of("Internacional"));
-        flightRouteDTO2.setFlightsNames(List.of("Vuelo3", "Vuelo4"));
         flightRouteController.createFlightRoute(flightRouteDTO2);
 
 
@@ -197,6 +195,7 @@ public class DBInitThread extends Thread {
         flightRoutePackageDTO.setCreationDate(java.time.LocalDate.now());
         flightRoutePackageDTO.setSeatType(EnumTipoAsiento.TURISTA);
         flightRoutePackageDTO.setFlightRouteNames(List.of("Madrid - Paris", "Paris - Berlin"));
+        flightRoutePackageDTO.setTotalPrice(0.0);
         flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
 
 
@@ -250,6 +249,7 @@ public class DBInitThread extends Thread {
         packageDTO1.setDiscount(50.0);
         packageDTO1.setCreationDate(LocalDate.now());
         packageDTO1.setSeatType(EnumTipoAsiento.TURISTA);
+        packageDTO1.setTotalPrice(0.0);
         flightRoutePackageController.createFlightRoutePackage(packageDTO1);
 
         FlightRoutePackageDTO packageDTO2 = new FlightRoutePackageDTO();
@@ -259,6 +259,7 @@ public class DBInitThread extends Thread {
         packageDTO2.setDiscount(100.0);
         packageDTO2.setCreationDate(LocalDate.now().plusDays(1));
         packageDTO2.setSeatType(EnumTipoAsiento.EJECUTIVO);
+        packageDTO2.setTotalPrice(0.0);
         flightRoutePackageController.createFlightRoutePackage(packageDTO2);
 
 // Crear categorías

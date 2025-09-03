@@ -53,7 +53,7 @@ public class UserService implements IUserService {
         // Creamos el nuevo customer
         Customer customer = customModelMapper.map(customerDTO, Customer.class);
         customer.setBoughtPackages(new ArrayList<>());
-        customer.setBookFlights(new ArrayList<>());
+        customer.setBookedFlights(new ArrayList<>());
 
         // Lo validamos
         ValidatorUtil.validate(customer);

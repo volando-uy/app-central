@@ -11,8 +11,9 @@ public interface IFlightRouteRepository {
 
     Iterable<FlightRoute> getAllByAirlineNickname(String airlineNickname);
     Iterable<FlightRoute> getFullAllByAirlineNickname(String airlineNickname);
-    void saveFlightRouteAndAddToAirline(FlightRoute flightRoute, Airline airline);
-
 
     FlightRoute getByName(String routeName);
+    FlightRoute getFullByName(String routeName);
+
+    void saveFlightRouteAndAddToAirline(FlightRoute flightRoute, Airline airline);
 }

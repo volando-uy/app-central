@@ -34,9 +34,16 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
     @Override
     public List<FlightRoute> getFullAllByAirlineNickname(String airlineNickname) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
-            return entityManager.createQuery("SELECT fr FROM FlightRoute fr JOIN FETCH fr.originCity JOIN FETCH fr.destinationCity JOIN FETCH fr.categories WHERE fr.airline.nickname = :nickname", FlightRoute.class)
+            List<FlightRoute> flightRoutes = entityManager.createQuery("SELECT fr FROM FlightRoute fr LEFT JOIN FETCH fr.destinationCity LEFT JOIN FETCH fr.originCity LEFT JOIN FETCH fr.airline WHERE fr.airline.nickname = :nickname", FlightRoute.class)
                     .setParameter("nickname", airlineNickname)
                     .getResultList();
+
+            for (FlightRoute fr : flightRoutes) {
+                fr.getFlights().size();
+                fr.getCategories().size(); // Initialize flights collection
+            }
+
+            return flightRoutes;
         }
     }
 
@@ -46,6 +53,17 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
             return entityManager.createQuery("SELECT fr FROM FlightRoute fr WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
                     .setParameter("name", name)
                     .getSingleResult();
+        }
+    }
+
+    public FlightRoute getFullByName(String name) {
+        try (EntityManager entityManager = DBConnection.getEntityManager()) {
+            FlightRoute flightRoute = entityManager.createQuery("SELECT fr FROM FlightRoute fr LEFT JOIN FETCH fr.destinationCity LEFT JOIN FETCH fr.originCity LEFT JOIN FETCH fr.airline WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            flightRoute.getFlights().size(); // Initialize flights collection
+            flightRoute.getCategories().size(); // Initialize categories collection
+            return flightRoute;
         }
     }
 

@@ -68,7 +68,7 @@ public class createFlightPanel extends JPanel {
     /** Carga la tabla de rutas para la aerolínea seleccionada */
     private void loadFlightRouteList(String airlineNickname) {
         List<FlightRouteDTO> flightRoutes =
-                flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
+                flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
         DefaultTableModel tableModel = new DefaultTableModel();
         String[] columnNames = {

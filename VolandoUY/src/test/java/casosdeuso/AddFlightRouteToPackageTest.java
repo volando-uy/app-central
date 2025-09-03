@@ -4,9 +4,11 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.city.CityDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
@@ -79,11 +81,11 @@ public class AddFlightRouteToPackageTest {
         assertTrue(paquetes.contains("Promo Paraguay"));
 
         // Paso 2: Listar aerolíneas
-        var aerolineas = userController.getAllAirlines(false);
+        List<BaseAirlineDTO> aerolineas = userController.getAllAirlinesSimpleDetails();
         assertFalse(aerolineas.isEmpty());
 
         // Paso 3: Obtener rutas de aerolínea
-        List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesByAirlineNickname("uyair");
+        List<BaseFlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesSimpleDetailsByAirlineNickname("uyair");
         assertEquals(1, rutas.size());
         String rutaNombre = rutas.get(0).getName();
 
@@ -91,7 +93,7 @@ public class AddFlightRouteToPackageTest {
         packageController.addFlightRouteToPackage("Promo Paraguay", rutaNombre, 2);
 
         // Validar que no falla (pasa si no lanza excepción)
-        var paquete = packageController.getFlightRoutePackageByName("Promo Paraguay", false);
+        var paquete = packageController.getFlightRoutePackageSimpleDetailsByName("Promo Paraguay");
         assertNotNull(paquete);
     }
 

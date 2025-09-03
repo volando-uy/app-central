@@ -4,6 +4,7 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
@@ -86,7 +87,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
     }
 
     private void loadFlightRouteList(String airlineNickname) {
-        List<FlightRouteDTO> flightRoutes = flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
+        List<FlightRouteDTO> flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
         // Create table model and set column names
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -179,7 +180,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
                     throw new IllegalArgumentException("Debe seleccionar una ruta de vuelo de la tabla.");
                 }
                 String selectedFlightRouteName = (String) flightRouteTable.getValueAt(selectedRow, 0);
-                FlightRouteDTO selectedFlightRoute = flightRouteController.getFlightRouteByName(selectedFlightRouteName);
+                BaseFlightRouteDTO selectedFlightRoute = flightRouteController.getFlightRouteSimpleDetailsByName(selectedFlightRouteName);
                 Integer quantity = (Integer) quantitySpinner.getValue();
 
                 // Add flight route to package

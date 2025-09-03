@@ -37,10 +37,7 @@ public class UserController implements IUserController {
 
     @Override
     public List<CustomerDTO> getAllCustomersDetails() {
-        return userService.getAllCustomersDetails(true)
-                .stream()
-                .map(cu -> (CustomerDTO) cu)
-                .toList();
+        return userService.getAllCustomersDetails(true);
     }
 
     @Override

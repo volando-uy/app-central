@@ -140,7 +140,7 @@ public class GetFlightRoutesPanel extends JPanel {
     // ------------------ TABLA ------------------
     private void loadFlightRoutesTable(String airlineNickname) {
         List<FlightRouteDTO> routes =
-                flightRouteController.getAllFlightRoutesByAirlineNickname(airlineNickname);
+                flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
         DefaultTableModel model = new DefaultTableModel();
         String[] cols = {
