@@ -33,4 +33,12 @@ public class Seat {
     // Un asiento va a estar relacionado a un ticket
     @ManyToOne()
     private Ticket ticket;
+
+    public Seat(String number, boolean isAvailable, double price, EnumTipoAsiento type, Flight flight) {
+        this.number = number;
+        this.isAvailable = isAvailable;
+        this.price = price;
+        this.type = type;
+        this.flight = flight;
+    }
 }

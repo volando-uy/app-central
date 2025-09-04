@@ -1,10 +1,11 @@
 package domain.services.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
+import domain.models.seat.Seat;
 import domain.services.ticket.ITicketService;
 
 public interface ISeatService {
-    BaseSeatDTO createSeat(BaseSeatDTO baseSeatDTO, String flightName);
+    Seat createSeatWithoutPersistance(BaseSeatDTO baseSeatDTO);
 
     void assignTicketToSeat(Long seatId, Long ticketId);
 
