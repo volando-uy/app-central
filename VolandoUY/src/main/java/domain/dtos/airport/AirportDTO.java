@@ -2,16 +2,16 @@
 
     import domain.dtos.city.CityDTO;
     import domain.models.city.City;
-    import lombok.AllArgsConstructor;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
+    import lombok.*;
 
-    @Data
+    @Getter
+    @Setter
     @NoArgsConstructor
-    @AllArgsConstructor
-    public class AirportDTO {
-        private String name;
-        private String code;
-
+    public class AirportDTO extends BaseAirportDTO {
         private String cityName;
+
+        public AirportDTO(String name, String code) {
+            super(name, code);
+            this.cityName = null;
+        }
     }

@@ -157,6 +157,13 @@ public class CreateFlightRoutePanel extends JPanel {
                 initCategoryList();    
             }
         });
+        
+        airlineLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadAirlinesIntoCombo();
+            }
+        });
     }
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
@@ -230,13 +237,11 @@ public class CreateFlightRoutePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-        . border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder
-        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
-        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
-        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-        ;
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
@@ -262,7 +267,8 @@ public class CreateFlightRoutePanel extends JPanel {
             selectAirlinePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
             //---- airlineLabel ----
-            airlineLabel.setText("Selecciona la Aerolinea:");
+            airlineLabel.setText("\ud83d\udd04 Selecciona la Aerolinea:");
+            airlineLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             selectAirlinePanel.add(airlineLabel);
 
             //---- airlineComboBox ----

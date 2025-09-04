@@ -12,6 +12,8 @@ import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.services.user.IUserService;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.*;
 import javax.swing.*;
@@ -24,6 +26,9 @@ public class PackagePurchasePanel extends JPanel {
     private IUserController userController;
     private IFlightRoutePackageController flightRoutePackageController;
     private List<BaseFlightRoutePackageDTO> availablePackages;
+    
+    private boolean arePackagesLoading = false;
+    
     public PackagePurchasePanel(IUserController userController, IFlightRoutePackageController flightRoutePackageController) {
         this.userController = userController;
         this.flightRoutePackageController = flightRoutePackageController;
@@ -34,6 +39,7 @@ public class PackagePurchasePanel extends JPanel {
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     private void loadPackagesWithRoutes() {
+        arePackagesLoading = true;
         listPackageComboBox.removeAllItems();
         availablePackages = flightRoutePackageController.getAllFlightRoutesPackagesSimpleDetailsWithFlightRoutes();
 
@@ -44,9 +50,14 @@ public class PackagePurchasePanel extends JPanel {
         for (BaseFlightRoutePackageDTO dto : availablePackages) {
             listPackageComboBox.addItem(dto.getName()); // muestra solo el nombre
         }
+        arePackagesLoading = false;
+        if (listPackageComboBox.getItemCount() > 0) {
+            listPackageComboBox.setSelectedIndex(0); // selecciona el primer paquete por defecto
+        }
     }
     private void setupListeners() {
         listPackageComboBox.addActionListener(e -> {
+            if (arePackagesLoading) return; // evita acción si aún se están cargando los paquetes
             int selectedIndex = listPackageComboBox.getSelectedIndex();
             if (selectedIndex >= 0) {
                 String packageName = availablePackages.get(selectedIndex).getName();
@@ -55,6 +66,7 @@ public class PackagePurchasePanel extends JPanel {
                 registerPurchaseBtn.setEnabled(true); // habilita botón cuando hay selección
             }
         });
+        
         registerPurchaseBtn.addActionListener(e -> {
             try {
                 int packageIndex = listPackageComboBox.getSelectedIndex();
@@ -85,6 +97,20 @@ public class PackagePurchasePanel extends JPanel {
                 JOptionPane.showMessageDialog(this,
                         "Error al registrar la compra: " + ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
+        packageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadPackagesWithRoutes();
+            }
+        });
+        
+        clientLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadClients();
             }
         });
     }
@@ -124,7 +150,7 @@ public class PackagePurchasePanel extends JPanel {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - dotto
         titleLabel = new JLabel();
         vSpacer18 = new JPanel(null);
         selectPackagePanel = new JPanel();
@@ -155,14 +181,12 @@ public class PackagePurchasePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (
-        new javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e"
-        , javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
-        , new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 )
-        , java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
-        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 31, 0, 0, 0, 0, 0};
@@ -190,8 +214,9 @@ public class PackagePurchasePanel extends JPanel {
             selectPackagePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
             //---- packageLabel ----
-            packageLabel.setText("Selecciona el Paquete:");
+            packageLabel.setText("\ud83d\udd04 Selecciona el Paquete:");
             packageLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+            packageLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             selectPackagePanel.add(packageLabel);
 
             //---- listPackageComboBox ----
@@ -218,8 +243,9 @@ public class PackagePurchasePanel extends JPanel {
             selectAirlinePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
             //---- clientLabel ----
-            clientLabel.setText("Selecciona el cliente:");
+            clientLabel.setText("\ud83d\udd04 Selecciona el cliente:");
             clientLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+            clientLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             selectAirlinePanel.add(clientLabel);
 
             //---- listClientComboBox ----
@@ -345,7 +371,7 @@ public class PackagePurchasePanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - dotto
     private JLabel titleLabel;
     private JPanel vSpacer18;
     private JPanel selectPackagePanel;

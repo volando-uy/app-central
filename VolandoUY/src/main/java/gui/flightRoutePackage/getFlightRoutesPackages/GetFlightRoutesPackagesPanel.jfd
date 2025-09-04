@@ -43,6 +43,7 @@ new FormModel {
 					"maximumSize": new java.awt.Dimension( 120, 30 )
 					"minimumSize": new java.awt.Dimension( 120, 30 )
 					"font": new java.awt.Font( "Inter", 3, 20 )
+					"cursor": new java.awt.Cursor( 12 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )

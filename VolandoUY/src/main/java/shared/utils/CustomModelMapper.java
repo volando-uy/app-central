@@ -157,6 +157,7 @@ public class CustomModelMapper extends ModelMapper {
     public FlightRoutePackageDTO mapFullFlightRoutePackage(FlightRoutePackage flightRoutePackage) {
         FlightRoutePackageDTO flightRoutePackageDTO = this.map(flightRoutePackage, FlightRoutePackageDTO.class);
         flightRoutePackageDTO.setFlightRouteNames(flightRoutePackage.getFlightRoutes().stream().map(FlightRoute::getName).toList());
+        flightRoutePackageDTO.setBuyPackages(flightRoutePackage.getBuyPackages().stream().map(BuyPackage::getId).toList());
         return flightRoutePackageDTO;
     }
 

@@ -1,16 +1,18 @@
 package domain.services.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.CityDTO;
 import domain.models.airport.Airport;
 import domain.services.city.ICityService;
 
 public interface IAirportService {
-    AirportDTO createAirport(AirportDTO airportDTO, String cityName);
-    // void removeAirport(String code);
-    // void updateAirport(String code, CityDTO city);
-    Airport getAirportByCode(String code);
-    AirportDTO getAirportDetailsByCode(String code);
+    BaseAirportDTO createAirport(BaseAirportDTO airportDTO, String cityName);
+
+    Airport getAirportByCode(String code, boolean full);
+
+    AirportDTO getAirportDetailsByCode(String code, boolean full);
+
     boolean airportExists(String code);
 
     void setCityService(ICityService cityService);

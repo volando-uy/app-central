@@ -1,6 +1,7 @@
 package controllers.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.services.airport.IAirportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,16 +42,16 @@ class AirportControllerTest {
     @DisplayName("GIVEN existing code WHEN getAirportByCode is called THEN correct airport is returned")
     void getAirportByCode_shouldReturnCorrectDTO() {
         // GIVEN
-        AirportDTO expected = new AirportDTO("Carrasco", "MVD", "Montevideo");
-        when(airportService.getAirportDetailsByCode("MVD")).thenReturn(expected);
+        BaseAirportDTO expected = new BaseAirportDTO("Carrasco", "MVD");
+        when(airportService.getAirportDetailsByCode("MVD", false)).thenReturn(expected);
 
         // WHEN
-        AirportDTO result = airportController.getAirportByCode("MVD");
+        AirportDTO result = airportController.getAirportDetailsByCode("MVD");
 
         // THEN
         assertNotNull(result);
         assertEquals("MVD", result.getCode());
-        verify(airportService).getAirportDetailsByCode("MVD");
+        verify(airportService).getAirportDetailsByCode("MVD", false);
     }
 
     @Test

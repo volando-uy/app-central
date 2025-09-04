@@ -21,6 +21,22 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
         }
     }
 
+    public Airport getFullAirportByCode(String code) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Airport airport = em.createQuery("SELECT a FROM Airport a WHERE LOWER(a.code) = :code", Airport.class)
+                    .setParameter("code", code.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize city relationship
+            if (airport != null && airport.getCity() != null) {
+                airport.getCity().getName(); // Access a property to initialize the relationship
+            }
+            return airport;
+        }
+    }
+
     @Override
     public boolean existsAirportByCode(String code) {
         try(EntityManager em= DBConnection.getEntityManager()){
@@ -47,4 +63,6 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
             em.close();
         }
     }
+
+
 }

@@ -31,7 +31,7 @@ new FormModel {
 				"$alignLeft": true
 				"$vGap": 5
 			} ) {
-				name: "InfoFlightRoutePackagePanel"
+				name: "InfoFlightPanel"
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "titleLabel"
@@ -63,11 +63,12 @@ new FormModel {
 					"columns": 3
 					"hgap": 10
 				} ) {
-					name: "selectPackagePanel"
+					name: "selectAirlinePanel"
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "packageLabel"
-						"text": "Selecciona el Aerolinea:"
+						name: "airlineLabel"
+						"text": "\ud83d\udd04 Selecciona el Aerolinea:"
+						"cursor": new java.awt.Cursor( 12 )
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "airlineComboBox"

@@ -21,6 +21,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
 
     private void initNotBoughtPackagesList() {
         arePackagesLoading = true;
+        packageComboBox.removeAllItems();
         List<String> notBoughtPackagesNames = flightRoutePackageController.getAllNotBoughtFlightRoutesPackagesNames();
         for (String name : notBoughtPackagesNames) {
             packageComboBox.addItem(name);
@@ -149,8 +152,6 @@ public class AddFlightRouteToPackagePanel extends JPanel {
                 String selectedPackageName = (String) packageComboBox.getSelectedItem();
                 // If package doesn't exist, throw exception
                 selectedPackage = flightRoutePackageController.getFlightRoutePackageSimpleDetailsByName(selectedPackageName);
-
-                JOptionPane.showMessageDialog(this, "Paquete seleccionado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al seleccionar un paquete: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -193,11 +194,25 @@ public class AddFlightRouteToPackagePanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Error al añadir la ruta de vuelo al paquete: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+        
+        airlineLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadAirlinesIntoCombo();
+            }
+        });
+        
+        packageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                initNotBoughtPackagesList();
+            }
+        });
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - dotto
         titleLabel = new JLabel();
         vSpacer18 = new JPanel(null);
         selectPackagePanel = new JPanel();
@@ -232,12 +247,11 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 31, 0, 0, 0, 0, 0};
@@ -265,8 +279,9 @@ public class AddFlightRouteToPackagePanel extends JPanel {
             selectPackagePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
             //---- packageLabel ----
-            packageLabel.setText("Selecciona el Paquete:");
+            packageLabel.setText("\ud83d\udd04 Selecciona el Paquete:");
             packageLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+            packageLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             selectPackagePanel.add(packageLabel);
 
             //---- packageComboBox ----
@@ -293,8 +308,9 @@ public class AddFlightRouteToPackagePanel extends JPanel {
             selectAirlinePanel.setLayout(new GridLayout(1, 3, 10, 0));
 
             //---- airlineLabel ----
-            airlineLabel.setText("Selecciona la Aerolinea:");
+            airlineLabel.setText("\ud83d\udd04 Selecciona la Aerolinea:");
             airlineLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+            airlineLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             selectAirlinePanel.add(airlineLabel);
 
             //---- airlineComboBox ----
@@ -447,7 +463,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
 
             //---- addFlightRouteToPackageBtn ----
             addFlightRouteToPackageBtn.setText("Aa\u00f1adir R.V. a Paquete");
-            addFlightRouteToPackageBtn.setEnabled(true);
+            addFlightRouteToPackageBtn.setEnabled(false);
             addFlightRouteToPackageBtn.setOpaque(false);
             addBtnPanel.add(addFlightRouteToPackageBtn, BorderLayout.CENTER);
         }
@@ -465,7 +481,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - dotto
     private JLabel titleLabel;
     private JPanel vSpacer18;
     private JPanel selectPackagePanel;

@@ -53,8 +53,8 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     @Override
     public FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String flightRoutePackageName, boolean full) {
-        // Comrpobamos que el paquete existe
-        FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
+        // Comprobamos que el paquete existe
+        FlightRoutePackage pack = full ? flightRoutePackageRepository.getFullFlightRoutePackageByName(flightRoutePackageName) : flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
         if (pack == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
         }
@@ -65,7 +65,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     @Override
     public FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName) {
-        // Comrpobamos que el paquete existe
+        // Comprobamos que el paquete existe
         FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
         if (pack == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));

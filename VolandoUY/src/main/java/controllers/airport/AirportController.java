@@ -1,6 +1,7 @@
 package controllers.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.CityDTO;
 import domain.services.airport.IAirportService;
 import lombok.AllArgsConstructor;
@@ -10,13 +11,18 @@ public class AirportController implements IAirportController {
     private IAirportService airportService;
 
     @Override
-    public AirportDTO createAirport(AirportDTO airportDTO, String cityName) {
-        return airportService.createAirport(airportDTO, cityName);
+    public BaseAirportDTO createAirport(BaseAirportDTO baseAirportDTO, String cityName) {
+        return airportService.createAirport(baseAirportDTO, cityName);
     }
 
     @Override
-    public AirportDTO getAirportByCode(String code) {
-        return airportService.getAirportDetailsByCode(code);
+    public AirportDTO getAirportDetailsByCode(String code) {
+        return airportService.getAirportDetailsByCode(code, true);
+    }
+
+    @Override
+    public BaseAirportDTO getAirportSimpleDetailsByCode(String code) {
+        return airportService.getAirportDetailsByCode(code, false);
     }
 
     @Override

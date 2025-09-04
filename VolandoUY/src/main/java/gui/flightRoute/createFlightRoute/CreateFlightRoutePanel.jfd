@@ -39,7 +39,8 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "airlineLabel"
-					"text": "Selecciona la Aerolinea:"
+					"text": "\ud83d\udd04 Selecciona la Aerolinea:"
+					"cursor": new java.awt.Cursor( 12 )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "airlineComboBox"

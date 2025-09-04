@@ -1,6 +1,7 @@
 package domain.services.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
@@ -25,7 +26,8 @@ public class AirportService implements IAirportService {
         this.airportRepository = new AirportRepository();
     }
 
-    public AirportDTO createAirport(AirportDTO dto, String cityName) {
+    @Override
+    public BaseAirportDTO createAirport(BaseAirportDTO dto, String cityName) {
         // Buscamos la ciudad a la que se agrega el aeropuerto
         // Tira throw si no encuentra
         City city = cityService.getCityByName(cityName);
@@ -46,12 +48,12 @@ public class AirportService implements IAirportService {
         airportRepository.saveAirportAndAddToCity(airport, city);
 
         // Retornamos el DTO del aeropuerto creado
-        return customModelMapper.mapFullAirport(airport);
+        return customModelMapper.map(airport, BaseAirportDTO.class);
     }
 
     @Override
-    public Airport getAirportByCode(String code) {
-        Airport airport = airportRepository.getAirportByCode(code);
+    public Airport getAirportByCode(String code, boolean full) {
+        Airport airport = full ? airportRepository.getFullAirportByCode(code) : airportRepository.getAirportByCode(code);
         if(airport == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code));
         }
@@ -59,8 +61,12 @@ public class AirportService implements IAirportService {
     }
 
     @Override
-    public AirportDTO getAirportDetailsByCode(String code) {
-        return customModelMapper.mapFullAirport(this.getAirportByCode(code));
+    public AirportDTO getAirportDetailsByCode(String code, boolean full) {
+        // Check if the airport exists
+        // Throws an exception if it doesn't
+        Airport airport = getAirportByCode(code, full);
+
+        return full ? customModelMapper.mapFullAirport(airport) : customModelMapper.map(airport, AirportDTO.class);
     }
 
     @Override
