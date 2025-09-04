@@ -60,11 +60,7 @@ public class CityService implements ICityService {
         }
 
         // Devolvemos el DTO mapeado
-        if (full) {
-            return customModelMapper.mapFullCity(city);
-        } else {
-            return customModelMapper.map(city, CityDTO.class);
-        }
+        return full ? customModelMapper.mapFullCity(city) : customModelMapper.map(city, CityDTO.class);
     }
 
 
