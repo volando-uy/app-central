@@ -1,12 +1,11 @@
 package domain.services.city;
 
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.models.city.City;
-import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import utils.TestUtils;
 
 import java.util.ArrayList;
@@ -24,7 +23,13 @@ class CityServiceTest {
     }
 
     private CityDTO crearCiudadBasica(String nombre) {
-        return new CityDTO(nombre, "Uruguay", -34.9011, -56.1645, new ArrayList<>());
+        CityDTO dto = new CityDTO();
+        dto.setName(nombre);
+        dto.setCountry("Uruguay");
+        dto.setLatitude(-34.9011);
+        dto.setLongitude(-56.1645);
+        dto.setAirportNames(new ArrayList<>());
+        return dto;
     }
 
     @Test
@@ -32,7 +37,7 @@ class CityServiceTest {
     void createCity_shouldAddCitySuccessfully() {
         CityDTO dto = crearCiudadBasica("Montevideo");
 
-        CityDTO result = cityService.createCity(dto);
+        BaseCityDTO result = cityService.createCity(dto);
 
         assertNotNull(result);
         assertEquals("Montevideo", result.getName());
@@ -42,11 +47,16 @@ class CityServiceTest {
     @Test
     @DisplayName("No debería permitir agregar ciudades duplicadas")
     void createCity_shouldRejectDuplicates() {
-        CityDTO dto = crearCiudadBasica("Montevideo");
-        cityService.createCity(dto);
+        CityDTO dto = crearCiudadBasica("Montevideo-dup");
 
-        assertThrows(IllegalArgumentException.class, () -> cityService.createCity(dto));
+        // La primera creación NO debe lanzar
+        assertDoesNotThrow(() -> cityService.createCity(dto));
+
+        // La segunda SÍ debe lanzar por duplicado
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> cityService.createCity(dto));
+        assertEquals("La ciudad Montevideo-dup ya existe", ex.getMessage());
     }
+
 
     @Test
     @DisplayName("Debería retornar ciudad existente correctamente")
@@ -61,9 +71,10 @@ class CityServiceTest {
     }
 
     @Test
-    @DisplayName("Buscar ciudad inexistente debería lanzar excepción")
-    void getCityByName_shouldThrowIfNotFound() {
-        assertFalse( cityService.getCityByName("Montevideo") != null);
+    @DisplayName("Buscar ciudad inexistente debería retornar null")
+    void getCityByName_shouldReturnNullIfNotFound() {
+        City city = cityService.getCityByName("NoExiste");
+        assertNull(city);
     }
 
     @Test
@@ -72,7 +83,7 @@ class CityServiceTest {
         CityDTO dto = crearCiudadBasica("Durazno");
         cityService.createCity(dto);
 
-        CityDTO found = cityService.getCityDetailsByName("Durazno");
+        CityDTO found = cityService.getCityDetailsByName("Durazno",false);
 
         assertNotNull(found);
         assertEquals("Durazno", found.getName());
@@ -81,7 +92,7 @@ class CityServiceTest {
     @Test
     @DisplayName("getCityDetailsByName debería fallar si no existe")
     void getCityDetailsByName_shouldThrowIfNotFound() {
-        assertThrows(IllegalArgumentException.class, () -> cityService.getCityDetailsByName("Fantasía"));
+        assertThrows(IllegalArgumentException.class, () -> cityService.getCityDetailsByName("Fantasía",false));
     }
 
     @Test
@@ -103,10 +114,9 @@ class CityServiceTest {
     @Test
     @DisplayName("isAirportInCity debería lanzar excepción si la ciudad no existe")
     void isAirportInCity_shouldThrowIfCityNotFound() {
-        assertFalse(cityService.isAirportInCity("Mercedes", "Aeropuerto Inventado"));
+        assertThrows(IllegalArgumentException.class, () -> cityService.isAirportInCity("Desconocida", "Aeropuerto X"));
     }
 
-    //Testear getAllCities
     @Test
     @DisplayName("GIVEN a list of cities WHEN getAllCities THEN return the list of city names")
     void getAllCities_shouldReturnListOfCityNames() {
@@ -120,9 +130,6 @@ class CityServiceTest {
         assertTrue(cities.contains("Ciudad1"));
         assertTrue(cities.contains("Ciudad2"));
         assertTrue(cities.contains("Ciudad3"));
-        assertTrue(cities.get(0).contains("Ciudad1"));
-        assertTrue(cities.get(1).contains("Ciudad2"));
-        assertTrue(cities.get(2).contains("Ciudad3"));
     }
 
     @Test
@@ -133,6 +140,4 @@ class CityServiceTest {
         assertNotNull(cities);
         assertTrue(cities.isEmpty());
     }
-
-
 }

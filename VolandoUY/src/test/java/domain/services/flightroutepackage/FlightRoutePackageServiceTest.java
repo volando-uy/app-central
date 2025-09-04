@@ -1,7 +1,9 @@
 package domain.services.flightroutepackage;
 
 import app.DBConnection;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
@@ -40,15 +42,20 @@ class FlightRoutePackageServiceTest {
     void setUp() {
         TestUtils.cleanDB();
 
-        flightRouteService  = new FlightRouteService();
-        packageService      = new FlightRoutePackageService();
+        // Crear servicios reales
+        flightRouteService = new FlightRouteService();
+        packageService     = new FlightRoutePackageService();
+
+        // Inyectar dependencias reales si hace falta
+        flightRouteService.setCityService(new CityService());
+        flightRouteService.setCategoryService(new CategoryService());
+        flightRouteService.setUserService(new UserService());
         packageService.setFlightRouteService(flightRouteService);
 
-        // ---- Semilla mínima en DB: Airline + Cities + Category ----
+        // Semilla mínima
         try (EntityManager em = DBConnection.getEntityManager()) {
             em.getTransaction().begin();
 
-            // Airline "air123"
             Airline airline = new Airline();
             airline.setNickname("air123");
             airline.setName("Test Airline");
@@ -57,13 +64,11 @@ class FlightRoutePackageServiceTest {
             airline.setWeb("www.testair.com");
             em.persist(airline);
 
-            // Cities (completar TODOS los campos con constraints)
             City mvd = new City("Montevideo", "UY", -34.9011, -56.1645);
             City bue = new City("Buenos Aires", "AR", -34.6037, -58.3816);
             em.persist(mvd);
             em.persist(bue);
 
-            // Category "Promo"
             Category promo = new Category();
             promo.setName("Promo");
             em.persist(promo);
@@ -71,20 +76,22 @@ class FlightRoutePackageServiceTest {
             em.getTransaction().commit();
         }
 
-        // ---- Ahora sí, crear la FlightRoute real ----
-        FlightRouteDTO dto = new FlightRouteDTO();
+        // Crear la ruta correctamente con BaseFlightRouteDTO
+        BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
         dto.setName("Ruta A");
         dto.setDescription("Ruta directa");
         dto.setCreatedAt(LocalDate.now());
         dto.setPriceTouristClass(100.0);
         dto.setPriceBusinessClass(200.0);
         dto.setPriceExtraUnitBaggage(20.0);
-        dto.setOriginCityName("Montevideo");
-        dto.setDestinationCityName("Buenos Aires");
-        dto.setAirlineNickname("air123");
-        dto.setCategories(List.of("Promo"));
 
-        flightRouteService.createFlightRoute(dto);
+        flightRouteService.createFlightRoute(
+                dto,
+                "Montevideo",
+                "Buenos Aires",
+                "air123",
+                List.of("Promo")
+        );
     }
 
 
@@ -94,11 +101,11 @@ class FlightRoutePackageServiceTest {
         // GIVEN
         FlightRoutePackageDTO dto = new FlightRoutePackageDTO(
                 "Pack A", "Descripción del paquete", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         );
 
         // WHEN
-        FlightRoutePackageDTO created = packageService.createFlightRoutePackage(dto);
+        BaseFlightRoutePackageDTO created = packageService.createFlightRoutePackage(dto);
 
         // THEN
         assertEquals("Pack A", created.getName());
@@ -111,14 +118,14 @@ class FlightRoutePackageServiceTest {
         // GIVEN un paquete ya creado
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack B", "Otro paquete", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
 
         // WHEN se intenta crear otro con el mismo nombre
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
             packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                     "Pack B", "Duplicado", 5, 10.0,
-                    LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                    LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
             ));
         });
 
@@ -132,7 +139,7 @@ class FlightRoutePackageServiceTest {
         // GIVEN un paquete creado
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack C", "Descripción C", 7, 5.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
 
         // WHEN se busca por nombre
@@ -161,12 +168,12 @@ class FlightRoutePackageServiceTest {
         // GIVEN varios paquetes creados
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack D", "DD", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
 
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack E", "EE", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
 
         // WHEN se piden los nombres
@@ -185,7 +192,7 @@ class FlightRoutePackageServiceTest {
 
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack F", "Paquete FF", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
     //org.opentest4j.AssertionFailedError: Unexpected exception thrown: jakarta.persistence.EntityNotFoundException: Unable to find domain.models.flightRoute.FlightRoute with id Ruta A
         // WHEN se agrega una ruta válida
@@ -200,7 +207,7 @@ class FlightRoutePackageServiceTest {
         // GIVEN paquete válido
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
                 "Pack G", "GG", 10, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>()
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
 
         // WHEN se pasa cantidad inválida

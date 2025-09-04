@@ -1,100 +1,140 @@
-//package controllers.flightRoutePackage;
-//
-//import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
-//import domain.models.enums.EnumTipoAsiento;
-//import domain.services.flightRoutePackage.IFlightRoutePackageService;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//
-//import java.time.LocalDate;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//class FlightRoutePackageControllerTest {
-//
-//    private IFlightRoutePackageService packageService;
-//    private IFlightRoutePackageController packageController;
-//
-//    @BeforeEach
-//    void setUp() {
-//        packageService = mock(IFlightRoutePackageService.class);
-//        packageController = new FlightRoutePackageController(packageService);
-//    }
-//
-//    @Test
-//    @DisplayName("Debe delegar la creación del paquete de ruta de vuelo al servicio")
-//    void createFlightRoutePackage_shouldCallService() {
-//        // GIVEN
-//        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descuento especial", 30, 10.0, LocalDate.now(), EnumTipoAsiento.TURISTA, new ArrayList<>());
-//
-//        when(packageService.createFlightRoutePackage(dto)).thenReturn(dto);
-//
-//        // WHEN
-//        FlightRoutePackageDTO result = packageController.createFlightRoutePackage(dto);
-//
-//        // THEN
-//        assertNotNull(result);
-//        assertEquals("Promo Verano", result.getName());
-//        verify(packageService).createFlightRoutePackage(dto);
-//    }
-//
-//    @Test
-//    @DisplayName("Debe retornar el paquete por nombre desde el servicio")
-//    void getFlightRoutePackageByName_shouldReturnFromService() {
-//        // GIVEN
-//        FlightRoutePackageDTO dto = new FlightRoutePackageDTO("Promo Verano", "Descripción", 30, 5.0, LocalDate.now(), EnumTipoAsiento.EJECUTIVO, new ArrayList<>());
-//
-//        when(packageService.getFlightRoutePackageByName("Promo Verano")).thenReturn(dto);
-//
-//        // WHEN
-//        FlightRoutePackageDTO result = packageController.getFlightRoutePackageByName("Promo Verano");
-//
-//        // THEN
-//        assertNotNull(result);
-//        assertEquals("Promo Verano", result.getName());
-//    }
-//
-//    @Test
-//    @DisplayName("Debe retornar nombres de todos los paquetes no comprados")
-//    void getAllNotBoughtFlightRoutePackagesNames_shouldReturnListFromService() {
-//        // GIVEN
-//        List<String> mockList = List.of("Pack 1", "Pack 2");
-//        when(packageService.getAllNotBoughtFlightRoutePackagesNames()).thenReturn(mockList);
-//
-//        // WHEN
-//        List<String> result = packageController.getAllNotBoughtFlightRoutePackagesNames();
-//
-//        // THEN
-//        assertEquals(2, result.size());
-//        assertEquals("Pack 1", result.get(0));
-//        verify(packageService).getAllNotBoughtFlightRoutePackagesNames();
-//    }
-//
-//    @Test
-//    @DisplayName("Debe agregar ruta de vuelo a un paquete vía el servicio")
-//    void addFlightRouteToPackage_shouldCallService() {
-//        // WHEN
-//        packageController.addFlightRouteToPackage("Pack A", "Ruta A", 3);
-//
-//        // THEN
-//        verify(packageService).addFlightRouteToPackage("Pack A", "Ruta A", 3);
-//    }
-//
-//    @Test
-//    @DisplayName("Debe verificar existencia de paquete de ruta")
-//    void flightRoutePackageExists_shouldReturnCorrectly() {
-//        // GIVEN
-//        when(packageService.flightRoutePackageExists("Promo Verano")).thenReturn(true);
-//
-//        // WHEN
-//        boolean exists = packageController.flightRoutePackageExists("Promo Verano");
-//
-//        // THEN
-//        assertTrue(exists);
-//        verify(packageService).flightRoutePackageExists("Promo Verano");
-//    }
-//}
+package controllers.flightRoutePackage;
+
+import controllers.flightRoute.IFlightRouteController;
+import controllers.user.IUserController;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
+import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.dtos.user.AirlineDTO;
+import domain.models.enums.EnumTipoAsiento;
+import factory.ControllerFactory;
+import factory.ServiceFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import utils.TestUtils;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FlightRoutePackageControllerTest {
+
+    private IFlightRoutePackageController packageController;
+    private IUserController userController;
+    private IFlightRouteController flightRouteController;
+
+    @BeforeEach
+    void setUp() {
+        TestUtils.cleanDB();
+        this.packageController = ControllerFactory.getFlightRoutePackageController();
+        this.userController = ControllerFactory.getUserController();
+        this.flightRouteController = ControllerFactory.getFlightRouteController();
+    }
+
+    @Test
+    @DisplayName("Debe crear el paquete de ruta de vuelo correctamente")
+    void createFlightRoutePackage_shouldCreateCorrectly() {
+        // GIVEN
+        BaseFlightRoutePackageDTO dto = new BaseFlightRoutePackageDTO(
+                "Promo Verano", "Descuento especial", 30, 10.0,
+                LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
+        );
+
+        // WHEN
+        BaseFlightRoutePackageDTO result = packageController.createFlightRoutePackage(dto);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("Promo Verano", result.getName());
+    }
+
+    @Test
+    @DisplayName("Debe retornar el paquete por nombre desde el controller")
+    void getFlightRoutePackageByName_shouldReturnFromController() {
+        // GIVEN
+        BaseFlightRoutePackageDTO dto = new BaseFlightRoutePackageDTO(
+                "Promo Verano", "Descripción", 30, 5.0,
+                LocalDate.now(), EnumTipoAsiento.EJECUTIVO, 100.0
+        );
+        packageController.createFlightRoutePackage(dto);
+
+        // WHEN
+        FlightRoutePackageDTO result = packageController.getFlightRoutePackageDetailsByName("Promo Verano");
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("Promo Verano", result.getName());
+        assertEquals(EnumTipoAsiento.EJECUTIVO, result.getSeatType());
+    }
+
+    @Test
+    @DisplayName("Debe retornar nombres de todos los paquetes no comprados")
+    void getAllNotBoughtFlightRoutePackagesNames_shouldReturnListFromController() {
+        // GIVEN
+        packageController.createFlightRoutePackage(new BaseFlightRoutePackageDTO(
+                "Pack 1", "desc 1", 10, 5.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
+        ));
+        packageController.createFlightRoutePackage(new BaseFlightRoutePackageDTO(
+                "Pack 2", "desc 2", 15, 7.5, LocalDate.now(), EnumTipoAsiento.EJECUTIVO, 100.0
+        ));
+
+        // WHEN
+        List<String> result = packageController.getAllNotBoughtFlightRoutesPackagesNames();
+
+        // THEN
+        assertEquals(2, result.size());
+        assertTrue(result.contains("Pack 1"));
+        assertTrue(result.contains("Pack 2"));
+    }
+
+    @Test
+    @DisplayName("Debe agregar ruta de vuelo a un paquete vía el controller")
+    void addFlightRouteToPackage_shouldAddCorrectly() {
+        // GIVEN: Crear paquete y ruta
+        packageController.createFlightRoutePackage(new BaseFlightRoutePackageDTO(
+                "Pack Ruta A", "Paquete con ruta", 10, 5.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
+        ));
+
+        // Simula que la ruta de vuelo 'Ruta A' ya existe en el sistema.
+
+//        //Crear aereolinea Airline1
+////        ServiceFactory.getUserService().registerAirline(new AirlineDTO("Airline1", "name", "asd@gmail.com","desgreafgreagfraeac","https://www.google.com"));
+////        ServiceFactory.getFlightRouteService().createFlightRoute(
+////                new BaseFlightRouteDTO("Pack Ruta A", "Ruta A", LocalDate.now(), 100.0, 200.0, 20.0),
+////                "City1", "City2", "Airline1", new ArrayList<>()
+////        );
+        AirlineDTO airlineDTO = new AirlineDTO();
+        airlineDTO.setNickname("Airline1");
+        airlineDTO.setName("name");
+        airlineDTO.setMail("agqmi@gmail.com");
+        airlineDTO.setDescription("descriptionasdasd");
+        airlineDTO.setWeb("https://www.google.com");
+        userController.registerAirline(airlineDTO);
+
+        // WHEN
+        packageController.addFlightRouteToPackage("Pack Ruta A", "Ruta A", 2);
+
+        // THEN
+        FlightRoutePackageDTO result = packageController.getFlightRoutePackageDetailsByName("Pack Ruta A");
+        assertNotNull(result);
+        assertTrue(result.getFlightRouteNames().contains("Ruta A"));
+    }
+
+    @Test
+    @DisplayName("Debe verificar existencia de paquete de ruta")
+    void flightRoutePackageExists_shouldReturnCorrectly() {
+        // GIVEN
+        packageController.createFlightRoutePackage(new BaseFlightRoutePackageDTO(
+                "Promo Check", "desc", 10, 5.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
+        ));
+
+        // WHEN
+        boolean exists = packageController.flightRoutePackageExists("Promo Check");
+
+        // THEN
+        assertTrue(exists);
+    }
+}

@@ -132,7 +132,7 @@ public class CheckFlightRoutePackageTest {
         flightRouteDTO.setAirlineNickname("Aerolineas Argentinas");
         flightRouteDTO.setCategories(List.of("Internacional"));
         flightRouteDTO.setFlightsNames(List.of("Vuelo1", "Vuelo2"));
-        flightRouteController.createFlightRoute(flightRouteDTO);
+        flightRouteController.createFlightRoute(flightRouteDTO, "Madrid", "Paris", "Aerolineas Argentinas", List.of("Internacional"));
 
 
 
@@ -148,7 +148,7 @@ public class CheckFlightRoutePackageTest {
         flightRouteDTO2.setAirlineNickname("Aerolineas Argentinas");
         flightRouteDTO2.setCategories(List.of("Internacional"));
         flightRouteDTO2.setFlightsNames(List.of("Vuelo3", "Vuelo4"));
-        flightRouteController.createFlightRoute(flightRouteDTO2);
+        flightRouteController.createFlightRoute(flightRouteDTO2, "Paris", "Berlin", "Aerolineas Argentinas", List.of("Internacional"));
 
 
 
@@ -161,7 +161,7 @@ public class CheckFlightRoutePackageTest {
         flightDTO1.setCreatedAt(LocalDateTime.now());
         flightDTO1.setAirlineNickname("Aerolineas Argentinas");
         flightDTO1.setFlightRouteName("Madrid - Paris");
-        flightController.createFlight(flightDTO1);
+        flightController.createFlight(flightDTO1, "Aerolineas Argentinas", "Madrid - Paris");
 
         FlightDTO flightDTO2 = new FlightDTO();
         flightDTO2.setName("Vuelo2");
@@ -172,7 +172,7 @@ public class CheckFlightRoutePackageTest {
         flightDTO2.setCreatedAt(LocalDateTime.now());
         flightDTO2.setAirlineNickname("Aerolineas Argentinas");
         flightDTO2.setFlightRouteName("Madrid - Paris");
-        flightController.createFlight(flightDTO2);
+        flightController.createFlight(flightDTO2, "Aerolineas Argentinas", "Madrid - Paris");
 
 
 
@@ -185,7 +185,7 @@ public class CheckFlightRoutePackageTest {
         flightDTO3.setCreatedAt(LocalDateTime.now());
         flightDTO3.setAirlineNickname("Aerolineas Argentinas");
         flightDTO3.setFlightRouteName("Paris - Berlin");
-        flightController.createFlight(flightDTO3);
+        flightController.createFlight(flightDTO3, "Aerolineas Argentinas", "Paris - Berlin");
 
         FlightDTO flightDTO4 = new FlightDTO();
         flightDTO4.setName("Vuelo4");
@@ -196,7 +196,7 @@ public class CheckFlightRoutePackageTest {
         flightDTO4.setCreatedAt(LocalDateTime.now());
         flightDTO4.setAirlineNickname("Aerolineas Argentinas");
         flightDTO4.setFlightRouteName("Paris - Berlin");
-        flightController.createFlight(flightDTO4);
+        flightController.createFlight(flightDTO4, "Aerolineas Argentinas", "Paris - Berlin");
 
 
 
@@ -210,10 +210,11 @@ public class CheckFlightRoutePackageTest {
         flightRoutePackageDTO.setCreationDate(java.time.LocalDate.now());
         flightRoutePackageDTO.setSeatType(EnumTipoAsiento.TURISTA);
         flightRoutePackageDTO.setFlightRouteNames(List.of("Madrid - Paris", "Paris - Berlin"));
+        flightRoutePackageDTO.setTotalPrice(100.0);
         flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
 
 
-        List<FlightRoutePackage> packages = flightRoutePackageController.getAllFlightRoutePackages();
+        List<FlightRoutePackage> packages = flightRoutePackageController.getAllFlightRoutesPackages();
 
         assertNotNull(packages);
         assertEquals(1, packages.size());
@@ -222,7 +223,7 @@ public class CheckFlightRoutePackageTest {
 
         System.out.println(packages);
         //Selecciono 1
-        FlightRoutePackageDTO selectedPackage = flightRoutePackageController.getFlightRoutePackageByName("Paquete1");
+        FlightRoutePackageDTO selectedPackage = flightRoutePackageController.getFlightRoutePackageDetailsByName("Paquete1");
         //Veo su informacion
         System.out.println(selectedPackage);
         assertTrue(selectedPackage.getName().equals("Paquete1"));
@@ -232,10 +233,10 @@ public class CheckFlightRoutePackageTest {
         assertTrue(selectedPackage.getSeatType() == EnumTipoAsiento.TURISTA);
         assertNotNull(selectedPackage.getCreationDate());
         assertNotNull(selectedPackage.getFlightRouteNames()); //Aca deberia de ser la ruta: Madrid - Paris, Paris - Berlin
-        assertFalse(selectedPackage.getFlightRouteNames().isEmpty());
+        assertFalse(selectedPackage.getFlightRouteNames().isEmpty()); //Imprimiria la ruta: Madrid - Paris, Paris - Berlin
 
         //Selecciono ruta de vuelo del paquete
-        FlightRouteDTO flightRouteInPackage = flightRouteController.getFlightRouteByName("Madrid - Paris");
+        FlightRouteDTO flightRouteInPackage = flightRouteController.getFlightRouteDetailsByName("Madrid - Paris");
         //Veo su informacion detallada
         System.out.println(flightRouteInPackage);
         assertNotNull(flightRouteInPackage);

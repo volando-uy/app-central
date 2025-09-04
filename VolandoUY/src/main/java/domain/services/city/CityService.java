@@ -72,8 +72,12 @@ public class CityService implements ICityService {
 
     @Override
     public boolean isAirportInCity(String cityName, String airportName) {
+        if (!cityExists(cityName)) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName));
+        }
         return cityRepository.existsAirportInCity(cityName, airportName);
     }
+
 
 
     @Override

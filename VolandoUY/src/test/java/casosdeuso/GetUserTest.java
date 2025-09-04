@@ -57,7 +57,7 @@ public class GetUserTest {
         userController.registerCustomer(customerDTO);
 
         // ---------- WHEN ----------
-        UserDTO retrievedUser = userController.getUserByNickname("cliente");
+        UserDTO retrievedUser = userController.getUserSimpleDetailsByNickname("cliente");
 
         // ---------- THEN ----------
         assertNotNull(retrievedUser, "El usuario no debería ser nulo");
@@ -73,7 +73,7 @@ public class GetUserTest {
 
         // ---------- WHEN & THEN ----------
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            userController.getUserByNickname(nonExistentNickname);
+            userController.getUserSimpleDetailsByNickname(nonExistentNickname);
         });
 
         String expectedMessage = String.format(ErrorMessages.ERR_USER_NOT_FOUND, nonExistentNickname);
@@ -94,7 +94,7 @@ public class GetUserTest {
         airlineDTO.setWeb("https://www.airline.com");
         userController.registerAirline(airlineDTO);
         // ---------- WHEN ----------
-        UserDTO retrievedUser = userController.getUserByNickname("aerolinea");
+        UserDTO retrievedUser = userController.getUserSimpleDetailsByNickname("aerolinea");
         // ---------- THEN ----------
         assertNotNull(retrievedUser, "El usuario no debería ser nulo");
         assertEquals("aerolinea", retrievedUser.getNickname(), "El nickname del usuario debería coincidir");

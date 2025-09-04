@@ -2,9 +2,7 @@ package domain.services.user;
 
 import app.DBConnection;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
@@ -44,7 +42,7 @@ class UserServiceTest {
         );
 
         // WHEN
-        CustomerDTO result = userService.registerCustomer(dto);
+        BaseCustomerDTO result = userService.registerCustomer(dto);
 
         // THEN
         assertNotNull(result);
@@ -75,7 +73,7 @@ class UserServiceTest {
         AirlineDTO dto = new AirlineDTO("air123", "FlyHigh", "fly@mail.com", "Líder regional", "www.flyhigh.com");
 
         // WHEN
-        AirlineDTO result = userService.registerAirline(dto);
+        BaseAirlineDTO result = userService.registerAirline(dto);
 
         // THEN
         assertNotNull(result);
@@ -93,13 +91,13 @@ class UserServiceTest {
         userService.registerCustomer(dto);
 
         // WHEN
-        UserDTO result = userService.getUserByNickname("nickCustomer");
+        UserDTO result = userService.getUserDetailsByNickname("nickCustomer",false);
 
         // THEN
         assertNotNull(result);
         assertEquals("Pama", result.getName());
-        assertTrue(result instanceof CustomerDTO);
-        assertEquals("Sosa", ((CustomerDTO) result).getSurname());
+        assertTrue(result instanceof BaseCustomerDTO);
+        assertEquals("Sosa", ((BaseCustomerDTO) result).getSurname());
     }
 
     @Test
@@ -140,7 +138,7 @@ class UserServiceTest {
     void getUserByNickname_shouldThrowExceptionIfNotFound() {
         // WHEN + THEN
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            userService.getUserByNickname("inexistente");
+            userService.getUserDetailsByNickname("inexistente",false);
         });
         //El usuario inexistente no fue encontrado
         assertEquals(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "inexistente"), ex.getMessage());
@@ -160,11 +158,12 @@ class UserServiceTest {
         userService.registerCustomer(original);
 
         // WHEN
-        UserDTO result = userService.updateUser("cliente1", updated);
+        BaseCustomerDTO customerResult = (BaseCustomerDTO) userService.updateUser("cliente1", updated);
 
         // THEN
-        assertEquals("Pedro Actualizado", result.getName());
-        assertEquals("Argentina", ((CustomerDTO) result).getCitizenship());
+        assertEquals("Pedro Actualizado", customerResult.getName());
+        assertEquals("Argentina", customerResult.getCitizenship());
+
     }
 
     @Test
@@ -179,10 +178,10 @@ class UserServiceTest {
 
         // THEN
         assertNotNull(result);
-        assertTrue(result instanceof AirlineDTO);
+        assertTrue(result instanceof BaseAirlineDTO);
         assertEquals("Airline One Updated", result.getName());
-        assertEquals("New Desc123456789", ((AirlineDTO) result).getDescription());
-        assertEquals("www.updated.com", ((AirlineDTO) result).getWeb());
+        assertEquals("New Desc123456789", ((BaseAirlineDTO) result).getDescription());
+        assertEquals("www.updated.com", ((BaseAirlineDTO) result).getWeb());
     }
 
     @Test
@@ -219,7 +218,7 @@ class UserServiceTest {
         userService.registerAirline(dto);
 
         // WHEN
-        Airline result = userService.getAirlineByNickname("vuela");
+        Airline result = userService.getAirlineByNickname("vuela",false);
 
         // THEN
         assertEquals("vuela", result.getNickname());
@@ -233,7 +232,7 @@ class UserServiceTest {
         userService.registerAirline(dto);
 
         // WHEN
-        AirlineDTO result = userService.getAirlineDetailsByNickname("express");
+        AirlineDTO result = userService.getAirlineDetailsByNickname("express",false);
 
         // THEN
         assertNotNull(result);
@@ -251,7 +250,7 @@ class UserServiceTest {
                 LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI));
 
         // WHEN
-        UserDTO result = userService.getUserByNickname("testnick");
+        UserDTO result = userService.getUserDetailsByNickname("testnick",false);
 
         // THEN
         assertNotNull(result);

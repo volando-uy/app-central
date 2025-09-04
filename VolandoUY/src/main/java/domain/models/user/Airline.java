@@ -47,9 +47,15 @@ public class Airline extends User {
     @Override
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof AirlineDTO newDataCasted)) return;
-        this.setName(newDataCasted.getName());
-        this.setDescription(newDataCasted.getDescription());
-        this.setWeb(newDataCasted.getWeb());
+        if (newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
+            this.setName(newDataCasted.getName());
+//        if (newDataCasted.getMail() != null && !newDataCasted.getMail().isBlank())
+//            this.setMail(newDataCasted.getMail());
+        if (newDataCasted.getDescription() != null && !newDataCasted.getDescription().isBlank())
+            this.setDescription(newDataCasted.getDescription());
+        if (newDataCasted.getWeb() != null && !newDataCasted.getWeb().isBlank())
+            this.setWeb(newDataCasted.getWeb());
+
     }
 
     @Override

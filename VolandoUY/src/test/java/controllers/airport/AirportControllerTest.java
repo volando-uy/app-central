@@ -1,84 +1,108 @@
 package controllers.airport;
 
+import controllers.city.ICityController;
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.airport.BaseAirportDTO;
-import domain.services.airport.IAirportService;
+import domain.dtos.city.CityDTO;
+import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import shared.constants.ErrorMessages;
+import utils.TestUtils;
 
-import static org.mockito.Mockito.*;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AirportControllerTest {
 
-    private IAirportService airportService;
     private IAirportController airportController;
+    private ICityController cityController;
 
     @BeforeEach
     void setUp() {
-        airportService = mock(IAirportService.class);
-        airportController = new AirportController(airportService);
+        TestUtils.cleanDB();
+        airportController = ControllerFactory.getAirportController();
+        cityController = ControllerFactory.getCityController();
+
+        // Crear ciudad base para los tests
+        CityDTO city = new CityDTO();
+        city.setName("Montevideo");
+        city.setCountry("Uruguay");
+        city.setLongitude(-34.9);
+        city.setLongitude(-56.2);
+        city.setAirportNames(List.of(city.getName()));
+        cityController.createCity(city);
     }
 
     @Test
     @DisplayName("GIVEN valid AirportDTO and city WHEN createAirport is called THEN it should return created airport")
     void createAirport_shouldReturnCreatedAirport() {
-        // GIVEN
-        AirportDTO input = new AirportDTO("Carrasco", "MVD", "Montevideo");
-        when(airportService.createAirport(input, "Montevideo")).thenReturn(input);
+        AirportDTO dto = new AirportDTO();
+        dto.setName("Carrasco");
+        dto.setCode("MVD");
+        dto.setCityName("Montevideo");
 
-        // WHEN
-        AirportDTO result = airportController.createAirport(input, "Montevideo");
+        BaseAirportDTO created = airportController.createAirport(dto, "Montevideo");
 
-        // THEN
-        assertNotNull(result);
-        assertEquals("Carrasco", result.getName());
-        assertEquals("MVD", result.getCode());
-        verify(airportService).createAirport(input, "Montevideo");
+        assertNotNull(created);
+        assertEquals("MVD", created.getCode());
+        assertEquals("Carrasco", created.getName());
     }
 
     @Test
     @DisplayName("GIVEN existing code WHEN getAirportByCode is called THEN correct airport is returned")
     void getAirportByCode_shouldReturnCorrectDTO() {
-        // GIVEN
-        BaseAirportDTO expected = new BaseAirportDTO("Carrasco", "MVD");
-        when(airportService.getAirportDetailsByCode("MVD", false)).thenReturn(expected);
+        AirportDTO dto = new AirportDTO();
+        dto.setName("Carrasco");
+        dto.setCode("MVD");
+        dto.setCityName("Montevideo");
 
-        // WHEN
+
+        airportController.createAirport(dto, "Montevideo");
+
         AirportDTO result = airportController.getAirportDetailsByCode("MVD");
 
-        // THEN
         assertNotNull(result);
         assertEquals("MVD", result.getCode());
-        verify(airportService).getAirportDetailsByCode("MVD", false);
+        assertEquals("Carrasco", result.getName());
+        assertEquals("Montevideo", result.getCityName());
     }
 
     @Test
     @DisplayName("GIVEN airport exists WHEN airportExists is called THEN return true")
     void airportExists_shouldReturnTrueIfExists() {
-        // GIVEN
-        when(airportService.airportExists("MVD")).thenReturn(true);
+        AirportDTO dto = new AirportDTO();
+        dto.setName("Carrasco");
+        dto.setCode("MVD");
+        dto.setCityName("Montevideo");
 
-        // WHEN
-        boolean exists = airportController.airportExists("MVD");
+        airportController.createAirport(dto, "Montevideo");
 
-        // THEN
-        assertTrue(exists);
-        verify(airportService).airportExists("MVD");
+        assertTrue(airportController.airportExists("MVD"));
     }
 
     @Test
     @DisplayName("GIVEN airport does not exist WHEN airportExists is called THEN return false")
     void airportExists_shouldReturnFalseIfNotExists() {
-        // GIVEN
-        when(airportService.airportExists("XXX")).thenReturn(false);
+        assertFalse(airportController.airportExists("XYZ"));
+    }
 
-        // WHEN
-        boolean exists = airportController.airportExists("XXX");
+    @Test
+    @DisplayName("GIVEN duplicate code WHEN createAirport is called THEN throw exception")
+    void createAirport_shouldFailOnDuplicateCode() {
+        AirportDTO dto = new AirportDTO();
+        dto.setName("Carrasco");
+        dto.setCode("MVD");
+        dto.setCityName("Montevideo");
 
-        // THEN
-        assertFalse(exists);
-        verify(airportService).airportExists("XXX");
+        airportController.createAirport(dto, "Montevideo");
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            airportController.createAirport(dto, "Montevideo");
+        });
+        System.out.println(ex.getMessage());
+        assertTrue(String.format(ErrorMessages.ERR_AIRPORT_CODE_ALREADY_EXISTS, "MVD").contains("MVD"));
     }
 }

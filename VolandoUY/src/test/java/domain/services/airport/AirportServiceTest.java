@@ -1,12 +1,13 @@
 package domain.services.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.services.city.CityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import utils.TestUtils;
 
 import java.util.ArrayList;
@@ -17,26 +18,22 @@ class AirportServiceTest {
 
     private AirportService airportService;
     private CityService cityService;
-    private ModelMapper modelMapper;
-
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        modelMapper = new ModelMapper();
         cityService = new CityService();
         airportService = new AirportService();
 
-        // Ciudad base para todos los tests
-        cityService.createCity(new CityDTO("Montevideo", "Uruguay", -34.9, -56.2,new ArrayList<>()));
+        cityService.createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9, -56.2));
     }
 
     @Test
     @DisplayName("Crear aeropuerto válido debería agregarlo correctamente")
     void createAirport_shouldAddCorrectly() {
-        AirportDTO dto = new AirportDTO("Carrasco", "MVD", "Montevideo");
+        BaseAirportDTO dto = new BaseAirportDTO("Carrasco", "MVD");
 
-        AirportDTO result = airportService.createAirport(dto, "Montevideo");
+        BaseAirportDTO result = airportService.createAirport(dto, "Montevideo");
 
         assertNotNull(result);
         assertEquals("MVD", result.getCode());
@@ -46,7 +43,7 @@ class AirportServiceTest {
     @Test
     @DisplayName("No debería permitir duplicados por código")
     void createAirport_shouldFailOnDuplicateCode() {
-        AirportDTO dto = new AirportDTO("Carrasco", "MVD", "Montevideo");
+        BaseAirportDTO dto = new BaseAirportDTO("Carrasco", "MVD");
 
         airportService.createAirport(dto, "Montevideo");
 
@@ -58,12 +55,12 @@ class AirportServiceTest {
     @Test
     @DisplayName("getAirportByCode debería devolver el aeropuerto correcto")
     void getAirportByCode_shouldReturnCorrectAirport() {
-        AirportDTO dto = new AirportDTO("Carrasco", "MVD", "Montevideo");
+        BaseAirportDTO dto = new BaseAirportDTO("Carrasco", "MVD");
         airportService.createAirport(dto, "Montevideo");
 
         assertTrue(airportService.airportExists("MVD"));
 
-        var airport = airportService.getAirportByCode("MVD");
+        var airport = airportService.getAirportByCode("MVD", false);
 
         assertEquals("Carrasco", airport.getName());
         assertEquals("MVD", airport.getCode());
@@ -72,23 +69,21 @@ class AirportServiceTest {
     @Test
     @DisplayName("getAirportDetailsByCode debería retornar DTO correctamente")
     void getAirportDetailsByCode_shouldReturnDTO() {
-        //Crear ciudad
-//        CityDTO cityDTO= new CityDTO("Montevideo", "Uruguay", -34.9, -56.2,new ArrayList<>());
-//        cityService.createCity(cityDTO);
-        AirportDTO dto = new AirportDTO("Carrasco", "MVD", "Montevideo");
+        BaseAirportDTO dto = new BaseAirportDTO("Carrasco", "MVD");
         airportService.createAirport(dto, "Montevideo");
 
-        AirportDTO result = airportService.getAirportDetailsByCode("MVD");
+        AirportDTO result = airportService.getAirportDetailsByCode("MVD", false);
 
         assertEquals("Carrasco", result.getName());
         assertEquals("MVD", result.getCode());
+        assertEquals("Montevideo", result.getCityName());
     }
 
     @Test
     @DisplayName("Buscar aeropuerto inexistente debería lanzar excepción")
     void getAirportByCode_shouldThrowIfNotFound() {
         assertThrows(IllegalArgumentException.class, () -> {
-            airportService.getAirportByCode("ZZZ");
+            airportService.getAirportByCode("ZZZ", false);
         });
     }
 
@@ -97,7 +92,7 @@ class AirportServiceTest {
     void airportExists_shouldReturnTrueOrFalse() {
         assertFalse(airportService.airportExists("MVD"));
 
-        AirportDTO dto = new AirportDTO("Carrasco", "MVD", "Montevideo");
+        BaseAirportDTO dto = new BaseAirportDTO("Carrasco", "MVD");
         airportService.createAirport(dto, "Montevideo");
 
         assertTrue(airportService.airportExists("MVD"));

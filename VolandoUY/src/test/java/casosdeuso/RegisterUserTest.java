@@ -60,7 +60,7 @@ public class RegisterUserTest {
         userController.registerCustomer(customerDTO);
 
         // Then
-        UserDTO createdCustomer = userController.getUserByNickname("gyabisito");
+        UserDTO createdCustomer = userController.getUserSimpleDetailsByNickname("gyabisito");
 
         // Verificar que el CustomerDTO fue creado correctamente
         assertEquals("gyabisito", createdCustomer.getNickname());
@@ -81,7 +81,7 @@ public class RegisterUserTest {
         userController.registerAirline(airlineDTO);
 
         // Then
-        AirlineDTO createdAirline = userController.getAirlineByNickname("flyuy");
+        AirlineDTO createdAirline = userController.getAirlineDetailsByNickname("flyuy");
 
         // Verificar que el AirlineDTO fue creado correctamente
         assertEquals("flyuy", createdAirline.getNickname());
