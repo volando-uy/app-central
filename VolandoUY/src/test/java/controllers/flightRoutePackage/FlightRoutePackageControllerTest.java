@@ -98,14 +98,6 @@ class FlightRoutePackageControllerTest {
                 "Pack Ruta A", "Paquete con ruta", 10, 5.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
         ));
 
-        // Simula que la ruta de vuelo 'Ruta A' ya existe en el sistema.
-
-//        //Crear aereolinea Airline1
-////        ServiceFactory.getUserService().registerAirline(new AirlineDTO("Airline1", "name", "asd@gmail.com","desgreafgreagfraeac","https://www.google.com"));
-////        ServiceFactory.getFlightRouteService().createFlightRoute(
-////                new BaseFlightRouteDTO("Pack Ruta A", "Ruta A", LocalDate.now(), 100.0, 200.0, 20.0),
-////                "City1", "City2", "Airline1", new ArrayList<>()
-////        );
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("Airline1");
         airlineDTO.setName("name");
@@ -113,6 +105,16 @@ class FlightRoutePackageControllerTest {
         airlineDTO.setDescription("descriptionasdasd");
         airlineDTO.setWeb("https://www.google.com");
         userController.registerAirline(airlineDTO);
+
+        // Crear la ruta de vuelo
+        BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
+        flightRouteDTO.setName("Ruta A");
+        flightRouteDTO.setDescription("Descripción de Ruta A");
+        flightRouteDTO.setCreatedAt(LocalDate.now());
+        flightRouteDTO.setPriceTouristClass(150.0);
+        flightRouteDTO.setPriceBusinessClass(300.0);
+        flightRouteDTO.setPriceExtraUnitBaggage(50.0);
+        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Buenos Aires", "Airline1", new ArrayList<>());
 
         // WHEN
         packageController.addFlightRouteToPackage("Pack Ruta A", "Ruta A", 2);

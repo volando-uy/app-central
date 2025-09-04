@@ -47,8 +47,16 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
 
     public List<Airline> findFullAll() {
         try (EntityManager em = DBConnection.getEntityManager()) {
-            return em.createQuery("SELECT a FROM Airline a LEFT JOIN FETCH a.flights LEFT JOIN FETCH a.flightRoutes", Airline.class)
+            List<Airline> airline = em.createQuery("SELECT a FROM Airline a", Airline.class)
                     .getResultList();
+
+            // Load flights to avoid lazy loading issues
+            for (Airline a : airline) {
+                a.getFlights().size();
+                a.getFlightRoutes().size();
+            }
+
+            return airline;
         }
     }
 

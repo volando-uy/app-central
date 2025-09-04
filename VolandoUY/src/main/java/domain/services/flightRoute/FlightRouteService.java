@@ -123,7 +123,7 @@ public class FlightRouteService implements IFlightRouteService {
         if (full){
             return customModelMapper.mapFullFlightRoute(flightRoute);
         } else {
-            return customModelMapper.map(flightRoute, FlightRouteDTO.class);
+            return customModelMapper.mapBaseFlightRoute(flightRoute);
         }
     }
 }

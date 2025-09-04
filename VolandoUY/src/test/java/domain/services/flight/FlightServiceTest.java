@@ -40,7 +40,7 @@ class FlightServiceTest {
     void setUp() {
         TestUtils.cleanDB();
 
-        userService = new UserService();
+        userService = ServiceFactory.getUserService();
         flightService = ServiceFactory.getFlightService();
         flightRouteService = ServiceFactory.getFlightRouteService();
         cityService = ServiceFactory.getCityService();

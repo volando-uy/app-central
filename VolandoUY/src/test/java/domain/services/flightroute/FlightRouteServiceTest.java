@@ -18,6 +18,7 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import factory.ServiceFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.*;
@@ -55,12 +56,10 @@ class FlightRouteServiceTest {
         TestUtils.cleanDB();
 
         // Instanciamos los servicios reales (en memoria)
-        userService = new UserService();
-        categoryService = new CategoryService(); // debería tener lista interna de categorías
-        cityService = new CityService();         // debería tener lista interna de ciudades
-
-        // Creamos el servicio a testear con sus dependencias reales
-        flightRouteService = new FlightRouteService();
+        userService = ServiceFactory.getUserService();
+        categoryService = ServiceFactory.getCategoryService(); // debería tener lista interna de categorías
+        cityService = ServiceFactory.getCityService();         // debería tener lista interna de ciudades
+        flightRouteService = ServiceFactory.getFlightRouteService();
         this.fillDB();
     }
 

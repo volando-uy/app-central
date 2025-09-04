@@ -5,7 +5,9 @@ import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.buyPackage.BuyPackageDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
@@ -27,15 +29,29 @@ import domain.models.ticket.Ticket;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
+import org.hibernate.collection.spi.PersistentBag;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class CustomModelMapper extends ModelMapper {
+
+    public CustomModelMapper() {
+        Converter<PersistentBag, List<?>> persistentBagToListConverter = new Converter<>() {
+            @Override
+            public java.util.List<?> convert(MappingContext<PersistentBag, java.util.List<?>> context) {
+                return new java.util.ArrayList<>(context.getSource());
+            }
+        };
+        this.addConverter(persistentBagToListConverter);
+    }
 
     public CustomerDTO mapFullCustomer(Customer customer) {
         CustomerDTO customerDTO = this.map(customer, CustomerDTO.class);
@@ -95,6 +111,11 @@ public class CustomModelMapper extends ModelMapper {
                 new ArrayList<>(flightRoute.getFlights()).stream().map(Flight::getName).toList()
         );
         return flightRouteDTO;
+    }
+
+    public FlightRouteDTO mapBaseFlightRoute(FlightRoute flightRoute) {
+        BaseFlightRouteDTO bfrdto = this.map(flightRoute, BaseFlightRouteDTO.class);
+        return this.map(bfrdto, FlightRouteDTO.class);
     }
 
     public BuyPackageDTO mapFullBuyPackage(BuyPackage buyPackage) {

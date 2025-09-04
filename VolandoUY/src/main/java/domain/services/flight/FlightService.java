@@ -61,10 +61,8 @@ public class FlightService implements IFlightService {
         // Tira throw si no existe.
         FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName, true);
 
-        flight.setAirline(airline);
-
-        // Guardamos el vuelo y actualizamos la aerolínea
-        flightRepository.saveFlightAndAddToAirline(flight, airline);
+        // Guardamos el vuelo y actualizamos la aerolínea y la ruta de vuelo
+        flightRepository.saveFlightAndAddToAirlineAndAddToFlightRoute(flight, airline, flightRoute);
 
         return customModelMapper.map(flight, BaseFlightDTO.class);
     }

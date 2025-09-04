@@ -13,6 +13,7 @@ import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
@@ -202,16 +203,20 @@ public class CheckFlightRoutePackageTest {
 
         // 1: Listar paquetes registrados
 
-        FlightRoutePackageDTO flightRoutePackageDTO = new FlightRoutePackageDTO();
+        BaseFlightRoutePackageDTO flightRoutePackageDTO = new BaseFlightRoutePackageDTO();
         flightRoutePackageDTO.setName("Paquete1");
         flightRoutePackageDTO.setDescription("Descripcion del paquete 1");
         flightRoutePackageDTO.setValidityPeriodDays(30);
         flightRoutePackageDTO.setDiscount(10.0);
         flightRoutePackageDTO.setCreationDate(java.time.LocalDate.now());
         flightRoutePackageDTO.setSeatType(EnumTipoAsiento.TURISTA);
-        flightRoutePackageDTO.setFlightRouteNames(List.of("Madrid - Paris", "Paris - Berlin"));
         flightRoutePackageDTO.setTotalPrice(100.0);
         flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
+
+        // Añadir la ruta de vuelo "Madrid - Paris" al paquete
+        flightRoutePackageController.addFlightRouteToPackage("Paquete1", "Madrid - Paris", 1);
+        // Añadir la ruta de vuelo "Paris - Berlin" al paquete
+        flightRoutePackageController.addFlightRouteToPackage("Paquete1", "Paris - Berlin", 1);
 
 
         List<FlightRoutePackage> packages = flightRoutePackageController.getAllFlightRoutesPackages();
@@ -221,9 +226,9 @@ public class CheckFlightRoutePackageTest {
         assertEquals(flightRoutePackageDTO.getName(), packages.get(0).getName());
         assertFalse(packages.get(0).getDescription().isEmpty());
 
-        System.out.println(packages);
         //Selecciono 1
         FlightRoutePackageDTO selectedPackage = flightRoutePackageController.getFlightRoutePackageDetailsByName("Paquete1");
+
         //Veo su informacion
         System.out.println(selectedPackage);
         assertTrue(selectedPackage.getName().equals("Paquete1"));

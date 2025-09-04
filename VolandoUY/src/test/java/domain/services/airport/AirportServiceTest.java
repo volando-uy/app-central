@@ -5,6 +5,8 @@ import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.services.city.CityService;
+import domain.services.city.ICityService;
+import factory.ServiceFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AirportServiceTest {
 
-    private AirportService airportService;
-    private CityService cityService;
+    private IAirportService airportService;
+    private ICityService cityService;
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        cityService = new CityService();
-        airportService = new AirportService();
+        cityService = ServiceFactory.getCityService();
+        airportService = ServiceFactory.getAirportService();
 
         cityService.createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9, -56.2));
     }
