@@ -72,7 +72,8 @@ public class UpdateUserPanel extends JPanel {
                 // If user doesn't exist, throw exception
                 selectedUser = userController.getUserSimpleDetailsByNickname(selectedNickname);
                 nameTextField.setText(selectedUser.getName());
-                if (selectedUser instanceof AirlineDTO selectedUser) {
+
+                if (selectedUser instanceof BaseAirlineDTO selectedUser) {
                     variableLabel1.setText("Descripción:");
                     variableTextField1.setText(selectedUser.getDescription());
                     variableLabel2.setText("Web:");
@@ -92,7 +93,7 @@ public class UpdateUserPanel extends JPanel {
                     variableTextField4.setText("");
                     idTypeLabel.setEnabled(false);
                     idTypeComboBox.setEnabled(false);
-                } else if (selectedUser instanceof CustomerDTO selectedUser) {
+                } else if (selectedUser instanceof BaseCustomerDTO selectedUser) {
                     variableLabel1.setText("Apellido:");
                     variableTextField1.setText(selectedUser.getSurname());
                     variableLabel2.setText("Nacionalidad:");

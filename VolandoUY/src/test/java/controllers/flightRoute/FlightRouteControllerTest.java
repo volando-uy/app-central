@@ -5,13 +5,10 @@ import controllers.city.ICityController;
 import controllers.user.IUserController;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
-import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
-import domain.models.user.Airline;
 import domain.services.flightRoute.FlightRouteService;
-import domain.services.flightRoute.IFlightRouteService;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,21 +19,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class FlightRouteControllerTest {
 
-    private IFlightRouteController controller;
+    private IFlightRouteController flightRouteController;
     private IUserController userController;
     private ICategoryController categoryController;
     private ICityController cityController;
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-        controller = new FlightRouteController(new FlightRouteService());
+        flightRouteController = ControllerFactory.getFlightRouteController();
         userController = ControllerFactory.getUserController();
         categoryController = ControllerFactory.getCategoryController();
         cityController = ControllerFactory.getCityController();
+
         //Crear aereolinea LAT123
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("LAT123");
@@ -75,14 +72,14 @@ class FlightRouteControllerTest {
         baseDTO.setPriceBusinessClass(150.0);
         baseDTO.setPriceExtraUnitBaggage(25.0);
 
-        controller.createFlightRoute(baseDTO, "Montevideo", "Santiago", "LAT123", List.of("Económica"));
+        flightRouteController.createFlightRoute(baseDTO, "Montevideo", "Santiago", "LAT123", List.of("Económica"));
     }
 
     @Test
     @DisplayName("Debe verificar si existe una ruta por nombre")
     void existFlightRoute() {
-        assertTrue(controller.existFlightRoute("Ruta 1"));
-        assertFalse(controller.existFlightRoute("Desconocida"));
+        assertTrue(flightRouteController.existFlightRoute("Ruta 1"));
+        assertFalse(flightRouteController.existFlightRoute("Desconocida"));
     }
 
     @Test
@@ -96,16 +93,16 @@ class FlightRouteControllerTest {
         dto.setPriceBusinessClass(130.0);
         dto.setPriceExtraUnitBaggage(20.0);
 
-        BaseFlightRouteDTO created = controller.createFlightRoute(dto, "Buenos Aires", "Lima", "LAT999", List.of("Business"));
+        BaseFlightRouteDTO created = flightRouteController.createFlightRoute(dto, "Buenos Aires", "Lima", "LAT999", List.of("Business"));
 
         assertEquals("Ruta 2", created.getName());
-        assertTrue(controller.existFlightRoute("Ruta 2"));
+        assertTrue(flightRouteController.existFlightRoute("Ruta 2"));
     }
 
     @Test
     @DisplayName("Debe obtener detalles completos de una ruta")
     void getFlightRouteDetailsByName() {
-        FlightRouteDTO dto = controller.getFlightRouteDetailsByName("Ruta 1");
+        FlightRouteDTO dto = flightRouteController.getFlightRouteDetailsByName("Ruta 1");
 
         assertNotNull(dto);
         assertEquals("Ruta 1", dto.getName());
@@ -116,7 +113,7 @@ class FlightRouteControllerTest {
     @Test
     @DisplayName("Debe obtener detalles simples de una ruta")
     void getFlightRouteSimpleDetailsByName() {
-        BaseFlightRouteDTO dto = controller.getFlightRouteSimpleDetailsByName("Ruta 1");
+        BaseFlightRouteDTO dto = flightRouteController.getFlightRouteSimpleDetailsByName("Ruta 1");
 
         assertNotNull(dto);
         assertEquals("Ruta 1", dto.getName());
@@ -125,7 +122,7 @@ class FlightRouteControllerTest {
     @Test
     @DisplayName("Debe obtener todas las rutas de una aerolínea")
     void getAllFlightRoutesByAirlineNickname() {
-        List<FlightRouteDTO> rutas = controller.getAllFlightRoutesDetailsByAirlineNickname("LAT123");
+        List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname("LAT123");
 
         assertEquals(1, rutas.size());
         assertEquals("Ruta 1", rutas.get(0).getName());
@@ -134,7 +131,7 @@ class FlightRouteControllerTest {
     @Test
     @DisplayName("Debe obtener rutas simples por aerolínea")
     void getAllFlightRoutesSimpleByAirlineNickname() {
-        List<BaseFlightRouteDTO> rutas = controller.getAllFlightRoutesSimpleDetailsByAirlineNickname("LAT123");
+        List<BaseFlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesSimpleDetailsByAirlineNickname("LAT123");
 
         assertEquals(1, rutas.size());
         assertEquals("Ruta 1", rutas.get(0).getName());

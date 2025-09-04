@@ -120,8 +120,7 @@ public class CheckFlightTest {
         assertEquals("airline1", airlineNickname);
 
         //Listar rutas asociadas a dicha aereolinea
-        flightController.getAllFlightsByAirline(airlineNickname).forEach(System.out::println);
-        assertNotNull(flightController.getAllFlightsByAirline(airlineNickname));
+        assertNotNull(flightController.getAllFlightsSimpleDetailsByAirline(airlineNickname));
 
         //Seleccionar ruta de vuelo
         FlightRouteDTO flightRouteDTO = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname).get(0);
@@ -130,12 +129,11 @@ public class CheckFlightTest {
         assertEquals("City B", flightRouteDTO.getDestinationCityName());
 
         //Listar vuelos asociados a dicha ruta
-        flightController.getAllFlightsByRouteName(flightRouteDTO.getName()).forEach(System.out::println);
-        assertNotNull(flightController.getAllFlightsByRouteName(flightRouteDTO.getName()));
+        assertNotNull(flightController.getAllFlightsSimpleDetailsByRouteName(flightRouteDTO.getName()));
 
         // Seleccionar vuelo
 
-        FlightDTO flightDTO = flightController.getAllFlightsByRouteName(flightRouteDTO.getName()).get(0); // java.lang.ArrayIndexOutOfBoundsException: Index 0 out of bounds for length 0
+        BaseFlightDTO flightDTO = flightController.getAllFlightsSimpleDetailsByRouteName(flightRouteDTO.getName()).get(0); // java.lang.ArrayIndexOutOfBoundsException: Index 0 out of bounds for length 0
         // No esta encontrando el vuelo
 
         assertEquals("Flight 101", flightDTO.getName());

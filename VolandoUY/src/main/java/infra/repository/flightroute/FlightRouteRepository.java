@@ -62,8 +62,12 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
                     .setParameter("name", name)
                     .getSingleResult();
 
-            flightRoute.getFlights().size(); // Initialize flights collection
-            flightRoute.getCategories().size(); // Initialize categories collection
+            if (flightRoute != null) {
+                if (flightRoute.getFlights() != null)
+                    flightRoute.getFlights().size(); // Initialize flights collection
+                if (flightRoute.getCategories() != null)
+                    flightRoute.getCategories().size(); // Initialize categories collection
+            }
 
             return flightRoute;
         }

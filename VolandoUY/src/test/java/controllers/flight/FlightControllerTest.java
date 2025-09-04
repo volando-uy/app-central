@@ -84,7 +84,7 @@ class FlightControllerTest {
         flightController.createFlight(new BaseFlightDTO("Vuelo A", LocalDateTime.now().plusDays(1), 90L, 80, 40, null), "air123", "Ruta A");
         flightController.createFlight(new BaseFlightDTO("Vuelo B", LocalDateTime.now().plusDays(2), 60L, 70, 35, null), "air123", "Ruta A");
 
-        List<FlightDTO> result = flightController.getAllFlights();
+        List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetails();
 
         assertEquals(2, result.size());
         assertTrue(result.stream().anyMatch(f -> f.getName().equals("Vuelo A")));
@@ -96,7 +96,7 @@ class FlightControllerTest {
     void getFlightByName_shouldReturnFlightDTO() {
         flightController.createFlight(new BaseFlightDTO("Vuelo Unico", LocalDateTime.now().plusDays(1), 120L, 100, 50, null), "air123", "Ruta A");
 
-        FlightDTO result = flightController.getFlightByName("Vuelo Unico");
+        FlightDTO result = flightController.getFlightDetailsByName("Vuelo Unico");
 
         assertNotNull(result);
         assertEquals("Vuelo Unico", result.getName());
@@ -109,7 +109,7 @@ class FlightControllerTest {
     void getAllFlightsByAirline_shouldReturnCorrectly() {
         flightController.createFlight(new BaseFlightDTO("Vuelo X", LocalDateTime.now().plusDays(1), 100L, 90, 45, null), "air123", "Ruta A");
 
-        List<FlightDTO> result = flightController.getAllFlightsByAirline("air123");
+        List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetailsByAirline("air123");
 
         assertEquals(1, result.size());
         assertEquals("Vuelo X", result.get(0).getName());
@@ -119,7 +119,7 @@ class FlightControllerTest {
     @DisplayName("GIVEN nonexistent airline WHEN getAllFlightsByAirline is called THEN throw exception")
     void getAllFlightsByAirline_shouldThrowIfNotFound() {
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            flightController.getAllFlightsByAirline("noExiste");
+            flightController.getAllFlightsSimpleDetailsByAirline("noExiste");
         });
 
         assertEquals(String.format(ErrorMessages.ERR_AIRLINE_NOT_FOUND, "noExiste"), ex.getMessage());

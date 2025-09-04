@@ -98,7 +98,7 @@ public class CheckFlightRouteTest {
         baseFlightRouteDTO.setPriceExtraUnitBaggage(3500.0);
 
         assertFalse(flightRouteController.existFlightRoute("AA-MAD"));
-        FlightRouteDTO rutaDTO = (FlightRouteDTO) flightRouteController.createFlightRoute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Internacional"));
+        flightRouteController.createFlightRoute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Internacional"));
         assertTrue(flightRouteController.existFlightRoute("AA-MAD"));
 
         // Crear vuelo asociado (indirectamente relacionado con la ruta)
@@ -159,9 +159,7 @@ public class CheckFlightRouteTest {
         //Vuelos:
         //Ver ruta de vuelo
         //Agarrar Ruta De vUELO
-        System.out.println("Ruta de vuelo: " + flightRouteController.getFlightRouteDetailsByName("AA-MAD"));
-        System.out.println("Vuelos:" + flightController.getAllFlightsByRouteName("AA-MAD"));
-        List<FlightDTO> vuelos = flightController.getAllFlightsByRouteName("AA-MAD");
+        List<FlightDTO> vuelos = flightController.getAllFlightsDetailsByRouteName("AA-MAD");
         assertEquals(1, vuelos.size());
 
         // Paso 6: Ver datos del vuelo

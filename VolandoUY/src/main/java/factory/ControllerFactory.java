@@ -31,8 +31,14 @@ import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
+import org.hibernate.collection.spi.PersistentBag;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import shared.utils.CustomModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ControllerFactory {

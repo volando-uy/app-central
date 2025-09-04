@@ -29,14 +29,18 @@ public class UserService implements IUserService {
 
     @Override
     public List<AirlineDTO> getAllAirlinesDetails(boolean full) {
-        return userRepository.getAllAirlines().stream()
+        List<Airline> airlines = full ? userRepository.getFullAllAirlines() : userRepository.getAllAirlines();
+
+        return airlines.stream()
                 .map(ar -> full ? customModelMapper.mapFullAirline(ar) : customModelMapper.map(ar, AirlineDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CustomerDTO> getAllCustomersDetails(boolean full) {
-        return userRepository.getAllCustomers().stream()
+        List<Customer> customers = full ? userRepository.getFullAllCustomers() : userRepository.getAllCustomers();
+
+        return customers.stream()
                 .map(cu -> full ? customModelMapper.mapFullCustomer(cu) : customModelMapper.map(cu, CustomerDTO.class))
                 .collect(Collectors.toList());
     }
@@ -95,7 +99,14 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserDTO> getAllUsers(boolean full) {
-        return userRepository.findAll().stream()
+        List<Customer> customers = full ? userRepository.getFullAllCustomers() : userRepository.getAllCustomers();
+        List<Airline> airlines = full ? userRepository.getFullAllAirlines() : userRepository.getAllAirlines();
+
+        List<User> allUsers = new ArrayList<>();
+        allUsers.addAll(customers);
+        allUsers.addAll(airlines);
+
+        return allUsers.stream()
                 .map(us -> full ? customModelMapper.mapFullUser(us) : customModelMapper.mapUser(us))
                 .toList();
     }
