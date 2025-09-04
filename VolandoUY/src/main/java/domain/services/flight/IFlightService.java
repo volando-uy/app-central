@@ -3,21 +3,24 @@ package domain.services.flight;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
+import domain.services.flightRoute.IFlightRouteService;
+import domain.services.user.IUserService;
 
 import java.util.List;
 
 public interface IFlightService {
     BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName);
 
-    List<FlightDTO> getAllFlights();
+    List<FlightDTO> getAllFlights(boolean full);
 
-    FlightDTO getFlightDetailsByName(String flightName);
+    FlightDTO getFlightDetailsByName(String flightName, boolean full);
 
-    Flight getFlightByName(String flightName);
+    Flight getFlightByName(String flightName, boolean full);
 
-    List<FlightDTO> getAllFlightsByAirline(String airlineNickname);
+    List<FlightDTO> getAllFlightsByAirlineNickname(String airlineNickname, boolean full);
 
-    List<FlightDTO> getFlightsByRouteName(String routeName);
+    List<FlightDTO> getAllFlightsByRouteName(String flightRouteName, boolean full);
 
-    List<FlightDTO> getAllFlightsByRouteName(String flightRouteName);
+    void setUserService(IUserService userService);
+    void setFlightRouteService(IFlightRouteService flightRouteService);
 }

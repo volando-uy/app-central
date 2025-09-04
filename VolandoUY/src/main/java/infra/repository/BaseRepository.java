@@ -63,20 +63,4 @@ public class BaseRepository<T> {
             return em.createQuery("FROM " + entityClass.getSimpleName(), entityClass).getResultList();
         }
     }
-
-//    public void delete(T entity) {
-//        EntityManager em = DBConnection.getEntityManager();
-//        EntityTransaction tx = em.getTransaction();
-//        try {
-//            tx.begin();
-//            em.remove(em.contains(entity) ? entity : em.merge(entity));
-//            tx.commit();
-//        } catch (Exception e) {
-//            if (tx.isActive()) tx.rollback();
-//            throw e;
-//        } finally {
-//            em.close();
-//        }
-//    }
-
 }

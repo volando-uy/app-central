@@ -1,5 +1,6 @@
 package factory;
 
+import controllers.seat.ISeatController;
 import domain.services.airport.AirportService;
 import domain.services.airport.IAirportService;
 import domain.services.category.CategoryService;
@@ -12,6 +13,10 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.seat.ISeatService;
+import domain.services.seat.SeatService;
+import domain.services.ticket.ITicketService;
+import domain.services.ticket.TicketService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
 
@@ -23,9 +28,10 @@ public class ServiceFactory {
     private static ICityService cityService;
     private static IFlightRoutePackageService packageService;
     private static IAirportService airportService;
+    private static ISeatService seatService;
+    private static ITicketService ticketService;
 
-    // ############ USER SERVICE ############
-
+    // ############ USER SERVICE ###########
 
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
     public static IUserService getUserService() {
@@ -71,6 +77,8 @@ public class ServiceFactory {
     public static IFlightService getFlightService() {
         if (flightService == null) {
             flightService = new FlightService();
+            flightService.setUserService(getUserService());
+            flightService.setFlightRouteService(getFlightRouteService());
         }
         return flightService;
     }
@@ -109,5 +117,22 @@ public class ServiceFactory {
             airportService.setCityService(getCityService());
         }
         return airportService;
+    }
+
+    // ############ SEAT SERVICE ############
+    public static ISeatService getSeatService() {
+        if (seatService == null) {
+            seatService = new SeatService();
+            seatService.setTicketService(getTicketService());
+        }
+        return seatService;
+    }
+
+    // ############ TICKET SERVICE ############
+    public static ITicketService getTicketService() {
+        if (ticketService == null) {
+            ticketService = new TicketService();
+        }
+        return ticketService;
     }
 }

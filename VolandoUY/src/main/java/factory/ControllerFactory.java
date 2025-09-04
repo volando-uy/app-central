@@ -10,6 +10,10 @@ import controllers.flight.FlightController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.FlightRouteController;
 import controllers.flightRoute.IFlightRouteController;
+import controllers.seat.ISeatController;
+import controllers.seat.SeatController;
+import controllers.ticket.ITicketController;
+import controllers.ticket.TicketController;
 import controllers.user.IUserController;
 import controllers.user.UserController;
 import controllers.flightRoutePackage.FlightRoutePackageController;
@@ -44,6 +48,8 @@ public class ControllerFactory {
     private static ICityController cityController;
     private static IFlightRoutePackageController packageController;
     private static IAirportController airportController;
+    private static ISeatController seatController;
+    private static ITicketController ticketController;
 
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
@@ -124,7 +130,7 @@ public class ControllerFactory {
     // ##########################################
 
 
-    // ############### CITY CONTROLLER & SERVICE #################
+    // ############### CITY CONTROLLER  #################
 
     public static ICityController getCityController() {
         if (cityController == null) {
@@ -133,13 +139,31 @@ public class ControllerFactory {
         return cityController;
     }
 
-    // ############### AIRPORT CONTROLLER & SERVICE #################
+    // ############### AIRPORT CONTROLLER  #################
 
     public static IAirportController getAirportController(){
         if(airportController == null){
             airportController = new AirportController(ServiceFactory.getAirportService());
         }
         return airportController;
+    }
+
+    // ############### SEAT CONTROLLER  #################
+
+    public static ISeatController getSeatController(){
+        if (seatController == null){
+            seatController = new SeatController(ServiceFactory.getSeatService());
+        }
+        return seatController;
+    }
+
+    // ############### TICKET CONTROLLER  #################
+
+    public static ITicketController getTicketController(){
+        if (ticketController == null){
+            ticketController = new TicketController(ServiceFactory.getTicketService());
+        }
+        return ticketController;
     }
 
 }

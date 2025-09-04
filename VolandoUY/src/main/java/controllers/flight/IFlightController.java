@@ -8,11 +8,15 @@ import java.util.List;
 public interface IFlightController {
     BaseFlightDTO createFlight(BaseFlightDTO flight, String airlineNickname, String flightRouteName);
 
-    List<FlightDTO> getAllFlights();
+    List<FlightDTO> getAllFlightsDetails();
+    List<BaseFlightDTO> getAllFlightsSimpleDetails();
 
-    FlightDTO getFlightByName(String name);
+    FlightDTO getFlightDetailsByName(String name);
+    BaseFlightDTO getFlightSimpleDetailsByName(String name);
 
-    List<FlightDTO> getAllFlightsByAirline(String airlineNickname);
+    List<FlightDTO> getAllFlightsDetailsByAirline(String airlineNickname);
+    List<BaseFlightDTO> getAllFlightsSimpleDetailsByAirline(String airlineNickname);
 
-    List<FlightDTO> getAllFlightsByRouteName(String flightRouteName);
+    List<FlightDTO> getAllFlightsDetailsByRouteName(String flightRouteName);
+    List<BaseFlightDTO> getAllFlightsSimpleDetailsByRouteName(String flightRouteName);
 }

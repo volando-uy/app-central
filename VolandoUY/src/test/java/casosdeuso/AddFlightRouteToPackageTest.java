@@ -3,9 +3,11 @@ package casosdeuso;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
@@ -38,8 +40,8 @@ public class AddFlightRouteToPackageTest {
         userController = ControllerFactory.getUserController();
 
         // Crear ciudades necesarias
-        ServiceFactory.getCityService().createCity(new CityDTO("Montevideo", "Uruguay", -34.9011, -56.1645, List.of("Carrasco")));
-        ServiceFactory.getCityService().createCity(new CityDTO("Asunción", "Paraguay", -25.2637, -57.5759, List.of("Silvio Pettirossi")));
+        ServiceFactory.getCityService().createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9011, -56.1645));
+        ServiceFactory.getCityService().createCity(new BaseCityDTO("Asunción", "Paraguay", -25.2637, -57.5759));
 
         // Crear aerolínea
         userController.registerAirline(new AirlineDTO(
@@ -47,30 +49,18 @@ public class AddFlightRouteToPackageTest {
         ));
 
         // Crear ruta de vuelo
-        flightRouteController.createFlightRoute(new FlightRouteDTO(
-                "UY-ASU",
-                "Ruta Montevideo - Asunción",
-                LocalDate.now(),
-                200.0,
-                350.0,
-                50.0,
+        flightRouteController.createFlightRoute(
+                new BaseFlightRouteDTO("UY-ASU", "Ruta Montevideo - Asunción", LocalDate.now(), 200.0, 350.0, 50.0),
                 "Montevideo",
                 "Asunción",
                 "uyair",
-                List.of(),
-                List.of()
-        ));
+                null
+        );
 
         // Crear paquete
-        packageController.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Promo Paraguay",
-                "Paquete con descuento para Paraguay",
-                15,
-                20.0,
-                LocalDate.now(),
-                EnumTipoAsiento.TURISTA,
-                List.of()
-        ));
+        packageController.createFlightRoutePackage(
+                new BaseFlightRoutePackageDTO("Promo Paraguay", "Paquete con descuento para Paraguay", 15, 20.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 0.0)
+        );
     }
 
     @Test

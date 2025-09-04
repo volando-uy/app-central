@@ -4,20 +4,12 @@ import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class SeatDTO {
-    private Long id;
-    private String number;
-    private boolean isAvailable;
-    private double price;
-    private EnumTipoAsiento type;
-
+public class SeatDTO extends BaseSeatDTO {
     private String flightName;
     private Long ticketId;
 }

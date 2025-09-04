@@ -1,5 +1,6 @@
 package controllers.flight;
 
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.services.flight.IFlightService;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,18 +46,18 @@ class FlightControllerTest {
     void getAllFlights_shouldReturnListFromService() {
         // GIVEN
         List<FlightDTO> mockFlights = List.of(
-                new FlightDTO("Vuelo A", LocalDateTime.now(), 90L, 80, 40, null, "air123","A"),
-                new FlightDTO("Vuelo B", LocalDateTime.now(), 60L, 70, 35, null, "air123","A")
+                new FlightDTO("Vuelo A", LocalDateTime.now(), 90L, 80, 40, LocalDateTime.now()),
+                new FlightDTO("Vuelo B", LocalDateTime.now(), 60L, 70, 35, LocalDateTime.now())
         );
-        when(flightService.getAllFlights()).thenReturn(mockFlights);
+        when(flightService.getAllFlights(false)).thenReturn(mockFlights);
 
         // WHEN
-        List<FlightDTO> result = flightController.getAllFlights();
+        List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetails();
 
         // THEN
         assertEquals(2, result.size());
         assertEquals("Vuelo A", result.get(0).getName());
-        verify(flightService).getAllFlights();
+        verify(flightService).getAllFlights(false);
     }
 
     @Test

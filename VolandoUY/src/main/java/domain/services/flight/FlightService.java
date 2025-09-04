@@ -11,6 +11,8 @@ import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -22,8 +24,11 @@ public class FlightService implements IFlightService {
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
-    private final IUserService userService = ServiceFactory.getUserService();
-    private final IFlightRouteService flightRouteService = ServiceFactory.getFlightRouteService();
+    @Setter
+    private IUserService userService;
+
+    @Setter
+    private IFlightRouteService flightRouteService;
 
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
@@ -66,48 +71,48 @@ public class FlightService implements IFlightService {
 
 
     @Override
-    public List<FlightDTO> getAllFlights() {
-        return flightRepository.findAll().stream().map(customModelMapper::mapFullFlight).collect(Collectors.toList());
+    public List<FlightDTO> getAllFlights(boolean full) {
+        return flightRepository.findAll().stream()
+                .map(fl -> full ? customModelMapper.mapFullFlight(fl) : customModelMapper.map(fl, FlightDTO.class))
+                .toList();
     }
 
     @Override
-    public FlightDTO getFlightDetailsByName(String name) {
-        // Comrpobamos que el vuelo existe
+    public FlightDTO getFlightDetailsByName(String name, boolean full) {
+        // Comprobamos que el vuelo existe
         // Tira throw si no existe
-        Flight flight = this.getFlightByName(name);
+        Flight flight = this.getFlightByName(name, full);
 
-        return customModelMapper.mapFullFlight(flight);
+        return full ? customModelMapper.mapFullFlight(flight) : customModelMapper.map(flight, FlightDTO.class);
     }
 
     @Override
-    public Flight getFlightByName(String flightName) {
-        // Comrpobamos que el vuelo existe
-        Flight flight = flightRepository.getFlightByName(flightName);
+    public Flight getFlightByName(String flightName, boolean full) {
+        // Comprobamos que el vuelo existe
+        Flight flight = full ? flightRepository.getFullFlightByName(flightName) : flightRepository.getFlightByName(flightName);
         if (flight == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_NOT_FOUND, flightName));
         }
-
         return flight;
     }
 
     @Override
-    public List<FlightDTO> getFlightsByRouteName(String routeName) {
-        return flightRepository.getFlightsByRouteName(routeName).stream().map(customModelMapper::mapFullFlight).toList();
+    public List<FlightDTO> getAllFlightsByRouteName(String flightRouteName, boolean full) {
+        return flightRepository.getFlightsByRouteName(flightRouteName).stream()
+                .map(fl -> full ? customModelMapper.mapFullFlight(fl) : customModelMapper.map(fl, FlightDTO.class))
+                .toList();
     }
 
     @Override
-    public List<FlightDTO> getAllFlightsByRouteName(String flightRouteName) {
-        return flightRepository.getFlightsByRouteName(flightRouteName).stream().map(customModelMapper::mapFullFlight).toList();
-    }
-
-    @Override
-    public List<FlightDTO> getAllFlightsByAirline(String airlineNickname) {
+    public List<FlightDTO> getAllFlightsByAirlineNickname(String airlineNickname, boolean full) {
         // Comrpobamos que la aerolínea existe
         // Tira throw si no existe
-        Airline airline = userService.getAirlineByNickname(airlineNickname, false);
+        userService.getAirlineByNickname(airlineNickname, false);
 
         // Retornamos el DTO de todos los vuelos de la aerolinea
-        return flightRepository.getAllByAirlineNickname(airlineNickname).stream().map(customModelMapper::mapFullFlight).toList();
+        return flightRepository.getAllByAirlineNickname(airlineNickname).stream()
+                .map(fl -> full ? customModelMapper.mapFullFlight(fl) : customModelMapper.map(fl, FlightDTO.class))
+                .toList();
     }
 
     private boolean _flightExists(Flight flight) {

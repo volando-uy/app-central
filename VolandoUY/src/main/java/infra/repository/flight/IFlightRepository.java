@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface IFlightRepository {
     Flight getFlightByName(String flightName);
+    Flight getFullFlightByName(String flightName);
 
     List<Flight> getAllByAirlineNickname(String airlineNickname);
 

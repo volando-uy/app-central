@@ -35,7 +35,7 @@ public class GetFlightsPanel extends JPanel {
 
     private void loadFlightsTable() {
         // 1) Traer datos
-        List<FlightDTO> flights = flightController.getAllFlights(); // usa tu método real
+        List<FlightDTO> flights = flightController.getAllFlightsDetails();
 
         // 2) Modelo y columnas
         DefaultTableModel model = new DefaultTableModel();
