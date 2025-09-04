@@ -23,8 +23,6 @@ import static org.mockito.Mockito.verify;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // IMPORTANTE para que el @BeforeAll no sea estático, y se haga 1 unica instasncia de la clase
 public class RegisterUserTest {
 
-    private ModelMapper modelMapper = ControllerFactory.getModelMapper();
-    private UserMapper userMapper = ControllerFactory.getUserMapper();
 
     private IUserService userService;
 
@@ -39,7 +37,7 @@ public class RegisterUserTest {
         // otras tablas si aplican
         em.getTransaction().commit();
         em.close();
-        userService = new UserService(modelMapper, userMapper);
+        userService = new UserService();
         userController = new UserController(userService);
 
     }
@@ -54,8 +52,8 @@ public class RegisterUserTest {
         customerDTO.setSurname("Ramirez");
         customerDTO.setMail("gyabisito@example.com");
         customerDTO.setBirthDate(LocalDate.of(2000, 1, 1));
-        customerDTO.setIdType(EnumTipoDocumento.CI);
-        customerDTO.setId("01234567");
+        customerDTO.setDocType(EnumTipoDocumento.CI);
+        customerDTO.setNumDoc("01234567");
         customerDTO.setCitizenship("Uruguay");
 
         // When

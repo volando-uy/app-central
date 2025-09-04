@@ -1,7 +1,9 @@
 package controllers.flightRoute;
 
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import lombok.AllArgsConstructor;
 
@@ -18,18 +20,43 @@ public class FlightRouteController implements IFlightRouteController{
     }
 
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO){
-        return flightRouteService.createFlightRoute(flightRouteDTO);
+    public BaseFlightRouteDTO createFlightRoute(
+            BaseFlightRouteDTO baseFlightRouteDTO,
+            String originCityName,
+            String destinationCityName,
+            String airlineNickname,
+            List<String> categoriesNames
+    ){
+        return flightRouteService.createFlightRoute(
+                baseFlightRouteDTO,
+                originCityName,
+                destinationCityName,
+                airlineNickname,
+                categoriesNames
+        );
     }
 
     @Override
-    public FlightRouteDTO getFlightRouteByName(String routeName) {
-        return flightRouteService.getFlightRouteDetailsByName(routeName);
+    public FlightRouteDTO getFlightRouteDetailsByName(String routeName) {
+        return flightRouteService.getFlightRouteDetailsByName(routeName, true);
     }
 
     @Override
-    public List<FlightRouteDTO> getAllFlightRoutesByAirlineNickname(String airlineNickname) {
-        return flightRouteService.getFlightRoutesDetailsByAirlineNickname(airlineNickname);
+    public BaseFlightRouteDTO getFlightRouteSimpleDetailsByName(String routeName) {
+        return flightRouteService.getFlightRouteDetailsByName(routeName, false);
+    }
 
+    @Override
+    public List<FlightRouteDTO> getAllFlightRoutesDetailsByAirlineNickname(String airlineNickname) {
+        return flightRouteService.getFlightRoutesDetailsByAirlineNickname(airlineNickname, true);
+
+    }
+
+    @Override
+    public List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByAirlineNickname(String airlineNickname) {
+        return flightRouteService.getFlightRoutesDetailsByAirlineNickname(airlineNickname, false)
+                .stream()
+                .map(route -> (BaseFlightRouteDTO) route)
+                .toList();
     }
 }

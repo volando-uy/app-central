@@ -1,5 +1,6 @@
 package controllers.city;
 
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.services.city.ICityService;
 import lombok.AllArgsConstructor;
@@ -11,14 +12,11 @@ public class CityController implements ICityController {
     private ICityService cityService;
 
     @Override
-    public CityDTO createCity(CityDTO city) {
-        return this.cityService.createCity(city);
+    public BaseCityDTO createCity(BaseCityDTO baseCity) {
+        return this.cityService.createCity(baseCity);
     }
 
-    @Override
-    public CityDTO getCityByName(String cityName) {
-        return this.cityService.getCityDetailsByName(cityName);
-    }
+
 
     @Override
     public boolean cityExists(String cityName) {
@@ -31,8 +29,13 @@ public class CityController implements ICityController {
     }
 
     @Override
-    public CityDTO getCityDetailsByName(String name) {
-        return this.cityService.getCityDetailsByName(name);
+    public BaseCityDTO getCitySimpleDetailsByName(String cityName) {
+        return this.cityService.getCityDetailsByName(cityName, false);
+    }
+
+    @Override
+    public CityDTO getCityDetailsByName(String cityName) {
+        return this.cityService.getCityDetailsByName(cityName, true);
     }
 
     @Override

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -41,8 +41,9 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "packageLabel"
-					"text": "Selecciona el Paquete:"
+					"text": "\ud83d\udd04 Selecciona el Paquete:"
 					"horizontalAlignment": 11
+					"cursor": &Cursor0 new java.awt.Cursor( 12 )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "listPackageComboBox"
@@ -74,8 +75,9 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "clientLabel"
-					"text": "Selecciona el cliente:"
+					"text": "\ud83d\udd04 Selecciona el cliente:"
 					"horizontalAlignment": 11
+					"cursor": #Cursor0
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "listClientComboBox"

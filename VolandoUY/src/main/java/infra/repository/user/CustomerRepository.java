@@ -7,6 +7,8 @@ import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
+import java.util.List;
+
 public class CustomerRepository extends AbstractUserRepository<Customer> {
     public CustomerRepository() {
         super(Customer.class);
@@ -41,6 +43,33 @@ public class CustomerRepository extends AbstractUserRepository<Customer> {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+        }
+    }
+
+    public List<Customer> findFullAll() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT c FROM Customer c LEFT JOIN FETCH c.boughtPackages LEFT JOIN FETCH c.bookedFlights", Customer.class)
+                    .getResultList();
+        }
+    }
+
+    public Customer findFullByNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Customer customer = em.createQuery(
+                            "SELECT c FROM Customer c WHERE LOWER(c.nickname) = :nickname", Customer.class)
+                    .setParameter("nickname", nickname.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Load collections if customer is found
+            if (customer != null) {
+                customer.getBoughtPackages().size();
+                customer.getBookedFlights().size();
+            }
+
+            return customer;
         }
     }
 }

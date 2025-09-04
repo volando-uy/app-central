@@ -1,5 +1,6 @@
 package controllers.city;
 
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.services.city.ICityService;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,16 +44,17 @@ class CityControllerTest {
     @DisplayName("GIVEN existing city name WHEN getCityByName is called THEN it should return correct CityDTO")
     void getCityByName_shouldReturnCorrectDTO() {
         // GIVEN
-        CityDTO cityDTO = new CityDTO("Buenos Aires", "Argentina", -34.6, -58.4, null);
-        when(cityService.getCityDetailsByName("Buenos Aires")).thenReturn(cityDTO);
+        CityDTO cityDTO = new CityDTO("Buenos Aires", "Argentina", -34.6, -58.4);
+        when(cityService.getCityDetailsByName("Buenos Aires", false)).thenReturn(cityDTO);
 
         // WHEN
-        CityDTO result = cityController.getCityByName("Buenos Aires");
+        BaseCityDTO result = cityController.getCitySimpleDetailsByName("Buenos Aires");
+        // Capaz hay que mapearlo a CityDTO
 
         // THEN
         assertNotNull(result);
         assertEquals("Buenos Aires", result.getName());
-        verify(cityService).getCityDetailsByName("Buenos Aires");
+        verify(cityService).getCityDetailsByName("Buenos Aires", false);
     }
 
     @Test

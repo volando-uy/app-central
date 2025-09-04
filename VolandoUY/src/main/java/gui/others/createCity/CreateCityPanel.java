@@ -3,6 +3,7 @@ package gui.others.createCity;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import domain.dtos.category.CategoryDTO;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import lombok.Setter;
 
@@ -34,9 +35,11 @@ public class CreateCityPanel extends JPanel {
                 double latitude = Double.parseDouble(latitudeTextField.getText());
                 double longitude = Double.parseDouble(longitudeTextField.getText());
 
-                CityDTO cityDTO = new CityDTO(name, country, latitude, longitude,new ArrayList<>());
+                BaseCityDTO baseCityDTO = new BaseCityDTO(
+                        name, country, latitude, longitude
+                );
 
-                CityDTO createdCityDTO = cityController.createCity(cityDTO);
+                BaseCityDTO createdCityDTO = cityController.createCity(baseCityDTO);
 
                 JOptionPane.showMessageDialog(this,
                 "Nombre: " + createdCityDTO.getName() +

@@ -46,23 +46,22 @@ public class FlightRoute {
     private Double priceExtraUnitBaggage;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private City originCity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private City destinationCity;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
     @OneToMany(
-            mappedBy = "flightRoute",
-            fetch = FetchType.EAGER
+            mappedBy = "flightRoute"
     )
     private List<Flight> flights = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Airline airline;
 
 

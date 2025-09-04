@@ -1,23 +1,21 @@
 package domain.dtos.flightRoutePackage;
 
 import domain.models.enums.EnumTipoAsiento;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class FlightRoutePackageDTO {
-    private String name;
-    private String description;
-    private int validityPeriodDays;
-    private double discount;
-    private LocalDate creationDate;
-    private EnumTipoAsiento seatType;
-
+public class FlightRoutePackageDTO extends BaseFlightRoutePackageDTO {
     private List<String> flightRouteNames;
+
+    private List<Long> buyPackages;
+
+    public FlightRoutePackageDTO(String name, String description, int validityPeriodDays, double discount, LocalDate creationDate, EnumTipoAsiento seatType, Double totalPrice) {
+        super(name, description, validityPeriodDays, discount, creationDate, seatType, totalPrice);
+        this.flightRouteNames = null;
+    }
 }

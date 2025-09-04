@@ -31,7 +31,6 @@ public class ServiceFactory {
     public static IUserService getUserService() {
         if (userService == null) {
             userService = new UserService();
-            userService.setFlightRoutePackageService(getFlightRoutePackageService());
         }
         return userService;
     }

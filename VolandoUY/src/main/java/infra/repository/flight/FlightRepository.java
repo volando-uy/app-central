@@ -2,6 +2,7 @@ package infra.repository.flight;
 
 import app.DBConnection;
 import domain.models.flight.Flight;
+import domain.models.user.Airline;
 import jakarta.persistence.EntityManager;
 
 import java.util.Arrays;
@@ -48,6 +49,23 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.flightRoute.name)=:name", Flight.class)
                     .setParameter("name", routeName.toLowerCase())
                     .getResultList();
+        }
+    }
+
+    public void saveFlightAndAddToAirline(Flight flight, Airline airline) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Airline managedAirline = em.merge(airline); // Attach airline to session
+            flight.setAirline(managedAirline); // Set the relationship
+            em.persist(flight); // Persist the flight
+            managedAirline.getFlights().add(flight); // Update the airline's collection
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
         }
     }
 }

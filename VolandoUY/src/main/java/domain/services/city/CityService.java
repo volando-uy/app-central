@@ -1,12 +1,11 @@
 package domain.services.city;
 
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 
 import domain.models.city.City;
 import factory.ControllerFactory;
 import infra.repository.city.CityRepository;
-import infra.repository.city.ICityRepository;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -26,23 +25,24 @@ public class CityService implements ICityService {
     }
 
     @Override
-    public CityDTO createCity(CityDTO cityDTO) {
+    public BaseCityDTO createCity(BaseCityDTO baseCityDTO) {
         // Cheackeamos que la ciudad no exista
-        City city = customModelMapper.map(cityDTO, City.class);
+        City city = customModelMapper.map(baseCityDTO, City.class);
         if (cityExists(city.getName())) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_ALREADY_EXISTS, city.getName()));
         }
-        // Inicializamos la lista de aeropuertos
-        city.setAirports(new ArrayList<>());
 
         // Validamos la ciudad
         ValidatorUtil.validate(city);
+
+        // Inicializamos la lista de aeropuertos
+        city.setAirports(new ArrayList<>());
 
         // Guardamos la nueva ciudad
         cityRepository.save(city);
 
         // Devolvemos el DTO mapeado
-        return customModelMapper.mapCity(city);
+        return customModelMapper.map(city, BaseCityDTO.class);
     }
 
     @Override
@@ -51,15 +51,16 @@ public class CityService implements ICityService {
     }
 
     @Override
-    public CityDTO getCityDetailsByName(String cityName) {
+    public CityDTO getCityDetailsByName(String cityName, boolean full) {
         // Cheackemos que la ciudad exista
-        City city = cityRepository.getCityByName(cityName);
+        City city = full ? cityRepository.getFullCityByName(cityName) : cityRepository.getCityByName(cityName);
+
         if (city == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName));
         }
 
         // Devolvemos el DTO mapeado
-        return customModelMapper.mapCity(city);
+        return full ? customModelMapper.mapFullCity(city) : customModelMapper.map(city, CityDTO.class);
     }
 
 

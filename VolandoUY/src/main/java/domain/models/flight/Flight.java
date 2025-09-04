@@ -56,14 +56,14 @@ public class Flight {
 
 
     //Muchos Aereopuetos tienen 1 vuelo
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Airport originAirport;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Airport destinationAirport;
 
     //1 vuelo tiene muchos asientos
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     private List<Seat> seats;
 
     private LocalDateTime createdAt = LocalDateTime.now();

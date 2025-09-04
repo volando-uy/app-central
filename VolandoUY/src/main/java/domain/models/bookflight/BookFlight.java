@@ -31,16 +31,16 @@ public class BookFlight {
     private LocalDateTime created_at;
 
     // Si la reserva viene de un paquete o no
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private BuyPackage buyPackage = null;
 
     // Cliente que lo reservó
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Customer customer;
 
     // Tiene muchos tickets
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Ticket> ticket =null;
+    @OneToMany()
+    private List<Ticket> tickets =null;
 
 
 }

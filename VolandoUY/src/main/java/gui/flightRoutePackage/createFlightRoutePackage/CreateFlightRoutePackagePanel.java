@@ -5,6 +5,7 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
@@ -48,13 +49,14 @@ public class CreateFlightRoutePackagePanel extends JPanel {
                 LocalDate createdAt = LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 Float discount = Float.parseFloat(discountCostTextField.getText());
                 EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
+                Double totalPrice = 0.0; // Will be calculated in service
 
-                FlightRoutePackageDTO flightRoutePackageDTO = new FlightRoutePackageDTO(
-                        name, description, expirationInDays, discount, createdAt, seatType, new ArrayList<>()
+                BaseFlightRoutePackageDTO flightRoutePackageDTO = new BaseFlightRoutePackageDTO(
+                        name, description, expirationInDays, discount, createdAt, seatType, totalPrice
                 );
 
                 // Throws exception if something is invalid
-                FlightRoutePackageDTO createdFlightRoutePackageDTO = flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
+                BaseFlightRoutePackageDTO createdFlightRoutePackageDTO = flightRoutePackageController.createFlightRoutePackage(flightRoutePackageDTO);
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -138,12 +140,12 @@ public class CreateFlightRoutePackagePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,
+        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .
+        getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};

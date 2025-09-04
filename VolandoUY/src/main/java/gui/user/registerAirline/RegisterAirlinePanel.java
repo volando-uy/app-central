@@ -2,6 +2,7 @@ package gui.user.registerAirline;
 
 import controllers.user.IUserController;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
 
 import java.awt.*;
@@ -31,9 +32,9 @@ public class RegisterAirlinePanel extends JPanel {
                 String email = mailTextField.getText();
                 String web = webTextField.getText();
 
-                AirlineDTO airlineDTO = new AirlineDTO(nickname, name, email, description, web);
+                BaseAirlineDTO baseAirlineDTO = new BaseAirlineDTO(nickname, name, email, description, web);
 
-                AirlineDTO createdAirlineDTO = userController.registerAirline(airlineDTO);
+                BaseAirlineDTO createdAirlineDTO = userController.registerAirline(baseAirlineDTO);
 
                 JOptionPane.showMessageDialog(this,
                         "Nickname: " + createdAirlineDTO.getNickname() +

@@ -41,8 +41,9 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "packageLabel"
-					"text": "Selecciona el Paquete:"
+					"text": "\ud83d\udd04 Selecciona el Paquete:"
 					"horizontalAlignment": 11
+					"cursor": &Cursor0 new java.awt.Cursor( 12 )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "packageComboBox"
@@ -74,8 +75,9 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "airlineLabel"
-					"text": "Selecciona la Aerolinea:"
+					"text": "\ud83d\udd04 Selecciona la Aerolinea:"
 					"horizontalAlignment": 11
+					"cursor": #Cursor0
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "airlineComboBox"
@@ -257,4 +259,3 @@ new FormModel {
 		} )
 	}
 }
-

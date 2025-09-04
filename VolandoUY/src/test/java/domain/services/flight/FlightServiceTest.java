@@ -32,7 +32,7 @@ class FlightServiceTest {
         TestUtils.cleanDB();
 
         ModelMapper modelMapper = new ModelMapper();
-        userService = new UserService(modelMapper, null); // Ajustalo si usás un mapper real
+        userService = new UserService(); // Ajustalo si usás un mapper real
 
         flightService = ServiceFactory.getFlightService();
         flightRouteService = ServiceFactory.getFlightRouteService();
@@ -76,7 +76,7 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN valid FlightDTO WHEN createFlight is called THEN flight is added")
     void createFlight_shouldAddFlightToDb() {
-        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123", null);
+        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123", "AAA");
         flightService.createFlight(dto);
 
         List<FlightDTO> allFlights = flightService.getAllFlights();
@@ -87,7 +87,7 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN duplicate flight name WHEN createFlight is called THEN throw exception")
     void createFlight_shouldNotAllowDuplicates() {
-        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123", null);
+        FlightDTO dto = new FlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null, "air123", "AAA");
         flightService.createFlight(dto);
 
         UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
@@ -100,8 +100,8 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN multiple flights WHEN getAllFlights is called THEN return all")
     void getAllFlights_shouldReturnAllFlights() {
-        flightService.createFlight(new FlightDTO("Vuelo A", LocalDateTime.now().plusDays(1), 90L, 100, 50, null, "air123", null));
-        flightService.createFlight(new FlightDTO("Vuelo B", LocalDateTime.now().plusDays(2), 60L, 80, 40, null, "air123", null));
+        flightService.createFlight(new FlightDTO("Vuelo A", LocalDateTime.now().plusDays(1), 90L, 100, 50, null, "air123", "AAA"));
+        flightService.createFlight(new FlightDTO("Vuelo B", LocalDateTime.now().plusDays(2), 60L, 80, 40, null, "air123", "AAA"));
 
         List<FlightDTO> flights = flightService.getAllFlights();
 
@@ -113,7 +113,7 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN existing flight WHEN getFlightDetailsByName is called THEN return flight DTO")
     void getFlightDetailsByName_shouldReturnCorrectFlight() {
-        flightService.createFlight(new FlightDTO("Vuelo Detalle", LocalDateTime.now().plusDays(1), 60L, 100, 50, null, "air123", null));
+        flightService.createFlight(new FlightDTO("Vuelo Detalle", LocalDateTime.now().plusDays(1), 60L, 100, 50, null, "air123", "AAA"));
 
         FlightDTO result = flightService.getFlightDetailsByName("Vuelo Detalle");
 
@@ -133,7 +133,7 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN existing flight WHEN getFlightByName is called THEN return flight")
     void getFlightByName_shouldReturnFlight() {
-        flightService.createFlight(new FlightDTO("Vuelo Buscado", LocalDateTime.now().plusDays(1), 90L, 80, 40, null, "air123", null));
+        flightService.createFlight(new FlightDTO("Vuelo Buscado", LocalDateTime.now().plusDays(1), 90L, 80, 40, null, "air123", "AAA"));
 
         Flight flight = flightService.getFlightByName("Vuelo Buscado");
 
@@ -153,7 +153,7 @@ class FlightServiceTest {
     @Test
     @DisplayName("GIVEN flights for an airline WHEN getAllFlightsByAirline is called THEN return flights")
     void getAllFlightsByAirline_shouldReturnFlightsForAirline() {
-        flightService.createFlight(new FlightDTO("Vuelo X", LocalDateTime.now().plusDays(1), 60L, 100, 50, null, "air123", null));
+        flightService.createFlight(new FlightDTO("Vuelo X", LocalDateTime.now().plusDays(1), 60L, 100, 50, null, "air123", "AAA"));
 
         List<FlightDTO> result = flightService.getAllFlightsByAirline("air123");
 

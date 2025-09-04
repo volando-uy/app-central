@@ -73,10 +73,10 @@ class FlightRouteControllerTest {
                 List.of("Económica"),
                 List.of("VueloA")
         );
-        when(flightRouteService.getFlightRouteDetailsByName("Ruta 1")).thenReturn(dto);
+        when(flightRouteService.getFlightRouteDetailsByName("Ruta 1", false)).thenReturn(dto);
 
         // WHEN
-        FlightRouteDTO result = flightRouteController.getFlightRouteByName("Ruta 1");
+        FlightRouteDTO result = flightRouteController.getFlightRouteDetailsByName("Ruta 1");
 
         // THEN
         assertNotNull(result);
@@ -94,7 +94,7 @@ class FlightRouteControllerTest {
                 new FlightRouteDTO("Ruta B", "Desc B", LocalDate.now(), 110.0, 160.0, 25.0, "MVD", "RIO", "air123", List.of(), List.of())
         );
 
-        when(flightRouteService.getAllFlightRoutesDetailsByAirlineNickname("air123")).thenReturn(mockRoutes);
+        when(flightRouteService.getFlightRoutesDetailsByAirlineNickname("air123")).thenReturn(mockRoutes);
 
         // WHEN
         List<FlightRouteDTO> result = flightRouteController.getAllFlightRoutesByAirlineNickname("air123");
@@ -103,6 +103,6 @@ class FlightRouteControllerTest {
         assertEquals(2, result.size());
         assertEquals("Ruta A", result.get(0).getName());
         assertEquals("Ruta B", result.get(1).getName());
-        verify(flightRouteService).getAllFlightRoutesDetailsByAirlineNickname("air123");
+        verify(flightRouteService).getFlightRoutesDetailsByAirlineNickname("air123");
     }
 }

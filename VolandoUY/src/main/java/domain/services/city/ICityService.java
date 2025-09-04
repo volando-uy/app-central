@@ -1,6 +1,7 @@
 package domain.services.city;
 
 
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.models.city.City;
 
@@ -15,9 +16,9 @@ import java.util.List;
  *
  */
 public interface ICityService {
-    CityDTO createCity(CityDTO city);
+    BaseCityDTO createCity(BaseCityDTO baseCity);
     City getCityByName(String cityName);
-    CityDTO getCityDetailsByName(String cityName);
+    CityDTO getCityDetailsByName(String cityName, boolean full);
     boolean cityExists(String cityName);
     boolean isAirportInCity(String cityName, String airportName);
     List<String> getAllCities();

@@ -20,6 +20,6 @@ public final class ExtraLuggage extends Luggage {
     private EnumCategoria category;
 
     //Estan asociados a 1 ticket
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Ticket ticket;
 }

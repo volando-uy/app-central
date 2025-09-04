@@ -38,7 +38,7 @@ class UpdateUserTest {
         // Inicializar dependencias solo una vez
         ModelMapper modelMapper = new ModelMapper();
         UserMapper userMapper = new UserMapper(modelMapper);
-        IUserService userService = new UserService(modelMapper, userMapper);
+        IUserService userService = new UserService();
         userController = new UserController(userService);
 
         // Crear datos base una sola vez
@@ -66,10 +66,10 @@ class UpdateUserTest {
         modificado.setMail(original.getMail()); // inmutable
         modificado.setName("Carlos");
         modificado.setSurname("Martinez");
-        modificado.setId("87654321");
+        modificado.setNumDoc("87654321");
         modificado.setCitizenship("Argentina");
         modificado.setBirthDate(LocalDate.of(1995, 5, 15));
-        modificado.setIdType(EnumTipoDocumento.RUT);
+        modificado.setDocType(EnumTipoDocumento.RUT);
 
         userController.updateUser(nickname, modificado);
 
@@ -77,10 +77,10 @@ class UpdateUserTest {
         CustomerDTO actualizado = (CustomerDTO) userController.getUserByNickname(nickname);
         assertEquals("Carlos", actualizado.getName());
         assertEquals("Martinez", actualizado.getSurname());
-        assertEquals("87654321", actualizado.getId());
+        assertEquals("87654321", actualizado.getNumDoc());
         assertEquals("Argentina", actualizado.getCitizenship());
         assertEquals(LocalDate.of(1995, 5, 15), actualizado.getBirthDate());
-        assertEquals(EnumTipoDocumento.RUT, actualizado.getIdType());
+        assertEquals(EnumTipoDocumento.RUT, actualizado.getDocType());
 
         // Campos inmutables
         assertEquals("gyabisito", actualizado.getNickname());

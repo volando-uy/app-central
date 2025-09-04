@@ -4,7 +4,7 @@ import domain.models.user.User;
 
 public interface IUserRepository {
     User getUserByEmail(String email);
-    User getUserByNickname(String nickname);
+    User getUserByNickname(String nickname, boolean full);
     void save(User user);
     boolean existsByEmail(String email);
     boolean existsByNickname(String nickname);

@@ -2,20 +2,18 @@ package domain.dtos.city;
 
 import domain.dtos.airport.AirportDTO;
 import domain.models.airport.Airport;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class CityDTO {
-    private String name;
-    private String country;
-    private double latitude;
-    private double longitude;
-
+public class CityDTO extends BaseCityDTO {
     private List<String> airportNames;
+
+    public CityDTO(String name, String country, double latitude, double longitude) {
+        super(name, country, latitude, longitude);
+        this.airportNames = null;
+    }
 }

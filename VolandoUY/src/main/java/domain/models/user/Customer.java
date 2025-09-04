@@ -48,12 +48,12 @@ public class Customer extends User {
     private String numDoc;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     private List<BuyPackage> boughtPackages;
 
 
     //1 cliente reserva muchos vuelos
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     private List<BookFlight> bookedFlights;
 
 

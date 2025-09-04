@@ -42,17 +42,6 @@ class ControllerFactoryTest {
     }
 
     @Test
-    void getModelMapper_shouldReturnSingletonInstance() {
-        // GIVEN
-        ModelMapper mapper1 = ControllerFactory.getModelMapper();
-        ModelMapper mapper2 = ControllerFactory.getModelMapper();
-
-        // THEN
-        assertNotNull(mapper1);
-        assertSame(mapper1, mapper2);
-    }
-
-    @Test
     void getFlightRouteController_shouldReturnSingletonInstance() {
         // GIVEN
         IFlightRouteController controller1 = ControllerFactory.getFlightRouteController();

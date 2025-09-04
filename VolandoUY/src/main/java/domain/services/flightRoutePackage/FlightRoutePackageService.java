@@ -1,14 +1,17 @@
 package domain.services.flightRoutePackage;
 
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.user.Airline;
 import domain.services.flightRoute.IFlightRouteService;
+import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.ServiceFactory;
 import infra.repository.flightroutepackage.FlightRoutePackageRepository;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -21,6 +24,8 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     private FlightRoutePackageRepository flightRoutePackageRepository;
 
+    private final IUserService userService = ServiceFactory.getUserService();
+
     @Setter
     private IFlightRouteService flightRouteService;
 
@@ -31,40 +36,11 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     }
 
     @Override
-    public FlightRoutePackageDTO createFlightRoutePackage(FlightRoutePackageDTO flightRoutePackageDTO) {
-        FlightRoutePackage pack = customModelMapper.map(flightRoutePackageDTO, FlightRoutePackage.class);
+    public BaseFlightRoutePackageDTO createFlightRoutePackage(BaseFlightRoutePackageDTO baseFlightRoutePackageDTO) {
+        FlightRoutePackage pack = customModelMapper.map(baseFlightRoutePackageDTO, FlightRoutePackage.class);
         if (flightRoutePackageExists(pack.getName())) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, pack.getName()));
         }
-        /**
-         * Si flightRouteNames viene con una lista vacia, inicializar flightRoutes como una lista vacía. Sino mapear
-         * flightRouteNames a flightRoutes.
-         */
-        //Si viene con cosas
-        List<FlightRoute> flightRoutes = new ArrayList<>();
-        if (flightRoutePackageDTO.getFlightRouteNames() != null && !flightRoutePackageDTO.getFlightRouteNames().isEmpty()) {
-            System.out.println("Flight route names: " + flightRoutePackageDTO.getFlightRouteNames());
-            for (String routeName : flightRoutePackageDTO.getFlightRouteNames()) {
-                FlightRoute route = flightRouteService.getFlightRouteByName(routeName);
-                if (route == null) {
-                    throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
-                }
-                flightRoutes.add(route);
-            }
-        }
-        // Agregamos las rutas
-        pack.setFlightRoutes(flightRoutes);
-
-        // Calcular el totalPrice
-        Double totalPrice;
-        if (pack.getSeatType().equals(EnumTipoAsiento.TURISTA)) {
-            totalPrice = flightRoutes.stream().mapToDouble(FlightRoute::getPriceTouristClass).sum();
-        } else if (pack.getSeatType().equals(EnumTipoAsiento.EJECUTIVO)) {
-            totalPrice = flightRoutes.stream().mapToDouble(FlightRoute::getPriceBusinessClass).sum();
-        } else {
-            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_INVALID_SEAT_TYPE, pack.getSeatType()));
-        }
-        pack.setTotalPrice(totalPrice);
 
         // Validamos el paquete
         ValidatorUtil.validate(pack);
@@ -72,23 +48,24 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         // Guardamos el paquete
         flightRoutePackageRepository.save(pack);
 
-        return customModelMapper.mapFlightRoutePackage(pack);
+        return customModelMapper.map(pack, BaseFlightRoutePackageDTO.class);
     }
 
     @Override
-    public FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String flightRoutePackageName) {
-        // Comrpobamos que el paquete existe
-        FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
+    public FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String flightRoutePackageName, boolean full) {
+        // Comprobamos que el paquete existe
+        FlightRoutePackage pack = full ? flightRoutePackageRepository.getFullFlightRoutePackageByName(flightRoutePackageName) : flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
         if (pack == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
         }
 
-        return customModelMapper.mapFlightRoutePackage(pack);
+        return full ? customModelMapper.mapFullFlightRoutePackage(pack)
+                : customModelMapper.map(flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName), FlightRoutePackageDTO.class);
     }
 
     @Override
     public FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName) {
-        // Comrpobamos que el paquete existe
+        // Comprobamos que el paquete existe
         FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName);
         if (pack == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, flightRoutePackageName));
@@ -121,7 +98,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         }
 
         // Tiramos una excepcion si la ruta de vuelo no existe
-        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
+        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName, false);
         if (flightRoute == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, flightRouteName));
         }
@@ -152,14 +129,14 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     }
 
     @Override
-    public List<FlightRoutePackageDTO> getPackagesWithFlightRoutes() {
+    public List<FlightRoutePackageDTO> getAllFlightRoutePackagesWithFlightRoutes(boolean full) {
         // Buscamos todos los paquetes en el repository
         // Filtramos entre los paquetes que tienen rutas de vuelo
         // Mapeamos a DTO y retornamos la lista
         return flightRoutePackageRepository.findAll()
                 .stream()
                 .filter(pack -> pack.getFlightRoutes() != null && !pack.getFlightRoutes().isEmpty())
-                .map(customModelMapper::mapFlightRoutePackage)
+                .map(pack -> full ? customModelMapper.mapFullFlightRoutePackage(pack) : customModelMapper.map(pack, FlightRoutePackageDTO.class))
                 .toList();
     }
 
@@ -171,5 +148,13 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     @Override
     public List<FlightRoutePackage> getAllFlightRoutePackages() {
         return flightRoutePackageRepository.findAll();
+    }
+
+    @Override
+    public List<FlightRoutePackageDTO> getAllFlightRoutePackagesDetails(boolean full) {
+        return flightRoutePackageRepository.findAll()
+                .stream()
+                .map(pack -> full ? customModelMapper.mapFullFlightRoutePackage(pack) : customModelMapper.map(pack, FlightRoutePackageDTO.class))
+                .toList();
     }
 }

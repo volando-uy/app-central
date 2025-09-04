@@ -2,6 +2,7 @@ package infra.repository.airport;
 
 import app.DBConnection;
 import domain.models.airport.Airport;
+import domain.models.city.City;
 import jakarta.persistence.EntityManager;
 
 public class AirportRepository extends AirportAbstractRepository implements IAirportRepository {
@@ -20,6 +21,22 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
         }
     }
 
+    public Airport getFullAirportByCode(String code) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Airport airport = em.createQuery("SELECT a FROM Airport a WHERE LOWER(a.code) = :code", Airport.class)
+                    .setParameter("code", code.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize city relationship
+            if (airport != null && airport.getCity() != null) {
+                airport.getCity().getName(); // Access a property to initialize the relationship
+            }
+            return airport;
+        }
+    }
+
     @Override
     public boolean existsAirportByCode(String code) {
         try(EntityManager em= DBConnection.getEntityManager()){
@@ -29,4 +46,23 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
             return count > 0;
         }
     }
+
+    public void saveAirportAndAddToCity(Airport airport, City city) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            city = em.merge(city);
+            airport.setCity(city);
+            em.persist(airport);
+            city.getAirports().add(airport);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+
 }

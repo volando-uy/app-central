@@ -1,6 +1,7 @@
 package domain.services.airport;
 
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
@@ -8,14 +9,9 @@ import factory.ControllerFactory;
 import factory.ServiceFactory;
 import infra.repository.airport.AirportRepository;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
-
-import javax.naming.ldap.Control;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AirportService implements IAirportService {
@@ -30,7 +26,8 @@ public class AirportService implements IAirportService {
         this.airportRepository = new AirportRepository();
     }
 
-    public AirportDTO createAirport(AirportDTO dto, String cityName) {
+    @Override
+    public BaseAirportDTO createAirport(BaseAirportDTO dto, String cityName) {
         // Buscamos la ciudad a la que se agrega el aeropuerto
         // Tira throw si no encuentra
         City city = cityService.getCityByName(cityName);
@@ -48,16 +45,15 @@ public class AirportService implements IAirportService {
         ValidatorUtil.validate(airport);
 
         // Si es válido, guardamos el aeropuerto y lo agregamos a la ciudad
-        airportRepository.save(airport);
-        city.getAirports().add(airport);
+        airportRepository.saveAirportAndAddToCity(airport, city);
 
         // Retornamos el DTO del aeropuerto creado
-        return customModelMapper.mapAirport(airport);
+        return customModelMapper.map(airport, BaseAirportDTO.class);
     }
 
     @Override
-    public Airport getAirportByCode(String code) {
-        Airport airport = airportRepository.getAirportByCode(code);
+    public Airport getAirportByCode(String code, boolean full) {
+        Airport airport = full ? airportRepository.getFullAirportByCode(code) : airportRepository.getAirportByCode(code);
         if(airport == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code));
         }
@@ -65,8 +61,12 @@ public class AirportService implements IAirportService {
     }
 
     @Override
-    public AirportDTO getAirportDetailsByCode(String code) {
-        return customModelMapper.mapAirport(this.getAirportByCode(code));
+    public AirportDTO getAirportDetailsByCode(String code, boolean full) {
+        // Check if the airport exists
+        // Throws an exception if it doesn't
+        Airport airport = getAirportByCode(code, full);
+
+        return full ? customModelMapper.mapFullAirport(airport) : customModelMapper.map(airport, AirportDTO.class);
     }
 
     @Override

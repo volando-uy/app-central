@@ -4,9 +4,7 @@ import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -36,7 +34,7 @@ public class GetUsersPanel extends JPanel {
     }
 
     private void loadCustomerTable() {
-        List<CustomerDTO> getAllCustomers = userController.getAllCustomers();
+        List<BaseCustomerDTO> getAllCustomers = userController.getAllCustomersSimpleDetails();
 
         // Create table model and set column names
         DefaultTableModel customerTableModel = new DefaultTableModel();
@@ -44,7 +42,7 @@ public class GetUsersPanel extends JPanel {
         customerTableModel.setColumnIdentifiers(columnNames);
         
         // Add rows to the table model
-        for (CustomerDTO customerDTO : getAllCustomers) {
+        for (BaseCustomerDTO customerDTO : getAllCustomers) {
             Object[] rowData = {
                 customerDTO.getNickname(),
                 customerDTO.getName(),
@@ -66,13 +64,13 @@ public class GetUsersPanel extends JPanel {
     }
     
     private void loadAirlineTable() {
-        List<AirlineDTO> getAllAirlines = userController.getAllAirlines();
+        List<BaseAirlineDTO> getAllAirlines = userController.getAllAirlinesSimpleDetails();
         
         DefaultTableModel airlineTableModel = new DefaultTableModel();
         String[] airlineColumnNames = {"Nickname", "Nombre", "Email", "Descripción", "Web"};
         airlineTableModel.setColumnIdentifiers(airlineColumnNames);
         
-        for (AirlineDTO airlineDTO : getAllAirlines) {
+        for (BaseAirlineDTO airlineDTO : getAllAirlines) {
             Object[] rowData = {
                     airlineDTO.getNickname(),
                     airlineDTO.getName(),
@@ -162,13 +160,13 @@ public class GetUsersPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax
-        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-        . awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
-        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .
-        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border
+        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog"
+        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
+        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+        . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException
+        ( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -201,6 +199,7 @@ public class GetUsersPanel extends JPanel {
             customerLabel.setMaximumSize(new Dimension(120, 30));
             customerLabel.setMinimumSize(new Dimension(120, 30));
             customerLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            customerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             CustomerInfoPanel.add(customerLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -273,6 +272,7 @@ public class GetUsersPanel extends JPanel {
             airlineLabel.setMaximumSize(new Dimension(120, 30));
             airlineLabel.setMinimumSize(new Dimension(120, 30));
             airlineLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            airlineLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             AirlineInfoPanel.add(airlineLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));

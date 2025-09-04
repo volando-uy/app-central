@@ -5,6 +5,7 @@
 package gui.flightRoutePackage.getFlightRoutesPackages;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 
 import java.awt.*;
@@ -33,7 +34,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
 
     private void loadPackagesTable() {
         // 1) Traer nombres (según tu controller)
-        List<String> names = flightRoutePackageController.getAllNotBoughtFlightRoutePackagesNames();
+        List<String> names = flightRoutePackageController.getAllNotBoughtFlightRoutesPackagesNames();
 
         // 2) Modelo/columnas
         DefaultTableModel model = new DefaultTableModel();
@@ -43,7 +44,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         // 3) Por cada nombre, obtener DTO y armar fila
         for (String name : names) {
             try {
-                FlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageByName(name);
+                BaseFlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageSimpleDetailsByName(name);
                 String desc = nz(p.getDescription());
                 Integer days = p.getValidityPeriodDays();
                 String disc = formatDiscount(p.getDiscount());  // 0.15 => 15%
@@ -139,14 +140,12 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder (
-        new javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn"
-        , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
-        , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 )
-        ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
-        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing.
+        border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER
+        ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font
+        . BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
+        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order"
+        .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -179,6 +178,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
             packageLabel.setMaximumSize(new Dimension(120, 30));
             packageLabel.setMinimumSize(new Dimension(120, 30));
             packageLabel.setFont(new Font("Inter", Font.BOLD | Font.ITALIC, 20));
+            packageLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             PackageinfoPanel.add(packageLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));

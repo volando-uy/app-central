@@ -39,7 +39,8 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "airlineLabel"
-					"text": "Selecciona la Aerolinea:"
+					"text": "\ud83d\udd04 Selecciona la Aerolinea:"
+					"cursor": new java.awt.Cursor( 12 )
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "airlineComboBox"
@@ -334,12 +335,13 @@ new FormModel {
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "categoriesLabel"
-						"text": "Categorias:"
+						"text": "\ud83d\udd04 Categorias:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": new java.awt.Dimension( 120, 30 )
 						"maximumSize": new java.awt.Dimension( 120, 30 )
 						"minimumSize": new java.awt.Dimension( 120, 30 )
+						"cursor": new java.awt.Cursor( 12 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 						name: "CategoriesScrollPane"

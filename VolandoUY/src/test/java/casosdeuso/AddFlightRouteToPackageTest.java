@@ -4,9 +4,11 @@ import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.city.CityDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
@@ -75,15 +77,15 @@ public class AddFlightRouteToPackageTest {
     @DisplayName("CU: Agregar ruta de vuelo a paquete existente exitosamente")
     void agregarRutaAVuelo_exitoso() {
         // Paso 1: Listar paquetes no comprados
-        List<String> paquetes = packageController.getAllNotBoughtFlightRoutePackagesNames();
+        List<String> paquetes = packageController.getAllNotBoughtFlightRoutesPackagesNames();
         assertTrue(paquetes.contains("Promo Paraguay"));
 
         // Paso 2: Listar aerolíneas
-        var aerolineas = userController.getAllAirlines();
+        List<BaseAirlineDTO> aerolineas = userController.getAllAirlinesSimpleDetails();
         assertFalse(aerolineas.isEmpty());
 
         // Paso 3: Obtener rutas de aerolínea
-        List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesByAirlineNickname("uyair");
+        List<BaseFlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesSimpleDetailsByAirlineNickname("uyair");
         assertEquals(1, rutas.size());
         String rutaNombre = rutas.get(0).getName();
 
@@ -91,7 +93,7 @@ public class AddFlightRouteToPackageTest {
         packageController.addFlightRouteToPackage("Promo Paraguay", rutaNombre, 2);
 
         // Validar que no falla (pasa si no lanza excepción)
-        var paquete = packageController.getFlightRoutePackageByName("Promo Paraguay");
+        var paquete = packageController.getFlightRoutePackageSimpleDetailsByName("Promo Paraguay");
         assertNotNull(paquete);
     }
 

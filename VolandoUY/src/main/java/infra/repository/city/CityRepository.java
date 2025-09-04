@@ -11,39 +11,48 @@ public class CityRepository extends AbstractCityRepository implements ICityRepos
 
     @Override
     public City getCityByName(String name) {
-        try(EntityManager em = DBConnection.getEntityManager()){
-            em.getTransaction().begin();
-            City city = em.createQuery("SELECT c FROM City c WHERE LOWER(c.name) = :name", City.class)
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery("SELECT c FROM City c WHERE LOWER(c.name) = :name", City.class)
                     .setParameter("name", name.toLowerCase())
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
-            em.getTransaction().commit();
+        }
+    }
+
+    public City getFullCityByName(String cityName) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            City city = em.createQuery("SELECT c FROM City c WHERE LOWER(c.name) = :name", City.class)
+                    .setParameter("name", cityName.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize airports collection
+            if (city != null) {
+                city.getAirports().size(); // Initialize airports collection
+            }
             return city;
         }
     }
 
     @Override
     public boolean existsByName(String name) {
-        try(EntityManager em = DBConnection.getEntityManager()){
-            em.getTransaction().begin();
+        try (EntityManager em = DBConnection.getEntityManager()) {
             Long count = em.createQuery("SELECT COUNT(c) FROM City c WHERE LOWER(c.name) = :name", Long.class)
                     .setParameter("name", name.toLowerCase())
                     .getSingleResult();
-            em.getTransaction().commit();
             return count > 0;
         }
     }
 
     @Override
-    public boolean existsAirportInCity(String cityName, String airpotyName) {
-        try(EntityManager em = DBConnection.getEntityManager()){
-            em.getTransaction().begin();
+    public boolean existsAirportInCity(String cityName, String airportName) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
             Long count = em.createQuery("SELECT COUNT(a) FROM Airport a WHERE LOWER(a.city.name) = :cityName AND LOWER(a.name) = :airportName", Long.class)
                     .setParameter("cityName", cityName.toLowerCase())
-                    .setParameter("airportName", airpotyName.toLowerCase())
+                    .setParameter("airportName", airportName.toLowerCase())
                     .getSingleResult();
-            em.getTransaction().commit();
             return count > 0;
         }
     }
