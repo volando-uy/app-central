@@ -20,6 +20,22 @@ public class CityRepository extends AbstractCityRepository implements ICityRepos
         }
     }
 
+    public City getFullCityByName(String cityName) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            City city = em.createQuery("SELECT c FROM City c WHERE LOWER(c.name) = :name", City.class)
+                    .setParameter("name", cityName.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize airports collection
+            if (city != null) {
+                city.getAirports().size(); // Initialize airports collection
+            }
+            return city;
+        }
+    }
+
     @Override
     public boolean existsByName(String name) {
         try (EntityManager em = DBConnection.getEntityManager()) {
@@ -40,4 +56,6 @@ public class CityRepository extends AbstractCityRepository implements ICityRepos
             return count > 0;
         }
     }
+
+
 }

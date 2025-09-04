@@ -5,8 +5,11 @@ import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.user.Airline;
 import domain.services.flightRoute.IFlightRouteService;
+import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.ServiceFactory;
 import infra.repository.flightroutepackage.FlightRoutePackageRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
@@ -20,6 +23,8 @@ import java.util.List;
 public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     private FlightRoutePackageRepository flightRoutePackageRepository;
+
+    private final IUserService userService = ServiceFactory.getUserService();
 
     @Setter
     private IFlightRouteService flightRouteService;
@@ -93,7 +98,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         }
 
         // Tiramos una excepcion si la ruta de vuelo no existe
-        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName);
+        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName, false);
         if (flightRoute == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, flightRouteName));
         }

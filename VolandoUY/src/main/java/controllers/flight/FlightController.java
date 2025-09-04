@@ -1,5 +1,6 @@
 package controllers.flight;
 
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.services.flight.IFlightService;
 import lombok.AllArgsConstructor;
@@ -12,8 +13,8 @@ public class FlightController implements IFlightController {
     private final IFlightService flightService;
 
     @Override
-    public FlightDTO createFlight(FlightDTO flight) {
-        return flightService.createFlight(flight);
+    public BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName) {
+        return flightService.createFlight(baseFlightDTO, airlineNickname, flightRouteName);
     }
 
     @Override

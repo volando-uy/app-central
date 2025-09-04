@@ -61,8 +61,10 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
             FlightRoute flightRoute = entityManager.createQuery("SELECT fr FROM FlightRoute fr LEFT JOIN FETCH fr.destinationCity LEFT JOIN FETCH fr.originCity LEFT JOIN FETCH fr.airline WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
                     .setParameter("name", name)
                     .getSingleResult();
+
             flightRoute.getFlights().size(); // Initialize flights collection
             flightRoute.getCategories().size(); // Initialize categories collection
+
             return flightRoute;
         }
     }

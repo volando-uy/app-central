@@ -20,8 +20,20 @@ public class FlightRouteController implements IFlightRouteController{
     }
 
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO){
-        return flightRouteService.createFlightRoute(flightRouteDTO);
+    public BaseFlightRouteDTO createFlightRoute(
+            BaseFlightRouteDTO baseFlightRouteDTO,
+            String originCityName,
+            String destinationCityName,
+            String airlineNickname,
+            List<String> categoriesNames
+    ){
+        return flightRouteService.createFlightRoute(
+                baseFlightRouteDTO,
+                originCityName,
+                destinationCityName,
+                airlineNickname,
+                categoriesNames
+        );
     }
 
     @Override

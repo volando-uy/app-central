@@ -3,6 +3,7 @@ package gui.flightRoute.createFlightRoute;
 import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
@@ -112,7 +113,7 @@ public class CreateFlightRoutePanel extends JPanel {
                 }
 
                 // Create the DTO
-                FlightRouteDTO flightRouteDTO = new FlightRouteDTO(
+                BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO(
                     nameTextField.getText(),
                     descriptionTextField.getText(),
                     LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
@@ -120,14 +121,14 @@ public class CreateFlightRoutePanel extends JPanel {
                     Double.parseDouble(businessCostTextField.getText()),
                     Double.parseDouble(additionalLuggageCostTextField.getText())
                 );
-                flightRouteDTO.setOriginCityName(originCityTextField.getText());
-                flightRouteDTO.setDestinationCityName(destinationCityTextField.getText());
-                flightRouteDTO.setAirlineNickname(selectedAirline);
-                flightRouteDTO.setCategories(selectedCategories);
 
                 // Call the controller to create the flight route
-                FlightRouteDTO createdFlightRouteDTO = flightRouteController.createFlightRoute(
-                        flightRouteDTO
+                BaseFlightRouteDTO createdFlightRouteDTO = flightRouteController.createFlightRoute(
+                        baseFlightRouteDTO,
+                        originCityTextField.getText(),
+                        destinationCityTextField.getText(),
+                        selectedAirline,
+                        selectedCategories
                 );
 
                 JOptionPane.showMessageDialog(
@@ -138,15 +139,22 @@ public class CreateFlightRoutePanel extends JPanel {
                         "\nCosto equipaje extra: " + createdFlightRouteDTO.getPriceExtraUnitBaggage() +
                         "\nCosto turista: " + createdFlightRouteDTO.getPriceTouristClass() +
                         "\nCosto ejecutivo: " + createdFlightRouteDTO.getPriceBusinessClass() +
-                        "\nCiudad origen: " + createdFlightRouteDTO.getOriginCityName() +
-                        "\nCiudad destino: " + createdFlightRouteDTO.getDestinationCityName() +
-                        (createdFlightRouteDTO.getCategories().isEmpty() ? "\n" : "\nCategorías:" + String.join(", ", createdFlightRouteDTO.getCategories())),
+                        "\nCiudad origen: " + originCityTextField.getText() +
+                        "\nCiudad destino: " + destinationCityTextField.getText() +
+                        (selectedCategories.isEmpty() ? "\n" : "\nCategorías:" + String.join(", ", selectedCategories)),
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE)
                 ;
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al crear la ruta de vuelo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
+        categoriesLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                initCategoryList();    
             }
         });
     }
@@ -222,13 +230,13 @@ public class CreateFlightRoutePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-        javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax
-        . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-        . awt .Font ( "Dialo\u0067", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .
-        PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "borde\u0072" .
-        equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+        . border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder
+        . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
+        awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder( )) )
+        ;  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+        ;
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
@@ -541,12 +549,13 @@ public class CreateFlightRoutePanel extends JPanel {
                 ((GridBagLayout)CategoriesTablePanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- categoriesLabel ----
-                categoriesLabel.setText("Categorias:");
+                categoriesLabel.setText("\ud83d\udd04 Categorias:");
                 categoriesLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 categoriesLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
                 categoriesLabel.setPreferredSize(new Dimension(120, 30));
                 categoriesLabel.setMaximumSize(new Dimension(120, 30));
                 categoriesLabel.setMinimumSize(new Dimension(120, 30));
+                categoriesLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 CategoriesTablePanel.add(categoriesLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));

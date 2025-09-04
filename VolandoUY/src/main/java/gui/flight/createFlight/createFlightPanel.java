@@ -8,6 +8,7 @@ import controllers.category.ICategoryController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.flight.FlightDTO;
@@ -184,19 +185,17 @@ public class createFlightPanel extends JPanel {
                 }
 
                 // Construcción del DTO
-                FlightDTO flightDTO = new FlightDTO(
+                BaseFlightDTO baseFlightDTO = new BaseFlightDTO(
                         flightName,
                         departureTime,
                         durationMinutes,
                         seatsEconomy,
                         seatsBusiness,
-                        createdAt,
-                        selectedAirlineNickname,
-                        selectedFlightRouteName
+                        createdAt
                 );
 
                 // Llamada al controlador
-                flightController.createFlight(flightDTO);
+                flightController.createFlight(baseFlightDTO, selectedAirlineNickname, selectedFlightRouteName);
 
                 JOptionPane.showMessageDialog(this,
                         "Vuelo creado con éxito.",

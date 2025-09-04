@@ -1,11 +1,12 @@
 package controllers.flight;
 
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 
 import java.util.List;
 
 public interface IFlightController {
-    FlightDTO createFlight(FlightDTO flight);
+    BaseFlightDTO createFlight(BaseFlightDTO flight, String airlineNickname, String flightRouteName);
 
     List<FlightDTO> getAllFlights();
 

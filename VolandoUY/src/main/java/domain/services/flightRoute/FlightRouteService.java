@@ -1,5 +1,6 @@
 package domain.services.flightRoute;
 
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
@@ -41,23 +42,29 @@ public class FlightRouteService implements IFlightRouteService {
 
 
     @Override
-    public FlightRouteDTO createFlightRoute(FlightRouteDTO flightRouteDTO) {
+    public BaseFlightRouteDTO createFlightRoute(
+            BaseFlightRouteDTO baseFlightRouteDTO,
+            String originCityName,
+            String destinationCityName,
+            String airlineNickname,
+            List<String> categoriesNames
+    ) {
         // Comprobar que la ruta de vuelo no exista
-        if (existFlightRoute(flightRouteDTO.getName())) {
+        if (existFlightRoute(baseFlightRouteDTO.getName())) {
             throw new UnsupportedOperationException(
-                    String.format(ErrorMessages.ERR_FLIGHT_ROUTE_ALREADY_EXISTS, flightRouteDTO.getName()));
+                    String.format(ErrorMessages.ERR_FLIGHT_ROUTE_ALREADY_EXISTS, baseFlightRouteDTO.getName()));
         }
 
         // Obtener todos las entidades relacionadas
         // Tira throw si ya existe
-        Airline airline = userService.getAirlineByNickname(flightRouteDTO.getAirlineNickname(), true);
-        City originCity = cityService.getCityByName(flightRouteDTO.getOriginCityName());
-        City destinationCity = cityService.getCityByName(flightRouteDTO.getDestinationCityName());
+        Airline airline = userService.getAirlineByNickname(airlineNickname, true);
+        City originCity = cityService.getCityByName(originCityName);
+        City destinationCity = cityService.getCityByName(destinationCityName);
 
         // Crear la lista de las categorias (si es que hay)
         List<Category> categories = new ArrayList<>();
-        if (flightRouteDTO.getCategories() != null) {
-            for (String categoryName : flightRouteDTO.getCategories()) {
+        if (categoriesNames != null) {
+            for (String categoryName : categoriesNames) {
                 Category category = categoryService.getCategoryByName(categoryName);
                 if (category == null) {
                     throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CATEGORY_NOT_FOUND, categoryName));
@@ -67,7 +74,7 @@ public class FlightRouteService implements IFlightRouteService {
         }
 
         // Crear la nueva ruta de vuelo
-        FlightRoute flightRoute = customModelMapper.map(flightRouteDTO, FlightRoute.class);
+        FlightRoute flightRoute = customModelMapper.map(baseFlightRouteDTO, FlightRoute.class);
         flightRoute.setOriginCity(originCity);
         flightRoute.setDestinationCity(destinationCity);
         flightRoute.setAirline(airline);
@@ -81,7 +88,7 @@ public class FlightRouteService implements IFlightRouteService {
         flightRouteRepository.saveFlightRouteAndAddToAirline(flightRoute, airline);
 
         // Devolver el DTO mapeado
-        return customModelMapper.mapFullFlightRoute(flightRoute);
+        return customModelMapper.map(flightRoute, BaseFlightRouteDTO.class);
     }
 
     @Override
@@ -98,9 +105,9 @@ public class FlightRouteService implements IFlightRouteService {
 
 
     @Override
-    public FlightRoute getFlightRouteByName(String routeName) {
+    public FlightRoute getFlightRouteByName(String routeName, boolean full) {
         // Comprobar que la ruta de vuelo exista
-        FlightRoute flightRoute = flightRouteRepository.getByName(routeName);
+        FlightRoute flightRoute = full ? flightRouteRepository.getFullByName(routeName) : flightRouteRepository.getByName(routeName);
         if (flightRoute == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
         }
@@ -111,7 +118,7 @@ public class FlightRouteService implements IFlightRouteService {
     public FlightRouteDTO getFlightRouteDetailsByName(String routeName, boolean full) {
         // Comprobar que la ruta de vuelo exista
         // Tira throw si no existe
-        FlightRoute flightRoute = this.getFlightRouteByName(routeName);
+        FlightRoute flightRoute = this.getFlightRouteByName(routeName, full);
 
         if (full){
             return customModelMapper.mapFullFlightRoute(flightRoute);

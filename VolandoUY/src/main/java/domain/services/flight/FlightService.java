@@ -1,8 +1,12 @@
 package domain.services.flight;
 
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flight.Flight;
+import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
+import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
@@ -18,23 +22,23 @@ public class FlightService implements IFlightService {
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
-    private IUserService userService;
+    private final IUserService userService = ServiceFactory.getUserService();
+    private final IFlightRouteService flightRouteService = ServiceFactory.getFlightRouteService();
 
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
-    private FlightRepository flightRepository;
+    private final FlightRepository flightRepository;
 
     // Constructor
     public FlightService() {
-        this.userService = ServiceFactory.getUserService();
         this.flightRepository = new FlightRepository();
     }
 
     @Override
-    public FlightDTO createFlight(FlightDTO flightDTO) {
+    public BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName) {
 
         // Verificar si el vuelo ya existe
-        Flight flight = customModelMapper.map(flightDTO, Flight.class);
+        Flight flight = customModelMapper.map(baseFlightDTO, Flight.class);
         if (_flightExists(flight)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ALREADY_EXISTS, flight.getName()));
         }
@@ -46,14 +50,18 @@ public class FlightService implements IFlightService {
 
         // Obtener la aerolínea por su nickname
         // Tira throw si no existe.
-        Airline airline = userService.getAirlineByNickname(flightDTO.getAirlineNickname(), true);
+        Airline airline = userService.getAirlineByNickname(airlineNickname, true);
+
+        // Obtener la ruta de vuelo por su nombre
+        // Tira throw si no existe.
+        FlightRoute flightRoute = flightRouteService.getFlightRouteByName(flightRouteName, true);
 
         flight.setAirline(airline);
 
         // Guardamos el vuelo y actualizamos la aerolínea
         flightRepository.saveFlightAndAddToAirline(flight, airline);
 
-        return customModelMapper.mapFullFlight(flight);
+        return customModelMapper.map(flight, BaseFlightDTO.class);
     }
 
 
