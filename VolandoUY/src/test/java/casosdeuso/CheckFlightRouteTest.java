@@ -5,7 +5,9 @@ import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.category.CategoryDTO;
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.models.category.Category;
@@ -75,50 +77,66 @@ public class CheckFlightRouteTest {
         CategoryDTO categoriaDTO = categoryController.createCategory(new CategoryDTO(categoria.getName()));
 
         // Crear ruta de vuelo
-        FlightRouteDTO rutaDTO = new FlightRouteDTO();
-        rutaDTO.setName("AA-MAD");
-        rutaDTO.setDescription("Ruta internacional Buenos Aires - Madrid");
-        rutaDTO.setCreatedAt(LocalDate.now());
-        rutaDTO.setPriceTouristClass(10000.0);
-        rutaDTO.setPriceBusinessClass(20000.0);
-        rutaDTO.setPriceExtraUnitBaggage(3500.0);
-        rutaDTO.setOriginCityName("Buenos Aires");
-        rutaDTO.setDestinationCityName("Madrid");
-        rutaDTO.setAirlineNickname("AA");
-        rutaDTO.setCategories(List.of("Internacional"));
+//        FlightRouteDTO rutaDTO = new FlightRouteDTO();
+//        rutaDTO.setName("AA-MAD");
+//        rutaDTO.setDescription("Ruta internacional Buenos Aires - Madrid");
+//        rutaDTO.setCreatedAt(LocalDate.now());
+//        rutaDTO.setPriceTouristClass(10000.0);
+//        rutaDTO.setPriceBusinessClass(20000.0);
+//        rutaDTO.setPriceExtraUnitBaggage(3500.0);
+//        rutaDTO.setOriginCityName("Buenos Aires");
+//        rutaDTO.setDestinationCityName("Madrid");
+//        rutaDTO.setAirlineNickname("AA");
+//        rutaDTO.setCategories(List.of("Internacional"));
+
+        BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO();
+        baseFlightRouteDTO.setName("AA-MAD");
+        baseFlightRouteDTO.setDescription("Ruta internacional Buenos Aires - Madrid");
+        baseFlightRouteDTO.setCreatedAt(LocalDate.now());
+        baseFlightRouteDTO.setPriceTouristClass(10000.0);
+        baseFlightRouteDTO.setPriceBusinessClass(20000.0);
+        baseFlightRouteDTO.setPriceExtraUnitBaggage(3500.0);
 
         assertFalse(flightRouteController.existFlightRoute("AA-MAD"));
-        flightRouteController.createFlightRoute(rutaDTO);
+        FlightRouteDTO rutaDTO = (FlightRouteDTO) flightRouteController.createFlightRoute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Internacional"));
         assertTrue(flightRouteController.existFlightRoute("AA-MAD"));
 
         // Crear vuelo asociado (indirectamente relacionado con la ruta)
-        FlightDTO vueloDTO = new FlightDTO();
-        vueloDTO.setName("VUELO-AA001");
-        vueloDTO.setAirlineNickname("AA");
-        vueloDTO.setCreatedAt(LocalDateTime.now());
-        vueloDTO.setDepartureTime(LocalDateTime.now().plusDays(5));
-        vueloDTO.setDuration(720L);
-        vueloDTO.setMaxEconomySeats(250);
-        vueloDTO.setMaxBusinessSeats(50);
-        vueloDTO.setFlightRouteName("AA-MAD");
+//        FlightDTO vueloDTO = new FlightDTO();
+//        vueloDTO.setName("VUELO-AA001");
+//        vueloDTO.setAirlineNickname("AA");
+//        vueloDTO.setCreatedAt(LocalDateTime.now());
+//        vueloDTO.setDepartureTime(LocalDateTime.now().plusDays(5));
+//        vueloDTO.setDuration(720L);
+//        vueloDTO.setMaxEconomySeats(250);
+//        vueloDTO.setMaxBusinessSeats(50);
+//        vueloDTO.setFlightRouteName("AA-MAD");
 
+        BaseFlightDTO baseFlightDTO = new BaseFlightDTO();
+        baseFlightDTO.setName("VUELO-AA001");
+        baseFlightDTO.setCreatedAt(LocalDateTime.now());
+        baseFlightDTO.setDepartureTime(LocalDateTime.now().plusDays(5));
+        baseFlightDTO.setDuration(720L);
+        baseFlightDTO.setMaxEconomySeats(250);
+        baseFlightDTO.setMaxBusinessSeats(50);
 
-        flightController.createFlight(vueloDTO);
+        flightController.createFlight(baseFlightDTO, "AA", "AA-MAD");
+
     }
 
     @Test
     void consultaRutaDeVuelo_completa() {
         // Paso 1: Listar aerolíneas
-        List<AirlineDTO> aerolineas = userController.getAllAirlines();
+        List<AirlineDTO> aerolineas = userController.getAllAirlinesDetails();
         assertFalse(aerolineas.isEmpty());
 
         // Paso 2: Seleccionar aerolínea
-        AirlineDTO aerolinea = userController.getAirlineByNickname("AA");
+        AirlineDTO aerolinea = userController.getAirlineDetailsByNickname("AA");
         assertNotNull(aerolinea);
         assertEquals("Aerolineas Argentinas", aerolinea.getName());
 
         // Paso 3: Listar rutas de vuelo asociadas
-        List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesByAirlineNickname("AA");
+        List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname("AA");
         assertEquals(1, rutas.size());
 
         FlightRouteDTO ruta = rutas.get(0);
@@ -141,7 +159,7 @@ public class CheckFlightRouteTest {
         //Vuelos:
         //Ver ruta de vuelo
         //Agarrar Ruta De vUELO
-        System.out.println("Ruta de vuelo: " + flightRouteController.getFlightRouteByName("AA-MAD"));
+        System.out.println("Ruta de vuelo: " + flightRouteController.getFlightRouteDetailsByName("AA-MAD"));
         System.out.println("Vuelos:" + flightController.getAllFlightsByRouteName("AA-MAD"));
         List<FlightDTO> vuelos = flightController.getAllFlightsByRouteName("AA-MAD");
         assertEquals(1, vuelos.size());

@@ -3,6 +3,8 @@ package casosdeuso;
 import controllers.airport.IAirportController;
 import controllers.city.ICityController;
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,15 +31,20 @@ public class RegisterCityTest {
     @Test
     @DisplayName("CU: Alta exitosa de ciudad")
     void altaCiudadExitosa() {
-        CityDTO dto = new CityDTO(
-                "Lima",
-                "Perú",
-                -12.0464,
-                -77.0428,
-                List.of("Aeropuerto Jorge Chávez")
-        );
+//        CityDTO dto = new CityDTO(
+//                "Lima",
+//                "Perú",
+//                -12.0464,
+//                -77.0428,
+//                List.of("Aeropuerto Jorge Chávez")
+//        );
+        BaseCityDTO baseCityDTO = new BaseCityDTO();
+        baseCityDTO.setName("Lima");
+        baseCityDTO.setCountry("Perú");
+        baseCityDTO.setLatitude(-12.0464);
+        baseCityDTO.setLongitude(-77.0428);
 
-        CityDTO result = cityController.createCity(dto);
+        BaseCityDTO result = cityController.createCity(baseCityDTO);
 
         assertEquals("Lima", result.getName());
         assertEquals("Perú", result.getCountry());
@@ -48,11 +55,16 @@ public class RegisterCityTest {
     @Test
     @DisplayName("CU: No se puede crear ciudad duplicada")
     void ciudadDuplicadaFalla() {
-        CityDTO dto = new CityDTO("Lima", "Perú", -12.0464, -77.0428, List.of());
-        cityController.createCity(dto);
+        BaseCityDTO baseCityDTO = new BaseCityDTO();
+        baseCityDTO.setName("Lima");
+        baseCityDTO.setCountry("Perú");
+        baseCityDTO.setLatitude(-12.0464);
+        baseCityDTO.setLongitude(-77.0428);
+
+        cityController.createCity(baseCityDTO);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-            cityController.createCity(dto);
+            cityController.createCity(baseCityDTO);
         });
 
         assertEquals(String.format(ErrorMessages.ERR_CITY_ALREADY_EXISTS, "Lima"), ex.getMessage());
@@ -62,8 +74,13 @@ public class RegisterCityTest {
     @DisplayName("CU: Verificar existencia de ciudad por nombre")
     void verificarExistenciaCiudad() {
         assertFalse(cityController.cityExists("Quito"));
+        BaseCityDTO baseCityDTO = new BaseCityDTO();
+        baseCityDTO.setName("Quito");
+        baseCityDTO.setCountry("Ecuador");
+        baseCityDTO.setLatitude(-0.1807);
+        baseCityDTO.setLongitude(-78.4678);
 
-        cityController.createCity(new CityDTO("Quito", "Ecuador", -0.1807, -78.4678, List.of()));
+        cityController.createCity(baseCityDTO);
 
         assertTrue(cityController.cityExists("Quito"));
     }
@@ -71,7 +88,13 @@ public class RegisterCityTest {
     @Test
     @DisplayName("CU: Ver detalle de ciudad por nombre")
     void obtenerDetallesCiudad() {
-        cityController.createCity(new CityDTO("Bogotá", "Colombia", 4.7110, -74.0721, List.of("El Dorado")));
+        BaseCityDTO baseCityDTO = new BaseCityDTO();
+        baseCityDTO.setName("Bogotá");
+        baseCityDTO.setCountry("Colombia");
+        baseCityDTO.setLatitude(4.7110);
+        baseCityDTO.setLongitude(-74.0721);
+
+        cityController.createCity(baseCityDTO);
 
         CityDTO bogota = cityController.getCityDetailsByName("Bogotá");
 
@@ -84,15 +107,22 @@ public class RegisterCityTest {
     @DisplayName("CU: Alta de ciudad y aeropuerto asociado")
     void altaCiudadConAeropuerto() {
         // Paso 1: Crear la ciudad
-        CityDTO ciudad = new CityDTO(
-                "Montevideo",
-                "Uruguay",
-                -34.9011,
-                -56.1645,
-                null // Sin aeropuertos en la creación
-        );
+//        CityDTO ciudad = new CityDTO(
+//                "Montevideo",
+//                "Uruguay",
+//                -34.9011,
+//                -56.1645,
+//                null // Sin aeropuertos en la creación
+//        );
 
-        CityDTO ciudadCreada = cityController.createCity(ciudad);
+        BaseCityDTO baseCityDTO = new BaseCityDTO();
+        baseCityDTO.setName("Montevideo");
+        baseCityDTO.setCountry("Uruguay");
+        baseCityDTO.setLatitude(-34.9011);
+        baseCityDTO.setLongitude(-56.1645);
+
+
+        BaseCityDTO ciudadCreada = cityController.createCity(baseCityDTO);
 
         assertNotNull(ciudadCreada);
         assertEquals("Montevideo", ciudadCreada.getName());
@@ -104,7 +134,7 @@ public class RegisterCityTest {
         aeropuerto.setCode("MVD");
         aeropuerto.setCityName("Montevideo");
 
-        AirportDTO aeropuertoCreado = airportController.createAirport(aeropuerto, "Montevideo");
+        BaseAirportDTO aeropuertoCreado = airportController.createAirport(aeropuerto, "Montevideo");
 
         assertNotNull(aeropuertoCreado);
         assertEquals("MVD", aeropuertoCreado.getCode());

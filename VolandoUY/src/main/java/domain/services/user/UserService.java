@@ -112,24 +112,22 @@ public class UserService implements IUserService {
 
     @Override
     public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
-        // Comprobamos que el usuario exista
+        // 1) Buscar usuario
         User user = userRepository.getUserByNickname(nickname, false);
         if (user == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
         }
 
-        // Creamos un usuario temporal para validar los datos nuevos
-        User tempUser = customModelMapper.mapUserDTO(updatedUserDTO);
-
-        // Validamos los datos
-        ValidatorUtil.validate(tempUser);
-
-        // Actualizamos los datos del usuario original
+        // 2) Aplicar cambios al usuario existente (mantiene el resto de campos)
         user.updateDataFrom(updatedUserDTO);
 
-        // Guardar el update
+        // 3) Validar el estado completo tras el merge (ya no faltan campos)
+        ValidatorUtil.validate(user);
+
+        // 4) Persistir
         userRepository.update(user);
 
+        // 5) Devolver DTO del tipo correcto
         return customModelMapper.mapUser(user);
     }
 

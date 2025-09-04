@@ -48,6 +48,9 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
     }
 
     public void saveAirportAndAddToCity(Airport airport, City city) {
+        if (city == null) {
+            throw new IllegalArgumentException("No se puede agregar un aeropuerto a una ciudad nula.");
+        }
         EntityManager em = DBConnection.getEntityManager();
         try {
             em.getTransaction().begin();
@@ -63,6 +66,7 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
             em.close();
         }
     }
+
 
 
 }

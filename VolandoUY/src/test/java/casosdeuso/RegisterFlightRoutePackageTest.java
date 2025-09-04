@@ -1,6 +1,7 @@
 package casosdeuso;
 
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.enums.EnumTipoAsiento;
 import factory.ControllerFactory;
@@ -28,16 +29,25 @@ public class RegisterFlightRoutePackageTest {
     @DisplayName("CU: Alta de paquete de rutas de vuelo exitoso")
     void altaDePaquete_exitoso() {
         // Paso 1: Crear DTO válido
-        FlightRoutePackageDTO dto = new FlightRoutePackageDTO();
-        dto.setName("Promo Sudamérica");
-        dto.setDescription("Descuento para vuelos dentro de Sudamérica");
-        dto.setValidityPeriodDays(30);
-        dto.setDiscount(10.0);
-        dto.setCreationDate(LocalDate.now());
-        dto.setSeatType(EnumTipoAsiento.TURISTA);
+//        FlightRoutePackageDTO dto = new FlightRoutePackageDTO();
+//        dto.setName("Promo Sudamérica");
+//        dto.setDescription("Descuento para vuelos dentro de Sudamérica");
+//        dto.setValidityPeriodDays(30);
+//        dto.setDiscount(10.0);
+//        dto.setCreationDate(LocalDate.now());
+//        dto.setSeatType(EnumTipoAsiento.TURISTA);
+
+        BaseFlightRoutePackageDTO baseFlightRoutePackageDTO = new BaseFlightRoutePackageDTO();
+        baseFlightRoutePackageDTO.setName("Promo Sudamérica");
+        baseFlightRoutePackageDTO.setDescription("Descuento para vuelos dentro de Sudamérica");
+        baseFlightRoutePackageDTO.setValidityPeriodDays(30);
+        baseFlightRoutePackageDTO.setDiscount(10.0);
+        baseFlightRoutePackageDTO.setCreationDate(LocalDate.now());
+        baseFlightRoutePackageDTO.setSeatType(EnumTipoAsiento.TURISTA);
+        baseFlightRoutePackageDTO.setTotalPrice(500.0);
 
         // Paso 2: Crear el paquete
-        FlightRoutePackageDTO creado = flightRoutePackageController.createFlightRoutePackage(dto);
+        BaseFlightRoutePackageDTO creado = flightRoutePackageController.createFlightRoutePackage(baseFlightRoutePackageDTO);
 
         // Paso 3: Validaciones
         assertNotNull(creado);
@@ -48,9 +58,9 @@ public class RegisterFlightRoutePackageTest {
 
         // Paso 4: Intentar duplicado
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            flightRoutePackageController.createFlightRoutePackage(dto);
+            flightRoutePackageController.createFlightRoutePackage(baseFlightRoutePackageDTO);
         });
 
-        assertEquals(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, dto.getName()), ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, baseFlightRoutePackageDTO.getName()), ex.getMessage());
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
-
+//esta mal hecho por los mocks y no esta siquiera el cleandb... pero funciona
 class CategoryControllerTest {
 
     private ICategoryService categoryService;
