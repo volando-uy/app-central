@@ -26,6 +26,24 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
     }
 
     @Override
+    public Flight getFullFlightByName(String flightName) {
+        try(EntityManager em= DBConnection.getEntityManager()){
+            Flight flight = em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.name)=:name", Flight.class)
+                    .setParameter("name", flightName.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            if(flight != null){
+                if(flight.getAirline() != null) {flight.getAirline().getName();}
+                if(flight.getFlightRoute() != null) {flight.getFlightRoute().getName();}
+                if(flight.getSeats() != null) {flight.getSeats().size();}
+            }
+            return flight;
+        }
+    }
+
+    @Override
     public List<Flight> getAllByAirlineNickname(String airlineNickname) {
         try(EntityManager em= DBConnection.getEntityManager()){
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.airline.nickname)=:nickname", Flight.class)
@@ -68,4 +86,6 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
             em.close();
         }
     }
+
+
 }

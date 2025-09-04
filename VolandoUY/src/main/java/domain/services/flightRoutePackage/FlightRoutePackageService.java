@@ -24,8 +24,6 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
     private FlightRoutePackageRepository flightRoutePackageRepository;
 
-    private final IUserService userService = ServiceFactory.getUserService();
-
     @Setter
     private IFlightRouteService flightRouteService;
 

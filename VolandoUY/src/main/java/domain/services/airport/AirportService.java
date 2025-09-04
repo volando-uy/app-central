@@ -16,13 +16,13 @@ import shared.utils.ValidatorUtil;
 
 public class AirportService implements IAirportService {
     private AirportRepository airportRepository;
+
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     @Setter
     private ICityService cityService;
 
     public AirportService() {
-        this.cityService= ServiceFactory.getCityService();
         this.airportRepository = new AirportRepository();
     }
 

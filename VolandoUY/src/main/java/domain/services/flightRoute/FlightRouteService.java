@@ -21,23 +21,23 @@ import shared.utils.ValidatorUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
 public class FlightRouteService implements IFlightRouteService {
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     FlightRouteRepository flightRouteRepository;
-    FlightRepository flightRepository;
+
+    @Setter
     private ICategoryService categoryService;
+
+    @Setter
     private ICityService cityService;
+
+    @Setter
     private IUserService userService;
 
     public FlightRouteService() {
-        this.userService = ServiceFactory.getUserService();
-        this.categoryService = ServiceFactory.getCategoryService();
-        this.cityService = ServiceFactory.getCityService();
         this.flightRouteRepository = new FlightRouteRepository();
-        this.flightRepository = new FlightRepository();
     }
 
 

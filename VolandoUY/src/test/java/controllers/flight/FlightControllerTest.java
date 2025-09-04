@@ -1,5 +1,6 @@
 package controllers.flight;
 
+
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
