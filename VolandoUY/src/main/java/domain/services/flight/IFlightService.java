@@ -4,6 +4,7 @@ import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
 import domain.services.flightRoute.IFlightRouteService;
+import domain.services.seat.ISeatService;
 import domain.services.user.IUserService;
 
 import java.util.List;
@@ -23,4 +24,5 @@ public interface IFlightService {
 
     void setUserService(IUserService userService);
     void setFlightRouteService(IFlightRouteService flightRouteService);
+    void setSeatService(ISeatService seatService);
 }

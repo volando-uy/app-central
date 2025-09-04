@@ -28,8 +28,11 @@ public class SeatService implements ISeatService {
     }
 
     @Override
-    public BaseSeatDTO createSeat(BaseSeatDTO baseSeatDTO, String flightName) {
-        return null;
+    public Seat createSeatWithoutPersistance(BaseSeatDTO baseSeatDTO) {
+        Seat seat = customModelMapper.map(baseSeatDTO, Seat.class);
+        seat.setTicket(null);
+        seat.setFlight(null);
+        return seat;
     }
 
     @Override

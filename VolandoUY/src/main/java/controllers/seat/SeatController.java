@@ -10,7 +10,7 @@ public class SeatController implements ISeatController {
 
     @Override
     public BaseSeatDTO createSeat(BaseSeatDTO baseSeatDTO, String flightName) {
-        return seatService.createSeat(baseSeatDTO, flightName);
+        return null; // Por ahora no estamos usando controller para crear asientos
     }
 
     @Override

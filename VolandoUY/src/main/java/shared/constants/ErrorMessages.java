@@ -1,5 +1,7 @@
 package shared.constants;
 
+import java.util.Locale;
+
 public class ErrorMessages {
     // ================================General errors==============================
     public static final String ERR_CAMPO_OBLIGATORIO = "El campo %s es obligatorio";
@@ -60,6 +62,8 @@ public class ErrorMessages {
     public static final String ERR_FLIGHT_ALREADY_EXISTS = "El vuelo %s ya existe";
     public static final String ERR_FLIGHT_DEPARTURE_FUTURE = "La salida debe ser en el futuro";
     public static final String ERR_FLIGHT_DURATION_POSITIVE = "La duración (min) debe ser mayor a 0";
+    public static final String ERR_FLIGHT_MAX_BUSINESS_SEATS = "El número máximo de asientos ejecutivos debe estar en el rango 0 - 500";
+    public static final String ERR_FLIGHT_MAX_ECONOMY_SEATS = "El número máximo de asientos turista debe estar en el rango 0 - 500";
     // ================================Fin Vuelo errors==============================
 
 
@@ -71,5 +75,6 @@ public class ErrorMessages {
     // ================================Paquete Ruta Vuelo errors==============================
     public static final String ERR_PACKAGE_ALREADY_EXISTS = "El paquete %s ya existe";
     public static final String ERR_INVALID_SEAT_TYPE = "El tipo de asiento %s no es válido";
+    public static final String ERR_FLIGHT_ROUTE_NOT_BELONGS_TO_AIRLINE = "La ruta de vuelo %s no pertenece a la aerolínea %s";
     // ================================Fin Paquete Ruta Vuelo errors==============================
 }

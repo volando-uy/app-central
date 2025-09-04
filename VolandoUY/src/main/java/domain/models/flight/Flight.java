@@ -1,6 +1,7 @@
 package domain.models.flight;
 
 import domain.models.airport.Airport;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
@@ -40,9 +41,11 @@ public class Flight {
 
     @NotNull
     @PositiveOrZero
+    @Max(value = 500, message = ErrorMessages.ERR_FLIGHT_MAX_ECONOMY_SEATS)
     private Integer maxEconomySeats;
 
     @NotNull
+    @Max(value = 500, message = ErrorMessages.ERR_FLIGHT_MAX_BUSINESS_SEATS)
     @PositiveOrZero
     private Integer maxBusinessSeats;
 
@@ -97,5 +100,4 @@ public class Flight {
     public double getTotalDurationInHours() {
         return (double) duration / 60;
     }
-
 }

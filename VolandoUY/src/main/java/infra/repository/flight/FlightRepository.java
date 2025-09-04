@@ -3,6 +3,7 @@ package infra.repository.flight;
 import app.DBConnection;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
+import domain.models.seat.Seat;
 import domain.models.user.Airline;
 import jakarta.persistence.EntityManager;
 
@@ -71,17 +72,34 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
         }
     }
 
-    public void saveFlightAndAddToAirlineAndAddToFlightRoute(Flight flight, Airline airline, FlightRoute flightRoute) {
+    public void saveFlightWithSeatsAndAddToAirlineAndAddToFlightRoute(Flight flight, Airline airline, FlightRoute flightRoute, List<Seat> seats) {
         EntityManager em = DBConnection.getEntityManager();
         try {
             em.getTransaction().begin();
+
+            // Persist seats first
+            for (Seat seat : seats) {
+                em.persist(seat);
+            }
+
             Airline managedAirline = em.merge(airline); // Attach airline to session
             FlightRoute managedFlightRoute = em.merge(flightRoute); // Attach flightRoute to session
             flight.setAirline(managedAirline); // Set the relationship
             flight.setFlightRoute(managedFlightRoute); // Set the relationship
+            flight.setSeats(seats);
+
             em.persist(flight); // Persist the flight
+
             managedAirline.getFlights().add(flight); // Update the airline's collection
+            em.merge(managedAirline);
+
             managedFlightRoute.getFlights().add(flight); // Update the flightRoute's collection
+            em.merge(managedFlightRoute);
+
+            seats.forEach(seat -> {
+                seat.setFlight(flight); // Set the relationship
+                em.merge(seat); // Update the seat
+            });
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();

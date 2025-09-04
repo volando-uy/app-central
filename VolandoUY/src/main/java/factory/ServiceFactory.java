@@ -79,6 +79,7 @@ public class ServiceFactory {
             flightService = new FlightService();
             flightService.setUserService(getUserService());
             flightService.setFlightRouteService(getFlightRouteService());
+            flightService.setSeatService(getSeatService());
         }
         return flightService;
     }
