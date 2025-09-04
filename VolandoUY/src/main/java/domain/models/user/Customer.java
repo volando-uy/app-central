@@ -65,12 +65,26 @@ public class Customer extends User {
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof CustomerDTO newDataCasted)) return;
 
-        this.setName(newDataCasted.getName());
-        this.setSurname(newDataCasted.getSurname());
-        this.setBirthDate(newDataCasted.getBirthDate());
-        this.setDocType(newDataCasted.getDocType());
-        this.setNumDoc(newDataCasted.getNumDoc());
-        this.setCitizenship(newDataCasted.getCitizenship());
+//        this.setName(newDataCasted.getName());
+//        this.setSurname(newDataCasted.getSurname());
+//        this.setBirthDate(newDataCasted.getBirthDate());
+//        this.setDocType(newDataCasted.getDocType());
+//        this.setNumDoc(newDataCasted.getNumDoc());
+//        this.setCitizenship(newDataCasted.getCitizenship());
+        if(newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
+            this.setName(newDataCasted.getName());
+//        if(newDataCasted.getMail() != null && !newDataCasted.getMail().isBlank())
+//            this.setMail(newDataCasted.getMail());
+        if(newDataCasted.getSurname() != null && !newDataCasted.getSurname().isBlank())
+            this.setSurname(newDataCasted.getSurname());
+        if(newDataCasted.getBirthDate() != null )
+            this.setBirthDate(newDataCasted.getBirthDate());
+        if(newDataCasted.getDocType() != null )
+            this.setDocType(newDataCasted.getDocType());
+        if(newDataCasted.getNumDoc() != null && !newDataCasted.getNumDoc().isBlank())
+            this.setNumDoc(newDataCasted.getNumDoc());
+        if(newDataCasted.getCitizenship() != null && !newDataCasted.getCitizenship().isBlank())
+            this.setCitizenship(newDataCasted.getCitizenship());
     }
 
     @Override

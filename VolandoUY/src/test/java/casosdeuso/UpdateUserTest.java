@@ -3,9 +3,7 @@ package casosdeuso;
 import app.DBConnection;
 import controllers.user.IUserController;
 import controllers.user.UserController;
-import domain.dtos.user.AirlineDTO;
-import domain.dtos.user.CustomerDTO;
-import domain.dtos.user.UserDTO;
+import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
@@ -57,7 +55,7 @@ class UpdateUserTest {
     void updateCustomer_shouldReflectChanges() {
         // GIVEN
         String nickname = "gyabisito";
-        CustomerDTO original = (CustomerDTO) userController.getUserByNickname(nickname);
+        BaseCustomerDTO original = (BaseCustomerDTO) userController.getUserSimpleDetailsByNickname(nickname);
         assertEquals("Jose", original.getName());
 
         // WHEN
@@ -74,7 +72,7 @@ class UpdateUserTest {
         userController.updateUser(nickname, modificado);
 
         // THEN
-        CustomerDTO actualizado = (CustomerDTO) userController.getUserByNickname(nickname);
+        BaseCustomerDTO actualizado = (BaseCustomerDTO) userController.getUserSimpleDetailsByNickname(nickname);
         assertEquals("Carlos", actualizado.getName());
         assertEquals("Martinez", actualizado.getSurname());
         assertEquals("87654321", actualizado.getNumDoc());
@@ -92,7 +90,7 @@ class UpdateUserTest {
     void updateAirline_shouldReflectChanges() {
         // GIVEN
         String nickname = "flyuy";
-        AirlineDTO original = (AirlineDTO) userController.getUserByNickname(nickname);
+        BaseAirlineDTO original = (BaseAirlineDTO) userController.getUserSimpleDetailsByNickname(nickname);
         assertEquals("FlyUY", original.getName());
 
         // WHEN
@@ -106,7 +104,7 @@ class UpdateUserTest {
         userController.updateUser(nickname, modificado);
 
         // THEN
-        AirlineDTO actualizado = (AirlineDTO) userController.getUserByNickname(nickname);
+        BaseAirlineDTO actualizado = (BaseAirlineDTO) userController.getUserSimpleDetailsByNickname(nickname);
         assertEquals("FlyUruguay", actualizado.getName());
         assertEquals("Nueva descripción", actualizado.getDescription());
         assertEquals("www.flyuy.net", actualizado.getWeb());

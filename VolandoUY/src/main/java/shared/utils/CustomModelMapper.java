@@ -78,16 +78,16 @@ public class CustomModelMapper extends ModelMapper {
 
     public FlightDTO mapFullFlight(Flight flight) {
         FlightDTO flightDTO = this.map(flight, FlightDTO.class);
-        flightDTO.setAirlineNickname(flight.getAirline().getNickname());
-        flightDTO.setFlightRouteName(flight.getFlightRoute().getName());
+        flightDTO.setAirlineNickname(flight.getAirline() != null ? flight.getAirline().getNickname() : null);
+        flightDTO.setFlightRouteName(flight.getFlightRoute() != null ? flight.getFlightRoute().getName() : null);
         return flightDTO;
     }
 
     public FlightRouteDTO mapFullFlightRoute(FlightRoute flightRoute) {
         FlightRouteDTO flightRouteDTO = this.map(flightRoute, FlightRouteDTO.class);
-        flightRouteDTO.setOriginCityName(flightRoute.getOriginCity().getName());
-        flightRouteDTO.setDestinationCityName(flightRoute.getDestinationCity().getName());
-        flightRouteDTO.setAirlineNickname(flightRoute.getAirline().getNickname());
+        flightRouteDTO.setOriginCityName(flightRoute.getOriginCity() != null ? flightRoute.getOriginCity().getName() : null);
+        flightRouteDTO.setDestinationCityName(flightRoute.getDestinationCity() != null ? flightRoute.getDestinationCity().getName() : null);
+        flightRouteDTO.setAirlineNickname(flightRoute.getAirline() != null ? flightRoute.getAirline().getNickname() : null);
         flightRouteDTO.setCategories(
                 new ArrayList<>(flightRoute.getCategories()).stream().map(Category::getName).toList()
         );
@@ -99,15 +99,15 @@ public class CustomModelMapper extends ModelMapper {
 
     public BuyPackageDTO mapFullBuyPackage(BuyPackage buyPackage) {
         BuyPackageDTO buyPackageDTO = this.map(buyPackage, BuyPackageDTO.class);
-        buyPackageDTO.setCustomerNickname(buyPackage.getCustomer().getNickname());
-        buyPackageDTO.setFlightRoutePackageName(buyPackage.getFlightRoutePackage().getName());
+        buyPackageDTO.setCustomerNickname(buyPackage.getCustomer() != null ? buyPackage.getCustomer().getNickname() : null);
+        buyPackageDTO.setFlightRoutePackageName(buyPackage.getFlightRoutePackage() != null ? buyPackage.getFlightRoutePackage().getName() : null);
         buyPackageDTO.setBookFlightsIds(buyPackage.getBookFlights().stream().map(BookFlight::getId).toList());
         return buyPackageDTO;
     }
 
     public BookFlightDTO mapFullBookFlight(BookFlight bookFlight) {
         BookFlightDTO bookFlightDTO = this.map(bookFlight, BookFlightDTO.class);
-        bookFlightDTO.setCustomerNickname(bookFlight.getCustomer().getNickname());
+        bookFlightDTO.setCustomerNickname(bookFlight.getCustomer() != null ? bookFlight.getCustomer().getNickname() : null);
         bookFlightDTO.setTicketIds(bookFlight.getTickets().stream().map(Ticket::getId).toList());
         return bookFlightDTO;
     }
@@ -131,20 +131,20 @@ public class CustomModelMapper extends ModelMapper {
             ticketDTO.setExtraLuggages(ticket.getExtraLuggages().stream().map(this::mapFullExtraLuggage).collect(toList()));
         }
         ticketDTO.setSeatNumber(ticket.getSeat().getNumber());
-        ticketDTO.setBookFlightId(ticket.getBookFlight().getId());
+        ticketDTO.setBookFlightId(ticket.getBookFlight() != null ? ticket.getBookFlight().getId() : null);
         return ticketDTO;
     }
 
     public SeatDTO mapFullSeat(Seat seat) {
         SeatDTO seatDTO = this.map(seat, SeatDTO.class);
-        seatDTO.setFlightName(seat.getFlight().getName());
-        seatDTO.setTicketId(seat.getTicket().getId());
+        seatDTO.setFlightName(seat.getFlight() != null ? seat.getFlight().getName() : null);
+        seatDTO.setTicketId(seat.getTicket() != null ? seat.getTicket().getId() : null);
         return seatDTO;
     }
 
     public AirportDTO mapFullAirport(Airport airport) {
         AirportDTO airportDTO = this.map(airport, AirportDTO.class);
-        airportDTO.setCityName(airport.getCity().getName());
+        airportDTO.setCityName(airport.getCity() != null ? airport.getCity().getName() : null);
         return airportDTO;
     }
 

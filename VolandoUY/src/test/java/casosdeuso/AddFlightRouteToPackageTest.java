@@ -40,8 +40,10 @@ public class AddFlightRouteToPackageTest {
         userController = ControllerFactory.getUserController();
 
         // Crear ciudades necesarias
+
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9011, -56.1645));
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Asunción", "Paraguay", -25.2637, -57.5759));
+
 
         // Crear aerolínea
         userController.registerAirline(new AirlineDTO(
@@ -49,18 +51,23 @@ public class AddFlightRouteToPackageTest {
         ));
 
         // Crear ruta de vuelo
-        flightRouteController.createFlightRoute(
-                new BaseFlightRouteDTO("UY-ASU", "Ruta Montevideo - Asunción", LocalDate.now(), 200.0, 350.0, 50.0),
-                "Montevideo",
-                "Asunción",
-                "uyair",
-                null
-        );
+        BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
+        flightRouteDTO.setName("UY-ASU");
+        flightRouteDTO.setDescription("Ruta Montevideo - Asunción");
+        flightRouteDTO.setCreatedAt(LocalDate.now());
+        flightRouteDTO.setPriceTouristClass(200.0);
+        flightRouteDTO.setPriceBusinessClass(350.0);
+        flightRouteDTO.setPriceExtraUnitBaggage(50.0);
+        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Asunción", "uyair", List.of());
 
-        // Crear paquete
-        packageController.createFlightRoutePackage(
-                new BaseFlightRoutePackageDTO("Promo Paraguay", "Paquete con descuento para Paraguay", 15, 20.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 0.0)
-        );
+        BaseFlightRoutePackageDTO packageDTO = new BaseFlightRoutePackageDTO();
+        packageDTO.setName("Promo Paraguay");
+        packageDTO.setDescription("Paquete con descuento para Paraguay");
+        packageDTO.setValidityPeriodDays(15);
+        packageDTO.setTotalPrice(20.0);
+        packageDTO.setCreationDate(LocalDate.now());
+        packageDTO.setSeatType(EnumTipoAsiento.TURISTA);
+        packageController.createFlightRoutePackage(packageDTO);
     }
 
     @Test

@@ -14,6 +14,7 @@ public class DBConnection {
     private static EntityManagerFactory emf = null;
 
     public static EntityManagerFactory getEntityManagerFactory() {
+
         String persistenceUnitName = ENVIRONMENT != null && ENVIRONMENT.equals("TEST") ? "VolandoAppTest" : "VolandoApp";
 
         if (ENVIRONMENT != null && ENVIRONMENT.equals("PROD")) {
