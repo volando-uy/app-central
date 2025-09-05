@@ -1,8 +1,11 @@
 package factory;
 
+import controllers.booking.IBookingController;
 import controllers.seat.ISeatController;
 import domain.services.airport.AirportService;
 import domain.services.airport.IAirportService;
+import domain.services.booking.BookingService;
+import domain.services.booking.IBookingService;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
 import domain.services.city.CityService;
@@ -30,7 +33,7 @@ public class ServiceFactory {
     private static IAirportService airportService;
     private static ISeatService seatService;
     private static ITicketService ticketService;
-
+    private static IBookingService bookingService;
     // ############ USER SERVICE ###########
 
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
@@ -135,5 +138,17 @@ public class ServiceFactory {
             ticketService = new TicketService();
         }
         return ticketService;
+    }
+
+    public static IBookingService getBookingService(){
+        if(bookingService == null){
+            bookingService = new BookingService();
+            bookingService.setFlightService(getFlightService());
+            bookingService.setSeatService(getSeatService());
+            bookingService.setTicketService(getTicketService());
+            bookingService.setUserService(getUserService());
+        }
+
+        return bookingService;
     }
 }

@@ -8,24 +8,25 @@ import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class TicketDTO {
-    private Long id;
-
-    private String name;
-    private String surname;
-    private String numDoc;
+public class TicketDTO extends BaseTicketDTO {
 
     private List<ExtraLuggageDTO> extraLuggages=null;
     private List<BasicLuggageDTO> basicLuggages=null;
     private String seatNumber;
     private Long bookFlightId;
+
+    public TicketDTO(Long id, String name,String surname,String numdoc) {
+        super(id, name,surname,numdoc);
+        this.extraLuggages=null;
+        this.basicLuggages=null;
+        this.seatNumber=null;
+        this.bookFlightId=null;
+    }
 }

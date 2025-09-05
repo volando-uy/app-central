@@ -64,7 +64,7 @@ class UserServiceTest {
         UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
             userService.registerCustomer(dto);
         });
-        assertEquals(ErrorMessages.ERR_USER_EXISTS, ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_USER_EXISTS, dto.getNickname()), ex.getMessage());
     }
 
     @Test
@@ -276,7 +276,7 @@ class UserServiceTest {
             userService.registerCustomer(second);
         });
 
-        assertEquals(ErrorMessages.ERR_USER_EXISTS, ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_USER_EXISTS, second.getNickname()), ex.getMessage());
     }
 
     @Test

@@ -51,7 +51,7 @@ public class UserService implements IUserService {
     public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO) {
         // Comprobamos que el usuario no exista
         if (existsUserByNickname(customerDTO.getNickname()) || _emailExists(customerDTO.getMail())) {
-            throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
+            throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USER_EXISTS, customerDTO.getNickname()));
         }
 
         // Creamos el nuevo customer

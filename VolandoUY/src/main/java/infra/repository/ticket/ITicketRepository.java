@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ITicketRepository {
     Ticket getTicketById(Long ticketId);
+
+    Ticket getFullTicketById(Long ticketId);
 }

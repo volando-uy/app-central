@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Setter;
 import shared.utils.CustomModelMapper;
 
+import java.util.List;
+
 public class SeatService implements ISeatService {
 
     private SeatRepository seatRepository;
@@ -38,5 +40,25 @@ public class SeatService implements ISeatService {
     @Override
     public void assignTicketToSeat(Long seatId, Long ticketId) {
 
+    }
+
+    @Override
+    public Seat getSeatById(Long seatId) {
+        return seatRepository.findByKey(seatId);
+    }
+
+    @Override
+    public boolean seatExists(Long seatId) {
+        return seatRepository.findByKey(seatId) != null;
+    }
+
+    @Override
+    public List<Seat> getAllSeatsByFlightName(String flightName) {
+        return seatRepository.getAllSeatsByFlightName(flightName);
+    }
+
+    @Override
+    public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
+        return seatRepository.getLimitedAvailableSeatsByFlightName(flightName, size);
     }
 }

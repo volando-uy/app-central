@@ -29,4 +29,26 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
             return List.of();
         }
     }
+
+    @Override
+    public List<Seat> getAllSeatsByFlightName(String flightName) {
+        try (EntityManager em = DBConnection.getEntityManager()){
+            Flight flight = em.find(Flight.class, flightName);
+            if (flight != null) {
+                return flight.getSeats().stream().filter(Seat::isAvailable).toList();
+            }
+            return List.of();
+        }
+    }
+
+    @Override
+    public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
+        try (EntityManager em = DBConnection.getEntityManager()){
+            Flight flight = em.find(Flight.class, flightName);
+            if (flight != null) {
+                return flight.getSeats().stream().filter(Seat::isAvailable).limit(size).toList();
+            }
+            return List.of();
+        }
+    }
 }

@@ -3,10 +3,12 @@ package domain.dtos.luggage;
 import domain.models.bookflight.BookFlight;
 import domain.models.luggage.EnumCategoria;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-public class ExtraLuggageDTO extends LuggageDTO {
-    private Long id;
-    private EnumCategoria category;
+@Setter
+@Getter
+public class ExtraLuggageDTO extends BaseExtraLuggageDTO {
 
-    private Long bookFlightId;
+    private Long ticketId;
 }
