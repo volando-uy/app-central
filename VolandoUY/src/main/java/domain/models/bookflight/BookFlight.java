@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,7 +41,7 @@ public class BookFlight {
 
     // Tiene muchos tickets
     @OneToMany()
-    private List<Ticket> tickets =null;
+    private List<Ticket> tickets =new ArrayList<>();
 
 
 }
