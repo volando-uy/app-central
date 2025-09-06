@@ -41,7 +41,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  * @author AparicioQuian
  */
-public class BookFlightPanel extends JPanel { // ===== Campos (mismo estilo que PackagePurchasePanel) =====
+public class BookFlightPanel extends JPanel {
 
     private IUserController userController;
     private IFlightRouteController flightRouteController;
@@ -442,7 +442,6 @@ public class BookFlightPanel extends JPanel { // ===== Campos (mismo estilo que 
     }
 
 
-    /* ---------------- helpers ---------------- */
 
     private void initPassengersTable() {
         passsengerTable.setModel(new DefaultTableModel(
