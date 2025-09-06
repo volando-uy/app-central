@@ -1,0 +1,61 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle1"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 300
+				"x": 40
+				"y": 15
+				"height": 40
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle2"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"y": 60
+				"width": 300
+				"height": 40
+				"x": 40
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle3"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 300
+				"height": 40
+				"x": 40
+				"y": 105
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle4"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 300
+				"height": 40
+				"x": 40
+				"y": 150
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle5"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 300
+				"height": 40
+				"x": 40
+				"y": 195
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "detalle6"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 300
+				"height": 40
+				"x": 40
+				"y": 240
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 365 )
+		} )
+	}
+}
