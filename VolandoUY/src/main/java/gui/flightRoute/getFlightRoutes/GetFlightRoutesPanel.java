@@ -10,9 +10,12 @@ import domain.dtos.category.CategoryDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
+import gui.flightRoute.details.FlightRouteDetailWindow;
+import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -28,7 +31,7 @@ import java.util.List;
 public class GetFlightRoutesPanel extends JPanel {
     private  IFlightRouteController flightRouteController;
     private  IUserController userController;
-
+    private List<FlightRouteDTO> flightRoutes = new ArrayList<>();
     private boolean areAirlinesLoading = false;
 
     // --- Datos auxiliares ---
@@ -67,6 +70,7 @@ public class GetFlightRoutesPanel extends JPanel {
                         "Error cargando las rutas de vuelo: " + ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         });
 
         flightRouteLabel.addMouseListener(new MouseAdapter() {
@@ -79,6 +83,16 @@ public class GetFlightRoutesPanel extends JPanel {
                     loadFlightRoutesTable(nickname);
                 } else {
                     clearTable();
+                }
+            }
+        });
+        FlightRouteTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && FlightRouteTable.getSelectedRow() != -1) {
+                    int fila = FlightRouteTable.getSelectedRow();
+                    FlightRouteDTO route = flightRoutes.get(fila);
+                    new FlightRouteDetailWindow(route).setVisible(true);
                 }
             }
         });
@@ -142,13 +156,13 @@ public class GetFlightRoutesPanel extends JPanel {
         List<FlightRouteDTO> routes =
                 flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
-        DefaultTableModel model = new DefaultTableModel();
         String[] cols = {
                 "Nombre", "Descripción", "Creado",
                 "Origen", "Destino", "Aerolínea",
                 "$ Turista", "$ Business", "$ Extra Bulto",
                 "Categorías"
         };
+        NonEditableTableModel model = new NonEditableTableModel(cols, 0);
         model.setColumnIdentifiers(cols);
 
         for (FlightRouteDTO r : routes) {
@@ -163,7 +177,7 @@ public class GetFlightRoutesPanel extends JPanel {
                     break;
                 }
             }
-
+            this.flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
             model.addRow(new Object[]{
                     safe(r.getName()),
                     safe(r.getDescription()),
@@ -233,7 +247,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         selectAirlinePanel = new JPanel();
         airlineLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
@@ -254,12 +268,13 @@ public class GetFlightRoutesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
-        EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing
-        .border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),
-        java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))
-        throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
+        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
+        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
+        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+        .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
+        ( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -349,7 +364,6 @@ public class GetFlightRoutesPanel extends JPanel {
                     FlightRouteTable.setPreferredSize(new Dimension(560, 150));
                     FlightRouteTable.setMaximumSize(new Dimension(560, 150));
                     FlightRouteTable.setMinimumSize(new Dimension(560, 150));
-                    FlightRouteTable.setEnabled(false);
                     FlightRouteTable.setOpaque(false);
                     FlightRouteScrollPane.setViewportView(FlightRouteTable);
                 }
@@ -383,7 +397,7 @@ public class GetFlightRoutesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel selectAirlinePanel;
     private JLabel airlineLabel;
     private JComboBox<String> airlineComboBox;

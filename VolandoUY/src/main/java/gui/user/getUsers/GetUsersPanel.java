@@ -6,6 +6,7 @@ import controllers.user.IUserController;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.*;
 import lombok.Setter;
+import shared.utils.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -37,8 +38,8 @@ public class GetUsersPanel extends JPanel {
         List<BaseCustomerDTO> getAllCustomers = userController.getAllCustomersSimpleDetails();
 
         // Create table model and set column names
-        DefaultTableModel customerTableModel = new DefaultTableModel();
         String[] columnNames = {"Nickname", "Nombre", "Apellido", "Email", "Nacionalidad", "Fecha de nacimiento", "Tipo de identificación", "Identificación"};
+        NonEditableTableModel customerTableModel = new NonEditableTableModel(columnNames, 0);
         customerTableModel.setColumnIdentifiers(columnNames);
         
         // Add rows to the table model
@@ -65,9 +66,9 @@ public class GetUsersPanel extends JPanel {
     
     private void loadAirlineTable() {
         List<BaseAirlineDTO> getAllAirlines = userController.getAllAirlinesSimpleDetails();
-        
-        DefaultTableModel airlineTableModel = new DefaultTableModel();
+
         String[] airlineColumnNames = {"Nickname", "Nombre", "Email", "Descripción", "Web"};
+        NonEditableTableModel airlineTableModel = new NonEditableTableModel(airlineColumnNames, 0);
         airlineTableModel.setColumnIdentifiers(airlineColumnNames);
         
         for (BaseAirlineDTO airlineDTO : getAllAirlines) {
@@ -135,7 +136,7 @@ public class GetUsersPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         vSpacer17 = new JPanel(null);
         CustomerInfoPanel = new JPanel();
         customerLabel = new JLabel();
@@ -160,13 +161,12 @@ public class GetUsersPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
-        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border
-        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog"
-        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
-        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
-        . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException
-        ( ) ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -232,7 +232,6 @@ public class GetUsersPanel extends JPanel {
                     customerTable.setPreferredSize(new Dimension(560, 150));
                     customerTable.setMaximumSize(new Dimension(560, 150));
                     customerTable.setMinimumSize(new Dimension(560, 150));
-                    customerTable.setEnabled(false);
                     customerScrollPane.setViewportView(customerTable);
                 }
                 CustomerTablePanel.add(customerScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -305,7 +304,6 @@ public class GetUsersPanel extends JPanel {
                     airlineTable.setPreferredSize(new Dimension(560, 150));
                     airlineTable.setMaximumSize(new Dimension(560, 150));
                     airlineTable.setMinimumSize(new Dimension(560, 150));
-                    airlineTable.setEnabled(false);
                     airlineScrollPane.setViewportView(airlineTable);
                 }
                 AirlineTablePanel.add(airlineScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -336,7 +334,7 @@ public class GetUsersPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel vSpacer17;
     private JPanel CustomerInfoPanel;
     private JLabel customerLabel;

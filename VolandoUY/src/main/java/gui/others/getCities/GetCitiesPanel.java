@@ -5,6 +5,7 @@
 package gui.others.getCities;
 
 import controllers.city.ICityController;
+import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import javax.swing.*;
@@ -36,8 +37,8 @@ public class GetCitiesPanel extends JPanel {
         List<String> allCities = cityController.getAllCities();
 
         // 2) Crear modelo y columnas
-        DefaultTableModel cityTableModel = new DefaultTableModel();
         String[] columnNames = {"Ciudad"};
+        NonEditableTableModel cityTableModel = new NonEditableTableModel(columnNames, 0);
         cityTableModel.setColumnIdentifiers(columnNames);
 
         // 3) Agregar filas
@@ -101,7 +102,7 @@ public class GetCitiesPanel extends JPanel {
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         vSpacer17 = new JPanel(null);
         cityInfoPanel = new JPanel();
         cityLabel = new JLabel();
@@ -119,11 +120,11 @@ public class GetCitiesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
-        0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
-        .BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt.Color.
-        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
-        beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+        0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+        . BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+        beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -194,7 +195,6 @@ public class GetCitiesPanel extends JPanel {
                     cityTable.setPreferredSize(new Dimension(560, 150));
                     cityTable.setMaximumSize(new Dimension(560, 150));
                     cityTable.setMinimumSize(new Dimension(560, 150));
-                    cityTable.setEnabled(false);
                     cityTable.setOpaque(false);
                     cityScrollPane.setViewportView(cityTable);
                 }
@@ -228,7 +228,7 @@ public class GetCitiesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel vSpacer17;
     private JPanel cityInfoPanel;
     private JLabel cityLabel;

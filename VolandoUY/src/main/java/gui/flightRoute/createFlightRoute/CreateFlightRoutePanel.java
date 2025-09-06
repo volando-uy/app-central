@@ -8,6 +8,7 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
+import shared.utils.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -71,8 +72,8 @@ public class CreateFlightRoutePanel extends JPanel {
         List<String> categoriesNames = categoryController.getAllCategoriesNames();
         
         // Create the table model
-        DefaultTableModel tableModel = new DefaultTableModel();
         String[] columnNames = {"Nombre"};
+        NonEditableTableModel tableModel = new NonEditableTableModel(columnNames, 0);
         for (String columnName : columnNames) {
             tableModel.addColumn(columnName);
         }
