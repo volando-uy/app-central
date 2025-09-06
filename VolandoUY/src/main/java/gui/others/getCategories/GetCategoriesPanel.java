@@ -5,6 +5,7 @@
 package gui.others.getCategories;
 
 import controllers.category.ICategoryController;
+import shared.utils.NonEditableTableModel;
 
 
 import java.awt.*;
@@ -38,8 +39,8 @@ public class GetCategoriesPanel extends JPanel {
         List<String> allCategories = categoryController.getAllCategoriesNames();
 
         // 2) Crear modelo y columnas
-        DefaultTableModel categoryTableModel = new DefaultTableModel();
         String[] columnNames = {"Categoría"};
+        NonEditableTableModel categoryTableModel = new NonEditableTableModel(columnNames, 0);
         categoryTableModel.setColumnIdentifiers(columnNames);
 
         // 3) Agregar filas
@@ -104,7 +105,7 @@ public class GetCategoriesPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         vSpacer17 = new JPanel(null);
         categoryInfoPanel = new JPanel();
         categoryLabel = new JLabel();
@@ -122,13 +123,12 @@ public class GetCategoriesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
-        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder
-        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
-        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
-        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
-        ;
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -199,7 +199,6 @@ public class GetCategoriesPanel extends JPanel {
                     categoryTable.setPreferredSize(new Dimension(560, 150));
                     categoryTable.setMaximumSize(new Dimension(560, 150));
                     categoryTable.setMinimumSize(new Dimension(560, 150));
-                    categoryTable.setEnabled(false);
                     categoryTable.setOpaque(false);
                     categoryScrollPane.setViewportView(categoryTable);
                 }
@@ -233,7 +232,7 @@ public class GetCategoriesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel vSpacer17;
     private JPanel categoryInfoPanel;
     private JLabel categoryLabel;

@@ -12,6 +12,7 @@ import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.flight.FlightDTO;
+import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -79,11 +80,11 @@ public class createFlightPanel extends JPanel {
         List<FlightRouteDTO> flightRoutes =
                 flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
-        DefaultTableModel tableModel = new DefaultTableModel();
         String[] columnNames = {
                 "Nombre", "Descripción", "Ciudad Origen", "Ciudad Destino",
                 "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"
         };
+        NonEditableTableModel tableModel = new NonEditableTableModel(columnNames, 0);
         tableModel.setColumnIdentifiers(columnNames);
 
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -7,6 +7,7 @@ package gui.flightRoutePackage.getFlightRoutesPackages;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -37,8 +38,8 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         List<String> names = flightRoutePackageController.getAllNotBoughtFlightRoutesPackagesNames();
 
         // 2) Modelo/columnas
-        DefaultTableModel model = new DefaultTableModel();
         String[] cols = {"Nombre", "Descripción", "Validez (días)", "Descuento", "Creado", "Tipo asiento"};
+        NonEditableTableModel model = new NonEditableTableModel(cols, 0);
         model.setColumnIdentifiers(cols);
 
         // 3) Por cada nombre, obtener DTO y armar fila
@@ -122,7 +123,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Nahuel
         vSpacer17 = new JPanel(null);
         PackageinfoPanel = new JPanel();
         packageLabel = new JLabel();
@@ -140,13 +141,12 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax
-        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-        .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
-        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .
-        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
+        ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
+        .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
+        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
+        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+        ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -212,7 +212,6 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
                     PackageTable.setPreferredSize(new Dimension(560, 150));
                     PackageTable.setMaximumSize(new Dimension(560, 150));
                     PackageTable.setMinimumSize(new Dimension(560, 150));
-                    PackageTable.setEnabled(false);
                     PackageScrollPane.setViewportView(PackageTable);
                 }
                 PackageTablePanel.add(PackageScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -243,7 +242,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Nahuel
     private JPanel vSpacer17;
     private JPanel PackageinfoPanel;
     private JLabel packageLabel;

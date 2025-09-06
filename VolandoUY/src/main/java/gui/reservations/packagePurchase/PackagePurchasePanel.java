@@ -11,6 +11,7 @@ import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.services.user.IUserService;
+import shared.utils.NonEditableTableModel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -115,18 +116,16 @@ public class PackagePurchasePanel extends JPanel {
         });
     }
     private void updatePackageTable(FlightRoutePackageDTO selectedPackage) {
-        String[] columnNames = {"Rutas incluidas"};
+        Object[] columnNames = {"Rutas incluidas"};
         List<String> routes = selectedPackage.getFlightRouteNames();
-        Object[][] data = new Object[routes.size()][1];
 
-        for (int i = 0; i < routes.size(); i++) {
-            data[i][0] = routes.get(i);
+        NonEditableTableModel model = new NonEditableTableModel(columnNames, 0);
+
+        for (String route : routes) {
+            model.addRow(new Object[]{route});
         }
 
-        packageTable.setModel(new javax.swing.table.DefaultTableModel(
-                data,
-                columnNames
-        ));
+        packageTable.setModel(model);
     }
     private void loadClients() {
         listClientComboBox.removeAllItems();
