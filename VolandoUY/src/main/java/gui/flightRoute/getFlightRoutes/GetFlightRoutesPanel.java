@@ -4,6 +4,7 @@
 
 package gui.flightRoute.getFlightRoutes;
 
+import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.category.CategoryDTO;
@@ -31,6 +32,7 @@ import java.util.List;
 public class GetFlightRoutesPanel extends JPanel {
     private  IFlightRouteController flightRouteController;
     private  IUserController userController;
+    private IFlightController flightController;
     private List<FlightRouteDTO> flightRoutes = new ArrayList<>();
     private boolean areAirlinesLoading = false;
 
@@ -40,12 +42,15 @@ public class GetFlightRoutesPanel extends JPanel {
 
 
     public GetFlightRoutesPanel(IFlightRouteController flightRouteController,
-                                IUserController userController)
+                                IUserController userController,
+                                IFlightController flightController)
     {
+        if (flightController == null) throw new IllegalArgumentException("IFlightController es null");
         if (flightRouteController == null) throw new IllegalArgumentException("IFlightRouteController es null");
         if (userController == null)         throw new IllegalArgumentException("IUserController es null");
         this.flightRouteController = flightRouteController;
         this.userController = userController;
+        this.flightController = flightController;
 
         initComponents();
         initListeners();
@@ -92,7 +97,7 @@ public class GetFlightRoutesPanel extends JPanel {
                 if (e.getClickCount() == 2 && FlightRouteTable.getSelectedRow() != -1) {
                     int fila = FlightRouteTable.getSelectedRow();
                     FlightRouteDTO route = flightRoutes.get(fila);
-                    new FlightRouteDetailWindow(route).setVisible(true);
+                    new FlightRouteDetailWindow(route, flightController).setVisible(true);
                 }
             }
         });
@@ -268,13 +273,12 @@ public class GetFlightRoutesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
-        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
-        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
-        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-        .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
-        ( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+        ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+        propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};

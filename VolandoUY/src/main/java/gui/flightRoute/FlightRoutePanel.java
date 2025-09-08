@@ -1,6 +1,7 @@
 package gui.flightRoute;
 
 import controllers.category.ICategoryController;
+import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import gui.flightRoute.createFlightRoute.CreateFlightRoutePanel;
@@ -21,6 +22,7 @@ public class FlightRoutePanel extends JPanel {
 
     private IFlightRouteController flightRouteController;
     private IUserController userController;
+    private IFlightController flightController;
     private ICategoryController categoryController;
 
     private JPanel createFlightRoutePanel;
@@ -28,10 +30,11 @@ public class FlightRoutePanel extends JPanel {
 
     private JPanel contentPanel;
 
-    public FlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController) {
+    public FlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController, IFlightController flightController) {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.categoryController = categoryController;
+        this.flightController = flightController;
         initComponents();
         initPanels();
         initListeners();
@@ -40,7 +43,7 @@ public class FlightRoutePanel extends JPanel {
 
     private void initPanels() {
         createFlightRoutePanel = new CreateFlightRoutePanel(flightRouteController, userController, categoryController);
-        getFlightsRoutesPanel = new GetFlightRoutesPanel(flightRouteController, userController);
+    getFlightsRoutesPanel = new GetFlightRoutesPanel(flightRouteController, userController, flightController);
     }
 
     private void initListeners() {

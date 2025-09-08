@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BaseBookFlightDTO {
     private Long id;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private Double totalPrice;
 
 }

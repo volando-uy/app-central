@@ -5,29 +5,94 @@
 package gui.flightRoute.details;
 
 import java.awt.*;
+import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
+import controllers.flight.FlightController;
+import controllers.flight.IFlightController;
+import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import gui.flight.flightDetails.FlightDetailWindow;
+import shared.utils.NonEditableTableModel;
 
 /**
  * @author Nahu
  */
 public class FlightRouteDetailWindow extends JFrame {
-    public FlightRouteDetailWindow(FlightRouteDTO route) {
+    private final IFlightController flightController;
+    public FlightRouteDetailWindow(FlightRouteDTO route, IFlightController flightController) {
+        this.flightController = flightController;
         initComponents();
 
-        if (route != null) {
-            detalle1.setText("Ruta: " + safe(route.getName()));
-            detalle2.setText("Origen: " + safe(route.getOriginCityName()));
-            detalle3.setText("Destino: " + safe(route.getDestinationCityName()));
-            detalle4.setText("Aerolínea: " + safe(route.getAirlineNickname()));
-            detalle5.setText("Categorías: " + String.join(", ", route.getCategories() != null ? route.getCategories() : Collections.emptyList()));
-            detalle6.setText("Vuelos: " + String.join(", ", route.getFlightsNames() != null ? route.getFlightsNames() : Collections.emptyList()));
-        }
 
         setTitle("Detalle de Ruta");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(800, 400);
+        setLocationRelativeTo(getOwner());
+
+        String[] columnNames = {
+                "Nombre", "Descripción", "Fecha de creación",
+                "Precio Turista", "Precio Ejecutivo", "Precio Extra Equipaje", "Vuelo Asociado"
+        };
+        NonEditableTableModel model = new NonEditableTableModel(columnNames, 0);
+        model.setColumnIdentifiers(columnNames);
+
+        model.addRow(new Object[]{
+                route.getName(),
+                route.getDescription(),
+                route.getCreatedAt() != null ? route.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "",
+                "$" + route.getPriceTouristClass(),
+                "$" + route.getPriceBusinessClass(),
+                "$" + route.getPriceExtraUnitBaggage(),
+                "-"   // vacío en la fila de ruta
+        });
+
+        if (route.getFlightsNames() != null && !route.getFlightsNames().isEmpty()) {
+            for (String vuelo : route.getFlightsNames()) {
+                model.addRow(new Object[]{
+                        "Doble", "click", "para", "detalle", "de vuelo", "", vuelo
+                });
+            }
+        }
+
+        tablaRutaVuelo.setModel(model);
+        tablaRutaVuelo.setRowHeight(28);
+        tablaRutaVuelo.setFillsViewportHeight(true);
+        tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tablaRutaVuelo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = tablaRutaVuelo.getSelectedRow();
+                    String vuelo = (String) tablaRutaVuelo.getValueAt(row, 6); // columna de vuelos
+                    if (vuelo != null && !vuelo.equals("-")) {
+                        try {
+                            // Obtener detalles del vuelo desde el controlador
+                            FlightDTO flight = flightController.getFlightDetailsByName(vuelo);
+
+                            // Abrir ventana de detalle (sin reservas por ahora)
+                            FlightDetailWindow detalle = new FlightDetailWindow(flight, null);
+                            detalle.setVisible(true);
+
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(
+                                    FlightRouteDetailWindow.this,
+                                    "Error al abrir detalle del vuelo: " + ex.getMessage(),
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private String safe(String text) {
@@ -37,28 +102,19 @@ public class FlightRouteDetailWindow extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Nahuel
-        detalle1 = new JLabel();
-        detalle2 = new JLabel();
-        detalle3 = new JLabel();
-        detalle4 = new JLabel();
-        detalle5 = new JLabel();
-        detalle6 = new JLabel();
+        scrollPane1 = new JScrollPane();
+        tablaRutaVuelo = new JTable();
 
         //======== this ========
         var contentPane = getContentPane();
         contentPane.setLayout(null);
-        contentPane.add(detalle1);
-        detalle1.setBounds(40, 15, 300, 40);
-        contentPane.add(detalle2);
-        detalle2.setBounds(40, 60, 300, 40);
-        contentPane.add(detalle3);
-        detalle3.setBounds(40, 105, 300, 40);
-        contentPane.add(detalle4);
-        detalle4.setBounds(40, 150, 300, 40);
-        contentPane.add(detalle5);
-        detalle5.setBounds(40, 195, 300, 40);
-        contentPane.add(detalle6);
-        detalle6.setBounds(40, 240, 300, 40);
+
+        //======== scrollPane1 ========
+        {
+            scrollPane1.setViewportView(tablaRutaVuelo);
+        }
+        contentPane.add(scrollPane1);
+        scrollPane1.setBounds(20, 25, 460, 260);
 
         {
             // compute preferred size
@@ -81,11 +137,7 @@ public class FlightRouteDetailWindow extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - Nahuel
-    private JLabel detalle1;
-    private JLabel detalle2;
-    private JLabel detalle3;
-    private JLabel detalle4;
-    private JLabel detalle5;
-    private JLabel detalle6;
+    private JScrollPane scrollPane1;
+    private JTable tablaRutaVuelo;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
