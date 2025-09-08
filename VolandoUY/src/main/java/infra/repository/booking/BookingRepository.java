@@ -1,6 +1,7 @@
 package infra.repository.booking;
 
 import app.DBConnection;
+import domain.dtos.bookFlight.BookFlightDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.luggage.BasicLuggage;
 import domain.models.seat.Seat;
@@ -9,6 +10,7 @@ import domain.models.user.Customer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +119,25 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             }
             return bf;
 
+        }
+    }
+    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
+        // OJO: ajustá los nombres de campos/relaciones según tu entidad BookFlight
+        // - b.createdAt  -> el nombre real en la ENTIDAD (no en el DTO)
+        // - b.customer.nickname -> la relación/columna real hacia Customer
+        // Si tu campo en la entidad se llama "created_at" o "creationDate", cambialo en la JPQL.
+        String jpql =
+                "select new domain.dtos.bookFlight.BookFlightDTO(" +
+                        "       b.id, b.created_at, b.totalPrice) " +
+                        "from BookFlight b " +
+                        "join b.customer c " +
+                        "where c.nickname = :nick " +
+                        "order by b.created_at desc";
+
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            TypedQuery<BookFlightDTO> q = em.createQuery(jpql, BookFlightDTO.class);
+            q.setParameter("nick", nickname);
+            return q.getResultList();
         }
     }
 }

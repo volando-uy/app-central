@@ -1,0 +1,203 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+			name: "splitPane1"
+			"continuousLayout": true
+			"resizeWeight": 0.45
+			"dividerSize": 8
+			"minimumSize": new java.awt.Dimension( 260, 200 )
+			"oneTouchExpandable": true
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel4"
+				"border": new javax.swing.border.EmptyBorder( 8, 8, 8, 8 )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					"border": new javax.swing.border.LineBorder( sfield java.awt.Color darkGray, 1, false )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+						name: "panel13"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label5"
+							"text": "Buscar"
+							"font": new java.awt.Font( "Inter", 0, 12 )
+							"foreground": new java.awt.Color( 95, 99, 104, 255 )
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "cmbTipo"
+							"preferredSize": new java.awt.Dimension( 110, 28 )
+							"maximumRowCount": 10
+						} )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane2"
+					"foreground": new java.awt.Color( 31, 31, 31, 255 )
+					"background": new java.awt.Color( 247, 249, 252, 255 )
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "tblUsuarios"
+						"rowHeight": 26
+						"showVerticalLines": false
+						"gridColor": new java.awt.Color( 230, 230, 230, 255 )
+						"intercellSpacing": new java.awt.Dimension( 0, 0 )
+						"autoCreateRowSorter": true
+						"selectionMode": 0
+						"selectionBackground": new java.awt.Color( 232, 240, 254, 255 )
+						"selectionForeground": new java.awt.Color( 11, 87, 208, 255 )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "left"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel5"
+				"border": new javax.swing.border.EmptyBorder( 8, 8, 8, 8 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"columns": 2
+					"rows": 2
+				} ) {
+					name: "headerDatos"
+					"border": new javax.swing.border.MatteBorder( 0, 0, 1, 0, sfield java.awt.Color gray )
+					"background": new java.awt.Color( 247, 249, 252, 255 )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "name"
+						"foreground": &Color0 new java.awt.Color( 31, 31, 31, 255 )
+						"text": "Nombre"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "tipo"
+						"foreground": #Color0
+						"text": "Nombre"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "email"
+						"foreground": #Color0
+						"text": "Nombre"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "doc"
+						"foreground": #Color0
+						"text": "Nombre"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.CardLayout ) ) {
+					name: "cardsPanel"
+					"border": new javax.swing.border.EmptyBorder( 6, 8, 8, 8 )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+						name: "cardEmpty"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label4"
+							"text": "Seleccioná un usuario"
+							"horizontalTextPosition": 0
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "Center"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "EMPTY"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+						name: "airline"
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel9"
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "btnDetalleRuta"
+								"text": "Ver detalle ruta"
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "North"
+						} )
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "scrollPane3"
+							add( new FormComponent( "javax.swing.JTable" ) {
+								name: "tblRutas"
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "Center"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "AIRLINE"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+						name: "client"
+						add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+							name: "tabbedPane1"
+							"tabLayoutPolicy": 1
+							"foreground": new java.awt.Color( 31, 31, 31, 255 )
+							"background": new java.awt.Color( 247, 249, 252, 255 )
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+								name: "panelReservas"
+								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+									name: "panelToolbarReserva"
+									add( new FormComponent( "javax.swing.JButton" ) {
+										name: "btnDetalleReserva"
+										"text": "Ver Detalle Reserva"
+										"margin": new java.awt.Insets( 8, 14, 8, 14 )
+										"cursor": new java.awt.Cursor( 12 )
+										"toolTipText": "Abrir detalle seleccionado"
+									} )
+								}, new FormLayoutConstraints( class java.lang.String ) {
+									"value": "North"
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPaneReservas"
+									add( new FormComponent( "javax.swing.JTable" ) {
+										name: "tblReservas"
+									} )
+								}, new FormLayoutConstraints( class java.lang.String ) {
+									"value": "Center"
+								} )
+							}, new FormLayoutConstraints( null ) {
+								"title": "Reservas"
+							} )
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+								name: "panelPaquetes"
+								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+									name: "panelToolbarPaquete"
+									add( new FormComponent( "javax.swing.JButton" ) {
+										name: "btnDetallePaquete"
+										"text": "Ver Detalle Paquete"
+									} )
+								}, new FormLayoutConstraints( class java.lang.String ) {
+									"value": "North"
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPanePaquetes"
+									add( new FormComponent( "javax.swing.JTable" ) {
+										name: "tblPaquetes"
+									} )
+								}, new FormLayoutConstraints( class java.lang.String ) {
+									"value": "Center"
+								} )
+							}, new FormLayoutConstraints( null ) {
+								"title": "Paquetes"
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "Center"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "CLIENT"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "right"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 190, 230 )
+			"size": new java.awt.Dimension( 630, 480 )
+		} )
+		add( new FormNonVisual( "java.awt.FlowLayout" ) {
+			name: "flowLayout1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 200, 235 )
+		} )
+	}
+}
