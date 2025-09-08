@@ -105,7 +105,7 @@ public class GetCategoriesPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         vSpacer17 = new JPanel(null);
         categoryInfoPanel = new JPanel();
         categoryLabel = new JLabel();
@@ -232,7 +232,7 @@ public class GetCategoriesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel vSpacer17;
     private JPanel categoryInfoPanel;
     private JLabel categoryLabel;

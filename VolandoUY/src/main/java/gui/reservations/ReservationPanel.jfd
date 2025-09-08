@@ -25,8 +25,8 @@ new FormModel {
 					"text": "+ Comprar Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "nullBtn"
-					"text": "..."
+					name: "getUsersBtn"
+					"text": "\ud83d\udcc4Consultar Usuarios"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "null01Btn"

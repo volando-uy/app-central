@@ -51,33 +51,37 @@ public class AddPassenger extends JPanel {
         seatTypeComboBox2 = new JComboBox();
         numTicketsLabel2 = new JLabel();
         numTicketsTextField2 = new JTextField();
-        vSpacer20 = new JPanel(null);
+        panel1 = new JPanel();
+        panel2 = new JPanel();
+        panel3 = new JPanel();
         secondRowPanel2 = new JPanel();
         extraLuggageLabel2 = new JLabel();
         extraLuggageTextField2 = new JTextField();
         reservationdateTypeLabel2 = new JLabel();
         reservationdateTextField2 = new JTextField();
+        vSpacer22 = new JPanel(null);
         updateBtnPanel2 = new JPanel();
         hSpacer3 = new JPanel(null);
         hSpacer4 = new JPanel(null);
         createNewCustomerBtn2 = new JButton();
+        vSpacer21 = new JPanel(null);
+        vSpacer23 = new JPanel(null);
 
         //======== InfoUserPanel2 ========
         {
             InfoUserPanel2.setOpaque(false);
             InfoUserPanel2.setMinimumSize(new Dimension(440, 258));
             InfoUserPanel2.setMaximumSize(new Dimension(440, 258));
-            InfoUserPanel2.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-            .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing
-            .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-            Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red
-            ),InfoUserPanel2. getBorder()));InfoUserPanel2. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-            public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName(
-            )))throw new RuntimeException();}});
+            InfoUserPanel2.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing
+            . border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ),
+            java. awt. Color. red) ,InfoUserPanel2. getBorder( )) ); InfoUserPanel2. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () ))
+            throw new RuntimeException( ); }} );
             InfoUserPanel2.setLayout(new GridBagLayout());
-            ((GridBagLayout)InfoUserPanel2.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel2.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel2.getLayout()).rowHeights = new int[] {0, 20, 0, 0, 0, 38, 15, 0};
-            ((GridBagLayout)InfoUserPanel2.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoUserPanel2.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
             ((GridBagLayout)InfoUserPanel2.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0E-4};
 
             //---- titleLabel2 ----
@@ -92,8 +96,9 @@ public class AddPassenger extends JPanel {
                 firstRowPanel3.setPreferredSize(new Dimension(510, 30));
                 firstRowPanel3.setMinimumSize(new Dimension(510, 30));
                 firstRowPanel3.setOpaque(false);
+                firstRowPanel3.setMaximumSize(new Dimension(510, 30));
                 firstRowPanel3.setLayout(new GridBagLayout());
-                ((GridBagLayout)firstRowPanel3.getLayout()).columnWidths = new int[] {130, 0, 130, 110, 0};
+                ((GridBagLayout)firstRowPanel3.getLayout()).columnWidths = new int[] {130, 110, 0, 120, 0};
                 ((GridBagLayout)firstRowPanel3.getLayout()).rowHeights = new int[] {10, 0};
                 ((GridBagLayout)firstRowPanel3.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)firstRowPanel3.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
@@ -136,15 +141,57 @@ public class AddPassenger extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel2.add(firstRowPanel3, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+            InfoUserPanel2.add(firstRowPanel3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
-            //---- vSpacer20 ----
-            vSpacer20.setPreferredSize(new Dimension(10, 100));
-            vSpacer20.setOpaque(false);
-            InfoUserPanel2.add(vSpacer20, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0,
-                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+            //======== panel1 ========
+            {
+                panel1.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[fill]",
+                    // rows
+                    "[]" +
+                    "[]" +
+                    "[]"));
+            }
+            InfoUserPanel2.add(panel1, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //======== panel2 ========
+            {
+                panel2.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[fill]" +
+                    "[18,fill]",
+                    // rows
+                    "[]" +
+                    "[]" +
+                    "[]"));
+            }
+            InfoUserPanel2.add(panel2, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[fill]",
+                    // rows
+                    "[]" +
+                    "[]" +
+                    "[]"));
+            }
+            InfoUserPanel2.add(panel3, new GridBagConstraints(3, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //======== secondRowPanel2 ========
@@ -154,7 +201,7 @@ public class AddPassenger extends JPanel {
                 secondRowPanel2.setMaximumSize(new Dimension(510, 510));
                 secondRowPanel2.setOpaque(false);
                 secondRowPanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)secondRowPanel2.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
+                ((GridBagLayout)secondRowPanel2.getLayout()).columnWidths = new int[] {130, 130, 0, 116, 0};
                 ((GridBagLayout)secondRowPanel2.getLayout()).rowHeights = new int[] {30, 0};
                 ((GridBagLayout)secondRowPanel2.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)secondRowPanel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
@@ -199,8 +246,14 @@ public class AddPassenger extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel2.add(secondRowPanel2, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
-                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+            InfoUserPanel2.add(secondRowPanel2, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer22 ----
+            vSpacer22.setOpaque(false);
+            InfoUserPanel2.add(vSpacer22, new GridBagConstraints(0, 6, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
             //======== updateBtnPanel2 ========
@@ -228,10 +281,21 @@ public class AddPassenger extends JPanel {
                 createNewCustomerBtn2.setPreferredSize(new Dimension(10, 34));
                 updateBtnPanel2.add(createNewCustomerBtn2, BorderLayout.CENTER);
             }
-            InfoUserPanel2.add(updateBtnPanel2, new GridBagConstraints(1, 6, 2, 1, 0.0, 0.0,
+            InfoUserPanel2.add(updateBtnPanel2, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- vSpacer21 ----
+            vSpacer21.setMaximumSize(new Dimension(12, 10));
+            vSpacer21.setOpaque(false);
+            InfoUserPanel2.add(vSpacer21, new GridBagConstraints(2, 6, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
+
+        //---- vSpacer23 ----
+        vSpacer23.setPreferredSize(new Dimension(10, 100));
+        vSpacer23.setOpaque(false);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
@@ -244,15 +308,20 @@ public class AddPassenger extends JPanel {
     private JComboBox seatTypeComboBox2;
     private JLabel numTicketsLabel2;
     private JTextField numTicketsTextField2;
-    private JPanel vSpacer20;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JPanel panel3;
     private JPanel secondRowPanel2;
     private JLabel extraLuggageLabel2;
     private JTextField extraLuggageTextField2;
     private JLabel reservationdateTypeLabel2;
     private JTextField reservationdateTextField2;
+    private JPanel vSpacer22;
     private JPanel updateBtnPanel2;
     private JPanel hSpacer3;
     private JPanel hSpacer4;
     private JButton createNewCustomerBtn2;
+    private JPanel vSpacer21;
+    private JPanel vSpacer23;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
