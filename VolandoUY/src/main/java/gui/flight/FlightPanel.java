@@ -46,7 +46,7 @@ public class FlightPanel extends JPanel {
 
     private void initPanels() {
         createFlightPanel = new createFlightPanel(flightController, flightRouteController, userController);
-        getFlightsPanel = new GetFlightsPanel(flightController);
+        getFlightsPanel = new GetFlightsPanel(flightController, userController);
     }
 
     private void initListeners() {
