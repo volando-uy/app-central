@@ -140,6 +140,17 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             return q.getResultList();
         }
     }
+    public List<BookFlight> findByCustomerNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT DISTINCT bf FROM BookFlight bf " +
+                                    "LEFT JOIN FETCH bf.customer c " +
+                                    "LEFT JOIN FETCH bf.tickets t " +
+                                    "WHERE c.nickname = :nickname", BookFlight.class)
+                    .setParameter("nickname", nickname)
+                    .getResultList();
+        }
+    }
 }
 
 /**

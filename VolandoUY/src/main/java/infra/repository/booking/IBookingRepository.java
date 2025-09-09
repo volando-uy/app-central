@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface IBookingRepository {
     void saveBookflightWithTicketsAndAddToSeats(BookFlight bookFlight, List<Ticket> savedTickets, List<Seat> seats, Customer customer);
+
 }
