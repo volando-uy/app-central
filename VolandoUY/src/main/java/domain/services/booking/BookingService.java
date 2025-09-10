@@ -123,4 +123,13 @@ public class BookingService implements IBookingService {
                     .toList();
         }
     }
+    @Override
+    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
+        return bookingRepository.findDTOsByCustomerNickname(nickname);
+    }
+    @Override
+    public BookFlight getFullBookingById(Long id) {
+        if (id == null) return null;
+        return bookingRepository.getFullBookingById(id);
+    }
 }

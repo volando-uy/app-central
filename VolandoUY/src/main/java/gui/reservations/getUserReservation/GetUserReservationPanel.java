@@ -29,13 +29,16 @@ import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
+import domain.models.bookflight.BookFlight;
+import domain.models.ticket.Ticket;
+import net.miginfocom.swing.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author AparicioQuian
  */
 public class GetUserReservationPanel extends JPanel {
-
     private final IUserController userController;
     private final IFlightRouteController flightRouteController;
     private final IFlightController flightController;
@@ -47,14 +50,26 @@ public class GetUserReservationPanel extends JPanel {
     private static final String CARD_CLIENT  = "CLIENT";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // --------- Modelos de tabla -----
     private DefaultTableModel modelUsuarios;
     private DefaultTableModel modelRutas;
     private DefaultTableModel modelReservas;
     private DefaultTableModel modelPaquetes;
 
-    private String usuarioSeleccionadoTipo = null;    // "Usuario" | "Aerolínea"
+    private String usuarioSeleccionadoTipo = null;
     private String usuarioSeleccionadoNick = null;
+    private final java.util.Map<String, String[]> routeEndsCache = new java.util.HashMap<>();
+
+    // detalle reserva
+    private JPanel detalleReservaPanel;
+    private JLabel lblDetTitulo, lblDetVuelo, lblDetRuta, lblDetFechaHora, lblDetTotal;
+    private JTable tblSeats;
+    private DefaultTableModel modelSeats;
+
+    // detalle ruta
+    private JPanel panelDetalleRuta, airlineBody;
+    private JLabel rlTitulo, rlRuta, rlOrigen, rlDestino, rlEstado, rlPrecioExtra;
+    private JTable tblDetalleRuta;
+    private DefaultTableModel modelDetalleRuta;
 
     public GetUserReservationPanel(
             IUserController userController,
@@ -69,36 +84,41 @@ public class GetUserReservationPanel extends JPanel {
         this.flightRoutePackageController = flightRoutePackageController;
         this.bookingController = bookingController;
 
-        initComponents();                 // 1) primero: JFD crea splitPane1 y demás
+        initComponents();
 
-        setLayout(new BorderLayout());    // 2) layout del panel raíz
-        add(splitPane1, BorderLayout.CENTER); // 3) ahora sí: splitPane1 ya NO es null
-
-        // Si estás usando la versión de evaluación de JFD, no cambies bordes aquí.
-        // (Evita setBorder(...) para no disparar la trampa de evaluación.)
+        setLayout(new BorderLayout());
+        add(splitPane1, BorderLayout.CENTER);
 
         postInitWireUp();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
-    // ---------- Wiring UI/Model ----------
+    // ---------- wiring ----------
     private void postInitWireUp() {
-        // Filtro
         cmbTipo.setModel(new DefaultComboBoxModel<>(new String[]{"Todos", "Usuario", "Aerolínea"}));
         cmbTipo.setSelectedIndex(0);
 
-        // Modelos
         modelUsuarios = new DefaultTableModel(new Object[]{"Nombre", "Documento", "Email", "Tipo", "Nickname"}, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblUsuarios.setModel(modelUsuarios);
 
-        modelRutas = new DefaultTableModel(new Object[]{"Ruta", "Origen", "Destino" }, 0) {
+        modelRutas = new DefaultTableModel(new Object[]{"Ruta", "Origen", "Destino", "Estado" }, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblRutas.setModel(modelRutas);
+        tblRutas.setAutoCreateRowSorter(true);
+        tblRutas.getTableHeader().setReorderingAllowed(false);
+        scrollPane3.setViewportView(tblRutas);
+        scrollPane3.setColumnHeaderView(tblRutas.getTableHeader());
 
-        modelReservas = new DefaultTableModel(new Object[]{"N° Reserva", "Fecha", "Vuelo" }, 0) {
+        // contenedor del cuerpo de Aerolínea (tabla + detalle debajo)
+        airlineBody = new JPanel(new BorderLayout());
+        airline.remove(scrollPane3);
+        airlineBody.add(scrollPane3, BorderLayout.CENTER);
+        airline.add(airlineBody, BorderLayout.CENTER);
+
+        modelReservas = new DefaultTableModel(new Object[]{"ID", "Fecha", "Total", "Tickets", "Vuelos" }, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblReservas.setModel(modelReservas);
@@ -108,21 +128,24 @@ public class GetUserReservationPanel extends JPanel {
         };
         tblPaquetes.setModel(modelPaquetes);
 
-        // Listeners
         cmbTipo.addActionListener(e -> reloadUsuarios());
-        tblUsuarios.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) onUsuarioSeleccionado();
-        });
+        tblUsuarios.getSelectionModel().addListSelectionListener(e -> { if (!e.getValueIsAdjusting()) onUsuarioSeleccionado(); });
         btnDetalleRuta.addActionListener(e -> abrirDetalleRuta());
-        btnDetalleReserva.addActionListener(e -> abrirDetalleReserva());
+        btnDetalleReserva.addActionListener(e -> abrirDetalleReservaEnPanel());
         btnDetallePaquete.addActionListener(e -> abrirDetallePaquete());
 
-        // Arranque: todos
+        buildDetalleReservaPanel();
+        panelReservas.add(detalleReservaPanel, BorderLayout.SOUTH);
+
         reloadUsuarios();
         showCard(CARD_EMPTY);
+
+        tblReservas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && detalleReservaPanel.isVisible()) detalleReservaPanel.setVisible(false);
+        });
     }
 
-    // ---------- Carga de usuarios ----------
+    // ---------- usuarios ----------
     private void reloadUsuarios() {
         String filtro = Objects.toString(cmbTipo.getSelectedItem(), "Todos");
         modelUsuarios.setRowCount(0);
@@ -132,8 +155,7 @@ public class GetUserReservationPanel extends JPanel {
                 List<BaseCustomerDTO> customers = userController.getAllCustomersSimpleDetails();
                 for (BaseCustomerDTO c : customers) {
                     String nick = nz(c.getNickname());
-                    if (nick.isBlank()) continue; // <<< evitar filas inválidas
-
+                    if (nick.isBlank()) continue;
                     modelUsuarios.addRow(new Object[]{
                             nz(c.getName()) + " " + nz(c.getSurname()),
                             (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim(),
@@ -147,18 +169,10 @@ public class GetUserReservationPanel extends JPanel {
                 List<BaseAirlineDTO> airlines = userController.getAllAirlinesSimpleDetails();
                 for (BaseAirlineDTO a : airlines) {
                     String nick = nz(a.getNickname());
-                    if (nick.isBlank()) continue; // <<< idem aerolíneas
-
-                    modelUsuarios.addRow(new Object[]{
-                            nz(a.getName()),
-                            "",
-                            nz(a.getMail()),
-                            "Aerolínea",
-                            nick
-                    });
+                    if (nick.isBlank()) continue;
+                    modelUsuarios.addRow(new Object[]{ nz(a.getName()), "", nz(a.getMail()), "Aerolínea", nick });
                 }
             }
-
             adjustDynamicWidthAndHeightToTable(tblUsuarios, modelUsuarios);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + ex.getMessage(),
@@ -182,32 +196,29 @@ public class GetUserReservationPanel extends JPanel {
         usuarioSeleccionadoNick = Objects.toString(modelUsuarios.getValueAt(r, 4), "").trim();
 
         if (usuarioSeleccionadoNick.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Este registro no tiene nickname. No se puede cargar el detalle.",
+            JOptionPane.showMessageDialog(this, "Este registro no tiene nickname.",
                     "Datos incompletos", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // LIMPIEZA
         modelRutas.setRowCount(0);
         modelReservas.setRowCount(0);
         modelPaquetes.setRowCount(0);
+        if (detalleReservaPanel != null) detalleReservaPanel.setVisible(false);
+        if (panelDetalleRuta != null) panelDetalleRuta.setVisible(false);
 
         try {
             if (usuarioSeleccionadoTipo.equalsIgnoreCase("Aerolínea")) {
-                // Para aerolínea sí pedimos el DTO simple (no toca bookedFlights)
                 BaseAirlineDTO a = userController.getAirlineSimpleDetailsByNickname(usuarioSeleccionadoNick);
                 headerDatosSet(nz(a.getName()), "Aerolínea", nz(a.getMail()), "");
                 loadAirlineRoutes(usuarioSeleccionadoNick);
                 showCard(CARD_AIRLINE);
             } else {
-                // ⬇️ NO pedimos Customer; usamos lo que ya está en la tabla
                 String nombre   = Objects.toString(modelUsuarios.getValueAt(r, 0), "");
                 String docTxt   = Objects.toString(modelUsuarios.getValueAt(r, 1), "");
                 String emailTxt = Objects.toString(modelUsuarios.getValueAt(r, 2), "");
                 headerDatosSet(nombre, "Usuario", emailTxt, docTxt);
 
-                // Datos derivados: reservas + paquetes (consultas planas)
                 loadCustomerReservations(usuarioSeleccionadoNick);
                 loadCustomerPackages(usuarioSeleccionadoNick);
                 showCard(CARD_CLIENT);
@@ -220,12 +231,11 @@ public class GetUserReservationPanel extends JPanel {
 
     private static String enumToString(Enum<?> e) { return e == null ? "" : e.name(); }
 
-    // ---------- Aerolínea ----------
+    // ---------- aerolínea ----------
     private void loadAirlineRoutes(String airlineNickname) {
         modelRutas.setRowCount(0);
         try {
-            List<FlightRouteDTO> rutas =
-                    flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
+            List<FlightRouteDTO> rutas = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
             for (FlightRouteDTO r : rutas) {
                 String origin = callGetterString(r, "getOriginCityName", "getOrigin");
                 String dest   = callGetterString(r, "getDestinationCityName", "getDestination");
@@ -243,127 +253,325 @@ public class GetUserReservationPanel extends JPanel {
         int v = tblRutas.getSelectedRow();
         if (v < 0) { JOptionPane.showMessageDialog(this, "Seleccioná una ruta"); return; }
         int r = tblRutas.convertRowIndexToModel(v);
-        String routeName = Objects.toString(modelRutas.getValueAt(r, 0), "");
+        String routeName = Objects.toString(modelRutas.getValueAt(r, 0), "").trim();
+        if (routeName.isEmpty()) { JOptionPane.showMessageDialog(this, "Ruta inválida"); return; }
+
+        FlightRouteDTO dto;
         try {
-            FlightRouteDTO dto = flightRouteController.getFlightRouteDetailsByName(routeName);
-            mostrarDialogoDetalle("Detalle de Ruta: " + routeName, detalleRutaAsText(dto));
+            dto = flightRouteController.getFlightRouteDetailsByName(routeName);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudo cargar la ruta: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    }
+        ensureDetalleRutaUI();
 
-    private JComponent detalleRutaAsText(FlightRouteDTO r) {
-        JTextArea t = new JTextArea();
-        t.setEditable(false);
-        t.setLineWrap(true);
-        t.setWrapStyleWord(true);
+        rlTitulo.setText("Detalle de ruta: " + routeName);
+        String origen  = callGetterString(dto, "getOriginCityName","getOrigin");
+        String destino = callGetterString(dto, "getDestinationCityName","getDestination");
+        String estado  = callGetterString(dto, "getStatus");
+        String extra   = callGetterNumber(dto, "getPriceExtraUnitBaggage");
+        rlRuta.setText("Ruta: " + routeName);
+        rlOrigen.setText("Origen: " + (origen.isBlank()? "-" : origen));
+        rlDestino.setText("Destino: " + (destino.isBlank()? "-" : destino));
+        rlEstado.setText("Estado: " + (estado.isBlank()? "-" : estado));
+        rlPrecioExtra.setText("Equipaje extra (unidad): " + (extra.isBlank()? "-" : extra));
 
-        String cats = "";
-        try { if (r.getCategories() != null) cats = String.join(", ", r.getCategories()); } catch (Throwable ignored) {}
-
-        t.setText(
-                "Nombre: " + nz(r.getName()) + "\n" +
-                        "Origen: " + callGetterString(r, "getOriginCityName", "getOrigin") + "\n" +
-                        "Destino: " + callGetterString(r, "getDestinationCityName", "getDestination") + "\n" +
-
-                        "Categorías: " + cats
-        );
-        return new JScrollPane(t);
-    }
-
-    private void loadCustomerReservations(String customerNickname) {
-        modelReservas.setRowCount(0);
+        modelDetalleRuta.setRowCount(0);
         try {
-            // 1) Traigo TODO y filtro en UI
-            List<BookFlightDTO> todas = bookingController.findAllBookFlightDetails();
+            var flights = flightController.getAllFlightsSimpleDetailsByRouteName(routeName);
+            if (flights != null) {
+                for (var f : flights) {
+                    String fname = callGetterString(f, "getName");
+                    String fecha = callGetterDate(f,  "getDepartureDate","getDate");
+                    String hora  = callGetterString(f, "getDepartureTime","getTime");
+                    String est   = callGetterString(f, "getStatus","getState");
+                    if (hora != null && hora.contains(":")) {
+                        String[] tp = hora.split(":",3);
+                        if (tp.length>=2) hora = tp[0]+":"+tp[1];
+                    }
+                    if (fecha != null && fecha.contains("T")) fecha = fecha.split("T",2)[0];
+                    modelDetalleRuta.addRow(new Object[]{ fname==null? "-" : fname,
+                            (fecha==null || fecha.isBlank()? "-" : fecha),
+                            (hora==null  || hora.isBlank()? "-" : hora),
+                            (est==null   || est.isBlank()? "-" : est)});
+                }
+            }
+        } catch (Exception ignored) { }
 
-            for (BookFlightDTO b : todas) {
-                String nick = extractBookUserNickname(b);
-                if (!customerNickname.equalsIgnoreCase(nick)) continue;
+        panelDetalleRuta.setVisible(true);
+        airlineBody.revalidate();
+        airlineBody.repaint();
+    }
 
-                String resNum = (b.getId() == null) ? "" : String.valueOf(b.getId());
-                String fecha  = callGetterDate(b, "getCreated_at", "getCreatedAt", "getCreationDate");
-                String vuelo  = extractBookFlightName(b); // usa campo plano si existe);
+    private void ensureDetalleRutaUI() {
+        if (panelDetalleRuta != null) return;
 
-                modelReservas.addRow(new Object[]{ resNum, fecha, vuelo  });
+        panelDetalleRuta = new JPanel(new BorderLayout(6,6));
+        panelDetalleRuta.setBackground(new Color(0xF7F9FC));
+        panelDetalleRuta.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1,0,0,0, Color.LIGHT_GRAY),
+                new EmptyBorder(8,8,8,8)
+        ));
+        panelDetalleRuta.setPreferredSize(new Dimension(10, 220));
+        panelDetalleRuta.setVisible(false);
+
+        // Top bar
+        JPanel top = new JPanel(new BorderLayout());
+        top.setOpaque(false);
+        rlTitulo = new JLabel("Detalle de ruta");
+        rlTitulo.setFont(rlTitulo.getFont().deriveFont(Font.BOLD, 13f));
+        top.add(rlTitulo, BorderLayout.WEST);
+
+        JButton btnOcultar = new JButton("Ocultar detalle");
+        btnOcultar.addActionListener(e -> {
+            panelDetalleRuta.setVisible(false);
+            airlineBody.revalidate();
+            airlineBody.repaint();
+        });
+        JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        right.setOpaque(false);
+        right.add(btnOcultar);
+        top.add(right, BorderLayout.EAST);
+        panelDetalleRuta.add(top, BorderLayout.NORTH);
+
+        // Info grid
+        JPanel grid = new JPanel(new GridLayout(2,3,8,4));
+        grid.setOpaque(false);
+        rlRuta        = new JLabel("Ruta: -");
+        rlOrigen      = new JLabel("Origen: -");
+        rlDestino     = new JLabel("Destino: -");
+        rlEstado      = new JLabel("Estado: -");
+        rlPrecioExtra = new JLabel("Equipaje extra (unidad): -");
+        grid.add(rlRuta); grid.add(rlOrigen); grid.add(rlDestino);
+        grid.add(rlEstado); grid.add(rlPrecioExtra); grid.add(new JLabel(""));
+        panelDetalleRuta.add(grid, BorderLayout.CENTER);
+
+        // Tabla inferior
+        modelDetalleRuta = new DefaultTableModel(new Object[]{"Vuelo","Fecha","Hora","Estado"}, 0) {
+            public boolean isCellEditable(int r,int c){ return false; }
+        };
+        tblDetalleRuta = new JTable(modelDetalleRuta);
+        tblDetalleRuta.setRowHeight(22);
+        tblDetalleRuta.setFillsViewportHeight(true);
+        tblDetalleRuta.getTableHeader().setReorderingAllowed(false);
+        JScrollPane sc = new JScrollPane(tblDetalleRuta);
+        panelDetalleRuta.add(sc, BorderLayout.SOUTH);
+
+        // Insertar al final del contenedor
+        airlineBody.add(panelDetalleRuta, BorderLayout.SOUTH);
+    }
+
+    // ---------- cliente: reservas ----------
+    private void loadCustomerReservations(String customerNickname) {
+        List<BookFlightDTO> reservas = bookingController.findDTOsByCustomerNickname(customerNickname);
+
+        DefaultTableModel model = (DefaultTableModel) tblReservas.getModel();
+        model.setColumnIdentifiers(new Object[] { "ID", "Fecha", "Total", "Tickets", "Vuelos" });
+        model.setRowCount(0);
+
+        for (BookFlightDTO reserva : reservas) {
+            BookFlight full = null;
+            try { full = bookingController.getFullBookingById(reserva.getId()); } catch (Exception ignored) {}
+
+            int ticketsCount = (full != null && full.getTickets() != null) ? full.getTickets().size() : 0;
+            String flights = "";
+            if (full != null && full.getTickets() != null) {
+                flights = full.getTickets().stream()
+                        .map(t -> (t.getSeat() != null && t.getSeat().getFlight() != null)
+                                ? nz(t.getSeat().getFlight().getName()) : "N/A")
+                        .distinct()
+                        .reduce((a,b) -> a.isBlank()? b : (b.isBlank()? a : a + ", " + b)).orElse("");
             }
 
-            adjustDynamicWidthAndHeightToTable(tblReservas, modelReservas);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "No se pudieron cargar reservas: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            model.addRow(new Object[]{
+                    reserva.getId(),
+                    reserva.getCreatedAt(),
+                    reserva.getTotalPrice(),
+                    ticketsCount,
+                    flights
+            });
         }
+        adjustDynamicWidthAndHeightToTable(tblReservas, modelReservas);
     }
 
+    private void buildDetalleReservaPanel() {
+        detalleReservaPanel = new JPanel(new BorderLayout());
+        detalleReservaPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));
+        detalleReservaPanel.setBackground(new Color(0xf7f9fc));
 
+        JPanel header = new JPanel(new GridBagLayout());
+        header.setBorder(new EmptyBorder(8, 8, 8, 8));
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.fill = GridBagConstraints.HORIZONTAL;
 
+        lblDetTitulo = new JLabel("Detalle de la reserva");
+        lblDetTitulo.setFont(lblDetTitulo.getFont().deriveFont(Font.BOLD, 13f));
+        header.add(lblDetTitulo, gc);
 
-    private void abrirDetalleReserva() {
+        JPanel grid = new JPanel(new GridLayout(2, 2, 8, 4));
+        lblDetVuelo = new JLabel("Vuelo: -");
+        lblDetRuta  = new JLabel("Ruta: -");
+        lblDetFechaHora = new JLabel("Fecha/Hora: -");
+        lblDetTotal = new JLabel("Total: -");
+        grid.add(lblDetVuelo);
+        grid.add(lblDetRuta);
+        grid.add(lblDetFechaHora);
+        grid.add(lblDetTotal);
+
+        gc.gridy = 1; header.add(grid, gc);
+
+        JButton btnCerrarDetalle = new JButton("Ocultar detalle");
+        btnCerrarDetalle.addActionListener(e -> detalleReservaPanel.setVisible(false));
+        JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        right.add(btnCerrarDetalle);
+
+        JPanel headerWrap = new JPanel(new BorderLayout());
+        headerWrap.add(header, BorderLayout.CENTER);
+        headerWrap.add(right, BorderLayout.EAST);
+
+        modelSeats = new DefaultTableModel(new Object[]{
+                "TicketId", "Asiento", "Tipo", "Vuelo", "Ruta", "Origen", "Destino"
+        }, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        tblSeats = new JTable(modelSeats);
+        tblSeats.setRowHeight(24);
+        tblSeats.setShowVerticalLines(false);
+        tblSeats.setIntercellSpacing(new Dimension(0, 0));
+        JScrollPane spSeats = new JScrollPane(tblSeats);
+
+        detalleReservaPanel.add(headerWrap, BorderLayout.NORTH);
+        detalleReservaPanel.add(spSeats, BorderLayout.CENTER);
+
+        detalleReservaPanel.setPreferredSize(new Dimension(10, 220));
+        detalleReservaPanel.setVisible(false);
+    }
+
+    private void abrirDetalleReservaEnPanel() {
         int v = tblReservas.getSelectedRow();
         if (v < 0) { JOptionPane.showMessageDialog(this, "Seleccioná una reserva"); return; }
         int r = tblReservas.convertRowIndexToModel(v);
 
-        String flightName = String.valueOf(modelReservas.getValueAt(r, 2));
-        if (flightName == null || flightName.isBlank()) {
-            JOptionPane.showMessageDialog(this,
-                    "Esta reserva no expone el nombre de vuelo.\n" +
-                            "Podemos agregarlo al DTO más adelante.",
-                    "Sin datos de vuelo", JOptionPane.INFORMATION_MESSAGE);
+        Long bookingId = null;
+        try {
+            int idCol = findTableColumnIndex(tblReservas, "ID", "Id", "N° Reserva", "Reserva");
+            if (idCol < 0) idCol = 0;
+            Object idVal = ((DefaultTableModel) tblReservas.getModel()).getValueAt(r, idCol);
+            if (idVal instanceof Number n) bookingId = n.longValue();
+            else if (idVal != null && !String.valueOf(idVal).isBlank()) bookingId = Long.valueOf(String.valueOf(idVal));
+        } catch (Exception ignored) {}
+
+        if (bookingId == null) {
+            JOptionPane.showMessageDialog(this, "ID de reserva inválido.");
             return;
         }
 
-        try {
-            FlightDTO f = flightController.getFlightDetailsByName(flightName);
-            mostrarDialogoDetalle("Detalle de Vuelo: " + flightName, detalleVueloAsText(f));
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo cargar el vuelo: " + ex.getMessage(),
+        BookFlight booking;
+        try { booking = bookingController.getFullBookingById(bookingId); }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la reserva: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (booking == null) { JOptionPane.showMessageDialog(this, "No se encontró la reserva."); return; }
+
+        fillDetalleReserva(booking);
+        detalleReservaPanel.setVisible(true);
+        adjustDynamicWidthAndHeightToTable(tblSeats, modelSeats);
+    }
+
+
+    private void fillDetalleReserva(BookFlight booking) {
+        String totalTxt = String.valueOf(booking.getTotalPrice());
+        String fechaTxt = booking.getCreated_at() != null ? String.valueOf(booking.getCreated_at()) : "-";
+
+        String vueloName = "-";
+        String rutaName  = "-";
+        String origen    = "";
+        String destino   = "";
+
+        try {
+            if (booking.getTickets() != null && !booking.getTickets().isEmpty()) {
+                Ticket t0 = booking.getTickets().get(0);
+                if (t0 != null && t0.getSeat() != null && t0.getSeat().getFlight() != null) {
+                    var f = t0.getSeat().getFlight();
+                    if (f.getName() != null) vueloName = f.getName();
+                    if (f.getFlightRoute() != null) {
+                        var fr = f.getFlightRoute();
+                        if (fr.getName() != null) rutaName = fr.getName();
+
+                        String orgTry = callGetterString(fr, "getOriginCityName","getOriginAirportName","getOriginName","getOriginIata","getOriginCode");
+                        String dstTry = callGetterString(fr, "getDestinationCityName","getDestinationAirportName","getDestinationName","getDestinationIata","getDestinationCode");
+                        if (!orgTry.isBlank()) origen = orgTry;
+                        if (!dstTry.isBlank()) destino = dstTry;
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+
+        if (origen.isBlank() || destino.isBlank()) {
+            String[] ends = getRouteEndsByName(rutaName);
+            if (origen.isBlank())  origen  = ends[0];
+            if (destino.isBlank()) destino = ends[1];
+        }
+
+        lblDetTitulo.setText("Detalle de la reserva #" + (booking.getId() != null ? booking.getId() : "-"));
+        lblDetVuelo.setText("Vuelo: " + vueloName);
+        lblDetRuta.setText("Ruta: " + (rutaName.isBlank() ? "-" : rutaName)
+                + "  |  Origen: " + (origen.isBlank() ? "-" : origen)
+                + "  |  Destino: " + (destino.isBlank() ? "-" : destino));
+        lblDetFechaHora.setText("Fecha/Hora: " + fechaTxt);
+        lblDetTotal.setText("Total: " + totalTxt);
+
+        modelSeats.setRowCount(0);
+        if (booking.getTickets() != null) {
+            for (Ticket t : booking.getTickets()) {
+                String ticketId = t.getId() != null ? String.valueOf(t.getId()) : "-";
+                String nro = "-";
+                String tipo = "-";
+                String vName = "-";
+                String rName = "-";
+                String org = "", dst = "";
+
+                if (t.getSeat() != null) {
+                    if (t.getSeat().getNumber() != null) nro = String.valueOf(t.getSeat().getNumber());
+                    if (t.getSeat().getType() != null)   tipo = String.valueOf(t.getSeat().getType());
+                    if (t.getSeat().getFlight() != null) {
+                        var f = t.getSeat().getFlight();
+                        if (f.getName() != null) vName = f.getName();
+                        if (f.getFlightRoute() != null) {
+                            var fr = f.getFlightRoute();
+                            if (fr.getName() != null) rName = fr.getName();
+
+                            String orgTry = callGetterString(fr, "getOriginCityName","getOriginAirportName","getOriginName","getOriginIata","getOriginCode");
+                            String dstTry = callGetterString(fr, "getDestinationCityName","getDestinationAirportName","getDestinationName","getDestinationIata","getDestinationCode");
+                            if (!orgTry.isBlank()) org = orgTry;
+                            if (!dstTry.isBlank()) dst = dstTry;
+
+                            if (org.isBlank() || dst.isBlank()) {
+                                String[] ends = getRouteEndsByName(rName);
+                                if (org.isBlank()) org = ends[0];
+                                if (dst.isBlank()) dst = ends[1];
+                            }
+                        }
+                    }
+                }
+                modelSeats.addRow(new Object[]{ ticketId, nro, tipo, vName, rName, (org.isBlank()? "-" : org), (dst.isBlank()? "-" : dst) });
+            }
         }
     }
 
-    private JComponent detalleVueloAsText(FlightDTO f) {
-        JTextArea t = new JTextArea();
-        t.setEditable(false);
-        t.setLineWrap(true);
-        t.setWrapStyleWord(true);
-
-        String fecha = callGetterDate(f, "getDepartureDate");
-        t.setText(
-                "Nombre: " + nz(f.getName()) + "\n" +
-                        "Ruta: "   + callGetterString(f, "getFlightRouteName", "getRouteName") + "\n" +
-                        "Fecha: "  + fecha + "\n" +
-                        "Hora: "   + callGetterString(f, "getDepartureTime", "getTime") + "\n" +
-                        "Estado: " + callGetterString(f, "getStatus")
-        );
-        return new JScrollPane(t);
-    }
-
-    // ---------- Cliente: PAQUETES (sin tocar services) ----------
     private void loadCustomerPackages(String customerNickname) {
         modelPaquetes.setRowCount(0);
         try {
-            // 1) Traigo el DTO completo del cliente (no entidad)
             CustomerDTO c = userController.getCustomerDetailsByNickname(customerNickname);
-            if (c == null) {
-                adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes);
-                return;
-            }
+            if (c == null) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
 
-            // 2) Leemos los IDs de paquetes comprados (lista de Long en el DTO)
             List<Long> ids = callGetterList(c, Long.class, "getBoughtPackagesIds");
-            if (ids == null || ids.isEmpty()) {
-                adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes);
-                return;
-            }
+            if (ids == null || ids.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
 
             for (Long id : ids) {
                 BaseFlightRoutePackageDTO p = null;
 
-                // 3) Intentamos resolver por ID con métodos comunes (si existen en tu controller)
-                //    Probamos varias firmas por REFLEXIÓN, sin cambiar controllers.
                 Object candidate = tryInvoke(
                         flightRoutePackageController,
                         new String[]{
@@ -377,12 +585,10 @@ public class GetUserReservationPanel extends JPanel {
                 );
 
                 if (candidate instanceof FlightRoutePackageDTO dtoFull) {
-                    // Lo convertimos a base por getters (sólo lo que muestra la tabla)
                     modelPaquetes.addRow(new Object[]{
                             callGetterString(dtoFull, "getCode"),
                             callGetterString(dtoFull, "getName"),
-                            callGetterNumber(dtoFull, "getValidityPeriodDays"),
-                            ""
+                            callGetterNumber(dtoFull, "getValidityPeriodDays")
                     });
                     continue;
                 } else if (candidate instanceof BaseFlightRoutePackageDTO dtoBase) {
@@ -393,86 +599,72 @@ public class GetUserReservationPanel extends JPanel {
                     modelPaquetes.addRow(new Object[]{
                             callGetterString(p, "getCode"),
                             callGetterString(p, "getName"),
-                            callGetterNumber(p, "getValidityPeriodDays"),
-                            ""
+                            callGetterNumber(p, "getValidityPeriodDays")
                     });
                 } else {
-                    // 4) Si tu controller no expone búsquedas por ID,
-                    //    mostramos el ID y dejamos el resto vacío (no rompe la UI).
-                    modelPaquetes.addRow(new Object[]{
-                            String.valueOf(id), // usamos el id como "código" visible
-                            "",                  // nombre desconocido
-                            "",                  // validez desconocida
-                            ""
-                    });
+                    modelPaquetes.addRow(new Object[]{ String.valueOf(id), "", "" });
                 }
             }
 
             adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes);
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "No se pudieron cargar paquetes: " + ex.getMessage(),
+            JOptionPane.showMessageDialog(this, "No se pudieron cargar paquetes: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private Object tryInvoke(Object target, String[] methodNames, Class<?>[] paramTypes, Object[] args) {
-        if (target == null) return null;
-        Class<?> c = target.getClass();
-        for (String name : methodNames) {
-            try {
-                var m = c.getMethod(name, paramTypes);
-                m.setAccessible(true);
-                return m.invoke(target, args);
-            } catch (NoSuchMethodException ignored) {
-            } catch (Exception e) {
-                // Si el método existe pero falló, mostramos aviso amigable y seguimos con el próximo
-                System.err.println("Invocación fallida a " + name + ": " + e.getMessage());
-            }
-        }
-        return null;
-    }
     private void abrirDetallePaquete() {
         int v = tblPaquetes.getSelectedRow();
         if (v < 0) { JOptionPane.showMessageDialog(this, "Seleccioná un paquete"); return; }
         int r = tblPaquetes.convertRowIndexToModel(v);
         String name = Objects.toString(modelPaquetes.getValueAt(r, 1), "");
         try {
-            FlightRoutePackageDTO p =
-                    flightRoutePackageController.getFlightRoutePackageDetailsByName(name);
+            FlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageDetailsByName(name);
             mostrarDialogoDetalle("Detalle de Paquete: " + name, detallePaqueteAsText(p));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudo cargar el paquete: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    /** Construye un panel de texto con el detalle del paquete. */
     private JComponent detallePaqueteAsText(FlightRoutePackageDTO p) {
-        JTextArea t = new JTextArea();
-        t.setEditable(false);
-        t.setLineWrap(true);
-        t.setWrapStyleWord(true);
+        if (p == null) {
+            JTextArea ta = new JTextArea("No se encontró el paquete.");
+            ta.setEditable(false);
+            ta.setLineWrap(true);
+            ta.setWrapStyleWord(true);
+            return new JScrollPane(ta);
+        }
 
-        String rutas = "";
-        try { if (p.getFlightRouteNames() != null) rutas = String.join(", ", p.getFlightRouteNames()); } catch (Throwable ignored) {}
+        // Lecturas seguras usando tus helpers
+        String code   = callGetterString(p, "getCode");
+        String name   = callGetterString(p, "getName");
+        String desc   = callGetterString(p, "getDescription");
+        String days   = callGetterNumber(p, "getValidityPeriodDays");
+        String disc   = callGetterNumber(p, "getDiscount"); // puede venir 0.15 o 15; lo muestro tal cual
+        String rutas  = "";
+        try {
+            var list = p.getFlightRouteNames();
+            if (list != null && !list.isEmpty()) rutas = String.join(", ", list);
+        } catch (Throwable ignored) {}
 
-        String desc = "";
-        try { Double d = p.getDiscount(); if (d != null) desc = (d <= 1 ? d * 100 : d) + "%"; } catch (Throwable ignored) {}
+        StringBuilder sb = new StringBuilder();
+        sb.append("Código: ").append(code.isBlank() ? "-" : code).append("\n");
+        sb.append("Nombre: ").append(name.isBlank() ? "-" : name).append("\n");
+        sb.append("Descripción: ").append(desc.isBlank() ? "-" : desc).append("\n");
+        sb.append("Validez: ").append(days.isBlank() ? "-" : days + " días").append("\n");
+        if (!disc.isBlank()) sb.append("Descuento: ").append(disc).append("\n");
+        sb.append("Rutas incluidas: ").append(rutas.isBlank() ? "-" : rutas);
 
-        String dias = callGetterNumber(p, "getValidityPeriodDays");
-        t.setText(
-                "Código: "     + callGetterString(p, "getCode") + "\n" +
-                        "Nombre: "     + nz(p.getName()) + "\n" +
-                        "Descripción: "+ callGetterString(p, "getDescription") + "\n" +
-                        "Validez: "    + (dias.isBlank() ? "" : dias + " días") + "\n" +
-                        "Descuento: "  + desc + "\n" +
-                        "Rutas: "      + rutas
-        );
-        return new JScrollPane(t);
+        JTextArea ta = new JTextArea(sb.toString());
+        ta.setEditable(false);
+        ta.setLineWrap(true);
+        ta.setWrapStyleWord(true);
+        return new JScrollPane(ta);
     }
 
-    // ---------- Header ----------
+    // ---------- header ----------
     private void headerDatosSet(String n, String t, String e, String d) {
         name.setText("Nombre: " + nz(n));
         tipo.setText("Tipo: " + nz(t));
@@ -482,15 +674,13 @@ public class GetUserReservationPanel extends JPanel {
     private void headerDatosReset() {
         name.setText("Nombre");
         tipo.setText("Tipo");
-        email.setText("Email");
-        doc.setText("Documento");
+        email.setText("Nombre");
+        doc.setText("Nombre");
     }
 
-    private void showCard(String key) {
-        ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key);
-    }
+    private void showCard(String key) { ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key); }
 
-    // ---------- Utils (tablas) ----------
+    // ---------- utils tablas ----------
     private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
         table.setModel(tableModel);
         for (int col = 0; col < table.getColumnCount(); col++) {
@@ -520,26 +710,29 @@ public class GetUserReservationPanel extends JPanel {
                 visibleRows * table.getRowHeight()
         ));
     }
-    private String extractBookUserNickname(BookFlightDTO b) {
-        String nick = callGetterString(b, "getUserNickname");   // directo en el DTO
-        if (!nick.isBlank()) return nick;
 
-        Object user = callGetter(b, "getUser");                 // objeto anidado
-        if (user != null) {
-            String n = callGetterString(user, "getNickname", "getNick");
-            if (!n.isBlank()) return n;
+    private int findTableColumnIndex(JTable table, String... candidates) {
+        if (table == null || candidates == null) return -1;
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            Object header = table.getColumnModel().getColumn(col).getHeaderValue();
+            String h = header == null ? "" : String.valueOf(header).trim();
+            for (String c : candidates) {
+                if (c != null && !c.isBlank() && h.equalsIgnoreCase(c.trim())) return col;
+            }
         }
-        return "";
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            Object header = table.getColumnModel().getColumn(col).getHeaderValue();
+            String h = header == null ? "" : String.valueOf(header).trim().toLowerCase();
+            for (String c : candidates) {
+                if (c == null) continue;
+                String cand = c.trim().toLowerCase();
+                if (h.contains(cand) || cand.contains(h)) return col;
+            }
+        }
+        return -1;
     }
 
-    /** Devuelve el nombre del vuelo de la reserva.
-     *  Intenta getFlightName(), si no usa getFlight().getName(). */
-    private String extractBookFlightName(BookFlightDTO b) {
-        // SOLO campo directo si existe en el DTO; no navegues getFlight()
-        String direct = callGetterString(b, "getFlightName"); // si tu DTO lo trae
-        return direct; // si no existe, quedará "", y está bien
-    }
-    // ---------- Utils (texto/reflexión) ----------
+    // ---------- utils reflexión / texto ----------
     private static String nz(String s) { return s == null ? "" : s; }
 
     private String callGetterString(Object target, String... candidates) {
@@ -560,10 +753,6 @@ public class GetUserReservationPanel extends JPanel {
         }
         return List.of();
     }
-    private List<?> callGetterListRaw(Object target, String... candidates) {
-        Object v = callGetter(target, candidates);
-        return (v instanceof List<?> list) ? list : List.of();
-    }
     private Object callGetter(Object target, String... candidates) {
         if (target == null) return null;
         Class<?> c = target.getClass();
@@ -576,11 +765,6 @@ public class GetUserReservationPanel extends JPanel {
         }
         return null;
     }
-    private List<String> safeListStrings(List<?> in) {
-        List<String> out = new ArrayList<>();
-        for (Object o : in) if (o != null) out.add(String.valueOf(o));
-        return out;
-    }
     private String callGetterDate(Object target, String... candidates) {
         Object v = callGetter(target, candidates);
         if (v == null) return "";
@@ -592,6 +776,24 @@ public class GetUserReservationPanel extends JPanel {
         }
     }
 
+    /** 🔧 FALTANTE: invoca por reflexión el primer método que exista. */
+    private Object tryInvoke(Object target, String[] methodNames, Class<?>[] paramTypes, Object[] args) {
+        if (target == null) return null;
+        Class<?> c = target.getClass();
+        for (String name : methodNames) {
+            try {
+                Method m = c.getMethod(name, paramTypes);
+                m.setAccessible(true);
+                return m.invoke(target, args);
+            } catch (NoSuchMethodException ignored) {
+                // probamos el siguiente nombre
+            } catch (Exception e) {
+                System.err.println("Invocación fallida a " + name + ": " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
     private void mostrarDialogoDetalle(String titulo, JComponent contenido) {
         Window owner = SwingUtilities.getWindowAncestor(this);
         JDialog d = new JDialog(owner, titulo, Dialog.ModalityType.APPLICATION_MODAL);
@@ -601,7 +803,32 @@ public class GetUserReservationPanel extends JPanel {
         d.setLocationRelativeTo(this);
         d.setVisible(true);
     }
+    private void mostrarDialogoDetalle(String titulo, String texto) {
+        JTextArea area = new JTextArea(texto);
+        area.setEditable(false);
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        JScrollPane scroll = new JScrollPane(area);
+        scroll.setPreferredSize(new Dimension(620, 360));
+        mostrarDialogoDetalle(titulo, scroll);
+    }
 
+    private String[] getRouteEndsByName(String routeName) {
+        if (routeName == null || routeName.isBlank()) return new String[]{"", ""};
+        String[] cached = routeEndsCache.get(routeName);
+        if (cached != null) return cached;
+        try {
+            FlightRouteDTO dto = flightRouteController.getFlightRouteDetailsByName(routeName);
+            String org = callGetterString(dto, "getOriginCityName", "getOrigin", "getOriginName", "getOriginCity");
+            String dst = callGetterString(dto, "getDestinationCityName", "getDestination", "getDestinationName", "getDestinationCity");
+            String[] out = new String[]{ nz(org), nz(dst) };
+            routeEndsCache.put(routeName, out);
+            return out;
+        } catch (Exception e) {
+            routeEndsCache.put(routeName, new String[]{"", ""});
+            return new String[]{"", ""};
+        }
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
@@ -652,12 +879,12 @@ public class GetUserReservationPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-                (0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-                .TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt
-                .Color.red),panel4. getBorder()));panel4. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-                propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException()
-                ;}});
+                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+                ( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+                . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
+                . Color. red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+                propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
+                ; }} );
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -768,6 +995,11 @@ public class GetUserReservationPanel extends JPanel {
 
                         //======== scrollPane3 ========
                         {
+
+                            //---- tblRutas ----
+                            tblRutas.setBorder(new EmptyBorder(8, 8, 8, 8));
+                            tblRutas.setFillsViewportHeight(true);
+                            tblRutas.setRowHeight(24);
                             scrollPane3.setViewportView(tblRutas);
                         }
                         airline.add(scrollPane3, BorderLayout.CENTER);

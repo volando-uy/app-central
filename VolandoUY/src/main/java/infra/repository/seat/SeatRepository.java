@@ -14,41 +14,39 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
 
     @Override
     public Seat getSeatById(Long seatId) {
-        try (EntityManager em = DBConnection.getEntityManager()){
+        try (EntityManager em = DBConnection.getEntityManager()) {
             return em.find(Seat.class, seatId);
         }
     }
 
     @Override
     public List<Seat> getAllSeatsInFlight(Long flightId) {
-        try (EntityManager em = DBConnection.getEntityManager()){
-            Flight flight = em.find(Flight.class, flightId);
-            if (flight != null) {
-                return flight.getSeats();
-            }
-            return List.of();
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT s FROM Seat s JOIN s.flight f WHERE f.id = :fid", Seat.class)
+                    .setParameter("fid", flightId)
+                    .getResultList();
         }
     }
 
     @Override
     public List<Seat> getAllSeatsByFlightName(String flightName) {
-        try (EntityManager em = DBConnection.getEntityManager()){
-            Flight flight = em.find(Flight.class, flightName);
-            if (flight != null) {
-                return flight.getSeats().stream().filter(Seat::isAvailable).toList();
-            }
-            return List.of();
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT s FROM Seat s JOIN s.flight f WHERE f.name = :name AND s.isAvailable = true", Seat.class)
+                    .setParameter("name", flightName)
+                    .getResultList();
         }
     }
 
     @Override
     public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
-        try (EntityManager em = DBConnection.getEntityManager()){
-            Flight flight = em.find(Flight.class, flightName);
-            if (flight != null) {
-                return flight.getSeats().stream().filter(Seat::isAvailable).limit(size).toList();
-            }
-            return List.of();
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT s FROM Seat s JOIN s.flight f WHERE f.name = :name AND s.isAvailable = true", Seat.class)
+                    .setParameter("name", flightName)
+                    .setMaxResults(size)
+                    .getResultList();
         }
     }
 }

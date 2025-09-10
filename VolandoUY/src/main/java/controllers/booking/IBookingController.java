@@ -17,5 +17,7 @@ public interface IBookingController {
 
     List<BookFlightDTO> findAllBookFlightDetails();
     List<BaseBookFlightDTO> findAllBookFlightSimpleDetails();
+    List<BookFlightDTO> findDTOsByCustomerNickname(String nickname);
+    BookFlight getFullBookingById(Long id);
 
 }
