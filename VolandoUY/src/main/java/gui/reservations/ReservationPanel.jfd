@@ -11,9 +11,9 @@ new FormModel {
 			"background": new java.awt.Color( 238, 238, 238, 255 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
 				name: "NavPanel"
-				"minimumSize": new java.awt.Dimension( 640, 60 )
-				"preferredSize": new java.awt.Dimension( 640, 60 )
-				"maximumSize": new java.awt.Dimension( 640, 60 )
+				"minimumSize": new java.awt.Dimension( 640, 40 )
+				"preferredSize": new java.awt.Dimension( 640, 40 )
+				"maximumSize": new java.awt.Dimension( 640, 40 )
 				"background": new java.awt.Color( 56, 106, 172, 255 )
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
