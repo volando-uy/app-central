@@ -12,10 +12,11 @@ import java.util.List;
 public class FlightRoutePackageDTO extends BaseFlightRoutePackageDTO {
     private List<String> flightRouteNames;
 
-    private List<Long> buyPackages;
+    private List<Long> buyPackagesIds;
 
     public FlightRoutePackageDTO(String name, String description, int validityPeriodDays, double discount, LocalDate creationDate, EnumTipoAsiento seatType, Double totalPrice) {
         super(name, description, validityPeriodDays, discount, creationDate, seatType, totalPrice);
         this.flightRouteNames = null;
+        this.buyPackagesIds = null;
     }
 }

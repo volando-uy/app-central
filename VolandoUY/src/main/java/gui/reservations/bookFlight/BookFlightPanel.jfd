@@ -18,22 +18,13 @@ new FormModel {
 			"opaque": false
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0, 450:1.0, 0, 0"
-				"$rowSpecs": "0, 0, top:38, 102, 0, 38, 0, 0, 0, 0, 0, 0, 0"
+				"$rowSpecs": "0, 0, top:38, 102, 0, 38, 0, 0, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
 				"$vGap": 5
 			} ) {
 				name: "InfoFlightPanel"
 				"opaque": false
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "titleLabel"
-					"text": "Crear Reserva"
-					"font": new java.awt.Font( "JetBrains Mono ExtraBold", 0, 20 )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"hAlign": 0
-					"insets": new java.awt.Insets( 10, 0, 0, 0 )
-					"gridx": 2
-				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 					name: "vSpacer1"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -342,8 +333,8 @@ new FormModel {
 					"$alignLeft": true
 				} ) {
 					name: "passengersPanel"
-					"preferredSize": #Dimension4
-					"minimumSize": #Dimension5
+					"preferredSize": new java.awt.Dimension( 510, 80 )
+					"minimumSize": new java.awt.Dimension( 510, 80 )
 					"maximumSize": #Dimension6
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
@@ -358,21 +349,23 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 						name: "passengerScrollPane"
-						"preferredSize": #Dimension10
-						"minimumSize": #Dimension11
-						"maximumSize": #Dimension12
+						"preferredSize": new java.awt.Dimension( 300, 80 )
+						"minimumSize": new java.awt.Dimension( 300, 80 )
+						"maximumSize": new java.awt.Dimension( 300, 80 )
 						"enabled": false
 						"opaque": false
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "passsengerTable"
 							"opaque": false
+							"minimumSize": new java.awt.Dimension( 30, 80 )
+							"preferredSize": new java.awt.Dimension( 150, 80 )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
-					"gridy": 9
+					"gridy": 8
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 					name: "createBtnPanel"
@@ -399,7 +392,7 @@ new FormModel {
 						"value": "East"
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 11
+					"gridy": 9
 					"gridx": 2
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {

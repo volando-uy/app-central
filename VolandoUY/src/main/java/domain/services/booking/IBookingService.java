@@ -29,8 +29,11 @@ public interface IBookingService {
     void setFlightService(IFlightService flightService);
     void setTicketService(ITicketService ticketService);
     void setUserService(IUserService userService);
-    List<BookFlightDTO> findDTOsByCustomerNickname(String nickname);
-    List<BookFlightDTO> findAllBookFlightDetails(boolean detailed);
-    BookFlight getFullBookingById(Long id);
 
+    List<BookFlightDTO> getAllBookFlightsDetailsByCustomerNickname(String nickname, boolean full);
+    List<BookFlightDTO> getAllBookFlightsDetails(boolean full);
+
+    List<BookFlightDTO> getBookFlightsDetailsByFlightName(String flightName, boolean full);
+
+    BookFlightDTO getBookFlightDetailsById(Long id, boolean full);
 }

@@ -63,6 +63,9 @@ public class AddFlightRouteToPackagePanel extends JPanel {
             packageComboBox.addItem(name);
         }
         arePackagesLoading = false;
+        if (!notBoughtPackagesNames.isEmpty()) {
+            packageComboBox.setSelectedIndex(0);
+        }
     }
 
     private void loadAirlinesIntoCombo() {
@@ -187,7 +190,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
 
                 // Add flight route to package
                 flightRoutePackageController.addFlightRouteToPackage(
-                        selectedPackage.getName(), selectedFlightRoute.getName(), quantity
+                            selectedPackage.getName(), selectedFlightRoute.getName(), quantity
                 );
 
                 JOptionPane.showMessageDialog(this, "Ruta de vuelo añadida al paquete correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);

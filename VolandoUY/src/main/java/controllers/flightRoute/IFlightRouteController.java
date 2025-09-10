@@ -20,4 +20,7 @@ public interface IFlightRouteController {
     // Simple and full versions
     List<FlightRouteDTO> getAllFlightRoutesDetailsByAirlineNickname(String airlineNickname);
     List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByAirlineNickname(String airlineNickname);
+
+    List<FlightRouteDTO> getAllFlightRoutesDetailsByPackageName(String packageName);
+    List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByPackageName(String packageName);
 }

@@ -1,6 +1,7 @@
 package controllers.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
+import domain.dtos.seat.SeatDTO;
 import domain.services.seat.ISeatService;
 import lombok.AllArgsConstructor;
 
@@ -8,13 +9,25 @@ import lombok.AllArgsConstructor;
 public class SeatController implements ISeatController {
     private ISeatService seatService;
 
+
     @Override
-    public BaseSeatDTO createSeat(BaseSeatDTO baseSeatDTO, String flightName) {
-        return null; // Por ahora no estamos usando controller para crear asientos
+    public SeatDTO getSeatDetailsById(Long id) {
+        return seatService.getSeatDetailsById(id, true);
     }
 
     @Override
-    public void assignTicketToSeat(Long seatId, Long ticketId) {
-        seatService.assignTicketToSeat(seatId, ticketId);
+    public BaseSeatDTO getSeatSimpleDetailsById(Long id) {
+        return seatService.getSeatDetailsById(id, false);
+    }
+
+    @Override
+    public BaseSeatDTO getSeatSimpleDetailsByTicketId(Long ticketId) {
+        return seatService.getSeatDetailsByTicketId(ticketId, false);
+    }
+
+    @Override
+    public SeatDTO getSeatDetailsByTicketId(Long ticketId) {
+        return seatService.getSeatDetailsByTicketId(ticketId, true);
+
     }
 }

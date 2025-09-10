@@ -13,6 +13,6 @@ public interface IBookingRepository {
     BookFlight getFullBookingById(Long id);
     List<BookFlightDTO> findDTOsByCustomerNickname(String nickname);
     List<BookFlight> findByCustomerNickname(String nickname);
-    List<BookFlight> findByFlightName(String flightName);
+    List<BookFlight> findFullByFlightName(String flightName);
 
 }

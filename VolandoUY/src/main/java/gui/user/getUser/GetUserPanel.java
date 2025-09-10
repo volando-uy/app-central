@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Sun Sep 07 16:17:39 UYT 2025
  */
 
-package gui.reservations.getUserReservation;
+package gui.user.getUser;
 
 import java.awt.*;
 import java.lang.reflect.Method;
@@ -21,32 +21,35 @@ import controllers.buyPackage.IBuyPackageController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.seat.ISeatController;
+import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import domain.dtos.bookFlight.BookFlightDTO;
-import domain.dtos.buyPackage.BaseBuyPackageDTO;
 import domain.dtos.buyPackage.BuyPackageDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.dtos.seat.BaseSeatDTO;
+import domain.dtos.seat.SeatDTO;
+import domain.dtos.ticket.TicketDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
-import domain.models.bookflight.BookFlight;
-import domain.models.ticket.Ticket;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author AparicioQuian
  */
-public class GetUserReservationPanel extends JPanel {
+public class GetUserPanel extends JPanel {
     private final IUserController userController;
     private final IFlightRouteController flightRouteController;
     private final IFlightController flightController;
     private final IFlightRoutePackageController flightRoutePackageController;
     private final IBookingController bookingController;
     private final IBuyPackageController buyPackageController;
+    private final ITicketController ticketController;
+    private final ISeatController seatController;
 
     private static final String CARD_EMPTY   = "EMPTY";
     private static final String CARD_AIRLINE = "AIRLINE";
@@ -74,13 +77,15 @@ public class GetUserReservationPanel extends JPanel {
     private JTable tblDetalleRuta;
     private DefaultTableModel modelDetalleRuta;
 
-    public GetUserReservationPanel(
+    public GetUserPanel(
             IUserController userController,
             IFlightRouteController flightRouteController,
             IFlightController flightController,
             IFlightRoutePackageController flightRoutePackageController,
             IBookingController bookingController,
-            IBuyPackageController buyPackageController
+            IBuyPackageController buyPackageController,
+            ITicketController ticketController,
+            ISeatController seatController
     ) {
         this.userController = userController;
         this.flightRouteController = flightRouteController;
@@ -88,7 +93,8 @@ public class GetUserReservationPanel extends JPanel {
         this.flightRoutePackageController = flightRoutePackageController;
         this.bookingController = bookingController;
         this.buyPackageController = buyPackageController;
-
+        this.ticketController = ticketController;
+        this.seatController = seatController;
         initComponents();
 
         setLayout(new BorderLayout());
@@ -96,6 +102,8 @@ public class GetUserReservationPanel extends JPanel {
 
         postInitWireUp();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
+        // Sacar borde del JFD
+        try { panel4.setBorder(null); } catch (Exception ignored) {}
     }
 
     // ---------- wiring ----------
@@ -127,11 +135,13 @@ public class GetUserReservationPanel extends JPanel {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblReservas.setModel(modelReservas);
+        tblPaquetes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         modelPaquetes = new DefaultTableModel(new Object[]{"Id", "Nombre paquete", "Fecha compra", "Precio total" }, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblPaquetes.setModel(modelPaquetes);
+        tblPaquetes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         cmbTipo.addActionListener(e -> reloadUsuarios());
         tblUsuarios.getSelectionModel().addListSelectionListener(e -> { if (!e.getValueIsAdjusting()) onUsuarioSeleccionado(); });
@@ -178,7 +188,7 @@ public class GetUserReservationPanel extends JPanel {
                     modelUsuarios.addRow(new Object[]{ nz(a.getName()), "", nz(a.getMail()), "Aerolínea", nick });
                 }
             }
-            adjustDynamicWidthAndHeightToTable(tblUsuarios, modelUsuarios);
+            adjustDynamicWidthAndHeightToTable(tblUsuarios);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -247,7 +257,7 @@ public class GetUserReservationPanel extends JPanel {
                 String status = callGetterString(r, "getStatus");
                 modelRutas.addRow(new Object[]{ nz(r.getName()), origin, dest, status });
             }
-            adjustDynamicWidthAndHeightToTable(tblRutas, modelRutas);
+            adjustDynamicWidthAndHeightToTable(tblRutas);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudieron cargar rutas: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -369,22 +379,24 @@ public class GetUserReservationPanel extends JPanel {
 
     // ---------- cliente: reservas ----------
     private void loadCustomerReservations(String customerNickname) {
-        List<BookFlightDTO> reservas = bookingController.findDTOsByCustomerNickname(customerNickname);
+        List<BookFlightDTO> reservas = bookingController.getBookFlightsDetailsByCustomerNickname(customerNickname);
 
         DefaultTableModel model = (DefaultTableModel) tblReservas.getModel();
         model.setColumnIdentifiers(new Object[] { "ID", "Fecha", "Total", "Tickets", "Vuelos" });
         model.setRowCount(0);
 
         for (BookFlightDTO reserva : reservas) {
-            BookFlight full = null;
-            try { full = bookingController.getFullBookingById(reserva.getId()); } catch (Exception ignored) {}
 
-            int ticketsCount = (full != null && full.getTickets() != null) ? full.getTickets().size() : 0;
+            int ticketsCount = (reserva != null && reserva.getTicketIds() != null) ? reserva.getTicketIds().size() : 0;
             String flights = "";
-            if (full != null && full.getTickets() != null) {
-                flights = full.getTickets().stream()
-                        .map(t -> (t.getSeat() != null && t.getSeat().getFlight() != null)
-                                ? nz(t.getSeat().getFlight().getName()) : "N/A")
+            if (reserva != null && reserva.getTicketIds() != null) {
+                flights = reserva.getTicketIds().stream()
+                        .map(ticketId -> {
+                            TicketDTO t = ticketController.getTicketDetailsById(ticketId);
+                            SeatDTO s = seatController.getSeatDetailsById(t.getSeatId());
+                            return (s != null && s.getFlightName() != null)
+                                    ? nz(s.getFlightName()) : "N/A";
+                        })
                         .distinct()
                         .reduce((a,b) -> a.isBlank()? b : (b.isBlank()? a : a + ", " + b)).orElse("");
             }
@@ -397,7 +409,7 @@ public class GetUserReservationPanel extends JPanel {
                     flights
             });
         }
-        adjustDynamicWidthAndHeightToTable(tblReservas, modelReservas);
+        adjustDynamicWidthAndHeightToTable(tblReservas);
     }
 
     private void buildDetalleReservaPanel() {
@@ -470,54 +482,39 @@ public class GetUserReservationPanel extends JPanel {
             return;
         }
 
-        BookFlight booking;
-        try { booking = bookingController.getFullBookingById(bookingId); }
+        BookFlightDTO bookingDTO;
+        try { bookingDTO = bookingController.getBookFlightDetailsById(bookingId); }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar la reserva: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (booking == null) { JOptionPane.showMessageDialog(this, "No se encontró la reserva."); return; }
+        if (bookingDTO == null) { JOptionPane.showMessageDialog(this, "No se encontró la reserva."); return; }
 
-        fillDetalleReserva(booking);
+        fillDetalleReserva(bookingDTO);
         detalleReservaPanel.setVisible(true);
-        adjustDynamicWidthAndHeightToTable(tblSeats, modelSeats);
+        adjustDynamicWidthAndHeightToTable(tblSeats);
     }
 
 
-    private void fillDetalleReserva(BookFlight booking) {
+    private void fillDetalleReserva(BookFlightDTO booking) {
         String totalTxt = String.valueOf(booking.getTotalPrice());
-        String fechaTxt = booking.getCreated_at() != null ? String.valueOf(booking.getCreated_at()) : "-";
+        String fechaTxt = booking.getCreatedAt() != null ? String.valueOf(booking.getCreatedAt()) : "-";
 
-        String vueloName = "-";
-        String rutaName  = "-";
-        String origen    = "";
-        String destino   = "";
+        // Agarramos un ticket cualquiera, todos pertenecen al mismo vuelo
+        TicketDTO t = ticketController.getTicketDetailsById(booking.getTicketIds().get(0));
+        if (t == null) return;
+        SeatDTO s = seatController.getSeatDetailsById(t.getSeatId());
+        if (s == null) return;
+        FlightDTO f = flightController.getFlightDetailsByName(s.getFlightName());
+        if (f == null) return;
+        FlightRouteDTO fr = flightRouteController.getFlightRouteDetailsByName(f.getFlightRouteName());
+        if (fr == null) return;
 
-        try {
-            if (booking.getTickets() != null && !booking.getTickets().isEmpty()) {
-                Ticket t0 = booking.getTickets().get(0);
-                if (t0 != null && t0.getSeat() != null && t0.getSeat().getFlight() != null) {
-                    var f = t0.getSeat().getFlight();
-                    if (f.getName() != null) vueloName = f.getName();
-                    if (f.getFlightRoute() != null) {
-                        var fr = f.getFlightRoute();
-                        if (fr.getName() != null) rutaName = fr.getName();
-
-                        String orgTry = callGetterString(fr, "getOriginCityName","getOriginAirportName","getOriginName","getOriginIata","getOriginCode");
-                        String dstTry = callGetterString(fr, "getDestinationCityName","getDestinationAirportName","getDestinationName","getDestinationIata","getDestinationCode");
-                        if (!orgTry.isBlank()) origen = orgTry;
-                        if (!dstTry.isBlank()) destino = dstTry;
-                    }
-                }
-            }
-        } catch (Exception ignored) {}
-
-        if (origen.isBlank() || destino.isBlank()) {
-            String[] ends = getRouteEndsByName(rutaName);
-            if (origen.isBlank())  origen  = ends[0];
-            if (destino.isBlank()) destino = ends[1];
-        }
+        String vueloName = f.getName();
+        String rutaName  = fr.getName();
+        String origen    = fr.getOriginCityName();
+        String destino   = fr.getDestinationCityName();
 
         lblDetTitulo.setText("Detalle de la reserva #" + (booking.getId() != null ? booking.getId() : "-"));
         lblDetVuelo.setText("Vuelo: " + vueloName);
@@ -528,39 +525,14 @@ public class GetUserReservationPanel extends JPanel {
         lblDetTotal.setText("Total: " + totalTxt);
 
         modelSeats.setRowCount(0);
-        if (booking.getTickets() != null) {
-            for (Ticket t : booking.getTickets()) {
-                String ticketId = t.getId() != null ? String.valueOf(t.getId()) : "-";
-                String nro = "-";
-                String tipo = "-";
-                String vName = "-";
-                String rName = "-";
-                String org = "", dst = "";
+        if (booking.getTicketIds() != null) {
+            for (Long ticketId : booking.getTicketIds()) {
+                BaseSeatDTO seatDTO = seatController.getSeatSimpleDetailsByTicketId(ticketId);
+                String numeroAsiento = seatDTO.getNumber();
+                String tipo = seatDTO.getType().name();
 
-                if (t.getSeat() != null) {
-                    if (t.getSeat().getNumber() != null) nro = String.valueOf(t.getSeat().getNumber());
-                    if (t.getSeat().getType() != null)   tipo = String.valueOf(t.getSeat().getType());
-                    if (t.getSeat().getFlight() != null) {
-                        var f = t.getSeat().getFlight();
-                        if (f.getName() != null) vName = f.getName();
-                        if (f.getFlightRoute() != null) {
-                            var fr = f.getFlightRoute();
-                            if (fr.getName() != null) rName = fr.getName();
-
-                            String orgTry = callGetterString(fr, "getOriginCityName","getOriginAirportName","getOriginName","getOriginIata","getOriginCode");
-                            String dstTry = callGetterString(fr, "getDestinationCityName","getDestinationAirportName","getDestinationName","getDestinationIata","getDestinationCode");
-                            if (!orgTry.isBlank()) org = orgTry;
-                            if (!dstTry.isBlank()) dst = dstTry;
-
-                            if (org.isBlank() || dst.isBlank()) {
-                                String[] ends = getRouteEndsByName(rName);
-                                if (org.isBlank()) org = ends[0];
-                                if (dst.isBlank()) dst = ends[1];
-                            }
-                        }
-                    }
-                }
-                modelSeats.addRow(new Object[]{ ticketId, nro, tipo, vName, rName, (org.isBlank()? "-" : org), (dst.isBlank()? "-" : dst) });
+                modelSeats.addRow(new Object[]{
+                        ticketId, numeroAsiento, tipo, vueloName, rutaName, origen, destino  });
             }
         }
     }
@@ -569,10 +541,10 @@ public class GetUserReservationPanel extends JPanel {
         modelPaquetes.setRowCount(0);
         try {
             CustomerDTO c = userController.getCustomerDetailsByNickname(customerNickname);
-            if (c == null) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
+            if (c == null) { adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
 
             List<Long> boughtPackagesIds = c.getBoughtPackagesIds();
-            if (boughtPackagesIds == null || boughtPackagesIds.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
+            if (boughtPackagesIds == null || boughtPackagesIds.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
 
             for (Long id : boughtPackagesIds) {
                 BuyPackageDTO buyPackageDTO = buyPackageController.getBuyPackageDetailsById(id);
@@ -585,7 +557,7 @@ public class GetUserReservationPanel extends JPanel {
                 });
             }
 
-            adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes);
+            adjustDynamicWidthAndHeightToTable(tblPaquetes);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudieron cargar paquetes: " + ex.getMessage(),
@@ -660,8 +632,10 @@ public class GetUserReservationPanel extends JPanel {
     private void showCard(String key) { ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key); }
 
     // ---------- utils tablas ----------
-    private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
-        table.setModel(tableModel);
+    private void adjustDynamicWidthAndHeightToTable(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int tableWidth = 0;
+        // Ancho
         for (int col = 0; col < table.getColumnCount(); col++) {
             TableColumn column = table.getColumnModel().getColumn(col);
             int preferredWidth = 0;
@@ -671,7 +645,7 @@ public class GetUserReservationPanel extends JPanel {
             Component headerComp = headerRenderer.getTableCellRendererComponent(
                     table, column.getHeaderValue(), false, false, 0, col
             );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
+            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
 
             for (int row = 0; row < maxRows; row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
@@ -681,11 +655,14 @@ public class GetUserReservationPanel extends JPanel {
                 preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
             }
             column.setPreferredWidth(preferredWidth + 10);
+            tableWidth += preferredWidth;
         }
+
+        // Alto
         int minRows = 5;
         int visibleRows = Math.max(table.getRowCount(), minRows);
         table.setPreferredSize(new Dimension(
-                table.getPreferredSize().width,
+                tableWidth,
                 visibleRows * table.getRowHeight()
         ));
     }
@@ -722,16 +699,7 @@ public class GetUserReservationPanel extends JPanel {
         Object v = callGetter(target, candidates);
         return v == null ? "" : String.valueOf(v);
     }
-    @SuppressWarnings("unchecked")
-    private <T> List<T> callGetterList(Object target, Class<T> of, String... candidates) {
-        Object v = callGetter(target, candidates);
-        if (v instanceof List<?> list) {
-            List<T> out = new ArrayList<>();
-            for (Object o : list) if (o != null && of.isInstance(o)) out.add((T) o);
-            return out;
-        }
-        return List.of();
-    }
+
     private Object callGetter(Object target, String... candidates) {
         if (target == null) return null;
         Class<?> c = target.getClass();
@@ -753,24 +721,6 @@ public class GetUserReservationPanel extends JPanel {
         } catch (Exception ignore) {
             return String.valueOf(v);
         }
-    }
-
-    /** 🔧 FALTANTE: invoca por reflexión el primer método que exista. */
-    private Object tryInvoke(Object target, String[] methodNames, Class<?>[] paramTypes, Object[] args) {
-        if (target == null) return null;
-        Class<?> c = target.getClass();
-        for (String name : methodNames) {
-            try {
-                Method m = c.getMethod(name, paramTypes);
-                m.setAccessible(true);
-                return m.invoke(target, args);
-            } catch (NoSuchMethodException ignored) {
-                // probamos el siguiente nombre
-            } catch (Exception e) {
-                System.err.println("Invocación fallida a " + name + ": " + e.getMessage());
-            }
-        }
-        return null;
     }
 
     private void mostrarDialogoDetalle(String titulo, JComponent contenido) {

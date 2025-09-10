@@ -4,6 +4,7 @@
 
 package gui.flight.getFlight;
 
+import controllers.booking.IBookingController;
 import controllers.flight.IFlightController;
 import controllers.user.IUserController;
 import domain.dtos.bookFlight.BookFlightDTO;
@@ -31,11 +32,18 @@ public class GetFlightsPanel extends JPanel {
     private boolean areAirlinesLoading = false;
 
     private IFlightController flightController;
+    private IBookingController bookingController;
+
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public GetFlightsPanel(IFlightController flightController, IUserController userController) {
+    public GetFlightsPanel(
+            IFlightController flightController,
+            IUserController userController,
+            IBookingController bookingController
+    ) {
         this.flightController = flightController;
         this.userController = userController;
+        this.bookingController = bookingController;
         initComponents();
         initListeners();
         loadAirlinesIntoCombo();
@@ -96,7 +104,7 @@ public class GetFlightsPanel extends JPanel {
 
         FlightTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         FlightTable.setModel(model);
-        adjustDynamicWidthAndHeightToTable(FlightTable, model);
+        adjustDynamicWidthAndHeightToTable(FlightTable);
         FlightTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
@@ -116,7 +124,9 @@ public class GetFlightsPanel extends JPanel {
     }
 
     // ajuste dinámico (podés usar el tuyo; dejo el mismo patrón)
-    private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
+    private void adjustDynamicWidthAndHeightToTable(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int tableWidth = 0;
         // Ancho
         for (int col = 0; col < table.getColumnCount(); col++) {
             TableColumn column = table.getColumnModel().getColumn(col);
@@ -127,7 +137,7 @@ public class GetFlightsPanel extends JPanel {
             Component headerComp = headerRenderer.getTableCellRendererComponent(
                     table, column.getHeaderValue(), false, false, 0, col
             );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
+            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
 
             for (int row = 0; row < maxRows; row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
@@ -137,13 +147,14 @@ public class GetFlightsPanel extends JPanel {
                 preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
             }
             column.setPreferredWidth(preferredWidth + 10);
+            tableWidth += preferredWidth;
         }
 
         // Alto
         int minRows = 5;
         int visibleRows = Math.max(table.getRowCount(), minRows);
         table.setPreferredSize(new Dimension(
-                table.getPreferredSize().width,
+                tableWidth,
                 visibleRows * table.getRowHeight()
         ));
     }
@@ -181,8 +192,7 @@ public class GetFlightsPanel extends JPanel {
                     int row = FlightTable.getSelectedRow();
                     FlightDTO flight = flights.get(row);
 
-                    // Lista vacía de reservas
-                    List<BookFlightDTO> reservations = new ArrayList<>();
+                    List<BookFlightDTO> reservations = bookingController.getBookFlightsDetailsByFlightName(flight.getName());
 
                     SwingUtilities.invokeLater(() -> {
                         FlightDetailWindow detailWin = new FlightDetailWindow(flight, reservations);

@@ -59,4 +59,17 @@ public class FlightRouteController implements IFlightRouteController{
                 .map(route -> (BaseFlightRouteDTO) route)
                 .toList();
     }
+
+    @Override
+    public List<FlightRouteDTO> getAllFlightRoutesDetailsByPackageName(String packageName) {
+        return flightRouteService.getFlightRoutesDetailsByPackageName(packageName, true);
+    }
+
+    @Override
+    public List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByPackageName(String packageName) {
+        return flightRouteService.getFlightRoutesDetailsByPackageName(packageName, false)
+                .stream()
+                .map(route -> (BaseFlightRouteDTO) route)
+                .toList();
+    }
 }

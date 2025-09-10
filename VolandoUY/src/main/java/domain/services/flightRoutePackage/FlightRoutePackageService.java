@@ -58,7 +58,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         }
 
         return full ? customModelMapper.mapFullFlightRoutePackage(pack)
-                : customModelMapper.map(flightRoutePackageRepository.getFlightRoutePackageByName(flightRoutePackageName), FlightRoutePackageDTO.class);
+                : customModelMapper.map(pack, FlightRoutePackageDTO.class);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         }
 
         // Tiramos una excepcion si el paquete no existe
-        FlightRoutePackage flightRoutePackage = flightRoutePackageRepository.getFlightRoutePackageByName(packageName);
+        FlightRoutePackage flightRoutePackage = flightRoutePackageRepository.getFullFlightRoutePackageByName(packageName);
         if (flightRoutePackage == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, packageName));
         }
@@ -116,14 +116,10 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
 
             // Setteamos el precio nuevo
             flightRoutePackage.setTotalPrice(flightRoutePackage.getTotalPrice() + priceToAdd);
-
-            // Añadimos la ruta de vuelo al paquete
-            flightRoutePackage.getFlightRoutes().add(flightRoute);
-
         }
 
         // Actualizamos el paquete
-        flightRoutePackageRepository.update(flightRoutePackage);
+        flightRoutePackageRepository.addFlightRouteToPackage(flightRoute, flightRoutePackage);
     }
 
     @Override
@@ -133,7 +129,8 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
         // Mapeamos a DTO y retornamos la lista
         List<FlightRoutePackage> packages = full ? flightRoutePackageRepository.findAllFullWithFlightRoutes() : flightRoutePackageRepository.findAllWithFlightRoutes();
         return packages.stream()
-                .map(pack -> full ? customModelMapper.mapFullFlightRoutePackage(pack) : customModelMapper.map(pack, FlightRoutePackageDTO.class))
+                .map(pack -> full ? customModelMapper.mapFullFlightRoutePackage(pack)
+                        : customModelMapper.map(pack, FlightRoutePackageDTO.class))
                 .toList();
     }
 

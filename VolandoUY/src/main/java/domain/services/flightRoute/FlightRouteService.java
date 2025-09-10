@@ -85,7 +85,7 @@ public class FlightRouteService implements IFlightRouteService {
         ValidatorUtil.validate(flightRoute);
 
         // Guardar la ruta de vuelo
-        flightRouteRepository.saveFlightRouteAndAddToAirline(flightRoute, airline);
+        flightRouteRepository.createFlightRoute(flightRoute, airline);
 
         // Devolver el DTO mapeado
         return customModelMapper.map(flightRoute, BaseFlightRouteDTO.class);
@@ -98,8 +98,25 @@ public class FlightRouteService implements IFlightRouteService {
 
     @Override
     public List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname, boolean full) {
-        return flightRouteRepository.getFullAllByAirlineNickname(airlineNickname).stream()
-                .map(fr -> full ? customModelMapper.mapFullFlightRoute(fr) : customModelMapper.map(fr, FlightRouteDTO.class))
+        List<FlightRoute> fr = full ? flightRouteRepository.getFullAllByAirlineNickname(airlineNickname) : flightRouteRepository.getAllByAirlineNickname(airlineNickname);
+        if (fr == null) {
+            return null;
+        }
+
+        return fr.stream()
+                .map(route -> full ? customModelMapper.mapFullFlightRoute(route) : customModelMapper.map(route, FlightRouteDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<FlightRouteDTO> getFlightRoutesDetailsByPackageName(String packageName, boolean full) {
+        List<FlightRoute> fr = full ? flightRouteRepository.getFullAllByPackageName(packageName) : flightRouteRepository.getAllByPackageName(packageName);
+        if (fr == null) {
+            return List.of();
+        }
+
+        return fr.stream()
+                .map(route -> full ? customModelMapper.mapFullFlightRoute(route) : customModelMapper.map(route, FlightRouteDTO.class))
                 .toList();
     }
 
@@ -107,11 +124,7 @@ public class FlightRouteService implements IFlightRouteService {
     @Override
     public FlightRoute getFlightRouteByName(String routeName, boolean full) {
         // Comprobar que la ruta de vuelo exista
-        FlightRoute flightRoute = full ? flightRouteRepository.getFullByName(routeName) : flightRouteRepository.getByName(routeName);
-        if (flightRoute == null) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
-        }
-        return flightRoute;
+        return full ? flightRouteRepository.getFullByName(routeName) : flightRouteRepository.getByName(routeName);
     }
 
     @Override

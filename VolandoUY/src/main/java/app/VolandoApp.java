@@ -44,7 +44,9 @@ public class VolandoApp {
                 ControllerFactory.getFlightRoutePackageController(),
                 ControllerFactory.getFlightController(),
                 ControllerFactory.getBookingController(),
-                ControllerFactory.getBuyPackageController()
+                ControllerFactory.getBuyPackageController(),
+                ControllerFactory.getTicketController(),
+                ControllerFactory.getSeatController()
             );
         });
 

@@ -473,6 +473,7 @@ public class BookFlightPanel extends JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al registrar la reserva: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            resetForm();
         }
     }
 
@@ -528,27 +529,15 @@ public class BookFlightPanel extends JPanel {
     }
 
     private void resetForm() {
-//        // pasajeros
-//        DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
-//        for (int i = m.getRowCount() - 1; i >= 0; i--) m.removeRow(i);
-//        ((DefaultTableModel) passsengerTable.getModel()).setRowCount(0);
-//        numTicketsTextField.setText("");
-//        extraLuggageTextField.setText("");
-//        // campos
-//        numTicketsTextField.setText("");
-//        extraLuggageTextField.setText("");
-//        setDefaultReservationDate();
-//
-//        // asiento
-//        seatTypeComboBox.removeAllItems();
-//
-//        // Vuelos (recargar para refrescar precios/stock)
-//        loadFlightsForSelectedFlightRoute();
-//
-//        // cliente (mantengo seleccionado el actual)
-//        if (customerComboBox.getItemCount() > 0 && customerComboBox.getSelectedIndex() < 0) {
-//            customerComboBox.setSelectedIndex(0);
-//        }
+        // pasajeros
+        DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
+        for (int i = m.getRowCount() - 1; i >= 0; i--) m.removeRow(i);
+        ((DefaultTableModel) passsengerTable.getModel()).setRowCount(0);
+
+        // cliente (mantengo seleccionado el actual)
+        if (customerComboBox.getItemCount() > 0 && customerComboBox.getSelectedIndex() < 0) {
+            customerComboBox.setSelectedIndex(0);
+        }
     }
 
     private FlightDTO getSelectedFlight() {
@@ -579,7 +568,6 @@ public class BookFlightPanel extends JPanel {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         InfoFlightPanel = new JPanel();
-        titleLabel = new JLabel();
         vSpacer1 = new JPanel(null);
         hSpacer5 = new JPanel(null);
         selectAirlinePanel = new JPanel();
@@ -628,12 +616,13 @@ public class BookFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
-        EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing
-        .border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),
-        java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))
-        throw new RuntimeException();}});
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing
+        .border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder
+        .CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.
+        awt.Font.BOLD,12),java.awt.Color.red), getBorder()))
+        ; addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}})
+        ;
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0};
@@ -645,16 +634,9 @@ public class BookFlightPanel extends JPanel {
             InfoFlightPanel.setOpaque(false);
             InfoFlightPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoFlightPanel.getLayout()).columnWidths = new int[] {0, 0, 450, 0, 0, 0};
-            ((GridBagLayout)InfoFlightPanel.getLayout()).rowHeights = new int[] {0, 0, 43, 107, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoFlightPanel.getLayout()).rowHeights = new int[] {0, 0, 43, 107, 0, 43, 0, 0, 0, 0, 0};
             ((GridBagLayout)InfoFlightPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoFlightPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
-
-            //---- titleLabel ----
-            titleLabel.setText("Crear Reserva");
-            titleLabel.setFont(new Font("JetBrains Mono ExtraBold", Font.PLAIN, 20));
-            InfoFlightPanel.add(titleLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                new Insets(10, 0, 5, 0), 0, 0));
+            ((GridBagLayout)InfoFlightPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
             InfoFlightPanel.add(vSpacer1, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -941,8 +923,8 @@ public class BookFlightPanel extends JPanel {
 
             //======== passengersPanel ========
             {
-                passengersPanel.setPreferredSize(new Dimension(510, 100));
-                passengersPanel.setMinimumSize(new Dimension(510, 100));
+                passengersPanel.setPreferredSize(new Dimension(510, 80));
+                passengersPanel.setMinimumSize(new Dimension(510, 80));
                 passengersPanel.setMaximumSize(new Dimension(510, 510));
                 passengersPanel.setOpaque(false);
                 passengersPanel.setLayout(new GridBagLayout());
@@ -965,21 +947,23 @@ public class BookFlightPanel extends JPanel {
 
                 //======== passengerScrollPane ========
                 {
-                    passengerScrollPane.setPreferredSize(new Dimension(300, 100));
-                    passengerScrollPane.setMinimumSize(new Dimension(300, 100));
-                    passengerScrollPane.setMaximumSize(new Dimension(300, 100));
+                    passengerScrollPane.setPreferredSize(new Dimension(300, 80));
+                    passengerScrollPane.setMinimumSize(new Dimension(300, 80));
+                    passengerScrollPane.setMaximumSize(new Dimension(300, 80));
                     passengerScrollPane.setEnabled(false);
                     passengerScrollPane.setOpaque(false);
 
                     //---- passsengerTable ----
                     passsengerTable.setOpaque(false);
+                    passsengerTable.setMinimumSize(new Dimension(30, 80));
+                    passsengerTable.setPreferredSize(new Dimension(150, 80));
                     passengerScrollPane.setViewportView(passsengerTable);
                 }
                 passengersPanel.add(passengerScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightPanel.add(passengersPanel, new GridBagConstraints(2, 9, 1, 1, 0.0, 0.0,
+            InfoFlightPanel.add(passengersPanel, new GridBagConstraints(2, 8, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -1003,9 +987,9 @@ public class BookFlightPanel extends JPanel {
                 hSpacer2.setOpaque(false);
                 createBtnPanel.add(hSpacer2, BorderLayout.EAST);
             }
-            InfoFlightPanel.add(createBtnPanel, new GridBagConstraints(2, 11, 1, 1, 0.0, 0.0,
+            InfoFlightPanel.add(createBtnPanel, new GridBagConstraints(2, 9, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
+                new Insets(0, 0, 0, 0), 0, 0));
         }
         add(InfoFlightPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1016,7 +1000,6 @@ public class BookFlightPanel extends JPanel {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel InfoFlightPanel;
-    private JLabel titleLabel;
     private JPanel vSpacer1;
     private JPanel hSpacer5;
     private JPanel selectAirlinePanel;

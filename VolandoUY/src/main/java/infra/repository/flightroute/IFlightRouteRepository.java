@@ -1,6 +1,8 @@
 package infra.repository.flightroute;
 
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flightRoute.FlightRoute;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 
 import java.util.Arrays;
@@ -15,5 +17,5 @@ public interface IFlightRouteRepository {
     FlightRoute getByName(String routeName);
     FlightRoute getFullByName(String routeName);
 
-    void saveFlightRouteAndAddToAirline(FlightRoute flightRoute, Airline airline);
+    void createFlightRoute(FlightRoute flightRoute, Airline airline);
 }

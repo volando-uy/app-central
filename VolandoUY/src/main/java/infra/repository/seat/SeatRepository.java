@@ -49,4 +49,45 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
                     .getResultList();
         }
     }
+
+    public Seat getFullSeatById(Long id) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Seat seat = em.createQuery(
+                            "SELECT s FROM Seat s " +
+                                    "LEFT JOIN FETCH s.flight f " +
+                                    "LEFT JOIN FETCH s.ticket t " +
+                                    "WHERE s.id = :id", Seat.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            return seat;
+        }
+    }
+
+
+    public Seat getFullSeatByTicketId(Long ticketId) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Seat seat = em.createQuery(
+                            "SELECT s FROM Seat s " +
+                                    "LEFT JOIN FETCH s.flight f " +
+                                    "LEFT JOIN FETCH s.ticket t " +
+                                    "WHERE t.id = :ticketId", Seat.class)
+                    .setParameter("ticketId", ticketId)
+                    .getSingleResult();
+
+            return seat;
+        }
+    }
+
+    public Seat getSeatByTicketId(Long ticketId) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            Seat seat = em.createQuery(
+                            "SELECT s FROM Seat s " +
+                                    "WHERE s.ticket.id = :ticketId", Seat.class)
+                    .setParameter("ticketId", ticketId)
+                    .getSingleResult();
+
+            return seat;
+        }
+    }
 }

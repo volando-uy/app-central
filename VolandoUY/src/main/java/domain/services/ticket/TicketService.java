@@ -37,24 +37,8 @@ public class TicketService implements ITicketService {
         if (ticket == null) {
             throw new IllegalArgumentException("Ticket not found");
         }
-        if(full){
-            TicketDTO dto = customModelMapper.map(ticket, TicketDTO.class);
 
-            // Fijate qué trae mapeado; forzá DTOs correctos:
-            var basicDtos = ticket.getBasicLuggages().stream()
-                    .map(b -> customModelMapper.map(b, BasicLuggageDTO.class))
-                    .toList();
-            var extraDtos = ticket.getExtraLuggages().stream()
-                    .map(e -> customModelMapper.map(e, ExtraLuggageDTO.class))
-                    .toList();
-
-            dto.setBasicLuggages(new ArrayList<>(basicDtos));
-            dto.setExtraLuggages(new ArrayList<>(extraDtos));
-            dto.setSeatNumber(ticket.getSeat() != null ? ticket.getSeat().getNumber() : null);
-            dto.setBookFlightId(ticket.getBookFlight() != null ? ticket.getBookFlight().getId() : null);
-            return dto;
-        }
-        return customModelMapper.map(ticket, TicketDTO.class);
+        return full ? customModelMapper.mapFullTicket(ticket) : customModelMapper.map(ticket, TicketDTO.class);
     }
 
 }

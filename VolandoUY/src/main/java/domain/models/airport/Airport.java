@@ -46,7 +46,6 @@ public class Airport {
     @Override
     public String toString() {
         return "Airport{" +
-                "city=" + city.getName() +
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 '}';

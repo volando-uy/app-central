@@ -35,7 +35,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-            initDB();
+            //initDB();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -123,7 +123,7 @@ public class DBInitThread extends Thread {
         baseFlightRouteDTO.setPriceExtraUnitBaggage(50.0);
         flightRouteController.createFlightRoute(
                 baseFlightRouteDTO,
-                "Madird",
+                "Madrid",
                 "Paris",
                 "Aerolineas Argentinas",
                 null

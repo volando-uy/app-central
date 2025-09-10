@@ -20,14 +20,6 @@ new FormModel {
 					name: "createReservationBtn"
 					"text": "+ Reserva Vuelo"
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "getUsersBtn"
-					"text": "\ud83d\udcc4Consultar Usuarios"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "null01Btn"
-					"text": "..."
-				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
 			} )

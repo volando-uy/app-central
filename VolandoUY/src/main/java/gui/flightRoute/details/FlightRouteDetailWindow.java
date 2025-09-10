@@ -33,10 +33,13 @@ public class FlightRouteDetailWindow extends JFrame {
         this.route = route;
         initComponents();
 
+        setResizable(false);
+
         setTitle("Detalle de Ruta");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(900, 500);
         setLocationRelativeTo(getOwner());
+
+        try { infoPanel.setBorder(null); } catch (Exception ignored) {}
 
         // Llenar labels con datos de la ruta
         label1.setText("Nombre: " + safe(route.getName()));
@@ -45,10 +48,6 @@ public class FlightRouteDetailWindow extends JFrame {
                 (route.getCreatedAt() != null
                         ? route.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         : ""));
-        //labelAirline.setText("Aerolínea: " + safe(route.getAirlineName()));
-        //labelPriceTourist.setText("Turista: $" + route.getPriceTouristClass());
-        //labelPriceBusiness.setText("Ejecutivo: $" + route.getPriceBusinessClass());
-        //labelPriceExtra.setText("Equipaje extra: $" + route.getPriceExtraUnitBaggage());
 
         // Configurar tabla SOLO para vuelos
         String[] columnNames = {
@@ -77,7 +76,7 @@ public class FlightRouteDetailWindow extends JFrame {
         tablaVuelos.setModel(model);
         tablaVuelos.setRowHeight(28);
         tablaVuelos.setFillsViewportHeight(true);
-        tablaVuelos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // 🚀 evita que se achiquen
+        tablaVuelos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         int[] columnWidths = {150, 150, 120, 140, 150, 120};
         for (int i = 0; i < columnWidths.length; i++) {
             tablaVuelos.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
@@ -90,64 +89,86 @@ public class FlightRouteDetailWindow extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
-        scrollPane1 = new JScrollPane();
-        tablaVuelos = new JTable();
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        infoPanel = new JPanel();
         label1 = new JLabel();
         label2 = new JLabel();
         label3 = new JLabel();
+        scrollPane1 = new JScrollPane();
+        tablaVuelos = new JTable();
 
         //======== this ========
         var contentPane = getContentPane();
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {0, 0};
+        ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {0, 0, 0};
+        ((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+        ((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0E-4};
+
+        //======== infoPanel ========
+        {
+            infoPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing
+            . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ),
+            java. awt. Color. red) ,infoPanel. getBorder( )) ); infoPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () ))
+            throw new RuntimeException( ); }} );
+            infoPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {0, 0};
+            ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- label1 ----
+            label1.setText("Nombre de la ruta de vuelo:");
+            infoPanel.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- label2 ----
+            label2.setText("Creaci\u00f3n:");
+            infoPanel.add(label2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- label3 ----
+            label3.setText("Aerol\u00ednea:");
+            infoPanel.add(label3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+        }
+        contentPane.add(infoPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+            new Insets(0, 10, 0, 0), 0, 0));
 
         //======== scrollPane1 ========
         {
+            scrollPane1.setPreferredSize(new Dimension(450, 300));
+            scrollPane1.setMinimumSize(new Dimension(450, 300));
+            scrollPane1.setMaximumSize(new Dimension(450, 300));
+
+            //---- tablaVuelos ----
+            tablaVuelos.setPreferredSize(new Dimension(450, 300));
+            tablaVuelos.setMinimumSize(new Dimension(450, 300));
+            tablaVuelos.setMaximumSize(new Dimension(500000, 500000));
+            tablaVuelos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             scrollPane1.setViewportView(tablaVuelos);
         }
-        contentPane.add(scrollPane1);
-        scrollPane1.setBounds(25, 115, 460, 260);
-
-        //---- label1 ----
-        label1.setText("Nombre de la ruta de vuelo:");
-        contentPane.add(label1);
-        label1.setBounds(35, 15, 450, 20);
-
-        //---- label2 ----
-        label2.setText("Creaci\u00f3n:");
-        contentPane.add(label2);
-        label2.setBounds(35, 35, 450, 20);
-
-        //---- label3 ----
-        label3.setText("Aerol\u00ednea:");
-        contentPane.add(label3);
-        label3.setBounds(35, 55, 445, 20);
-
-        {
-            // compute preferred size
-            Dimension preferredSize = new Dimension();
-            for(int i = 0; i < contentPane.getComponentCount(); i++) {
-                Rectangle bounds = contentPane.getComponent(i).getBounds();
-                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-            }
-            Insets insets = contentPane.getInsets();
-            preferredSize.width += insets.right;
-            preferredSize.height += insets.bottom;
-            contentPane.setMinimumSize(preferredSize);
-            contentPane.setPreferredSize(preferredSize);
-        }
+        contentPane.add(scrollPane1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 25, 25, 25), 0, 0));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
-    private JScrollPane scrollPane1;
-    private JTable tablaVuelos;
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    private JPanel infoPanel;
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
+    private JScrollPane scrollPane1;
+    private JTable tablaVuelos;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

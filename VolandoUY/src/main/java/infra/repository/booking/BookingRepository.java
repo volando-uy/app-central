@@ -49,6 +49,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                 em.persist(ticket);
 
                 managedSeat.setTicket(ticket);
+                managedSeat.setAvailable(false);
                 em.merge(managedSeat);
 
                 bookFlight.getTickets().add(ticket);
@@ -161,14 +162,11 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                                         "LEFT JOIN FETCH bf.tickets t " +
                                         "LEFT JOIN FETCH t.seat s " +
                                         "LEFT JOIN FETCH s.flight f " +
-                                        "LEFT JOIN FETCH f.flightRoute fr " +
                                         "LEFT JOIN FETCH bf.customer c " +
+                                        "LEFT JOIN FETCH bf.buyPackage bp " +
                                         "WHERE bf.id = :id", BookFlight.class)
                         .setParameter("id", id)
                         .getSingleResult();
-
-                // Asegurar inicialización de colecciones (redundante por JOIN FETCH pero seguro)
-                if (bf != null && bf.getTickets() != null) bf.getTickets().size();
 
                 return bf;
             } catch (NoResultException ex) {
@@ -179,15 +177,12 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
     public List<BookFlight> findByCustomerNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
-                            "SELECT DISTINCT bf FROM BookFlight bf " +
-                                    "LEFT JOIN FETCH bf.customer c " +
-                                    "LEFT JOIN FETCH bf.tickets t " +
-                                    "WHERE c.nickname = :nickname", BookFlight.class)
+                            "SELECT DISTINCT bf FROM BookFlight bf WHERE c.nickname = :nickname", BookFlight.class)
                     .setParameter("nickname", nickname)
                     .getResultList();
         }
     }
-    public List<BookFlight> findByFlightName(String flightName) {
+    public List<BookFlight> findFullByFlightName(String flightName) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<BookFlight> bfList = em.createQuery(
                             "SELECT DISTINCT bf FROM BookFlight bf " +
@@ -195,61 +190,61 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                                     "LEFT JOIN FETCH bf.tickets t " +
                                     "LEFT JOIN FETCH t.seat s " +
                                     "LEFT JOIN FETCH s.flight f " +        // join al vuelo
-                                    "LEFT JOIN FETCH t.basicLuggages bl " +
-                                    "LEFT JOIN FETCH t.extraLuggages el " +
+                                    "LEFT JOIN FETCH bf.buyPackage bp " +
                                     "WHERE f.name = :flightName", BookFlight.class)
                     .setParameter("flightName", flightName)
                     .getResultList();
 
             // Forzar inicialización
             for (BookFlight bf : bfList) {
-                if (bf.getCustomer() != null) bf.getCustomer().getNickname();
-                if (bf.getTickets() != null) {
-                    for (Ticket t : bf.getTickets()) {
-                        if (t.getSeat() != null) t.getSeat().isAvailable();
-                        if (t.getBasicLuggages() != null) t.getBasicLuggages().size();
-                        if (t.getExtraLuggages() != null) t.getExtraLuggages().size();
-                    }
-                }
+                if (bf.getCustomer() != null)
+                    bf.getCustomer().getNickname();
+                if (bf.getTickets() != null)
+                    bf.getTickets().size();
+                if (bf.getBuyPackage() != null)
+                    bf.getBuyPackage().getId();
             }
 
             return bfList;
         }
     }
-}
 
-/**
- * EntityManager em = DBConnection.getEntityManager();
- * try {
- * em.getTransaction().begin();
- * <p>
- * // Persist seats first
- * for (Seat seat : seats) {
- * em.persist(seat);
- * }
- * <p>
- * Airline managedAirline = em.merge(airline); // Attach airline to session
- * FlightRoute managedFlightRoute = em.merge(flightRoute); // Attach flightRoute to session
- * flight.setAirline(managedAirline); // Set the relationship
- * flight.setFlightRoute(managedFlightRoute); // Set the relationship
- * flight.setSeats(seats);
- * <p>
- * em.persist(flight); // Persist the flight
- * <p>
- * managedAirline.getFlights().add(flight); // Update the airline's collection
- * em.merge(managedAirline);
- * <p>
- * managedFlightRoute.getFlights().add(flight); // Update the flightRoute's collection
- * em.merge(managedFlightRoute);
- * <p>
- * seats.forEach(seat -> {
- * seat.setFlight(flight); // Set the relationship
- * em.merge(seat); // Update the seat
- * });
- * em.getTransaction().commit();
- * } catch (Exception e) {
- * em.getTransaction().rollback();
- * throw e;
- * } finally {
- * em.close();
- */
+    public List<BookFlight> findByFlightName(String flightName) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<BookFlight> bfList = em.createQuery(
+                            "SELECT DISTINCT bf FROM BookFlight bf " +
+                                    "LEFT JOIN FETCH bf.tickets t " +
+                                    "LEFT JOIN FETCH t.seat s " +
+                                    "LEFT JOIN FETCH s.flight f " +        // join al vuelo
+                                    "WHERE f.name = :flightName", BookFlight.class)
+                    .setParameter("flightName", flightName)
+                    .getResultList();
+
+            return bfList;
+        }
+
+    }
+
+    public List<BookFlight> findFullByCustomerNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<BookFlight> bfList = em.createQuery(
+                            "SELECT DISTINCT bf FROM BookFlight bf LEFT JOIN FETCH bf.customer c WHERE c.nickname = :nickname", BookFlight.class)
+                    .setParameter("nickname", nickname)
+                    .getResultList();
+
+            // Forzar inicialización
+            for (BookFlight bf : bfList) {
+                if (bf.getCustomer() != null)
+                    bf.getCustomer().getNickname();
+                if (bf.getTickets() != null)
+                    bf.getTickets().size();
+                if (bf.getBuyPackage() != null)
+                    bf.getBuyPackage().getId();
+            }
+
+            return bfList;
+        }
+    }
+
+
+}

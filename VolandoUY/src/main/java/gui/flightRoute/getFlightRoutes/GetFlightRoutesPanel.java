@@ -161,6 +161,8 @@ public class GetFlightRoutesPanel extends JPanel {
         List<FlightRouteDTO> routes =
                 flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
+        flightRoutes = routes;
+
         String[] cols = {
                 "Nombre", "Descripción", "Creado",
                 "Origen", "Destino", "Aerolínea",
@@ -182,7 +184,7 @@ public class GetFlightRoutesPanel extends JPanel {
                     break;
                 }
             }
-            this.flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
+            //this.flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
             model.addRow(new Object[]{
                     safe(r.getName()),
                     safe(r.getDescription()),
@@ -199,7 +201,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
         FlightRouteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         FlightRouteTable.setModel(model);
-        adjustDynamicWidthAndHeightToTable(FlightRouteTable, model);
+        adjustDynamicWidthAndHeightToTable(FlightRouteTable);
         FlightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -217,7 +219,9 @@ public class GetFlightRoutesPanel extends JPanel {
     private String safe(String s) { return s == null ? "" : s; }
     private String fmtMoney(Double d) { return d == null ? "" : String.format("$ %.2f", d); }
 
-    private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
+    private void adjustDynamicWidthAndHeightToTable(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int tableWidth = 0;
         // Ancho
         for (int col = 0; col < table.getColumnCount(); col++) {
             TableColumn column = table.getColumnModel().getColumn(col);
@@ -228,7 +232,7 @@ public class GetFlightRoutesPanel extends JPanel {
             Component headerComp = headerRenderer.getTableCellRendererComponent(
                     table, column.getHeaderValue(), false, false, 0, col
             );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
+            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
 
             for (int row = 0; row < maxRows; row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
@@ -238,13 +242,14 @@ public class GetFlightRoutesPanel extends JPanel {
                 preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
             }
             column.setPreferredWidth(preferredWidth + 10);
+            tableWidth += preferredWidth;
         }
 
         // Alto
         int minRows = 5;
         int visibleRows = Math.max(table.getRowCount(), minRows);
         table.setPreferredSize(new Dimension(
-                table.getPreferredSize().width,
+                tableWidth,
                 visibleRows * table.getRowHeight()
         ));
     }

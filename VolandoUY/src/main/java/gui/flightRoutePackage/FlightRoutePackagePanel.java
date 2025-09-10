@@ -60,7 +60,7 @@ public class FlightRoutePackagePanel extends JPanel {
     private void initPanels() {
         createFlightRoutePackagePanel = new CreateFlightRoutePackagePanel(flightRoutePackageController);
         addFlightRouteToPackagePanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
-        getFlightRoutesPackagesPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController);
+        getFlightRoutesPackagesPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController, flightRouteController);
         purchaseFlightRoutePackagePanel = new PackagePurchasePanel(userController, flightRoutePackageController, buyPackageController);
     }
 

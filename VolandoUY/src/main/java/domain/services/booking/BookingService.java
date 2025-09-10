@@ -110,24 +110,50 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<BookFlightDTO> findAllBookFlightDetails(boolean detailed) {
-        if(detailed) {
-            return bookingRepository.findFullAll().stream()
-                    .map(bf -> customModelMapper.mapFullBookFlight(bf))
-                    .toList();
-        } else {
-            return bookingRepository.findAll().stream()
-                    .map(bf -> customModelMapper.map(bf, BookFlightDTO.class))
-                    .toList();
+    public List<BookFlightDTO> getAllBookFlightsDetails(boolean full) {
+        List<BookFlight> bookFlights = full ? bookingRepository.findFullAll()
+                : bookingRepository.findAll();
+        if (bookFlights == null || bookFlights.isEmpty()) {
+            return List.of();
         }
+
+        return bookFlights.stream()
+                .map(bf -> full ? customModelMapper.mapFullBookFlight(bf) : customModelMapper.map(bf, BookFlightDTO.class))
+                .toList();
     }
     @Override
-    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
-        return bookingRepository.findDTOsByCustomerNickname(nickname);
+    public List<BookFlightDTO> getAllBookFlightsDetailsByCustomerNickname(String nickname, boolean full) {
+        List<BookFlight> bookFlights = full ? bookingRepository.findFullByCustomerNickname(nickname)
+                : bookingRepository.findByCustomerNickname(nickname);
+        if (bookFlights == null || bookFlights.isEmpty()) {
+            return List.of();
+        }
+
+        return bookFlights.stream()
+                .map(bf -> full ? customModelMapper.mapFullBookFlight(bf) : customModelMapper.map(bf, BookFlightDTO.class))
+                .toList();
     }
+
     @Override
-    public BookFlight getFullBookingById(Long id) {
-        if (id == null) return null;
-        return bookingRepository.getFullBookingById(id);
+    public List<BookFlightDTO> getBookFlightsDetailsByFlightName(String flightName, boolean full) {
+        List<BookFlight> bookFlights = full ? bookingRepository.findFullByFlightName(flightName)
+                : bookingRepository.findByFlightName(flightName);
+        if (bookFlights == null || bookFlights.isEmpty()) {
+            return List.of();
+        }
+
+        return bookFlights.stream()
+                .map(bf -> full ? customModelMapper.mapFullBookFlight(bf) : customModelMapper.map(bf, BookFlightDTO.class))
+                .toList();
+    }
+
+    @Override
+    public BookFlightDTO getBookFlightDetailsById(Long id, boolean full) {
+        BookFlight bf = full ? bookingRepository.getFullBookingById(id) : bookingRepository.findByKey(id);
+        if (bf == null) {
+            return null;
+        }
+
+        return full ? customModelMapper.mapFullBookFlight(bf) : customModelMapper.map(bf, BookFlightDTO.class);
     }
 }

@@ -25,4 +25,6 @@ public interface IFlightRouteService {
     void setCategoryService(ICategoryService categoryService);
     void setCityService(ICityService cityService);
     void setUserService(IUserService userService);
+
+    List<FlightRouteDTO> getFlightRoutesDetailsByPackageName(String packageName, boolean full);
 }

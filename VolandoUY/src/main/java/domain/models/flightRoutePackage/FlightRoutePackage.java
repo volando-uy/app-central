@@ -21,11 +21,11 @@ import java.util.List;
 @Entity
 public class FlightRoutePackage {
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     private List<FlightRoute> flightRoutes;
 
     //Tiene muchos compras de paquete
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "flightRoutePackage")
+    @OneToMany(mappedBy = "flightRoutePackage")
     private List<BuyPackage> buyPackages;
 
     @Id

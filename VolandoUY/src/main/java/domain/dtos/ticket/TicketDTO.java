@@ -19,7 +19,11 @@ public class TicketDTO extends BaseTicketDTO {
 
     private List<ExtraLuggageDTO> extraLuggages=null;
     private List<BasicLuggageDTO> basicLuggages=null;
+
+    // Precisamos el Id para luego buscar el asiento, ya que el number no es único
+    private Long seatId;
     private String seatNumber;
+
     private Long bookFlightId;
 
     public TicketDTO(Long id, String name,String surname,String numdoc) {

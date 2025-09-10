@@ -43,15 +43,15 @@ import static java.util.stream.Collectors.toList;
 
 public class CustomModelMapper extends ModelMapper {
 
-    public CustomModelMapper() {
-        Converter<PersistentBag, List<?>> persistentBagToListConverter = new Converter<>() {
-            @Override
-            public java.util.List<?> convert(MappingContext<PersistentBag, java.util.List<?>> context) {
-                return new java.util.ArrayList<>(context.getSource());
-            }
-        };
-        this.addConverter(persistentBagToListConverter);
-    }
+//    public CustomModelMapper() {
+//        Converter<PersistentBag, List<?>> persistentBagToListConverter = new Converter<>() {
+//            @Override
+//            public java.util.List<?> convert(MappingContext<PersistentBag, java.util.List<?>> context) {
+//                return new java.util.ArrayList<>(context.getSource());
+//            }
+//        };
+//        this.addConverter(persistentBagToListConverter);
+//    }
 
     public CustomerDTO mapFullCustomer(Customer customer) {
         CustomerDTO customerDTO = this.map(customer, CustomerDTO.class);
@@ -110,6 +110,9 @@ public class CustomModelMapper extends ModelMapper {
         flightRouteDTO.setFlightsNames(
                 new ArrayList<>(flightRoute.getFlights()).stream().map(Flight::getName).toList()
         );
+        flightRouteDTO.setInPackagesNames(
+                new ArrayList<>(flightRoute.getInPackages().stream().map(FlightRoutePackage::getName).toList())
+        );
         return flightRouteDTO;
     }
 
@@ -152,6 +155,7 @@ public class CustomModelMapper extends ModelMapper {
             ticketDTO.setExtraLuggages(ticket.getExtraLuggages().stream().map(this::mapFullExtraLuggage).collect(toList()));
         }
         ticketDTO.setSeatNumber(ticket.getSeat().getNumber());
+        ticketDTO.setSeatId(ticket.getSeat().getId());
         ticketDTO.setBookFlightId(ticket.getBookFlight() != null ? ticket.getBookFlight().getId() : null);
         return ticketDTO;
     }
@@ -178,7 +182,7 @@ public class CustomModelMapper extends ModelMapper {
     public FlightRoutePackageDTO mapFullFlightRoutePackage(FlightRoutePackage flightRoutePackage) {
         FlightRoutePackageDTO flightRoutePackageDTO = this.map(flightRoutePackage, FlightRoutePackageDTO.class);
         flightRoutePackageDTO.setFlightRouteNames(flightRoutePackage.getFlightRoutes().stream().map(FlightRoute::getName).toList());
-        flightRoutePackageDTO.setBuyPackages(flightRoutePackage.getBuyPackages().stream().map(BuyPackage::getId).toList());
+        flightRoutePackageDTO.setBuyPackagesIds(flightRoutePackage.getBuyPackages().stream().map(BuyPackage::getId).toList());
         return flightRoutePackageDTO;
     }
 

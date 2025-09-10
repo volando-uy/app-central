@@ -3,6 +3,7 @@ package infra.repository.flightroutepackage;
 import app.DBConnection;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.buypackage.BuyPackage;
+import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import jakarta.persistence.EntityManager;
 
@@ -35,8 +36,10 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
             // Initialize the attributes
             if (frp != null) {
-                frp.getFlightRoutes().size(); // Load flightRoutes
-                frp.getBuyPackages().size(); // Load buyPackages
+                if (frp.getFlightRoutes() != null)
+                    frp.getFlightRoutes().size(); // Load flightRoutes
+                if (frp.getBuyPackages() != null)
+                    frp.getBuyPackages().size(); // Load buyPackages
             }
 
             return frp;
@@ -83,8 +86,10 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
             // Initialize flightRoutes for each package
             for (FlightRoutePackage frp : packages) {
-                frp.getFlightRoutes().size(); // Load flightRoutes
-                frp.getBuyPackages().size(); // Load buyPackages
+                if (frp.getFlightRoutes() != null)
+                    frp.getFlightRoutes().size(); // Load flightRoutes
+                if (frp.getBuyPackages() != null)
+                    frp.getBuyPackages().size(); // Load buyPackages
             }
 
             return packages;
@@ -101,11 +106,34 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
             // Initialize the attributes
             if (frp != null) {
-                frp.getFlightRoutes().size(); // Load flightRoutes
-                frp.getBuyPackages().size(); // Load buyPackages
+                if (frp.getFlightRoutes() != null)
+                    frp.getFlightRoutes().size(); // Load flightRoutes
+                if (frp.getBuyPackages() != null)
+                    frp.getBuyPackages().size(); // Load buyPackages
             }
 
             return frp;
+        }
+    }
+
+    public void addFlightRouteToPackage(FlightRoute flightRoute, FlightRoutePackage flightRoutePackage) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            em.getTransaction().begin();
+
+            // Reattach entities to the current persistence context
+            FlightRoute managedFlightRoute = em.merge(flightRoute);
+            FlightRoutePackage managedFlightRoutePackage = em.merge(flightRoutePackage);
+
+            // Add the flight route to the package
+            managedFlightRoutePackage.getFlightRoutes().add(managedFlightRoute);
+
+            // Add the package to the flight route
+            managedFlightRoute.getInPackages().add(flightRoutePackage);
+
+            em.merge(managedFlightRoutePackage);
+            em.merge(managedFlightRoute);
+
+            em.getTransaction().commit();
         }
     }
 }
