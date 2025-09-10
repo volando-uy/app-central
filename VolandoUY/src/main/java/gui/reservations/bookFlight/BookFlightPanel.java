@@ -418,12 +418,15 @@ public class BookFlightPanel extends JPanel {
             double extraPrice = (route.getPriceExtraUnitBaggage() != null ? route.getPriceExtraUnitBaggage() : 0.0);
             double total = (unitPrice * passengerCount) + (extraUnits * passengerCount * extraPrice);
 
-            // DTO de reserva
+            // === DTO de reserva ===
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
             booking.setTotalPrice(total);
-            // Si tu DTO tiene createdAt, descomentá la siguiente línea:
-            // booking.setCreatedAt(java.time.LocalDateTime.now());
 
+            // 👉 Seteamos createdAt usando el campo de fecha del formulario
+            // (parseReservationDate() ya maneja ambos formatos y fallback a now())
+            booking.setCreatedAt(parseReservationDate());
+
+            // Crear
             BaseBookFlightDTO created = bookingController.createBooking(
                     booking, ticketMap, customerNickname, flightName
             );

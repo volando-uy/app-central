@@ -4,6 +4,7 @@ import domain.dtos.bookFlight.BaseBookFlightDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
+import domain.models.bookflight.BookFlight;
 import domain.services.booking.IBookingService;
 import lombok.AllArgsConstructor;
 
@@ -29,6 +30,16 @@ public class BookingController implements IBookingController {
     @Override
     public List<BaseBookFlightDTO> findAllBookFlightSimpleDetails() {
         return bookingService.findAllBookFlightDetails(false).stream().map(bf -> (BaseBookFlightDTO) bf).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
+        return bookingService.findDTOsByCustomerNickname(nickname);
+    }
+
+    @Override
+    public BookFlight getFullBookingById(Long id) {
+        return bookingService.getFullBookingById(id);
     }
 
 }

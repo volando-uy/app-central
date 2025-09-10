@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import domain.models.enums.EnumTipoDocumento;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * @author AparicioQuian

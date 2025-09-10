@@ -117,6 +117,9 @@ new FormModel {
 							name: "scrollPane3"
 							add( new FormComponent( "javax.swing.JTable" ) {
 								name: "tblRutas"
+								"border": new javax.swing.border.EmptyBorder( 8, 8, 8, 8 )
+								"fillsViewportHeight": true
+								"rowHeight": 24
 							} )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "Center"

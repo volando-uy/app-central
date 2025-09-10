@@ -4,6 +4,7 @@ import domain.dtos.bookFlight.BaseBookFlightDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
+import domain.models.bookflight.BookFlight;
 import domain.services.flight.IFlightService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.seat.ISeatService;
@@ -28,6 +29,8 @@ public interface IBookingService {
     void setFlightService(IFlightService flightService);
     void setTicketService(ITicketService ticketService);
     void setUserService(IUserService userService);
-
+    List<BookFlightDTO> findDTOsByCustomerNickname(String nickname);
     List<BookFlightDTO> findAllBookFlightDetails(boolean detailed);
+    BookFlight getFullBookingById(Long id);
+
 }

@@ -7,10 +7,7 @@ import domain.models.luggage.BasicLuggage;
 import domain.models.seat.Seat;
 import domain.models.ticket.Ticket;
 import domain.models.user.Customer;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,6 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
     public BookingRepository() {
         super();
     }
-
     @Override
     public void saveBookflightWithTicketsAndAddToSeats(BookFlight bookFlight,
                                                        List<Ticket> savedTickets,
@@ -29,60 +25,53 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
         try {
             tx.begin();
 
-            // Seguridad: que la colección no sea null
-            if (bookFlight.getTickets() == null) {
-                bookFlight.setTickets(new ArrayList<>());
+            if (bookFlight.getCreated_at() == null) {
+                bookFlight.setCreated_at(java.time.LocalDateTime.now());
             }
 
-            // 4) Reatachar el customer y setear relaciones
+            // Seguridad: que la colección no sea null
+            if (bookFlight.getTickets() == null) {
+                bookFlight.setTickets(new java.util.ArrayList<>());
+            }
+
+            // Reatachar el customer y setear relaciones
             Customer managedCustomer = em.getReference(Customer.class, customer.getNickname());
             bookFlight.setCustomer(managedCustomer);
 
-            // 1) Persistir la reserva (nueva)
+            // Persistir la reserva
             em.persist(bookFlight);
 
-            customer.getBookedFlights().add(bookFlight);
+            managedCustomer.getBookedFlights().add(bookFlight);
+            em.merge(managedCustomer);
 
-            em.merge(customer);
-
-            // 2) Por cada ticket, reatachar el seat y setear relaciones
+            // Persistir tickets y relaciones seat/luggage ...
             for (int i = 0; i < savedTickets.size(); i++) {
                 Ticket ticket = savedTickets.get(i);
                 Seat detachedSeat = seats.get(i);
 
-                // Reattach Seat en ESTE EntityManager (no persist seats existentes)
                 Seat managedSeat = em.getReference(Seat.class, detachedSeat.getId());
 
-                // Relaciones bidireccionales
                 ticket.setSeat(managedSeat);
                 managedSeat.setTicket(ticket);
 
                 ticket.setBookFlight(bookFlight);
                 bookFlight.getTickets().add(ticket);
 
-                // Si NO tenés cascade=ALL en Ticket -> Luggage, persisto manualmente
-                // y aseguro el back-reference
                 if (ticket.getBasicLuggages() != null) {
                     for (domain.models.luggage.BasicLuggage b : ticket.getBasicLuggages()) {
                         b.setTicket(ticket);
-                        if (b.getId() == null && !em.contains(b)) {
-                            em.persist(b);
-                        }
+                        if (b.getId() == null && !em.contains(b)) em.persist(b);
                     }
                 }
                 if (ticket.getExtraLuggages() != null) {
                     for (domain.models.luggage.ExtraLuggage e : ticket.getExtraLuggages()) {
                         e.setTicket(ticket);
-                        if (e.getId() == null && !em.contains(e)) {
-                            em.persist(e);
-                        }
+                        if (e.getId() == null && !em.contains(e)) em.persist(e);
                     }
                 }
 
-                // 3) Persistir el ticket (nuevo)
                 em.persist(ticket);
             }
-
 
             tx.commit();
         } catch (RuntimeException e) {
@@ -121,23 +110,73 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
 
         }
     }
-    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
-        // OJO: ajustá los nombres de campos/relaciones según tu entidad BookFlight
-        // - b.createdAt  -> el nombre real en la ENTIDAD (no en el DTO)
-        // - b.customer.nickname -> la relación/columna real hacia Customer
-        // Si tu campo en la entidad se llama "created_at" o "creationDate", cambialo en la JPQL.
-        String jpql =
-                "select new domain.dtos.bookFlight.BookFlightDTO(" +
-                        "       b.id, b.created_at, b.totalPrice) " +
-                        "from BookFlight b " +
-                        "join b.customer c " +
-                        "where c.nickname = :nick " +
-                        "order by b.created_at desc";
 
+    @Override
+    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            // Si TENÉS un constructor projection en BookFlightDTO(id, totalPrice, createdAt)
+            // descomenta esta versión:
+        /*
+        return em.createQuery(
+                "SELECT new domain.dtos.bookFlight.BookFlightDTO(" +
+                "  bf.id, bf.totalPrice, bf.created_at" +
+                ") " +
+                "FROM BookFlight bf " +
+                "WHERE bf.customer.nickname = :nick " +
+                "ORDER BY bf.created_at DESC",
+                BookFlightDTO.class
+        )
+        .setParameter("nick", nickname)
+        .getResultList();
+        */
+
+            // Versión segura (sin depender de constructor en el DTO):
+            List<BookFlight> list = em.createQuery(
+                            "SELECT bf FROM BookFlight bf " +
+                                    "WHERE bf.customer.nickname = :nick " +
+                                    "ORDER BY bf.created_at DESC",
+                            BookFlight.class
+                    )
+                    .setParameter("nick", nickname)
+                    .getResultList();
+
+            List<BookFlightDTO> out = new java.util.ArrayList<>();
+            for (BookFlight bf : list) {
+                BookFlightDTO dto = new BookFlightDTO();
+                dto.setId(bf.getId());
+                dto.setTotalPrice(bf.getTotalPrice());
+                dto.setCreatedAt(bf.getCreated_at());
+                out.add(dto);
+            }
+            return out;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public BookFlight getFullBookingById(Long id) {
         try (EntityManager em = DBConnection.getEntityManager()) {
-            TypedQuery<BookFlightDTO> q = em.createQuery(jpql, BookFlightDTO.class);
-            q.setParameter("nick", nickname);
-            return q.getResultList();
+            try {
+                BookFlight bf = em.createQuery(
+                                "SELECT DISTINCT bf FROM BookFlight bf " +
+                                        "LEFT JOIN FETCH bf.tickets t " +
+                                        "LEFT JOIN FETCH t.seat s " +
+                                        "LEFT JOIN FETCH s.flight f " +
+                                        "LEFT JOIN FETCH f.flightRoute fr " +
+                                        "LEFT JOIN FETCH bf.customer c " +
+                                        "WHERE bf.id = :id", BookFlight.class)
+                        .setParameter("id", id)
+                        .getSingleResult();
+
+                // Asegurar inicialización de colecciones (redundante por JOIN FETCH pero seguro)
+                if (bf != null && bf.getTickets() != null) bf.getTickets().size();
+
+                return bf;
+            } catch (NoResultException ex) {
+                return null;
+            }
         }
     }
 }
