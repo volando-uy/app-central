@@ -1,6 +1,8 @@
 package infra.repository.user;
 
 import app.DBConnection;
+import domain.models.buypackage.BuyPackage;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import infra.repository.BaseRepository;
@@ -72,4 +74,5 @@ public class CustomerRepository extends AbstractUserRepository<Customer> {
             return customer;
         }
     }
+
 }

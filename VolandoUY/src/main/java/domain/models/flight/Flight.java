@@ -36,6 +36,7 @@ public class Flight {
 
     @NotNull
     @Positive(message = ErrorMessages.ERR_FLIGHT_DURATION_POSITIVE)
+    // In minutes
     private Long duration;
 
 
@@ -66,7 +67,7 @@ public class Flight {
     private Airport destinationAirport;
 
     //1 vuelo tiene muchos asientos
-    @OneToMany()
+    @OneToMany(mappedBy = "flight")
     private List<Seat> seats;
 
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -88,11 +89,6 @@ public class Flight {
                 ", duration=" + duration +
                 ", maxEconomySeats=" + maxEconomySeats +
                 ", maxBusinessSeats=" + maxBusinessSeats +
-                ", flightRoute=" + (flightRoute != null ? flightRoute.getName() : "null") +
-                ", airline=" + (airline != null ? airline.getName() : "null") +
-                ", originAirport=" + (originAirport != null ? originAirport.getName() : "null") +
-                ", destinationAirport=" + (destinationAirport != null ? destinationAirport.getName() : "null") +
-                ", seats=" + (seats != null ? seats.stream().map(Seat::getNumber).toList() : "null") +
                 ", createdAt=" + createdAt +
                 '}';
     }

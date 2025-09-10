@@ -4,6 +4,7 @@ import domain.dtos.user.*;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface IUserService {
     boolean existsUserByNickname(String nickname);
 
     void updateAirline(Airline airline);
+
+    void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
 }

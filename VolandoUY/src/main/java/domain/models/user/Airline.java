@@ -63,8 +63,6 @@ public class Airline extends User {
         return "Airline{" +
                 "description='" + description + '\'' +
                 ", web='" + web + '\'' +
-                ", flights=" + (flights != null ? flights.stream().map(Flight::getName).toList() : "[]") +
-                ", flightRoutes=" + (flightRoutes != null ? flightRoutes.stream().map(FlightRoute::getName).toList() : "[]") +
                 "} " + super.toString();
     }
 }

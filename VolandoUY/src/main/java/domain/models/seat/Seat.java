@@ -31,7 +31,7 @@ public class Seat {
     private Flight flight;
 
     // Un asiento va a estar relacionado a un ticket
-    @ManyToOne()
+    @OneToOne()
     private Ticket ticket;
 
     public Seat(String number, boolean isAvailable, double price, EnumTipoAsiento type, Flight flight) {

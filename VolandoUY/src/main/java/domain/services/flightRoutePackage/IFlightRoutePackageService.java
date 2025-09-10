@@ -16,7 +16,7 @@ public interface IFlightRoutePackageService {
     void _updateFlightRoutePackage(FlightRoutePackage flightRoutePackage);
 
     FlightRoutePackageDTO getFlightRoutePackageDetailsByName(String flightRoutePackageName, boolean full);
-    FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName);
+    FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName, boolean full);
 
     boolean flightRoutePackageExists(String flightRoutePackageName);
     List<String> getAllNotBoughtFlightRoutePackagesNames();
@@ -24,7 +24,7 @@ public interface IFlightRoutePackageService {
 
     List<FlightRoutePackage> getAllFlightRoutePackages();
     List<FlightRoutePackageDTO> getAllFlightRoutePackagesDetails(boolean full);
-    List<FlightRoutePackageDTO> getAllFlightRoutePackagesWithFlightRoutes(boolean full);
+    List<FlightRoutePackageDTO> getAllFlightRoutePackagesDetailsWithFlightRoutes(boolean full);
 
     void setFlightRouteService(IFlightRouteService flightRouteService);
 }

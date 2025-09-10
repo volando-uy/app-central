@@ -9,5 +9,4 @@ public abstract class AbstractBookingRepository extends BaseRepository<BookFligh
     public AbstractBookingRepository() {
         super(BookFlight.class);
     }
-    public abstract List<BookFlight> findByFlightName(String flightName);
 }

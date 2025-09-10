@@ -17,7 +17,8 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 public class Ticket {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -28,14 +29,14 @@ public class Ticket {
     @JoinColumn(name = "book_flight_id")
     private BookFlight bookFlight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ticket")
     private List<BasicLuggage> basicLuggages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ticket")
     private List<ExtraLuggage> extraLuggages = new ArrayList<>();
 
     public Ticket(String name, String surname, String numDoc) {

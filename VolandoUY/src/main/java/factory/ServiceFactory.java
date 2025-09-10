@@ -6,6 +6,8 @@ import domain.services.airport.AirportService;
 import domain.services.airport.IAirportService;
 import domain.services.booking.BookingService;
 import domain.services.booking.IBookingService;
+import domain.services.buyPackage.BuyPackageService;
+import domain.services.buyPackage.IBuyPackageService;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
 import domain.services.city.CityService;
@@ -34,12 +36,15 @@ public class ServiceFactory {
     private static ISeatService seatService;
     private static ITicketService ticketService;
     private static IBookingService bookingService;
+    private static IBuyPackageService buyPackageService;
+
     // ############ USER SERVICE ###########
 
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
     public static IUserService getUserService() {
         if (userService == null) {
             userService = new UserService();
+            userService.setFlightRoutePackageService(getFlightRoutePackageService());
         }
         return userService;
     }
@@ -140,6 +145,7 @@ public class ServiceFactory {
         return ticketService;
     }
 
+    // ############ BOOKING SERVICE ############
     public static IBookingService getBookingService(){
         if(bookingService == null){
             bookingService = new BookingService();
@@ -150,5 +156,15 @@ public class ServiceFactory {
         }
 
         return bookingService;
+    }
+
+    // ############ BUYPACKAGE SERVICE ############
+    public static IBuyPackageService getBuyPackageService(){
+        if(buyPackageService == null){
+            buyPackageService = new BuyPackageService();
+            buyPackageService.setUserService(getUserService());
+            buyPackageService.setFlightRoutePackageService(getFlightRoutePackageService());
+        }
+        return buyPackageService;
     }
 }

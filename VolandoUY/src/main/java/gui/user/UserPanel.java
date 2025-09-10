@@ -1,8 +1,16 @@
 package gui.user;
 
 import javax.swing.border.*;
+
+import controllers.booking.IBookingController;
+import controllers.buyPackage.IBuyPackageController;
+import controllers.flight.IFlightController;
+import controllers.flightRoute.IFlightRouteController;
+import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.seat.ISeatController;
+import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
-import gui.user.getUsers.GetUsersPanel;
+import gui.user.getUser.GetUserPanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
 import gui.user.updateUser.UpdateUserPanel;
@@ -18,6 +26,14 @@ import java.lang.reflect.InvocationTargetException;
 public class UserPanel extends JPanel {
 
     private IUserController userController;
+    private IFlightRouteController flightRouteController;
+    private IFlightController flightController;
+    private IFlightRoutePackageController flightRoutePackageController;
+    private IBookingController bookingController;
+    private IBuyPackageController buyPackageController;
+    private ITicketController ticketController;
+    private ISeatController seatController;
+
 
     private JPanel registerCustomerPanel;
     private JPanel registerAirlinePanel;
@@ -26,8 +42,24 @@ public class UserPanel extends JPanel {
     
     private JPanel contentPanel;
 
-    public UserPanel(IUserController userController) {
+    public UserPanel(
+            IUserController userController,
+            IFlightRouteController flightRouteController,
+            IFlightController flightController,
+            IFlightRoutePackageController flightRoutePackageController,
+            IBookingController bookingController,
+            IBuyPackageController buyPackageController,
+            ITicketController ticketController,
+            ISeatController seatController
+    ) {
         this.userController = userController;
+        this.flightRouteController = flightRouteController;
+        this.flightController = flightController;
+        this.flightRoutePackageController = flightRoutePackageController;
+        this.bookingController = bookingController;
+        this.buyPackageController = buyPackageController;
+        this.ticketController = ticketController;
+        this.seatController = seatController;
         initComponents();
         initPanels();
         initListeners();
@@ -41,7 +73,8 @@ public class UserPanel extends JPanel {
         registerCustomerPanel = new RegisterCustomerPanel(userController);
         registerAirlinePanel = new RegisterAirlinePanel(userController);
         updateUserPanel = new UpdateUserPanel(userController);
-        getUsersPanel = new GetUsersPanel(userController);
+        getUsersPanel = new GetUserPanel(userController, flightRouteController, flightController, flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
+
     }
 
     private void initListeners() {
@@ -75,7 +108,7 @@ public class UserPanel extends JPanel {
     }
   
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel NavPanel;
     private JButton registerCustomerBtn;
     private JButton registerAirlineBtn;
@@ -85,7 +118,7 @@ public class UserPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         NavPanel = new JPanel();
         registerCustomerBtn = new JButton();
         registerAirlineBtn = new JButton();
@@ -97,12 +130,13 @@ public class UserPanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xeeeeee));
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
+        .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing
+        .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
+        Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red
+        ), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
+        public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName(
+        )))throw new RuntimeException();}});
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -127,7 +161,7 @@ public class UserPanel extends JPanel {
             NavPanel.add(updateUserBtn);
 
             //---- getUsersBtn ----
-            getUsersBtn.setText("\ud83d\udcc4 Listar Clientes");
+            getUsersBtn.setText("\ud83d\udcc4 Consultar Usuarios");
             NavPanel.add(getUsersBtn);
         }
         add(NavPanel, BorderLayout.NORTH);

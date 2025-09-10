@@ -22,4 +22,8 @@ public interface ISeatService {
 
 
     List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size);
+
+    SeatDTO getSeatDetailsById(Long id, boolean full);
+
+    SeatDTO getSeatDetailsByTicketId(Long ticketId, boolean full);
 }

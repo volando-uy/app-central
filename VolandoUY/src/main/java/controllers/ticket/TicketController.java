@@ -14,7 +14,7 @@ public class TicketController implements ITicketController {
     }
 
     @Override
-    public TicketDTO getTicketSimpleById(Long ticketId) {
+    public TicketDTO getTicketSimpleDetailsById(Long ticketId) {
         return ticketService.getTicketDetailsById(ticketId, false);
     }
 }

@@ -54,7 +54,6 @@ public class City {
     @Override
     public String toString() {
         return "City{" +
-                "airports=" + airports.stream().map(Airport::getName).toList() +
                 ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
                 ", latitude=" + latitude +

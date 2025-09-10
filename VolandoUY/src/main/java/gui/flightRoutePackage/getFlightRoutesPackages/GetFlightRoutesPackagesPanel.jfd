@@ -71,7 +71,7 @@ new FormModel {
 						"maximumSize": new java.awt.Dimension( 560, 150 )
 						"enabled": false
 						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "PackageTable"
+							name: "packageTable"
 							"preferredSize": new java.awt.Dimension( 560, 150 )
 							"maximumSize": new java.awt.Dimension( 560, 150 )
 							"minimumSize": new java.awt.Dimension( 560, 150 )

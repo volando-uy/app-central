@@ -11,4 +11,5 @@ public interface IFlightRoutePackageRepository {
     FlightRoutePackage getFullFlightRoutePackageByName(String flightRoutePackageName);
     boolean existsByName(String packageName);
     List<BuyPackage> findByCustomerNickname(String nickname);
+    FlightRoutePackage getFlightRoutePackageFullByName(String flightRoutePackageName);
 }

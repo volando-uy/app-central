@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import domain.models.enums.EnumTipoDocumento;
-import net.miginfocom.swing.MigLayout;
 
 /**
  * @author AparicioQuian
@@ -44,7 +43,7 @@ public class AddPassenger extends JPanel {
     public String getApellido()  { return reservationdateTextField2.getText().trim(); }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         InfoUserPanel2 = new JPanel();
         titleLabel2 = new JLabel();
         firstRowPanel3 = new JPanel();
@@ -52,9 +51,6 @@ public class AddPassenger extends JPanel {
         seatTypeComboBox2 = new JComboBox();
         numTicketsLabel2 = new JLabel();
         numTicketsTextField2 = new JTextField();
-        panel1 = new JPanel();
-        panel2 = new JPanel();
-        panel3 = new JPanel();
         secondRowPanel2 = new JPanel();
         extraLuggageLabel2 = new JLabel();
         extraLuggageTextField2 = new JTextField();
@@ -73,12 +69,13 @@ public class AddPassenger extends JPanel {
             InfoUserPanel2.setOpaque(false);
             InfoUserPanel2.setMinimumSize(new Dimension(440, 258));
             InfoUserPanel2.setMaximumSize(new Dimension(440, 258));
-            InfoUserPanel2.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing
-            . border. TitledBorder. BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ),
-            java. awt. Color. red) ,InfoUserPanel2. getBorder( )) ); InfoUserPanel2. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () ))
-            throw new RuntimeException( ); }} );
+            InfoUserPanel2.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,InfoUserPanel2. getBorder( )) )
+            ; InfoUserPanel2. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
             InfoUserPanel2.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel2.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel2.getLayout()).rowHeights = new int[] {0, 20, 0, 0, 0, 38, 15, 0};
@@ -252,7 +249,7 @@ public class AddPassenger extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel InfoUserPanel2;
     private JLabel titleLabel2;
     private JPanel firstRowPanel3;
@@ -260,9 +257,6 @@ public class AddPassenger extends JPanel {
     private JComboBox seatTypeComboBox2;
     private JLabel numTicketsLabel2;
     private JTextField numTicketsTextField2;
-    private JPanel panel1;
-    private JPanel panel2;
-    private JPanel panel3;
     private JPanel secondRowPanel2;
     private JLabel extraLuggageLabel2;
     private JTextField extraLuggageTextField2;

@@ -4,9 +4,13 @@
 
 package gui.flightRoutePackage.getFlightRoutesPackages;
 
+import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import gui.flightRoute.details.FlightRouteDetailWindow;
+import gui.flightRoutePackage.details.FlightRoutePackageDetailWindow;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
@@ -24,9 +28,14 @@ import java.util.List;
  */
 public class GetFlightRoutesPackagesPanel extends JPanel {
     private IFlightRoutePackageController flightRoutePackageController;
+    private IFlightRouteController flightRouteController;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public GetFlightRoutesPackagesPanel(IFlightRoutePackageController flightRoutePackageController ) {
+    public GetFlightRoutesPackagesPanel(
+            IFlightRoutePackageController flightRoutePackageController,
+            IFlightRouteController flightRouteController
+    ) {
         this.flightRoutePackageController = flightRoutePackageController;
+        this.flightRouteController = flightRouteController;
         initComponents();     // TU UI generada
         loadPackagesTable();  // Carga de datos -> misma lógica que UsersPanel
         initListeners();
@@ -59,14 +68,14 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         }
 
         // 4) Tabla (igual que en GetUsersPanel)
-        PackageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        PackageTable.setModel(model);
+        packageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        packageTable.setModel(model);
 
         // 5) Ajuste dinámico
-        adjustDynamicWidthAndHeightToTable(PackageTable, model);
+        adjustDynamicWidthAndHeightToTable(packageTable);
 
         // 6) Selección
-        PackageTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        packageTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private String nz(String s) { return s == null ? "" : s; }
@@ -78,7 +87,9 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     }
 
     // MISMA lógica que venís usando
-    private void adjustDynamicWidthAndHeightToTable(JTable table, DefaultTableModel tableModel) {
+    private void adjustDynamicWidthAndHeightToTable(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int tableWidth = 0;
         // Ancho
         for (int col = 0; col < table.getColumnCount(); col++) {
             TableColumn column = table.getColumnModel().getColumn(col);
@@ -89,7 +100,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
             Component headerComp = headerRenderer.getTableCellRendererComponent(
                     table, column.getHeaderValue(), false, false, 0, col
             );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width);
+            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
 
             for (int row = 0; row < maxRows; row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
@@ -99,13 +110,14 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
                 preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
             }
             column.setPreferredWidth(preferredWidth + 10);
+            tableWidth += preferredWidth;
         }
 
-        // Alto (mínimo 5 filas)
+        // Alto
         int minRows = 5;
         int visibleRows = Math.max(table.getRowCount(), minRows);
         table.setPreferredSize(new Dimension(
-                table.getPreferredSize().width,
+                tableWidth,
                 visibleRows * table.getRowHeight()
         ));
     }
@@ -118,18 +130,29 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
                 loadPackagesTable();
             }
         });
+
+        packageTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && packageTable.getSelectedRow() != -1) {
+                    int fila = packageTable.getSelectedRow();
+                    String packageName = (String) packageTable.getValueAt(fila, 0);
+                    new FlightRoutePackageDetailWindow(packageName, flightRoutePackageController, flightRouteController).setVisible(true);
+                }
+            }
+        });
     }
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         vSpacer17 = new JPanel(null);
         PackageinfoPanel = new JPanel();
         packageLabel = new JLabel();
         hSpacer5 = new JPanel(null);
         PackageTablePanel = new JPanel();
         PackageScrollPane = new JScrollPane();
-        PackageTable = new JTable();
+        packageTable = new JTable();
         hSpacer6 = new JPanel(null);
         vSpacer19 = new JPanel(null);
 
@@ -140,13 +163,12 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
-        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-        .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
-        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
-        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+        border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER
+        , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font
+        .BOLD ,12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
+        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er"
+        .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -208,11 +230,11 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
                     PackageScrollPane.setMaximumSize(new Dimension(560, 150));
                     PackageScrollPane.setEnabled(false);
 
-                    //---- PackageTable ----
-                    PackageTable.setPreferredSize(new Dimension(560, 150));
-                    PackageTable.setMaximumSize(new Dimension(560, 150));
-                    PackageTable.setMinimumSize(new Dimension(560, 150));
-                    PackageScrollPane.setViewportView(PackageTable);
+                    //---- packageTable ----
+                    packageTable.setPreferredSize(new Dimension(560, 150));
+                    packageTable.setMaximumSize(new Dimension(560, 150));
+                    packageTable.setMinimumSize(new Dimension(560, 150));
+                    PackageScrollPane.setViewportView(packageTable);
                 }
                 PackageTablePanel.add(PackageScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
@@ -242,14 +264,14 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel vSpacer17;
     private JPanel PackageinfoPanel;
     private JLabel packageLabel;
     private JPanel hSpacer5;
     private JPanel PackageTablePanel;
     private JScrollPane PackageScrollPane;
-    private JTable PackageTable;
+    private JTable packageTable;
     private JPanel hSpacer6;
     private JPanel vSpacer19;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

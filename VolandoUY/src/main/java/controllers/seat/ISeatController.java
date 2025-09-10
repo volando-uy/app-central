@@ -1,10 +1,13 @@
 package controllers.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
+import domain.dtos.seat.SeatDTO;
 
 public interface ISeatController {
 
-    BaseSeatDTO createSeat(BaseSeatDTO baseSeatDTO, String flightName);
+    SeatDTO getSeatDetailsById(Long id);
+    BaseSeatDTO getSeatSimpleDetailsById(Long id);
 
-    void assignTicketToSeat(Long seatId, Long ticketId);
+    BaseSeatDTO getSeatSimpleDetailsByTicketId(Long ticketId);
+    SeatDTO getSeatDetailsByTicketId(Long ticketId);
 }

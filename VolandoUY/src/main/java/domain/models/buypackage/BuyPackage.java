@@ -35,6 +35,6 @@ public class BuyPackage {
     private FlightRoutePackage flightRoutePackage;
 
     //Lista de reservas
-    @OneToMany()
+    @OneToMany(mappedBy = "buyPackage")
     private List<BookFlight> bookFlights;
 }

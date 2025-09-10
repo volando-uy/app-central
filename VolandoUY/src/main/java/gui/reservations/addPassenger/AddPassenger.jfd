@@ -73,36 +73,6 @@ new FormModel {
 				"gridy": 2
 				"gridx": 1
 			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][fill]"
-				"$rowConstraints": "[][][]"
-			} ) {
-				name: "panel1"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 3
-				"gridx": 1
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][fill][18,fill]"
-				"$rowConstraints": "[][][]"
-			} ) {
-				name: "panel2"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridx": 2
-				"gridy": 3
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][fill]"
-				"$rowConstraints": "[][][]"
-			} ) {
-				name: "panel3"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridx": 3
-				"gridy": 3
-			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "120, 120, 0, 116"
 				"$rowSpecs": "center:30"

@@ -3,49 +3,60 @@ JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0:1.0"
+			"$rowSpecs": "0:1.0, 0"
+			"$alignTop": true
+			"$alignLeft": true
+		} ) {
 			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0"
+				"$rowSpecs": "0, 0, 0"
+				"$alignTop": true
+				"$alignLeft": true
+				"$vGap": 5
+			} ) {
+				name: "infoPanel"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "Nombre de la ruta de vuelo:"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label2"
+					"text": "Creación:"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"text": "Aerolínea:"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 2
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"vAlign": 0
+				"insets": new java.awt.Insets( 0, 10, 0, 0 )
+			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
+				"preferredSize": new java.awt.Dimension( 450, 300 )
+				"minimumSize": new java.awt.Dimension( 450, 300 )
+				"maximumSize": new java.awt.Dimension( 450, 300 )
 				add( new FormComponent( "javax.swing.JTable" ) {
 					name: "tablaVuelos"
+					"preferredSize": new java.awt.Dimension( 450, 300 )
+					"minimumSize": new java.awt.Dimension( 450, 300 )
+					"maximumSize": new java.awt.Dimension( 500000, 500000 )
+					"selectionMode": 0
 				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 25
-				"y": 115
-				"width": 460
-				"height": 260
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
-				"text": "Nombre de la ruta de vuelo:"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 35
-				"y": 15
-				"width": 450
-				"height": 20
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label2"
-				"text": "Creación:"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 450
-				"height": 20
-				"x": 35
-				"y": 35
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
-				"text": "Aerolínea:"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 445
-				"height": 20
-				"x": 35
-				"y": 55
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+				"insets": new java.awt.Insets( 0, 25, 25, 25 )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 545, 435 )
+			"size": new java.awt.Dimension( 500, 435 )
 		} )
 	}
 }

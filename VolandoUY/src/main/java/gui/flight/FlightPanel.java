@@ -4,6 +4,7 @@
 
 package gui.flight;
 
+import controllers.booking.IBookingController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
@@ -27,16 +28,23 @@ public class FlightPanel extends JPanel {
     private IFlightController flightController;
     private IFlightRouteController flightRouteController;
     private IUserController userController;
+    private IBookingController bookingController;
 
     private JPanel createFlightPanel;
     private JPanel getFlightsPanel;
 
     private JPanel contentPanel;
 
-    public FlightPanel( IFlightController flightController, IFlightRouteController flightRouteController, IUserController userController) {
+    public FlightPanel(
+            IFlightController flightController,
+            IFlightRouteController flightRouteController,
+            IUserController userController,
+            IBookingController bookingController
+    ) {
         this.flightController = flightController;
         this.flightRouteController = flightRouteController;
         this.userController = userController;
+        this.bookingController = bookingController;
         initComponents();
         initPanels();
         initListeners();
@@ -46,7 +54,7 @@ public class FlightPanel extends JPanel {
 
     private void initPanels() {
         createFlightPanel = new createFlightPanel(flightController, flightRouteController, userController);
-        getFlightsPanel = new GetFlightsPanel(flightController, userController);
+        getFlightsPanel = new GetFlightsPanel(flightController, userController, bookingController);
     }
 
     private void initListeners() {
@@ -79,7 +87,7 @@ public class FlightPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         NavPanel = new JPanel();
         createFlightBtn = new JButton();
         listFlightBtn = new JButton();
@@ -89,13 +97,13 @@ public class FlightPanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xeeeeee));
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-        javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax
-        . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-        .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans.
-        PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .
-        equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -120,7 +128,7 @@ public class FlightPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel NavPanel;
     private JButton createFlightBtn;
     private JButton listFlightBtn;

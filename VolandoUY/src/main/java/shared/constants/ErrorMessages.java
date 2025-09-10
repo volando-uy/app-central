@@ -76,5 +76,6 @@ public class ErrorMessages {
     public static final String ERR_PACKAGE_ALREADY_EXISTS = "El paquete %s ya existe";
     public static final String ERR_INVALID_SEAT_TYPE = "El tipo de asiento %s no es válido";
     public static final String ERR_FLIGHT_ROUTE_NOT_BELONGS_TO_AIRLINE = "La ruta de vuelo %s no pertenece a la aerolínea %s";
+    public static final String ERR_NO_FLIGHT_ROUTE_PACKAGES_FOUND = "No se encontraron paquetes de ruta de vuelo para este paquete";
     // ================================Fin Paquete Ruta Vuelo errors==============================
 }

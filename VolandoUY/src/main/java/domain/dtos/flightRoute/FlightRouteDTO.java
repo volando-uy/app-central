@@ -20,8 +20,10 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
     private String originCityName;
     private String destinationCityName;
     private String airlineNickname;
+
     private List<String> categories;
     private List<String> flightsNames;
+    private List<String> inPackagesNames;
 
     public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage) {
         super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage);
@@ -30,5 +32,6 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
         this.airlineNickname = null;
         this.categories = null;
         this.flightsNames = null;
+        this.inPackagesNames = null;
     }
 }

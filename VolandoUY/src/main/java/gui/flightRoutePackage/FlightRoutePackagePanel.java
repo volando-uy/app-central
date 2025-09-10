@@ -1,5 +1,6 @@
 package gui.flightRoutePackage;
 
+import controllers.buyPackage.IBuyPackageController;
 import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
@@ -7,6 +8,7 @@ import controllers.user.IUserController;
 import gui.flightRoutePackage.addFlightRouteToPackage.AddFlightRouteToPackagePanel;
 import gui.flightRoutePackage.createFlightRoutePackage.CreateFlightRoutePackagePanel;
 import gui.flightRoutePackage.getFlightRoutesPackages.GetFlightRoutesPackagesPanel;
+import gui.flightRoutePackage.packagePurchase.PackagePurchasePanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -23,25 +25,29 @@ public class FlightRoutePackagePanel extends JPanel {
     private MouseListener createFlightRoutePackagePanelListener;
     private MouseListener addFlightRouteToPackagePanelListener;
     private MouseListener getFlightRoutesPackagesPanelListener;
+
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightRouteController flightRouteController;
     private IUserController userController;
+    private IBuyPackageController buyPackageController;
 
     private JPanel createFlightRoutePackagePanel;
     private JPanel addFlightRouteToPackagePanel;
     private JPanel getFlightRoutesPackagesPanel;
+    private JPanel purchaseFlightRoutePackagePanel;
 
     private JPanel contentPanel;
 
     public FlightRoutePackagePanel(
             IFlightRoutePackageController flightRoutePackageController,
             IFlightRouteController flightRouteController,
-            IUserController userController
-
+            IUserController userController,
+            IBuyPackageController buyPackageController
     ) {
         this.flightRoutePackageController = flightRoutePackageController;
         this.flightRouteController = flightRouteController;
         this.userController = userController;
+        this.buyPackageController = buyPackageController;
         initPanels();
         initComponents();
         initListeners();
@@ -54,13 +60,15 @@ public class FlightRoutePackagePanel extends JPanel {
     private void initPanels() {
         createFlightRoutePackagePanel = new CreateFlightRoutePackagePanel(flightRoutePackageController);
         addFlightRouteToPackagePanel = new AddFlightRouteToPackagePanel(flightRoutePackageController, flightRouteController, userController);
-        getFlightRoutesPackagesPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController);
+        getFlightRoutesPackagesPanel = new GetFlightRoutesPackagesPanel(flightRoutePackageController, flightRouteController);
+        purchaseFlightRoutePackagePanel = new PackagePurchasePanel(userController, flightRoutePackageController, buyPackageController);
     }
 
     private void initListeners() {
         createFlightRoutePackageBtn.addMouseListener(createListener(createFlightRoutePackagePanel));
         addFlightRouteToPackageBtn.addMouseListener(createListener(addFlightRouteToPackagePanel));
         getFlightRoutePackageBtn.addMouseListener(createListener(getFlightRoutesPackagesPanel));
+        purchaseFlightRoutePackageBtn.addMouseListener(createListener(purchaseFlightRoutePackagePanel));
     }
 
     private MouseAdapter createListener(JPanel panel) {
@@ -87,18 +95,20 @@ public class FlightRoutePackagePanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - dotto
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel NavPanel;
     private JButton createFlightRoutePackageBtn;
+    private JButton purchaseFlightRoutePackageBtn;
     private JButton addFlightRouteToPackageBtn;
     private JButton getFlightRoutePackageBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - dotto
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         NavPanel = new JPanel();
         createFlightRoutePackageBtn = new JButton();
+        purchaseFlightRoutePackageBtn = new JButton();
         addFlightRouteToPackageBtn = new JButton();
         getFlightRoutePackageBtn = new JButton();
 
@@ -108,11 +118,11 @@ public class FlightRoutePackagePanel extends JPanel {
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xeeeeee));
         setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax
-        . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing
+        . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing
         .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .
-        Font ( "Dialo\u0067", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red
+        Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red
         ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override
-        public void propertyChange (java . beans. PropertyChangeEvent e) { if( "borde\u0072" .equals ( e. getPropertyName (
+        public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName (
         ) ) )throw new RuntimeException( ) ;} } );
         setLayout(new BorderLayout());
 
@@ -128,6 +138,10 @@ public class FlightRoutePackagePanel extends JPanel {
             //---- createFlightRoutePackageBtn ----
             createFlightRoutePackageBtn.setText("+ Crear Paquete");
             NavPanel.add(createFlightRoutePackageBtn);
+
+            //---- purchaseFlightRoutePackageBtn ----
+            purchaseFlightRoutePackageBtn.setText("$ Comprar Paquete");
+            NavPanel.add(purchaseFlightRoutePackageBtn);
 
             //---- addFlightRouteToPackageBtn ----
             addFlightRouteToPackageBtn.setText("\u279c A\u00f1adir R.V. a Paquete");

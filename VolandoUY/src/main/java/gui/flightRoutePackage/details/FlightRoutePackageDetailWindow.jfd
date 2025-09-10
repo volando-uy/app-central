@@ -1,0 +1,98 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "left:0"
+			"$rowSpecs": "0:1.0, 0"
+			"$alignTop": true
+			"$alignLeft": true
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "300:1.0, right:175:1.0"
+				"$rowSpecs": "0, 0, 0"
+				"$alignTop": true
+				"$alignLeft": true
+				"$vGap": 5
+			} ) {
+				name: "infoPanel"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "flightRoutePackageNameLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "flightRoutePackageNameLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "createdAtLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "createdAtLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"hAlign": 2
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "descriptionLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "descriptionLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "validityPeriodDaysLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "validityPeriodDaysLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"gridx": 1
+					"hAlign": 2
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "priceLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "priceLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 2
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "seatTypeLabel"
+					"horizontalTextPosition": 2
+					"horizontalAlignment": 2
+					"text": "seatTypeLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 2
+					"hAlign": 2
+					"gridx": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"vAlign": 0
+				"insets": new java.awt.Insets( 0, 10, 0, 10 )
+				"hAlign": 0
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane2"
+				"preferredSize": new java.awt.Dimension( 450, 250 )
+				"minimumSize": new java.awt.Dimension( 450, 250 )
+				"maximumSize": new java.awt.Dimension( 450, 250 )
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "flightRoutesTable"
+					"preferredSize": new java.awt.Dimension( 450, 500 )
+					"minimumSize": new java.awt.Dimension( 450, 250 )
+					"maximumSize": new java.awt.Dimension( 500000, 500000 )
+					"selectionMode": 0
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+				"insets": new java.awt.Insets( 0, 25, 25, 25 )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 500, 435 )
+			"location": new java.awt.Point( 0, 606 )
+		} )
+	}
+}

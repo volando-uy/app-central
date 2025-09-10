@@ -23,13 +23,17 @@ public class FlightDetailWindow extends JFrame {
         initComponents();
         setTitle("Detalle del Vuelo: " + flight.getName());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 400);
         setLocationRelativeTo(getOwner());
 
+        setResizable(false);
+
         // Cargar datos en la tabla
-        loadFlightDetails(flight, reservations);
+        loadFlightDetails(flight);
+        loadReservationsTable(reservations);
+
     }
-    private void loadFlightDetails(FlightDTO flight, List<BookFlightDTO> reservations) {
+    
+    private void loadReservationsTable(List<BookFlightDTO> reservations) {
         String[] cols = {"ID Reserva", "Cliente", "Tickets"};
         NonEditableTableModel model = new NonEditableTableModel(cols, 0);
 
@@ -45,21 +49,22 @@ public class FlightDetailWindow extends JFrame {
             model.addRow(new Object[]{"-", "No hay reservas", "-"});
         }
 
-        tablaRutaVuelo.setModel(model);
-        tablaRutaVuelo.setRowHeight(28);
-        tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        reservationsTable.setModel(model);
+        reservationsTable.setRowHeight(28);
+        reservationsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         int[] columnWidths = {100, 200, 300};
         for (int i = 0; i < columnWidths.length; i++) {
-            tablaRutaVuelo.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+            reservationsTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
         }
-        label1.setText("Nombre del vuelo: " + safe(flight.getName()));
-        label2.setText("Ruta: " + safe(flight.getFlightRouteName()) + " | Aerolínea: " + safe(flight.getAirlineNickname()));
-        label3.setText("Salida: " +
-                (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A")
-                + " | Duración: " + formatDuration(flight.getDuration()));
-        tablaRutaVuelo.setModel(model);
-        tablaRutaVuelo.setRowHeight(28);
-        tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    }
+
+    private void loadFlightDetails(FlightDTO flight) {
+        try { infoPanel.setBorder(null); } catch (Exception e) {}
+        flightNameLabel.setText("Nombre del vuelo: " + safe(flight.getName()));
+        flightRouteNameLabel.setText("Ruta: " + safe(flight.getFlightRouteName()));
+        flightAirlineNameLabel.setText( "Aerolínea: " + safe(flight.getAirlineNickname()));
+        departureLabel.setText("Salida: " + (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A"));
+        durationLabel.setText("Duración: " + formatDuration(flight.getDuration()));
     }
     private String safe(String s) {
         return s == null ? "" : s;
@@ -73,64 +78,113 @@ public class FlightDetailWindow extends JFrame {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
-        scrollPane1 = new JScrollPane();
-        tablaRutaVuelo = new JTable();
-        label1 = new JLabel();
-        label2 = new JLabel();
-        label3 = new JLabel();
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        infoPanel = new JPanel();
+        flightNameLabel = new JLabel();
+        departureLabel = new JLabel();
+        flightRouteNameLabel = new JLabel();
+        durationLabel = new JLabel();
+        flightAirlineNameLabel = new JLabel();
+        scrollPane2 = new JScrollPane();
+        reservationsTable = new JTable();
 
         //======== this ========
         var contentPane = getContentPane();
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {0, 0};
+        ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {0, 0, 0};
+        ((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
+        ((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0E-4};
 
-        //======== scrollPane1 ========
+        //======== infoPanel ========
         {
-            scrollPane1.setViewportView(tablaRutaVuelo);
+            infoPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,infoPanel. getBorder( )) )
+            ; infoPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
+            infoPanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {300, 175, 0};
+            ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+            ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- flightNameLabel ----
+            flightNameLabel.setText("Nombre del vuelo:");
+            flightNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            flightNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(flightNameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- departureLabel ----
+            departureLabel.setText("Salida:");
+            departureLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            departureLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(departureLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- flightRouteNameLabel ----
+            flightRouteNameLabel.setText("Nombre de la ruta del vuelo:");
+            flightRouteNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            flightRouteNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(flightRouteNameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- durationLabel ----
+            durationLabel.setText("Duracion:");
+            durationLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            durationLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(durationLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- flightAirlineNameLabel ----
+            flightAirlineNameLabel.setText("Aerolinea:");
+            flightAirlineNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            flightAirlineNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(flightAirlineNameLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
         }
-        contentPane.add(scrollPane1);
-        scrollPane1.setBounds(20, 110, 460, 215);
+        contentPane.add(infoPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.NONE,
+            new Insets(0, 10, 0, 10), 0, 0));
 
-        //---- label1 ----
-        label1.setText("Nombre del vuelo:");
-        contentPane.add(label1);
-        label1.setBounds(25, 5, 650, label1.getPreferredSize().height);
-
-        //---- label2 ----
-        label2.setText("Otro dato del vuelo:");
-        contentPane.add(label2);
-        label2.setBounds(25, 25, 650, label2.getPreferredSize().height);
-
-        //---- label3 ----
-        label3.setText("Un dato m\u00e1s del vuelo:");
-        contentPane.add(label3);
-        label3.setBounds(25, 45, 650, label3.getPreferredSize().height);
-
+        //======== scrollPane2 ========
         {
-            // compute preferred size
-            Dimension preferredSize = new Dimension();
-            for(int i = 0; i < contentPane.getComponentCount(); i++) {
-                Rectangle bounds = contentPane.getComponent(i).getBounds();
-                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-            }
-            Insets insets = contentPane.getInsets();
-            preferredSize.width += insets.right;
-            preferredSize.height += insets.bottom;
-            contentPane.setMinimumSize(preferredSize);
-            contentPane.setPreferredSize(preferredSize);
+            scrollPane2.setPreferredSize(new Dimension(450, 300));
+            scrollPane2.setMinimumSize(new Dimension(450, 300));
+            scrollPane2.setMaximumSize(new Dimension(450, 300));
+
+            //---- reservationsTable ----
+            reservationsTable.setPreferredSize(new Dimension(450, 300));
+            reservationsTable.setMinimumSize(new Dimension(450, 300));
+            reservationsTable.setMaximumSize(new Dimension(500000, 500000));
+            reservationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            scrollPane2.setViewportView(reservationsTable);
         }
+        contentPane.add(scrollPane2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+            new Insets(0, 25, 25, 25), 0, 0));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
-    private JScrollPane scrollPane1;
-    private JTable tablaRutaVuelo;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    private JPanel infoPanel;
+    private JLabel flightNameLabel;
+    private JLabel departureLabel;
+    private JLabel flightRouteNameLabel;
+    private JLabel durationLabel;
+    private JLabel flightAirlineNameLabel;
+    private JScrollPane scrollPane2;
+    private JTable reservationsTable;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

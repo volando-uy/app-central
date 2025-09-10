@@ -43,7 +43,10 @@ public class VolandoApp {
                 ControllerFactory.getCityController(),
                 ControllerFactory.getFlightRoutePackageController(),
                 ControllerFactory.getFlightController(),
-                ControllerFactory.getBookingController()
+                ControllerFactory.getBookingController(),
+                ControllerFactory.getBuyPackageController(),
+                ControllerFactory.getTicketController(),
+                ControllerFactory.getSeatController()
             );
         });
 

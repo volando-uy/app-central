@@ -23,23 +23,47 @@ public class BookingController implements IBookingController {
     }
 
     @Override
-    public List<BookFlightDTO> findAllBookFlightDetails() {
-        return bookingService.findAllBookFlightDetails(true);
+    public List<BookFlightDTO> getAllBookFlightsDetails() {
+        return bookingService.getAllBookFlightsDetails(true);
     }
 
     @Override
-    public List<BaseBookFlightDTO> findAllBookFlightSimpleDetails() {
-        return bookingService.findAllBookFlightDetails(false).stream().map(bf -> (BaseBookFlightDTO) bf).collect(Collectors.toList());
+    public List<BaseBookFlightDTO> getAllBookFlightsSimpleDetails() {
+        return bookingService.getAllBookFlightsDetails(false)
+                .stream()
+                .map(bf -> (BaseBookFlightDTO) bf)
+                .toList();
     }
 
     @Override
-    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
-        return bookingService.findDTOsByCustomerNickname(nickname);
+    public List<BookFlightDTO> getBookFlightsDetailsByCustomerNickname(String nickname) {
+        return bookingService.getAllBookFlightsDetailsByCustomerNickname(nickname, true);
     }
 
     @Override
-    public BookFlight getFullBookingById(Long id) {
-        return bookingService.getFullBookingById(id);
+    public List<BaseBookFlightDTO> getBookFlightsSimpleDetailsByCustomerNickname(String nickname) {
+        return bookingService.getAllBookFlightsDetailsByCustomerNickname(nickname, false)
+                .stream()
+                .map(bf -> (BaseBookFlightDTO) bf)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookFlightDTO> getBookFlightsDetailsByFlightName(String flightName) {
+        return bookingService.getBookFlightsDetailsByFlightName(flightName, true);
+    }
+
+    @Override
+    public List<BaseBookFlightDTO> getBookFlightsSimpleDetailsByFlightName(String nickname) {
+        return bookingService.getBookFlightsDetailsByFlightName(nickname, false)
+                .stream()
+                .map(bf -> (BaseBookFlightDTO) bf)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookFlightDTO getBookFlightDetailsById(Long id) {
+        return bookingService.getBookFlightDetailsById(id, true);
     }
 
 }

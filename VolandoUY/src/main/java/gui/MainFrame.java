@@ -6,11 +6,14 @@ import javax.swing.*;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import controllers.booking.IBookingController;
+import controllers.buyPackage.IBuyPackageController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.seat.ISeatController;
+import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import gui.flight.FlightPanel;
 import gui.flightRoute.FlightRoutePanel;
@@ -32,6 +35,9 @@ public class MainFrame extends JFrame {
     private IFlightRoutePackageController flightRoutePackageController;
     private IFlightController flightController;
     private IBookingController bookingController;
+    private IBuyPackageController buyPackageController;
+    private ITicketController ticketController;
+    private ISeatController seatController;
 
     private JPanel userPanel;
     private JPanel flightRoutePanel;
@@ -48,7 +54,12 @@ public class MainFrame extends JFrame {
 
     public MainFrame(IUserController userController, IFlightRouteController flightRouteController,
                      ICategoryController categoryController, ICityController cityController,
-                     IFlightRoutePackageController flightRoutePackageController , IFlightController flightController , IBookingController bookingController) {
+                     IFlightRoutePackageController flightRoutePackageController,
+                     IFlightController flightController , IBookingController bookingController,
+                     IBuyPackageController buyPackageController,
+                     ITicketController ticketController,
+                     ISeatController seatController
+    ) {
         this.flightController = flightController;
         this.userController = userController;
         this.flightRouteController = flightRouteController;
@@ -56,6 +67,9 @@ public class MainFrame extends JFrame {
         this.cityController = cityController;
         this.flightRoutePackageController = flightRoutePackageController;
         this.bookingController = bookingController;
+        this.buyPackageController = buyPackageController;
+        this.ticketController = ticketController;
+        this.seatController = seatController;
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
         } catch( Exception ex ) {
@@ -77,6 +91,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Volando Uy");
         setSize(800, 600);
+        setResizable(false);
         setLocationRelativeTo(null);
         setBackground(new Color(43,45,48));
 
@@ -109,12 +124,12 @@ public class MainFrame extends JFrame {
 
 
     private SideBar createSideBar() {
-        userPanel = new UserPanel(userController);
+        userPanel = new UserPanel(userController, flightRouteController, flightController,flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
         flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController, flightController);
-        flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController);
-        flightPanel = new FlightPanel(flightController, flightRouteController, userController);
+        flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController, buyPackageController);
+        flightPanel = new FlightPanel(flightController, flightRouteController, userController, bookingController);
         otherPanel = new OtherPanel(categoryController, cityController);
-        reservationPanel = new ReservationPanel(userController, flightRoutePackageController , flightRouteController , flightController , bookingController);
+        reservationPanel = new ReservationPanel(userController , flightRouteController , flightController , bookingController);
 
         MouseListener userManagementBtnListener = new MouseAdapter() {
             @Override

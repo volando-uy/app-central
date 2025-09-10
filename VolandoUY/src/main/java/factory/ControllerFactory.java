@@ -4,6 +4,8 @@ import controllers.airport.AirportController;
 import controllers.airport.IAirportController;
 import controllers.booking.BookingController;
 import controllers.booking.IBookingController;
+import controllers.buyPackage.BuyPackageController;
+import controllers.buyPackage.IBuyPackageController;
 import controllers.category.CategoryController;
 import controllers.category.ICategoryController;
 import controllers.city.CityController;
@@ -59,6 +61,7 @@ public class ControllerFactory {
     private static ISeatController seatController;
     private static ITicketController ticketController;
     private static IBookingController bookingController;
+    private static IBuyPackageController buyPackageController;
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
 
@@ -176,11 +179,16 @@ public class ControllerFactory {
     // ############### BOOKING CONTROLLER  #################
     public static IBookingController getBookingController(){
         if (bookingController == null){
-            bookingController = new BookingController(ServiceFactory.getBookingService()) {
-            };
+            bookingController = new BookingController(ServiceFactory.getBookingService());
         }
         return bookingController;
 
     }
 
+    public static IBuyPackageController getBuyPackageController() {
+        if (buyPackageController == null) {
+            buyPackageController = new BuyPackageController(ServiceFactory.getBuyPackageService());
+        }
+        return buyPackageController;
+    }
 }

@@ -3,6 +3,7 @@ package domain.models.flightRoute;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.flight.Flight;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -56,10 +57,11 @@ public class FlightRoute {
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
-    @OneToMany(
-            mappedBy = "flightRoute"
-    )
+    @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
+
+    @ManyToMany()
+    private List<FlightRoutePackage> inPackages = new ArrayList<>();
 
     @ManyToOne()
     private Airline airline;
@@ -81,9 +83,6 @@ public class FlightRoute {
     @Override
     public String toString() {
         return "FlightRoute{" +
-                "categories=" + categories.stream().map(Category::getName).toList() +
-                ", flights=" + flights.stream().map(Flight::getName).toList() +
-                ", airline=" + (airline != null ? airline.getNickname() : "null") +
                 ", originCity=" + originCity +
                 ", destinationCity=" + destinationCity +
                 ", name='" + name + '\'' +

@@ -1,6 +1,7 @@
 package domain.services.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
+import domain.dtos.seat.SeatDTO;
 import domain.models.flight.Flight;
 import domain.models.seat.Seat;
 import domain.services.flight.IFlightService;
@@ -60,5 +61,25 @@ public class SeatService implements ISeatService {
     @Override
     public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
         return seatRepository.getLimitedAvailableSeatsByFlightName(flightName, size);
+    }
+
+    @Override
+    public SeatDTO getSeatDetailsById(Long id, boolean full) {
+        Seat seat = full ? seatRepository.getFullSeatById(id) : seatRepository.findByKey(id);
+        if (seat == null) {
+            return null;
+        }
+
+        return full ? customModelMapper.mapFullSeat(seat) : customModelMapper.map(seat, SeatDTO.class);
+    }
+
+    @Override
+    public SeatDTO getSeatDetailsByTicketId(Long ticketId, boolean full) {
+        Seat seat = full ? seatRepository.getFullSeatByTicketId(ticketId) : seatRepository.getSeatByTicketId(ticketId);
+        if (seat == null) {
+            return null;
+        }
+
+        return full ? customModelMapper.mapFullSeat(seat) : customModelMapper.map(seat, SeatDTO.class);
     }
 }
