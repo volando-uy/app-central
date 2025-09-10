@@ -25,7 +25,7 @@ public class FlightRoutePackage {
     private List<FlightRoute> flightRoutes;
 
     //Tiene muchos compras de paquete
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "flightRoutePackage")
     private List<BuyPackage> buyPackages;
 
     @Id

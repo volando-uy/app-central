@@ -56,9 +56,7 @@ public class FlightRoute {
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
-    @OneToMany(
-            mappedBy = "flightRoute"
-    )
+    @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
 
     @ManyToOne()

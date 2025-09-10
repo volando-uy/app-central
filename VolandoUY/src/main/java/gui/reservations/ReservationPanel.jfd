@@ -21,10 +21,6 @@ new FormModel {
 					"text": "+ Reserva Vuelo"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "packagePurchaseBtn"
-					"text": "+ Comprar Paquete"
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getUsersBtn"
 					"text": "\ud83d\udcc4Consultar Usuarios"
 				} )

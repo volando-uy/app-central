@@ -5,12 +5,13 @@
 package gui.reservations;
 
 import controllers.booking.IBookingController;
+import controllers.buyPackage.IBuyPackageController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import gui.reservations.getUserReservation.GetUserReservationPanel;
-import gui.reservations.packagePurchase.PackagePurchasePanel;
+import gui.flightRoutePackage.packagePurchase.PackagePurchasePanel;
 import gui.reservations.bookFlight.BookFlightPanel;
 
 import java.awt.*;
@@ -28,31 +29,38 @@ public class ReservationPanel extends JPanel {
     private IFlightRouteController flightRouteController;
     private IBookingController bookingController;
     private IFlightController flightController;
+    private IBuyPackageController buyPackageController;
 
 
     private GetUserReservationPanel userReservationPanel;
     private JPanel packagePurchasePanel;
     private JPanel bookFlightPanel;
     private JPanel contentPanel;
-    public ReservationPanel(IUserController userController,IFlightRoutePackageController flightRoutePackageController , IFlightRouteController flightRouteController , IFlightController flightController, IBookingController bookingController) {
+    public ReservationPanel(
+            IUserController userController,
+            IFlightRoutePackageController flightRoutePackageController,
+            IFlightRouteController flightRouteController,
+            IFlightController flightController,
+            IBookingController bookingController,
+            IBuyPackageController buyPackageController
+    ) {
         this.userController = userController;
         this.flightRoutePackageController = flightRoutePackageController;
         this.flightRouteController = flightRouteController ;
         this.flightController = flightController ;
         this.bookingController = bookingController;
+        this.buyPackageController = buyPackageController;
         initPanels();
         initComponents();
         initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
     private void initPanels() {
-        packagePurchasePanel = new PackagePurchasePanel(userController, flightRoutePackageController);
         bookFlightPanel = new BookFlightPanel(userController, flightRouteController  , flightController , bookingController);
-        userReservationPanel = new GetUserReservationPanel(userController, flightRouteController, flightController, flightRoutePackageController, bookingController);
+        userReservationPanel = new GetUserReservationPanel(userController, flightRouteController, flightController, flightRoutePackageController, bookingController, buyPackageController);
     }
 
     private void initListeners() {
-        packagePurchaseBtn.addMouseListener(createListener(packagePurchasePanel));
         createReservationBtn.addMouseListener(createListener(bookFlightPanel));
         getUsersBtn.addMouseListener(createListener(userReservationPanel));
     }
@@ -78,10 +86,9 @@ public class ReservationPanel extends JPanel {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         NavPanel = new JPanel();
         createReservationBtn = new JButton();
-        packagePurchaseBtn = new JButton();
         getUsersBtn = new JButton();
         null01Btn = new JButton();
 
@@ -90,12 +97,12 @@ public class ReservationPanel extends JPanel {
         setMinimumSize(new Dimension(640, 600));
         setMaximumSize(new Dimension(640, 600));
         setBackground(new Color(0xeeeeee));
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
-        .EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax
-        .swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,
-        12),java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans
-        .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.
-        getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
+        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
+        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
+        throw new RuntimeException( ); }} );
         setLayout(new BorderLayout());
 
         //======== NavPanel ========
@@ -111,10 +118,6 @@ public class ReservationPanel extends JPanel {
             createReservationBtn.setText("+ Reserva Vuelo");
             NavPanel.add(createReservationBtn);
 
-            //---- packagePurchaseBtn ----
-            packagePurchaseBtn.setText("+ Comprar Paquete");
-            NavPanel.add(packagePurchaseBtn);
-
             //---- getUsersBtn ----
             getUsersBtn.setText("\ud83d\udcc4Consultar Usuarios");
             NavPanel.add(getUsersBtn);
@@ -128,10 +131,9 @@ public class ReservationPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel NavPanel;
     private JButton createReservationBtn;
-    private JButton packagePurchaseBtn;
     private JButton getUsersBtn;
     private JButton null01Btn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

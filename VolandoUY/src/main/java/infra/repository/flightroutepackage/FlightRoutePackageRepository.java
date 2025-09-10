@@ -1,6 +1,7 @@
 package infra.repository.flightroutepackage;
 
 import app.DBConnection;
+import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.models.buypackage.BuyPackage;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import jakarta.persistence.EntityManager;
@@ -64,4 +65,47 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
         }
     }
 
+    public List<FlightRoutePackage> findAllWithFlightRoutes() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<FlightRoutePackage> packages = em.createQuery(
+                            "SELECT DISTINCT frp FROM FlightRoutePackage frp WHERE frp.flightRoutes IS NOT EMPTY", FlightRoutePackage.class)
+                    .getResultList();
+
+            return packages;
+        }
+    }
+
+    public List<FlightRoutePackage> findAllFullWithFlightRoutes() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<FlightRoutePackage> packages = em.createQuery(
+                            "SELECT DISTINCT frp FROM FlightRoutePackage frp WHERE frp.flightRoutes IS NOT EMPTY", FlightRoutePackage.class)
+                    .getResultList();
+
+            // Initialize flightRoutes for each package
+            for (FlightRoutePackage frp : packages) {
+                frp.getFlightRoutes().size(); // Load flightRoutes
+                frp.getBuyPackages().size(); // Load buyPackages
+            }
+
+            return packages;
+        }
+    }
+
+    public FlightRoutePackage getFlightRoutePackageFullByName(String flightRoutePackageName) {
+        try(EntityManager em= DBConnection.getEntityManager()){
+            FlightRoutePackage frp = em.createQuery("SELECT frp FROM FlightRoutePackage frp WHERE LOWER(frp.name)=:name", FlightRoutePackage.class)
+                    .setParameter("name", flightRoutePackageName.toLowerCase())
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize the attributes
+            if (frp != null) {
+                frp.getFlightRoutes().size(); // Load flightRoutes
+                frp.getBuyPackages().size(); // Load buyPackages
+            }
+
+            return frp;
+        }
+    }
 }

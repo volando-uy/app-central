@@ -53,7 +53,7 @@ public class Customer extends User {
 
 
     //1 cliente reserva muchos vuelos
-    @OneToMany()
+    @OneToMany(mappedBy = "customer")
     private List<BookFlight> bookedFlights;
 
 

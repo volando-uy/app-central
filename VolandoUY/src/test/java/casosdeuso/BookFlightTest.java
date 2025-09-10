@@ -346,25 +346,25 @@ public class BookFlightTest {
 
         //Si existe reserva, me tira throw. Supongamos que no existe reserva
         //Ingresar Datos Reserva
-// Datos de la reserva
+        // Datos de la reserva
         BaseBookFlightDTO booking = new BaseBookFlightDTO();
         booking.setTotalPrice(100.0);
-// Si tu DTO tiene fecha, setéala (ajustá al campo real si existe)
-// booking.setBookingDate(LocalDate.now());
+        // Si tu DTO tiene fecha, setéala (ajustá al campo real si existe)
+        // booking.setBookingDate(LocalDate.now());
 
-// Construimos los tickets + equipaje para 1 pasajero (customer3)
+        // Construimos los tickets + equipaje para 1 pasajero (customer3)
         var tickets = new java.util.LinkedHashMap<BaseTicketDTO, java.util.List<LuggageDTO>>();
 
-// Ticket del pasajero
+        // Ticket del pasajero
         BaseTicketDTO t1 = new BaseTicketDTO();
         t1.setName("Customer 3");       // nombre pasajero
         t1.setSurname("Apellido3");     // apellido pasajero
         t1.setNumDoc("34567890");       // doc pasajero (coincide con customer3)
 
-// Equipaje del pasajero
+        // Equipaje del pasajero
         var luggagesT1 = new java.util.ArrayList<LuggageDTO>();
 
-// ⚠️ Asegurate que tus DTOs de equipaje tengan getters/setters (agregá @Getter/@Setter de Lombok si falta)
+        // ⚠️ Asegurate que tus DTOs de equipaje tengan getters/setters (agregá @Getter/@Setter de Lombok si falta)
         BasicLuggageDTO basic = new BasicLuggageDTO();
         basic.setWeight(8.0);
         basic.setCategory(EnumEquipajeBasico.BOLSO); // ajustá a tu enum real
@@ -376,10 +376,10 @@ public class BookFlightTest {
         luggagesT1.add(basic);
         luggagesT1.add(extra);
 
-// Agregamos el ticket y su equipaje al mapa
+        // Agregamos el ticket y su equipaje al mapa
         tickets.put(t1, luggagesT1);
 
-// Finalmente, invocamos el caso de uso
+        // Finalmente, invocamos el caso de uso
         BaseBookFlightDTO created = bookingController.createBooking(
                 booking,
                 tickets,

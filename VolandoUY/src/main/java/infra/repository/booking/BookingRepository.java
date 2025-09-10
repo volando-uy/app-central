@@ -25,15 +25,6 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
         try {
             tx.begin();
 
-            if (bookFlight.getCreated_at() == null) {
-                bookFlight.setCreated_at(java.time.LocalDateTime.now());
-            }
-
-            // Seguridad: que la colección no sea null
-            if (bookFlight.getTickets() == null) {
-                bookFlight.setTickets(new java.util.ArrayList<>());
-            }
-
             // Reatachar el customer y setear relaciones
             Customer managedCustomer = em.getReference(Customer.class, customer.getNickname());
             bookFlight.setCustomer(managedCustomer);
@@ -52,10 +43,16 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                 Seat managedSeat = em.getReference(Seat.class, detachedSeat.getId());
 
                 ticket.setSeat(managedSeat);
-                managedSeat.setTicket(ticket);
 
                 ticket.setBookFlight(bookFlight);
+
+                em.persist(ticket);
+
+                managedSeat.setTicket(ticket);
+                em.merge(managedSeat);
+
                 bookFlight.getTickets().add(ticket);
+                em.merge(bookFlight);
 
                 if (ticket.getBasicLuggages() != null) {
                     for (domain.models.luggage.BasicLuggage b : ticket.getBasicLuggages()) {
@@ -70,7 +67,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                     }
                 }
 
-                em.persist(ticket);
+                em.merge(ticket);
             }
 
             tx.commit();

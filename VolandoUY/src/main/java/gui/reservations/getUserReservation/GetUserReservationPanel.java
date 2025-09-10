@@ -17,11 +17,14 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import controllers.booking.IBookingController;
+import controllers.buyPackage.IBuyPackageController;
 import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.buyPackage.BaseBuyPackageDTO;
+import domain.dtos.buyPackage.BuyPackageDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
@@ -31,7 +34,6 @@ import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.ticket.Ticket;
-import net.miginfocom.swing.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +46,7 @@ public class GetUserReservationPanel extends JPanel {
     private final IFlightController flightController;
     private final IFlightRoutePackageController flightRoutePackageController;
     private final IBookingController bookingController;
+    private final IBuyPackageController buyPackageController;
 
     private static final String CARD_EMPTY   = "EMPTY";
     private static final String CARD_AIRLINE = "AIRLINE";
@@ -76,13 +79,15 @@ public class GetUserReservationPanel extends JPanel {
             IFlightRouteController flightRouteController,
             IFlightController flightController,
             IFlightRoutePackageController flightRoutePackageController,
-            IBookingController bookingController
+            IBookingController bookingController,
+            IBuyPackageController buyPackageController
     ) {
         this.userController = userController;
         this.flightRouteController = flightRouteController;
         this.flightController = flightController;
         this.flightRoutePackageController = flightRoutePackageController;
         this.bookingController = bookingController;
+        this.buyPackageController = buyPackageController;
 
         initComponents();
 
@@ -123,7 +128,7 @@ public class GetUserReservationPanel extends JPanel {
         };
         tblReservas.setModel(modelReservas);
 
-        modelPaquetes = new DefaultTableModel(new Object[]{"Código", "Nombre", "Validez (días)" }, 0) {
+        modelPaquetes = new DefaultTableModel(new Object[]{"Id", "Nombre paquete", "Fecha compra", "Precio total" }, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblPaquetes.setModel(modelPaquetes);
@@ -217,7 +222,7 @@ public class GetUserReservationPanel extends JPanel {
                 String nombre   = Objects.toString(modelUsuarios.getValueAt(r, 0), "");
                 String docTxt   = Objects.toString(modelUsuarios.getValueAt(r, 1), "");
                 String emailTxt = Objects.toString(modelUsuarios.getValueAt(r, 2), "");
-                headerDatosSet(nombre, "Usuario", emailTxt, docTxt);
+                headerDatosSet(nombre, "Cliente", emailTxt, docTxt);
 
                 loadCustomerReservations(usuarioSeleccionadoNick);
                 loadCustomerPackages(usuarioSeleccionadoNick);
@@ -566,44 +571,18 @@ public class GetUserReservationPanel extends JPanel {
             CustomerDTO c = userController.getCustomerDetailsByNickname(customerNickname);
             if (c == null) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
 
-            List<Long> ids = callGetterList(c, Long.class, "getBoughtPackagesIds");
-            if (ids == null || ids.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
+            List<Long> boughtPackagesIds = c.getBoughtPackagesIds();
+            if (boughtPackagesIds == null || boughtPackagesIds.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes); return; }
 
-            for (Long id : ids) {
-                BaseFlightRoutePackageDTO p = null;
+            for (Long id : boughtPackagesIds) {
+                BuyPackageDTO buyPackageDTO = buyPackageController.getBuyPackageDetailsById(id);
 
-                Object candidate = tryInvoke(
-                        flightRoutePackageController,
-                        new String[]{
-                                "getFlightRoutePackageSimpleDetailsById",
-                                "getFlightRoutePackageDetailsById",
-                                "findFlightRoutePackageSimpleById",
-                                "findFlightRoutePackageById"
-                        },
-                        new Class<?>[]{ Long.class },
-                        new Object[]{ id }
-                );
-
-                if (candidate instanceof FlightRoutePackageDTO dtoFull) {
-                    modelPaquetes.addRow(new Object[]{
-                            callGetterString(dtoFull, "getCode"),
-                            callGetterString(dtoFull, "getName"),
-                            callGetterNumber(dtoFull, "getValidityPeriodDays")
-                    });
-                    continue;
-                } else if (candidate instanceof BaseFlightRoutePackageDTO dtoBase) {
-                    p = dtoBase;
-                }
-
-                if (p != null) {
-                    modelPaquetes.addRow(new Object[]{
-                            callGetterString(p, "getCode"),
-                            callGetterString(p, "getName"),
-                            callGetterNumber(p, "getValidityPeriodDays")
-                    });
-                } else {
-                    modelPaquetes.addRow(new Object[]{ String.valueOf(id), "", "" });
-                }
+                modelPaquetes.addRow(new Object[] {
+                        buyPackageDTO.getId(),
+                        buyPackageDTO.getFlightRoutePackageName(),
+                        buyPackageDTO.getCreatedAt(),
+                        buyPackageDTO.getTotalPrice()
+                });
             }
 
             adjustDynamicWidthAndHeightToTable(tblPaquetes, modelPaquetes);
@@ -831,7 +810,7 @@ public class GetUserReservationPanel extends JPanel {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         splitPane1 = new JSplitPane();
         panel4 = new JPanel();
         scrollPane1 = new JScrollPane();
@@ -879,12 +858,12 @@ public class GetUserReservationPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-                ( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-                . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
-                . Color. red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-                propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
-                ; }} );
+                panel4.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+                (0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+                .TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),java.awt
+                .Color.red),panel4. getBorder()));panel4. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+                propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException()
+                ;}});
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -893,18 +872,26 @@ public class GetUserReservationPanel extends JPanel {
 
                     //======== panel13 ========
                     {
-                        panel13.setLayout(new FlowLayout());
+                        panel13.setLayout(new GridBagLayout());
+                        ((GridBagLayout)panel13.getLayout()).columnWidths = new int[] {0, 144, 0};
+                        ((GridBagLayout)panel13.getLayout()).rowHeights = new int[] {0, 0};
+                        ((GridBagLayout)panel13.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                        ((GridBagLayout)panel13.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                         //---- label5 ----
                         label5.setText("Buscar");
                         label5.setFont(new Font("Inter", Font.PLAIN, 12));
                         label5.setForeground(new Color(0x5f6368));
-                        panel13.add(label5);
+                        panel13.add(label5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                            new Insets(0, 0, 0, 5), 0, 0));
 
                         //---- cmbTipo ----
                         cmbTipo.setPreferredSize(new Dimension(110, 28));
                         cmbTipo.setMaximumRowCount(10);
-                        panel13.add(cmbTipo);
+                        panel13.add(cmbTipo, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                            new Insets(0, 0, 0, 0), 0, 0));
                     }
                     scrollPane1.setViewportView(panel13);
                 }
@@ -985,11 +972,11 @@ public class GetUserReservationPanel extends JPanel {
 
                         //======== panel9 ========
                         {
-                            panel9.setLayout(new FlowLayout());
+                            panel9.setLayout(new BorderLayout());
 
                             //---- btnDetalleRuta ----
                             btnDetalleRuta.setText("Ver detalle ruta");
-                            panel9.add(btnDetalleRuta);
+                            panel9.add(btnDetalleRuta, BorderLayout.CENTER);
                         }
                         airline.add(panel9, BorderLayout.NORTH);
 
@@ -1075,7 +1062,7 @@ public class GetUserReservationPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JSplitPane splitPane1;
     private JPanel panel4;
     private JScrollPane scrollPane1;

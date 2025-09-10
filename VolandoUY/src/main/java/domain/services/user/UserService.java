@@ -1,16 +1,24 @@
 package domain.services.user;
 
 import domain.dtos.user.*;
+import domain.models.buypackage.BuyPackage;
 import domain.models.flightRoute.FlightRoute;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
+import domain.services.buyPackage.IBuyPackageService;
+import domain.services.flightRoutePackage.FlightRoutePackageService;
+import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import factory.ControllerFactory;
+import infra.repository.user.IUserRepository;
 import infra.repository.user.UserRepository;
+import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +28,12 @@ public class UserService implements IUserService {
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     private final UserRepository userRepository;
+
+    @Setter
+    private IFlightRoutePackageService flightRoutePackageService;
+
+    @Setter
+    private IBuyPackageService buyPackageService;
 
     public UserService() {
         this.userRepository = new UserRepository();
@@ -203,46 +217,7 @@ public class UserService implements IUserService {
 
     @Override
     public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
-//        Customer customer = this.getCustomerByNickname(customerNickname);
-//
-//        // Buscar el paquete por su nombre
-//        // Tira throw si no lo encuentra
-//        FlightRoutePackage flightRoutePackage = flightRoutePackageService.getFlightRoutePackageByName(packageName);
-//
-//        // Verificar si ya compró este paquete
-//        customer.getBoughtPackages().stream()
-//                .filter(pkg -> pkg.getFlightRoutePackage().getName().equalsIgnoreCase(packageName))
-//                .findFirst()
-//                .ifPresent(pkg -> {
-//                    throw new IllegalArgumentException(
-//                            String.format("El cliente %s ya compró el paquete %s", customerNickname, packageName)
-//                    );
-//                });
-//
-//        // Validar que el paquete no esté vencido
-//        if (flightRoutePackage.isExpired()) {
-//            throw new IllegalArgumentException(
-//                    String.format("El paquete %s ya expiró y no puede ser comprado", packageName)
-//            );
-//        }
-//
-//        // Creamos el buy package
-//        BuyPackage buyPackage = new BuyPackage();
-//        buyPackage.setCustomer(customer);
-//        buyPackage.setFlightRoutePackage(flightRoutePackage);
-//        buyPackage.setCreatedAt(LocalDateTime.now());
-//        buyPackage.setTotalPrice(flightRoutePackage.getTotalPrice());
-//
-//        // Añadimos el buy package al customer
-//        customer.getBoughtPackages().add(buyPackage);
-//
-//        // Añadimos el buy package al flight route package
-//        flightRoutePackage.getBuyPackages().add(buyPackage);
-//
-//        // Guardar cambios en ambos repositorios
-//        userRepository.save(customer);
-//        // buyPackageService.save(buyPackage);
-//        flightRoutePackageService._updateFlightRoutePackage(flightRoutePackage);
+
     }
 
 

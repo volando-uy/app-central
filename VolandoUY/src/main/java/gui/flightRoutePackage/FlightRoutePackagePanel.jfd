@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -19,6 +19,10 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createFlightRoutePackageBtn"
 					"text": "+ Crear Paquete"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "purchaseFlightRoutePackageBtn"
+					"text": "$ Comprar Paquete"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addFlightRouteToPackageBtn"

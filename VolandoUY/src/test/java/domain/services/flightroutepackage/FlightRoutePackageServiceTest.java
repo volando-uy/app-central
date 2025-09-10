@@ -143,7 +143,7 @@ class FlightRoutePackageServiceTest {
         ));
 
         // WHEN se busca por nombre
-        var result = packageService.getFlightRoutePackageByName("Pack C");
+        var result = packageService.getFlightRoutePackageByName("Pack C", false);
 
         // THEN
         assertNotNull(result);
@@ -155,7 +155,7 @@ class FlightRoutePackageServiceTest {
     void getFlightRoutePackageByName_shouldThrowIfNotFound() {
         // WHEN se busca uno inexistente
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            packageService.getFlightRoutePackageByName("Inexistente");
+            packageService.getFlightRoutePackageByName("Inexistente", false);
         });
 
         // THEN

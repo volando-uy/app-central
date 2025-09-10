@@ -40,7 +40,7 @@ public class BookFlight {
     private Customer customer;
 
     // Tiene muchos tickets
-    @OneToMany()
+    @OneToMany(mappedBy = "bookFlight")
     private List<Ticket> tickets =new ArrayList<>();
 
 

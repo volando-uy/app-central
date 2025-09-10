@@ -47,7 +47,7 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
 
     @Override
     public List<BaseFlightRoutePackageDTO> getAllFlightRoutesPackagesSimpleDetailsWithFlightRoutes() {
-        return packageService.getAllFlightRoutePackagesWithFlightRoutes(false)
+        return packageService.getAllFlightRoutePackagesDetailsWithFlightRoutes(false)
                 .stream()
                 .map(pack -> (BaseFlightRoutePackageDTO) pack)
                 .toList();

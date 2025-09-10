@@ -16,7 +16,7 @@ public class DBConnection {
 
     public static EntityManagerFactory getEntityManagerFactory() {
 
-        String persistenceUnitName = ENVIRONMENT != null && ENVIRONMENT.equals("TEST") ? "VolandoAppTest" : "VolandoApp";
+        String persistenceUnitName = ENVIRONMENT != null && ENVIRONMENT.equals("PROD") ? "VolandoAppProd" : "VolandoApp";
 
         if (ENVIRONMENT != null && ENVIRONMENT.equals("PROD")) {
             Map<String, String> properties = new HashMap<>();

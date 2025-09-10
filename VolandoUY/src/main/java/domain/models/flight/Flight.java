@@ -66,7 +66,7 @@ public class Flight {
     private Airport destinationAirport;
 
     //1 vuelo tiene muchos asientos
-    @OneToMany()
+    @OneToMany(mappedBy = "flight")
     private List<Seat> seats;
 
     private LocalDateTime createdAt = LocalDateTime.now();

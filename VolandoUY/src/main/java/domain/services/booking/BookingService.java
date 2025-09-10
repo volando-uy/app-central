@@ -61,10 +61,10 @@ public class BookingService implements IBookingService {
         Customer customer = userService.getCustomerByNickname(userNickname,true);
 
 
-        List<Seat> seats = seatService.getLimitedAvailableSeatsByFlightName(flightName, tickets.size());
-        if (seats == null || seats.isEmpty())
+        List<Seat> availableSeats = seatService.getLimitedAvailableSeatsByFlightName(flightName, tickets.size());
+        if (availableSeats == null || availableSeats.isEmpty())
             throw new UnsupportedOperationException("No hay asientos disponibles");
-        if (seats.size() < tickets.size())
+        if (availableSeats.size() < tickets.size())
             throw new UnsupportedOperationException("No hay suficientes asientos disponibles");
 
         List<Ticket> savedTickets = new ArrayList<>();
@@ -84,10 +84,8 @@ public class BookingService implements IBookingService {
             savedTickets.add(t);
         }
         // Asignamos el vuelo y el usuario (cliente) al BookFlight
-// Pasamos seats (detached) + tickets (transient). El repo los reatacha/persiste correctamente.
-        bookingRepository.saveBookflightWithTicketsAndAddToSeats(bookFlight, savedTickets, seats,customer);
-
-
+        // Pasamos seats (detached) + tickets (transient). El repo los reatacha/persiste correctamente.
+        bookingRepository.saveBookflightWithTicketsAndAddToSeats(bookFlight, savedTickets, availableSeats,customer);
 
         return customModelMapper.map(bookFlight, BaseBookFlightDTO.class);
     }

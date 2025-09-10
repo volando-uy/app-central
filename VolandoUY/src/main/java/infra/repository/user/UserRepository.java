@@ -1,5 +1,7 @@
 package infra.repository.user;
 
+import domain.models.buypackage.BuyPackage;
+import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.User;
 import domain.models.user.Customer;
 import domain.models.user.Airline;
@@ -59,16 +61,23 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
         all.addAll(airlineRepo.findAll());
         return all;
     }
+
+    @Override
     public List<Airline> getAllAirlines() {
         return airlineRepo.findAll();
     }
+
+    @Override
     public List<Customer> getAllCustomers() {return customerRepo.findAll();}
 
+    @Override
     public List<Airline> getFullAllAirlines() {
         return airlineRepo.findFullAll();
     }
 
+    @Override
     public List<Customer> getFullAllCustomers() {
         return customerRepo.findFullAll();
     }
+
 }

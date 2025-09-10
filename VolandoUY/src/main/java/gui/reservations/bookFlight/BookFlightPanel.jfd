@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -88,14 +88,14 @@ new FormModel {
 					"$alignTop": true
 					"$alignLeft": true
 				} ) {
-					name: "firstRowPanel2"
+					name: "flightRoutesPanel"
 					"preferredSize": &Dimension4 new java.awt.Dimension( 510, 100 )
 					"minimumSize": &Dimension5 new java.awt.Dimension( 510, 100 )
 					"maximumSize": &Dimension6 new java.awt.Dimension( 510, 510 )
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "flightRouteLabel"
-						"text": "Rutas de vuelo:"
+						"text": "Rutas de Vuelo:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": &Dimension7 new java.awt.Dimension( 120, 30 )
@@ -103,14 +103,53 @@ new FormModel {
 						"minimumSize": &Dimension9 new java.awt.Dimension( 120, 30 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "flightRouteScrollPane"
+						name: "flightRoutesTableScrollPane2"
 						"preferredSize": &Dimension10 new java.awt.Dimension( 300, 100 )
 						"minimumSize": &Dimension11 new java.awt.Dimension( 300, 100 )
 						"maximumSize": &Dimension12 new java.awt.Dimension( 300, 100 )
 						"enabled": false
 						"opaque": false
 						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "flightRouteTable"
+							name: "flightRoutesTable"
+							"opaque": false
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 3
+					"gridx": 2
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "120, 376"
+					"$rowSpecs": "center:67"
+					"$hGap": 10
+					"$alignTop": true
+					"$alignLeft": true
+				} ) {
+					name: "flightsPanel"
+					"preferredSize": #Dimension4
+					"minimumSize": #Dimension5
+					"maximumSize": #Dimension6
+					"opaque": false
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "flightLabel"
+						"text": "Vuelos:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension7
+						"maximumSize": #Dimension8
+						"minimumSize": #Dimension9
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "flightsTableScrollPane"
+						"preferredSize": #Dimension10
+						"minimumSize": #Dimension11
+						"maximumSize": #Dimension12
+						"enabled": false
+						"opaque": false
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "flightsTable"
 							"opaque": false
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -118,7 +157,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
-					"gridy": 3
+					"gridy": 4
 				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 					name: "vSpacer2"
@@ -138,7 +177,7 @@ new FormModel {
 					"columns": 3
 					"hgap": 10
 				} ) {
-					name: "selectClientPanel"
+					name: "selectCustomerPanel"
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "clientLabel"
@@ -146,7 +185,7 @@ new FormModel {
 						"cursor": #Cursor0
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "customerComboBox2"
+						name: "customerComboBox"
 						"minimumSize": #Dimension1
 						"preferredSize": #Dimension2
 						"opaque": false
@@ -182,7 +221,7 @@ new FormModel {
 					"$alignLeft": true
 					"$rowSpecs": "center:10"
 				} ) {
-					name: "firstRowPanel"
+					name: "firstRowCustomerPanel"
 					"preferredSize": new java.awt.Dimension( 510, 30 )
 					"minimumSize": new java.awt.Dimension( 510, 30 )
 					"opaque": false
@@ -199,6 +238,9 @@ new FormModel {
 						name: "seatTypeComboBox"
 						"minimumSize": new java.awt.Dimension( 100, 30 )
 						"preferredSize": new java.awt.Dimension( 120, 30 )
+						auxiliary() {
+							"JavaCodeGenerator.typeParameters": "EnumTipoAsiento"
+						}
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -243,7 +285,7 @@ new FormModel {
 					"$alignTop": true
 					"$alignLeft": true
 				} ) {
-					name: "secondRowPanel"
+					name: "secondRowCustomerPanel"
 					"preferredSize": new java.awt.Dimension( 510, 30 )
 					"minimumSize": new java.awt.Dimension( 510, 30 )
 					"maximumSize": new java.awt.Dimension( 510, 510 )
@@ -299,7 +341,7 @@ new FormModel {
 					"$alignTop": true
 					"$alignLeft": true
 				} ) {
-					name: "firstRowPanel3"
+					name: "passengersPanel"
 					"preferredSize": #Dimension4
 					"minimumSize": #Dimension5
 					"maximumSize": #Dimension6
@@ -343,7 +385,7 @@ new FormModel {
 						"value": "West"
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "createFlightBtn"
+						name: "createReservationBtn"
 						"text": "+ Reservar"
 						"opaque": false
 					}, new FormLayoutConstraints( class java.lang.String ) {
