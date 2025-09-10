@@ -146,55 +146,6 @@ public class AddPassenger extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
-            //======== panel1 ========
-            {
-                panel1.setLayout(new MigLayout(
-                    "hidemode 3",
-                    // columns
-                    "[fill]" +
-                    "[fill]",
-                    // rows
-                    "[]" +
-                    "[]" +
-                    "[]"));
-            }
-            InfoUserPanel2.add(panel1, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //======== panel2 ========
-            {
-                panel2.setLayout(new MigLayout(
-                    "hidemode 3",
-                    // columns
-                    "[fill]" +
-                    "[fill]" +
-                    "[18,fill]",
-                    // rows
-                    "[]" +
-                    "[]" +
-                    "[]"));
-            }
-            InfoUserPanel2.add(panel2, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //======== panel3 ========
-            {
-                panel3.setLayout(new MigLayout(
-                    "hidemode 3",
-                    // columns
-                    "[fill]" +
-                    "[fill]",
-                    // rows
-                    "[]" +
-                    "[]" +
-                    "[]"));
-            }
-            InfoUserPanel2.add(panel3, new GridBagConstraints(3, 3, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-
             //======== secondRowPanel2 ========
             {
                 secondRowPanel2.setPreferredSize(new Dimension(510, 30));

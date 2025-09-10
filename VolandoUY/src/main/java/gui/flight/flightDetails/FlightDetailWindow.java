@@ -30,40 +30,33 @@ public class FlightDetailWindow extends JFrame {
         loadFlightDetails(flight, reservations);
     }
     private void loadFlightDetails(FlightDTO flight, List<BookFlightDTO> reservations) {
-        // Ahora solo hasta "Cliente"
-        String[] cols = {"Nombre", "Ruta", "Aerolínea", "Salida", "Duración",
-                "Econ. máx", "Bus. máx", "Creado", "Cliente"};
+        String[] cols = {"ID Reserva", "Cliente", "Tickets"};
         NonEditableTableModel model = new NonEditableTableModel(cols, 0);
 
-        // Fila de vuelo
-        model.addRow(new Object[] {
-                safe(flight.getName()),
-                safe(flight.getFlightRouteName()),
-                safe(flight.getAirlineNickname()),
-                flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "",
-                formatDuration(flight.getDuration()),
-                flight.getMaxEconomySeats(),
-                flight.getMaxBusinessSeats(),
-                flight.getCreatedAt() != null ? flight.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "",
-                "-" // Cliente vacío en la fila de vuelo
-        });
-
-        // Filas de reservas
-        if (reservations != null) {
+        if (reservations != null && !reservations.isEmpty()) {
             for (BookFlightDTO r : reservations) {
-                model.addRow(new Object[] {
-                        "-", "-", "-", "-", "-", "-", "-", "-",
-                        safe(r.getCustomerNickname()) // directo del DTO
+                model.addRow(new Object[]{
+                        r.getId(),
+                        safe(r.getCustomerNickname()),
+                        r.getTicketIds() != null ? r.getTicketIds().toString() : "-"
                 });
             }
         } else {
-            // Si no hay reservas, agregar una fila indicándolo
-            model.addRow(new Object[] {
-                    "-", "-", "-", "-", "-", "-", "-", "-",
-                    "No hay reservas"
-            });
+            model.addRow(new Object[]{"-", "No hay reservas", "-"});
         }
 
+        tablaRutaVuelo.setModel(model);
+        tablaRutaVuelo.setRowHeight(28);
+        tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int[] columnWidths = {100, 200, 300};
+        for (int i = 0; i < columnWidths.length; i++) {
+            tablaRutaVuelo.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+        }
+        label1.setText("Nombre del vuelo: " + safe(flight.getName()));
+        label2.setText("Ruta: " + safe(flight.getFlightRouteName()) + " | Aerolínea: " + safe(flight.getAirlineNickname()));
+        label3.setText("Salida: " +
+                (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A")
+                + " | Duración: " + formatDuration(flight.getDuration()));
         tablaRutaVuelo.setModel(model);
         tablaRutaVuelo.setRowHeight(28);
         tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -83,6 +76,9 @@ public class FlightDetailWindow extends JFrame {
         // Generated using JFormDesigner Evaluation license - Nahuel
         scrollPane1 = new JScrollPane();
         tablaRutaVuelo = new JTable();
+        label1 = new JLabel();
+        label2 = new JLabel();
+        label3 = new JLabel();
 
         //======== this ========
         var contentPane = getContentPane();
@@ -93,7 +89,22 @@ public class FlightDetailWindow extends JFrame {
             scrollPane1.setViewportView(tablaRutaVuelo);
         }
         contentPane.add(scrollPane1);
-        scrollPane1.setBounds(20, 25, 460, 260);
+        scrollPane1.setBounds(20, 110, 460, 215);
+
+        //---- label1 ----
+        label1.setText("Nombre del vuelo:");
+        contentPane.add(label1);
+        label1.setBounds(25, 5, 650, label1.getPreferredSize().height);
+
+        //---- label2 ----
+        label2.setText("Otro dato del vuelo:");
+        contentPane.add(label2);
+        label2.setBounds(25, 25, 650, label2.getPreferredSize().height);
+
+        //---- label3 ----
+        label3.setText("Un dato m\u00e1s del vuelo:");
+        contentPane.add(label3);
+        label3.setBounds(25, 45, 650, label3.getPreferredSize().height);
 
         {
             // compute preferred size
@@ -118,5 +129,8 @@ public class FlightDetailWindow extends JFrame {
     // Generated using JFormDesigner Evaluation license - Nahuel
     private JScrollPane scrollPane1;
     private JTable tablaRutaVuelo;
+    private JLabel label1;
+    private JLabel label2;
+    private JLabel label3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

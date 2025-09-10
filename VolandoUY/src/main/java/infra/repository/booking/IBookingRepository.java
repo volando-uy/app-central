@@ -12,4 +12,7 @@ public interface IBookingRepository {
     void saveBookflightWithTicketsAndAddToSeats(BookFlight bookFlight, List<Ticket> savedTickets, List<Seat> seats, Customer customer);
     BookFlight getFullBookingById(Long id);
     List<BookFlightDTO> findDTOsByCustomerNickname(String nickname);
+    List<BookFlight> findByCustomerNickname(String nickname);
+    List<BookFlight> findByFlightName(String flightName);
+
 }

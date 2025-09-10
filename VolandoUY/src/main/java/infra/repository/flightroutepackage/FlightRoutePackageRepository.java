@@ -1,8 +1,11 @@
 package infra.repository.flightroutepackage;
 
 import app.DBConnection;
+import domain.models.buypackage.BuyPackage;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import jakarta.persistence.EntityManager;
+
+import java.util.List;
 
 public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRepository implements IFlightRoutePackageRepository{
     public FlightRoutePackageRepository(){
@@ -48,6 +51,17 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
             return count > 0;
         }
     }
-
+    public List<BuyPackage> findByCustomerNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT DISTINCT bp FROM BuyPackage bp " +
+                                    "LEFT JOIN FETCH bp.customer c " +
+                                    "LEFT JOIN FETCH bp.bookFlights bf " +
+                                    "LEFT JOIN FETCH bp.flightRoutePackage frp " +
+                                    "WHERE c.nickname = :nickname", BuyPackage.class)
+                    .setParameter("nickname", nickname)
+                    .getResultList();
+        }
+    }
 
 }
