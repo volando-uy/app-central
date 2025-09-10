@@ -29,7 +29,6 @@ import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
-import net.miginfocom.swing.*;
 import java.util.List;
 
 /**

@@ -27,72 +27,61 @@ import shared.utils.NonEditableTableModel;
  */
 public class FlightRouteDetailWindow extends JFrame {
     private final IFlightController flightController;
+    private final FlightRouteDTO route;
     public FlightRouteDetailWindow(FlightRouteDTO route, IFlightController flightController) {
         this.flightController = flightController;
+        this.route = route;
         initComponents();
-
 
         setTitle("Detalle de Ruta");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 400);
+        setSize(900, 500);
         setLocationRelativeTo(getOwner());
 
+        // Llenar labels con datos de la ruta
+        label1.setText("Nombre: " + safe(route.getName()));
+        label2.setText("Descripción: " + safe(route.getDescription()));
+        label3.setText("Creación: " +
+                (route.getCreatedAt() != null
+                        ? route.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        : ""));
+        //labelAirline.setText("Aerolínea: " + safe(route.getAirlineName()));
+        //labelPriceTourist.setText("Turista: $" + route.getPriceTouristClass());
+        //labelPriceBusiness.setText("Ejecutivo: $" + route.getPriceBusinessClass());
+        //labelPriceExtra.setText("Equipaje extra: $" + route.getPriceExtraUnitBaggage());
+
+        // Configurar tabla SOLO para vuelos
         String[] columnNames = {
-                "Nombre", "Descripción", "Fecha de creación",
-                "Precio Turista", "Precio Ejecutivo", "Precio Extra Equipaje", "Vuelo Asociado"
+                "Nombre vuelo", "Fecha salida", "Duración (min)",
+                "Asientos turista", "Asientos ejecutivo", "Creado"
         };
         NonEditableTableModel model = new NonEditableTableModel(columnNames, 0);
-        model.setColumnIdentifiers(columnNames);
-
-        model.addRow(new Object[]{
-                route.getName(),
-                route.getDescription(),
-                route.getCreatedAt() != null ? route.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "",
-                "$" + route.getPriceTouristClass(),
-                "$" + route.getPriceBusinessClass(),
-                "$" + route.getPriceExtraUnitBaggage(),
-                "-"   // vacío en la fila de ruta
-        });
 
         if (route.getFlightsNames() != null && !route.getFlightsNames().isEmpty()) {
             for (String vuelo : route.getFlightsNames()) {
-                model.addRow(new Object[]{
-                        "Doble", "click", "para", "detalle", "de vuelo", "", vuelo
-                });
-            }
-        }
-
-        tablaRutaVuelo.setModel(model);
-        tablaRutaVuelo.setRowHeight(28);
-        tablaRutaVuelo.setFillsViewportHeight(true);
-        tablaRutaVuelo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tablaRutaVuelo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int row = tablaRutaVuelo.getSelectedRow();
-                    String vuelo = (String) tablaRutaVuelo.getValueAt(row, 6); // columna de vuelos
-                    if (vuelo != null && !vuelo.equals("-")) {
-                        try {
-                            // Obtener detalles del vuelo desde el controlador
-                            FlightDTO flight = flightController.getFlightDetailsByName(vuelo);
-
-                            // Abrir ventana de detalle (sin reservas por ahora)
-                            FlightDetailWindow detalle = new FlightDetailWindow(flight, null);
-                            detalle.setVisible(true);
-
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(
-                                    FlightRouteDetailWindow.this,
-                                    "Error al abrir detalle del vuelo: " + ex.getMessage(),
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE
-                            );
-                        }
-                    }
+                try {
+                    FlightDTO flight = flightController.getFlightDetailsByName(vuelo);
+                    model.addRow(new Object[]{
+                            flight.getName(),
+                            flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "",
+                            flight.getDuration(),
+                            flight.getMaxEconomySeats(),
+                            flight.getMaxBusinessSeats(),
+                            flight.getCreatedAt() != null ? flight.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""
+                    });
+                } catch (Exception ex) {
+                    model.addRow(new Object[]{vuelo, "Error al cargar", "-", "-", "-", "-"});
                 }
             }
-        });
+        }
+        tablaVuelos.setModel(model);
+        tablaVuelos.setRowHeight(28);
+        tablaVuelos.setFillsViewportHeight(true);
+        tablaVuelos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // 🚀 evita que se achiquen
+        int[] columnWidths = {150, 150, 120, 140, 150, 120};
+        for (int i = 0; i < columnWidths.length; i++) {
+            tablaVuelos.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+        }
     }
 
     private String safe(String text) {
@@ -103,7 +92,10 @@ public class FlightRouteDetailWindow extends JFrame {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Nahuel
         scrollPane1 = new JScrollPane();
-        tablaRutaVuelo = new JTable();
+        tablaVuelos = new JTable();
+        label1 = new JLabel();
+        label2 = new JLabel();
+        label3 = new JLabel();
 
         //======== this ========
         var contentPane = getContentPane();
@@ -111,10 +103,25 @@ public class FlightRouteDetailWindow extends JFrame {
 
         //======== scrollPane1 ========
         {
-            scrollPane1.setViewportView(tablaRutaVuelo);
+            scrollPane1.setViewportView(tablaVuelos);
         }
         contentPane.add(scrollPane1);
-        scrollPane1.setBounds(20, 25, 460, 260);
+        scrollPane1.setBounds(25, 115, 460, 260);
+
+        //---- label1 ----
+        label1.setText("Nombre de la ruta de vuelo:");
+        contentPane.add(label1);
+        label1.setBounds(35, 15, 450, 20);
+
+        //---- label2 ----
+        label2.setText("Creaci\u00f3n:");
+        contentPane.add(label2);
+        label2.setBounds(35, 35, 450, 20);
+
+        //---- label3 ----
+        label3.setText("Aerol\u00ednea:");
+        contentPane.add(label3);
+        label3.setBounds(35, 55, 445, 20);
 
         {
             // compute preferred size
@@ -138,6 +145,9 @@ public class FlightRouteDetailWindow extends JFrame {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - Nahuel
     private JScrollPane scrollPane1;
-    private JTable tablaRutaVuelo;
+    private JTable tablaVuelos;
+    private JLabel label1;
+    private JLabel label2;
+    private JLabel label3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

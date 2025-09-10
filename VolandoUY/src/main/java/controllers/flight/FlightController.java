@@ -1,8 +1,11 @@
 package controllers.flight;
 
+import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.services.booking.IBookingService;
 import domain.services.flight.IFlightService;
+import gui.flight.flightDetails.FlightDetailWindow;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
