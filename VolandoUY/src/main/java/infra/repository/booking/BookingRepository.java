@@ -140,6 +140,46 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             return q.getResultList();
         }
     }
+    public List<BookFlight> findByCustomerNickname(String nickname) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            return em.createQuery(
+                            "SELECT DISTINCT bf FROM BookFlight bf " +
+                                    "LEFT JOIN FETCH bf.customer c " +
+                                    "LEFT JOIN FETCH bf.tickets t " +
+                                    "WHERE c.nickname = :nickname", BookFlight.class)
+                    .setParameter("nickname", nickname)
+                    .getResultList();
+        }
+    }
+    public List<BookFlight> findByFlightName(String flightName) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<BookFlight> bfList = em.createQuery(
+                            "SELECT DISTINCT bf FROM BookFlight bf " +
+                                    "LEFT JOIN FETCH bf.customer c " +
+                                    "LEFT JOIN FETCH bf.tickets t " +
+                                    "LEFT JOIN FETCH t.seat s " +
+                                    "LEFT JOIN FETCH s.flight f " +        // join al vuelo
+                                    "LEFT JOIN FETCH t.basicLuggages bl " +
+                                    "LEFT JOIN FETCH t.extraLuggages el " +
+                                    "WHERE f.name = :flightName", BookFlight.class)
+                    .setParameter("flightName", flightName)
+                    .getResultList();
+
+            // Forzar inicialización
+            for (BookFlight bf : bfList) {
+                if (bf.getCustomer() != null) bf.getCustomer().getNickname();
+                if (bf.getTickets() != null) {
+                    for (Ticket t : bf.getTickets()) {
+                        if (t.getSeat() != null) t.getSeat().isAvailable();
+                        if (t.getBasicLuggages() != null) t.getBasicLuggages().size();
+                        if (t.getExtraLuggages() != null) t.getExtraLuggages().size();
+                    }
+                }
+            }
+
+            return bfList;
+        }
+    }
 }
 
 /**
