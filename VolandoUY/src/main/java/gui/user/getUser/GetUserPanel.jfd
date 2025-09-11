@@ -17,7 +17,7 @@ new FormModel {
 					name: "scrollPane1"
 					"border": new javax.swing.border.LineBorder( sfield java.awt.Color darkGray, 1, false )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-						"$columnSpecs": "33, 140"
+						"$columnSpecs": "0, 144"
 						"$rowSpecs": "0"
 						"$hGap": 5
 						"$vGap": 5
@@ -26,16 +26,10 @@ new FormModel {
 					} ) {
 						name: "panel13"
 						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "reloadUserTableLabel"
-							"text": "\ud83d\udd04"
+							name: "label5"
+							"text": "Buscar"
 							"font": new java.awt.Font( "Inter", 0, 12 )
 							"foreground": new java.awt.Color( 95, 99, 104, 255 )
-							"preferredSize": new java.awt.Dimension( 17, 17 )
-							"minimumSize": new java.awt.Dimension( 17, 17 )
-							"maximumSize": new java.awt.Dimension( 17, 17 )
-							"horizontalAlignment": 0
-							"horizontalTextPosition": 0
-							"cursor": new java.awt.Cursor( 12 )
 						}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
 							name: "cmbTipo"
