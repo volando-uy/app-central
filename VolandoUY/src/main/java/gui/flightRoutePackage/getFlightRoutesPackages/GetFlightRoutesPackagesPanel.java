@@ -145,7 +145,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         vSpacer17 = new JPanel(null);
         PackageinfoPanel = new JPanel();
         packageLabel = new JLabel();
@@ -266,7 +266,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel vSpacer17;
     private JPanel PackageinfoPanel;
     private JLabel packageLabel;

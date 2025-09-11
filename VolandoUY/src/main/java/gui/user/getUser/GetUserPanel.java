@@ -9,8 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Method;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.border.EtchedBorder;
@@ -37,8 +37,7 @@ import domain.dtos.ticket.TicketDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
-
-import java.util.List;
+import gui.flightRoute.details.FlightRouteDetailWindow;
 
 /**
  * @author AparicioQuian
@@ -53,32 +52,90 @@ public class GetUserPanel extends JPanel {
     private final ITicketController ticketController;
     private final ISeatController seatController;
 
+    // --------- constantes ----------
     private static final String CARD_EMPTY   = "EMPTY";
     private static final String CARD_AIRLINE = "AIRLINE";
     private static final String CARD_CLIENT  = "CLIENT";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+    // --------- modelos de tablas ----------
     private DefaultTableModel modelUsuarios;
     private DefaultTableModel modelRutas;
     private DefaultTableModel modelReservas;
     private DefaultTableModel modelPaquetes;
 
+    // --------- estado selección ----------
     private String usuarioSeleccionadoTipo = null;
     private String usuarioSeleccionadoNick = null;
-    private final java.util.Map<String, String[]> routeEndsCache = new java.util.HashMap<>();
+    private final Map<String, String[]> routeEndsCache = new HashMap<>();
 
-    // detalle reserva
+    // --------- header dinámico (manual, NO JFD) ----------
+    private JPanel headerCards;        // contenedor con CardLayout (reusa headerDatos)
+    private JPanel headerClientePanel; // card cliente
+    private JPanel headerAirlinePanel; // card aerolínea
+
+    // labels aerolínea (manuales; los de cliente son los de JFD: name, tipo, email, doc)
+    private JLabel aName;
+    private JLabel aTipo;
+    private JLabel aEmail;
+    private JLabel aWeb;
+    private JLabel aDesc;
+
+    // --------- detalle reserva (manual) ----------
     private JPanel detalleReservaPanel;
     private JLabel lblDetTitulo, lblDetVuelo, lblDetRuta, lblDetFechaHora, lblDetTotal;
     private JTable tblSeats;
     private DefaultTableModel modelSeats;
 
-    // detalle ruta
+    // --------- detalle ruta (manual) ----------
     private JPanel panelDetalleRuta, airlineBody;
     private JLabel rlTitulo, rlRuta, rlOrigen, rlDestino, rlEstado, rlPrecioExtra;
     private JTable tblDetalleRuta;
     private DefaultTableModel modelDetalleRuta;
 
+    // --------- UI generada por JFormDesigner ----------
+    private JSplitPane splitPane1;
+    private JPanel panel4;
+    private JScrollPane scrollPane1;
+    private JPanel panel13;
+    private JLabel label5;
+    private JComboBox<String> cmbTipo;
+    private JScrollPane scrollPane2;
+    private JTable tblUsuarios;
+    private JPanel panel5;
+
+    // este panel lo reusamos como contenedor de cards
+    private JPanel headerDatos;
+
+    // labels de CLIENTE (los provee JFD)
+    private JLabel name;
+    private JLabel tipo;
+    private JLabel email;
+    private JLabel doc;
+
+    private JPanel cardsPanel;
+    private JPanel cardEmpty;
+    private JLabel label4;
+    private JPanel airline;
+    private JPanel panel9;
+    private JButton btnDetalleRuta;
+    private JScrollPane scrollPane3;
+    private JTable tblRutas;
+    private JPanel client;
+    private JTabbedPane tabbedPane1;
+    private JPanel panelReservas;
+    private JPanel panelToolbarReserva;
+    private JButton btnDetalleReserva;
+    private JScrollPane scrollPaneReservas;
+    private JTable tblReservas;
+    private JPanel panelPaquetes;
+    private JPanel panelToolbarPaquete;
+    private JButton btnDetallePaquete;
+    private JScrollPane scrollPanePaquetes;
+    private JTable tblPaquetes;
+    private FlowLayout flowLayout1;
+
+    // --------- ctor ----------
     public GetUserPanel(
             IUserController userController,
             IFlightRouteController flightRouteController,
@@ -97,26 +154,32 @@ public class GetUserPanel extends JPanel {
         this.buyPackageController = buyPackageController;
         this.ticketController = ticketController;
         this.seatController = seatController;
+
         initComponents();
 
         setLayout(new BorderLayout());
         add(splitPane1, BorderLayout.CENTER);
 
+        // construye el header dinámico sobre el panel generado por JFD
+        buildHeaderCards();
+
         postInitWireUp();
+
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
-        // Sacar borde del JFD
         try { panel4.setBorder(null); } catch (Exception ignored) {}
     }
 
-    // ---------- wiring ----------
+    // ---------- wiring inicial ----------
     private void postInitWireUp() {
         cmbTipo.setModel(new DefaultComboBoxModel<>(new String[]{"Todos", "Usuario", "Aerolínea"}));
         cmbTipo.setSelectedIndex(0);
 
-        modelUsuarios = new DefaultTableModel(new Object[]{"Nombre", "Documento", "Email", "Tipo", "Nickname"}, 0) {
+        modelUsuarios = new DefaultTableModel(new Object[]{"Tipo", "Nombre", "Nickname"}, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         tblUsuarios.setModel(modelUsuarios);
+        tblUsuarios.setAutoCreateRowSorter(true);
+        tblUsuarios.getTableHeader().setReorderingAllowed(false);
 
         modelRutas = new DefaultTableModel(new Object[]{"Ruta", "Origen", "Destino", "Estado" }, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
@@ -167,6 +230,79 @@ public class GetUserPanel extends JPanel {
         });
     }
 
+    // ---------- header dinámico ----------
+    private void buildHeaderCards() {
+        // usamos headerDatos (creado por JFD) como contenedor de tarjetas
+        headerDatos.removeAll();
+        headerDatos.setLayout(new CardLayout());
+        headerCards = headerDatos;
+
+        // Card CLIENTE: reutiliza labels existentes
+        headerClientePanel = new JPanel(new GridLayout(2, 2));
+        headerClientePanel.setOpaque(false);
+        headerClientePanel.add(name);
+        headerClientePanel.add(tipo);
+        headerClientePanel.add(email);
+        headerClientePanel.add(doc);
+
+        // Card AEROLÍNEA: labels nuevos
+        headerAirlinePanel = new JPanel(new GridLayout(3, 2));
+        headerAirlinePanel.setOpaque(false);
+        aName = new JLabel("Nombre");
+        aTipo = new JLabel("Tipo");
+        aEmail = new JLabel("Email");
+        aWeb  = new JLabel("Web");
+        aDesc = new JLabel("Descripción");
+
+        headerAirlinePanel.add(aName);
+        headerAirlinePanel.add(aTipo);
+        headerAirlinePanel.add(aEmail);
+        headerAirlinePanel.add(aWeb);
+        headerAirlinePanel.add(aDesc);
+        headerAirlinePanel.add(new JLabel(""));
+
+        headerCards.add(headerClientePanel, CARD_CLIENT);
+        headerCards.add(headerAirlinePanel, CARD_AIRLINE);
+
+        showHeaderCard(CARD_CLIENT);
+    }
+
+    private void showHeaderCard(String key) {
+        ((CardLayout) headerCards.getLayout()).show(headerCards, key);
+        headerCards.revalidate();
+        headerCards.repaint();
+    }
+
+    private void headerClienteSet(String n, String t, String e, String d) {
+        name.setText("Nombre: " + nz(n));
+        tipo.setText("Tipo: " + nz(t));
+        email.setText("Email: " + nz(e));
+        doc.setText("Documento: " + nz(d));
+        showHeaderCard(CARD_CLIENT);
+    }
+
+    private void headerAirlineSet(Object airlineDTO) {
+        String n   = callGetterString(airlineDTO, "getName");
+        String e   = callGetterString(airlineDTO, "getMail","getEmail");
+        String web = callGetterString(airlineDTO, "getWebsite","getWeb","getUrl","getSite");
+        String d   = callGetterString(airlineDTO, "getDescription","getDesc");
+
+        aName.setText("Nombre: " + nz(n));
+        aTipo.setText("Tipo: Aerolínea");
+        aEmail.setText("Email: " + nz(e));
+        aWeb.setText("Web: " + (web.isBlank() ? "-" : web));
+        aDesc.setText("Descripción: " + (d.isBlank() ? "-" : d));
+        showHeaderCard(CARD_AIRLINE);
+    }
+
+    private void headerDatosReset() {
+        name.setText("Nombre");
+        tipo.setText("Tipo");
+        email.setText("Email");
+        doc.setText("Documento");
+        showHeaderCard(CARD_CLIENT);
+    }
+
     // ---------- usuarios ----------
     private void reloadUsuarios() {
         String filtro = Objects.toString(cmbTipo.getSelectedItem(), "Todos");
@@ -178,13 +314,8 @@ public class GetUserPanel extends JPanel {
                 for (BaseCustomerDTO c : customers) {
                     String nick = nz(c.getNickname());
                     if (nick.isBlank()) continue;
-                    modelUsuarios.addRow(new Object[]{
-                            nz(c.getName()) + " " + nz(c.getSurname()),
-                            (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim(),
-                            nz(c.getMail()),
-                            "Usuario",
-                            nick
-                    });
+                    String nombre = (nz(c.getName()) + " " + nz(c.getSurname())).trim();
+                    modelUsuarios.addRow(new Object[]{ "Usuario", nombre, nick });
                 }
             }
             if ("Todos".equalsIgnoreCase(filtro) || "Aerolínea".equalsIgnoreCase(filtro)) {
@@ -192,7 +323,7 @@ public class GetUserPanel extends JPanel {
                 for (BaseAirlineDTO a : airlines) {
                     String nick = nz(a.getNickname());
                     if (nick.isBlank()) continue;
-                    modelUsuarios.addRow(new Object[]{ nz(a.getName()), "", nz(a.getMail()), "Aerolínea", nick });
+                    modelUsuarios.addRow(new Object[]{ "Aerolínea", nz(a.getName()), nick });
                 }
             }
             adjustDynamicWidthAndHeightToTable(tblUsuarios);
@@ -209,13 +340,15 @@ public class GetUserPanel extends JPanel {
         showCard(CARD_EMPTY);
     }
 
+
     private void onUsuarioSeleccionado() {
         int v = tblUsuarios.getSelectedRow();
         if (v < 0) return;
 
         int r = tblUsuarios.convertRowIndexToModel(v);
-        usuarioSeleccionadoTipo = Objects.toString(modelUsuarios.getValueAt(r, 3), "");
-        usuarioSeleccionadoNick = Objects.toString(modelUsuarios.getValueAt(r, 4), "").trim();
+        // Nueva disposición de columnas: 0=Tipo, 1=Nombre, 2=Nickname
+        usuarioSeleccionadoTipo = Objects.toString(modelUsuarios.getValueAt(r, 0), "");
+        usuarioSeleccionadoNick = Objects.toString(modelUsuarios.getValueAt(r, 2), "").trim();
 
         if (usuarioSeleccionadoNick.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Este registro no tiene nickname.",
@@ -232,14 +365,18 @@ public class GetUserPanel extends JPanel {
         try {
             if (usuarioSeleccionadoTipo.equalsIgnoreCase("Aerolínea")) {
                 BaseAirlineDTO a = userController.getAirlineSimpleDetailsByNickname(usuarioSeleccionadoNick);
-                headerDatosSet(nz(a.getName()), "Aerolínea", nz(a.getMail()), "");
+                headerAirlineSet(a);                       // usa tus labels de aerolínea (web/desc/email)
                 loadAirlineRoutes(usuarioSeleccionadoNick);
                 showCard(CARD_AIRLINE);
             } else {
-                String nombre   = Objects.toString(modelUsuarios.getValueAt(r, 0), "");
-                String docTxt   = Objects.toString(modelUsuarios.getValueAt(r, 1), "");
-                String emailTxt = Objects.toString(modelUsuarios.getValueAt(r, 2), "");
-                headerDatosSet(nombre, "Cliente", emailTxt, docTxt);
+                // Cliente: ahora levantamos todos los datos vía controller (no desde la tabla)
+                CustomerDTO c = userController.getCustomerDetailsByNickname(usuarioSeleccionadoNick);
+                String nombre   = c == null ? Objects.toString(modelUsuarios.getValueAt(r, 1), "")
+                        : (nz(c.getName()) + " " + nz(c.getSurname())).trim();
+                String docTxt   = c == null ? "" : (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim();
+                String emailTxt = c == null ? "" : nz(c.getMail());
+
+                headerClienteSet(nombre, "Cliente", emailTxt, docTxt);
 
                 loadCustomerReservations(usuarioSeleccionadoNick);
                 loadCustomerPackages(usuarioSeleccionadoNick);
@@ -250,6 +387,7 @@ public class GetUserPanel extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private static String enumToString(Enum<?> e) { return e == null ? "" : e.name(); }
 
@@ -273,57 +411,33 @@ public class GetUserPanel extends JPanel {
 
     private void abrirDetalleRuta() {
         int v = tblRutas.getSelectedRow();
-        if (v < 0) { JOptionPane.showMessageDialog(this, "Seleccioná una ruta"); return; }
-        int r = tblRutas.convertRowIndexToModel(v);
-        String routeName = Objects.toString(modelRutas.getValueAt(r, 0), "").trim();
-        if (routeName.isEmpty()) { JOptionPane.showMessageDialog(this, "Ruta inválida"); return; }
-
-        FlightRouteDTO dto;
-        try {
-            dto = flightRouteController.getFlightRouteDetailsByName(routeName);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo cargar la ruta: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        if (v < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccioná una ruta");
             return;
         }
-        ensureDetalleRutaUI();
+        int r = tblRutas.convertRowIndexToModel(v);
+        String routeName = Objects.toString(modelRutas.getValueAt(r, 0), "").trim();
+        if (routeName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ruta inválida");
+            return;
+        }
 
-        rlTitulo.setText("Detalle de ruta: " + routeName);
-        String origen  = callGetterString(dto, "getOriginCityName","getOrigin");
-        String destino = callGetterString(dto, "getDestinationCityName","getDestination");
-        String estado  = callGetterString(dto, "getStatus");
-        String extra   = callGetterNumber(dto, "getPriceExtraUnitBaggage");
-        rlRuta.setText("Ruta: " + routeName);
-        rlOrigen.setText("Origen: " + (origen.isBlank()? "-" : origen));
-        rlDestino.setText("Destino: " + (destino.isBlank()? "-" : destino));
-        rlEstado.setText("Estado: " + (estado.isBlank()? "-" : estado));
-        rlPrecioExtra.setText("Equipaje extra (unidad): " + (extra.isBlank()? "-" : extra));
-
-        modelDetalleRuta.setRowCount(0);
         try {
-            var flights = flightController.getAllFlightsSimpleDetailsByRouteName(routeName);
-            if (flights != null) {
-                for (var f : flights) {
-                    String fname = callGetterString(f, "getName");
-                    String fecha = callGetterDate(f,  "getDepartureDate","getDate");
-                    String hora  = callGetterString(f, "getDepartureTime","getTime");
-                    String est   = callGetterString(f, "getStatus","getState");
-                    if (hora != null && hora.contains(":")) {
-                        String[] tp = hora.split(":",3);
-                        if (tp.length>=2) hora = tp[0]+":"+tp[1];
-                    }
-                    if (fecha != null && fecha.contains("T")) fecha = fecha.split("T",2)[0];
-                    modelDetalleRuta.addRow(new Object[]{ fname==null? "-" : fname,
-                            (fecha==null || fecha.isBlank()? "-" : fecha),
-                            (hora==null  || hora.isBlank()? "-" : hora),
-                            (est==null   || est.isBlank()? "-" : est)});
-                }
-            }
-        } catch (Exception ignored) { }
+            // Traemos el DTO de la ruta
+            FlightRouteDTO dto = flightRouteController.getFlightRouteDetailsByName(routeName);
 
-        panelDetalleRuta.setVisible(true);
-        airlineBody.revalidate();
-        airlineBody.repaint();
+            // Abrimos la ventana de detalle de RUTA
+            SwingUtilities.invokeLater(() -> {
+                JFrame win = new FlightRouteDetailWindow(dto, flightController);
+                win.setVisible(true);
+            });
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo cargar la ruta: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void ensureDetalleRutaUI() {
@@ -393,7 +507,6 @@ public class GetUserPanel extends JPanel {
         model.setRowCount(0);
 
         for (BookFlightDTO reserva : reservas) {
-
             int ticketsCount = (reserva != null && reserva.getTicketIds() != null) ? reserva.getTicketIds().size() : 0;
             String flights = "";
             if (reserva != null && reserva.getTicketIds() != null) {
@@ -503,12 +616,11 @@ public class GetUserPanel extends JPanel {
         adjustDynamicWidthAndHeightToTable(tblSeats);
     }
 
-
     private void fillDetalleReserva(BookFlightDTO booking) {
         String totalTxt = String.valueOf(booking.getTotalPrice());
         String fechaTxt = booking.getCreatedAt() != null ? String.valueOf(booking.getCreatedAt()) : "-";
 
-        // Agarramos un ticket cualquiera, todos pertenecen al mismo vuelo
+        // Un ticket cualquiera (mismo vuelo)
         TicketDTO t = ticketController.getTicketDetailsById(booking.getTicketIds().get(0));
         if (t == null) return;
         SeatDTO s = seatController.getSeatDetailsById(t.getSeatId());
@@ -585,6 +697,7 @@ public class GetUserPanel extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /** Construye un panel de texto con el detalle del paquete. */
     private JComponent detallePaqueteAsText(FlightRoutePackageDTO p) {
         if (p == null) {
@@ -595,12 +708,11 @@ public class GetUserPanel extends JPanel {
             return new JScrollPane(ta);
         }
 
-        // Lecturas seguras usando tus helpers
         String code   = callGetterString(p, "getCode");
         String name   = callGetterString(p, "getName");
         String desc   = callGetterString(p, "getDescription");
         String days   = callGetterNumber(p, "getValidityPeriodDays");
-        String disc   = callGetterNumber(p, "getDiscount"); // puede venir 0.15 o 15; lo muestro tal cual
+        String disc   = callGetterNumber(p, "getDiscount");
         String rutas  = "";
         try {
             var list = p.getFlightRouteNames();
@@ -622,27 +734,14 @@ public class GetUserPanel extends JPanel {
         return new JScrollPane(ta);
     }
 
-    // ---------- header ----------
-    private void headerDatosSet(String n, String t, String e, String d) {
-        name.setText("Nombre: " + nz(n));
-        tipo.setText("Tipo: " + nz(t));
-        email.setText("Email: " + nz(e));
-        doc.setText("Documento: " + nz(d));
-    }
-    private void headerDatosReset() {
-        name.setText("Nombre");
-        tipo.setText("Tipo");
-        email.setText("Nombre");
-        doc.setText("Nombre");
-    }
-
     private void showCard(String key) { ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key); }
 
     // ---------- utils tablas ----------
     private void adjustDynamicWidthAndHeightToTable(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         int tableWidth = 0;
-        // Ancho
+
+        // ancho
         for (int col = 0; col < table.getColumnCount(); col++) {
             TableColumn column = table.getColumnModel().getColumn(col);
             int preferredWidth = 0;
@@ -665,7 +764,7 @@ public class GetUserPanel extends JPanel {
             tableWidth += preferredWidth;
         }
 
-        // Alto
+        // alto
         int minRows = 5;
         int visibleRows = Math.max(table.getRowCount(), minRows);
         table.setPreferredSize(new Dimension(
@@ -719,6 +818,7 @@ public class GetUserPanel extends JPanel {
         }
         return null;
     }
+
     private String callGetterDate(Object target, String... candidates) {
         Object v = callGetter(target, candidates);
         if (v == null) return "";
@@ -767,7 +867,7 @@ public class GetUserPanel extends JPanel {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         splitPane1 = new JSplitPane();
         panel4 = new JPanel();
         scrollPane1 = new JScrollPane();
@@ -815,11 +915,15 @@ public class GetUserPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-                0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-                . BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-                red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-                beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+ 
+                panel4.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
+                swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
+                .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
+                ,java.awt.Font.BOLD,12),java.awt.Color.red),panel4. getBorder
+                ()));panel4. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
+                .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
+                ();}});
+ 
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -1024,41 +1128,11 @@ public class GetUserPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
+ 
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+
+ 
     // Generated using JFormDesigner Evaluation license - Ignacio Suarez
-    private JSplitPane splitPane1;
-    private JPanel panel4;
-    private JScrollPane scrollPane1;
-    private JPanel panel13;
-    private JLabel reloadUserTableLabel;
-    private JComboBox cmbTipo;
-    private JScrollPane scrollPane2;
-    private JTable tblUsuarios;
-    private JPanel panel5;
-    private JPanel headerDatos;
-    private JLabel name;
-    private JLabel tipo;
-    private JLabel email;
-    private JLabel doc;
-    private JPanel cardsPanel;
-    private JPanel cardEmpty;
-    private JLabel label4;
-    private JPanel airline;
-    private JPanel panel9;
-    private JButton btnDetalleRuta;
-    private JScrollPane scrollPane3;
-    private JTable tblRutas;
-    private JPanel client;
-    private JTabbedPane tabbedPane1;
-    private JPanel panelReservas;
-    private JPanel panelToolbarReserva;
-    private JButton btnDetalleReserva;
-    private JScrollPane scrollPaneReservas;
-    private JTable tblReservas;
-    private JPanel panelPaquetes;
-    private JPanel panelToolbarPaquete;
-    private JButton btnDetallePaquete;
-    private JScrollPane scrollPanePaquetes;
-    private JTable tblPaquetes;
-    private FlowLayout flowLayout1;
+   
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
