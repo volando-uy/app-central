@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,7 +53,6 @@ public class BookFlightPanel extends JPanel {
     private List<FlightRouteDTO> currentFlightRoutes = new ArrayList<>();
     private boolean areAirlinesLoading = false;
 
-    // Solo para formatear fechas mostradas en tablas
     private static final DateTimeFormatter DF_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public BookFlightPanel(IUserController userController,
@@ -67,7 +67,7 @@ public class BookFlightPanel extends JPanel {
         initComponents();          // ← autogenerado
         initPassengersTable();
         initRoutesTable();
-        initLuggageWidgets();      // ← combos/campos de equipaje
+        initLuggageWidgets();
         loadAirlines();
         loadClients();
         loadSeatTypes();
@@ -75,13 +75,14 @@ public class BookFlightPanel extends JPanel {
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
 
-    /* =====================  CARGAS INICIALES  ===================== */
+    /* ======= INIT ======= */
 
     private void initPassengersTable() {
         passsengerTable.setModel(new DefaultTableModel(
                 new Object[][]{}, new String[]{"Tipo Doc", "Documento", "Nombre", "Apellido"}) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         });
+        passsengerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void initRoutesTable() {
@@ -94,24 +95,21 @@ public class BookFlightPanel extends JPanel {
     }
 
     private void initLuggageWidgets() {
-        // Modelos correctos para los combos de equipaje
         basicLuggageCatetTypeComboBox3.setModel(new DefaultComboBoxModel<>(EnumEquipajeBasico.values()));
         extraCategoryTypeComboBox2.setModel(new DefaultComboBoxModel<>(EnumCategoria.values()));
-
-        // Default
         basicLuggageCatetTypeComboBox3.setSelectedItem(EnumEquipajeBasico.BOLSO);
         extraCategoryTypeComboBox2.setSelectedItem(EnumCategoria.MALETA);
-
-        // Campos numéricos: solo dígitos
-        addDigitsOnlyFilter(basicLuggageTextField2);
-        addDigitsOnlyFilter(extraLuggageTextField);
+        addDigitsAlphaFilter(basicLuggageTextField2);
+        addDigitsAlphaFilter(extraLuggageTextField);
+        basicLuggageTextField2.setText("1");
+        extraLuggageTextField.setText("0");
     }
 
-    private void addDigitsOnlyFilter(JTextField tf) {
+    private void addDigitsAlphaFilter(JTextField tf) {
         tf.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override public void keyTyped(java.awt.event.KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '\b') e.consume();
+                if (!Character.isDigit(c) && !Character.isAlphabetic(c) && c != ' ' && c != '\b') e.consume();
             }
         });
     }
@@ -121,6 +119,44 @@ public class BookFlightPanel extends JPanel {
         seatTypeComboBox.addItem(EnumTipoAsiento.EJECUTIVO);
         seatTypeComboBox.setSelectedIndex(0);
     }
+
+    private void initListeners() {
+        airlineComboBox.addActionListener(e -> {
+            if (areAirlinesLoading) return;
+            loadFlightRoutesForSelectedAirline();
+        });
+
+        numTicketsTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override public void keyTyped(java.awt.event.KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '\b') e.consume();
+            }
+        });
+
+        flightRoutesTable.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) {
+                String flightRouteName = String.valueOf(
+                        flightRoutesTable.getValueAt(flightRoutesTable.getSelectedRow(), 0));
+                loadFlightsTableByFlightRouteName(flightRouteName);
+            }
+        });
+
+        airlineLabel.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { loadAirlines(); }
+        });
+
+        clientLabel.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { loadClients(); }
+        });
+
+        addPassengerLabel.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { openAddPassengerDialog(); }
+        });
+
+        createReservationBtn.addActionListener(this::onReserveAction);
+    }
+
+    /* ======= LOAD ======= */
 
     private void loadAirlines() {
         areAirlinesLoading = true;
@@ -152,41 +188,6 @@ public class BookFlightPanel extends JPanel {
         }
     }
 
-    /* =====================  LISTENERS  ===================== */
-
-    private void initListeners() {
-        airlineComboBox.addActionListener(e -> {
-            if (areAirlinesLoading) return;
-            loadFlightRoutesForSelectedAirline();
-        });
-
-        addDigitsOnlyFilter(numTicketsTextField);
-
-        flightRoutesTable.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                String flightRouteName = String.valueOf(
-                        flightRoutesTable.getValueAt(flightRoutesTable.getSelectedRow(), 0));
-                loadFlightsTableByFlightRouteName(flightRouteName);
-            }
-        });
-
-        airlineLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { loadAirlines(); }
-        });
-
-        clientLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { loadClients(); }
-        });
-
-        addPassengerLabel.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { openAddPassengerDialog(); }
-        });
-
-        createReservationBtn.addActionListener(e -> onReserve());
-    }
-
-    /* =====================  CARGA DE TABLAS  ===================== */
-
     private void loadFlightRoutesForSelectedAirline() {
         String airline = (String) airlineComboBox.getSelectedItem();
         if (airline == null || airline.isBlank()) {
@@ -194,10 +195,10 @@ public class BookFlightPanel extends JPanel {
             return;
         }
         try {
-            List<FlightRouteDTO> flightRoutesDTOs =
-                    flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airline);
-            currentFlightRoutes = flightRoutesDTOs;
-            updateFlightRoutesTable(flightRoutesDTOs);
+            List<FlightRouteDTO> list = flightRouteController
+                    .getAllFlightRoutesDetailsByAirlineNickname(airline);
+            currentFlightRoutes = list;
+            updateFlightRoutesTable(list);
             if (!currentFlightRoutes.isEmpty()) flightRoutesTable.setRowSelectionInterval(0, 0);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar rutas: " + ex.getMessage(),
@@ -209,9 +210,9 @@ public class BookFlightPanel extends JPanel {
 
     private void loadFlightsTableByFlightRouteName(String flightRouteName) {
         try {
-            List<FlightDTO> flightsDTOs = flightController.getAllFlightsDetailsByRouteName(flightRouteName);
-            currentFlights = flightsDTOs;
-            updateFlightsTable(flightsDTOs);
+            List<FlightDTO> list = flightController.getAllFlightsDetailsByRouteName(flightRouteName);
+            currentFlights = list;
+            updateFlightsTable(list);
             if (!currentFlights.isEmpty()) flightsTable.setRowSelectionInterval(0, 0);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar vuelos: " + ex.getMessage(),
@@ -235,7 +236,7 @@ public class BookFlightPanel extends JPanel {
             data[i][4] = money(fr.getPriceTouristClass());
             data[i][5] = money(fr.getPriceBusinessClass());
             data[i][6] = money(fr.getPriceExtraUnitBaggage());
-            LocalDate created = fr.getCreatedAt(); // LocalDate en tu DTO
+            LocalDate created = fr.getCreatedAt();
             data[i][7] = (created != null) ? created.format(DF_DATE) : "";
         }
 
@@ -256,8 +257,9 @@ public class BookFlightPanel extends JPanel {
             data[i][1] = f.getFlightRouteName();
             data[i][2] = f.getDepartureTime();
             data[i][3] = f.getDuration();
-            data[i][4] = f.getMaxBusinessSeats();
-            data[i][5] = f.getMaxEconomySeats();
+            // turista = economy, ejecutivo = business (corregido)
+            data[i][4] = f.getMaxEconomySeats();
+            data[i][5] = f.getMaxBusinessSeats();
             LocalDate created = (f.getCreatedAt() != null) ? f.getCreatedAt().toLocalDate() : null;
             data[i][6] = (created != null) ? created.format(DF_DATE) : "";
         }
@@ -268,11 +270,12 @@ public class BookFlightPanel extends JPanel {
         flightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    /* =====================  RESERVA  ===================== */
+    /* ======= RESERVA ======= */
+
+    private void onReserveAction(ActionEvent e) { onReserve(); }
 
     private void onReserve() {
         try {
-            // Cliente
             String customerNickname = parseNickname((String) customerComboBox.getSelectedItem());
             if (customerNickname == null) {
                 JOptionPane.showMessageDialog(this, "Debes seleccionar un cliente", "Error",
@@ -280,7 +283,6 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            // Ruta y vuelo
             FlightRouteDTO flightRouteDTO = getSelectedFlightRoute();
             if (flightRouteDTO == null) {
                 JOptionPane.showMessageDialog(this, "Debes seleccionar una ruta de vuelo", "Error",
@@ -294,7 +296,6 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            // Pasajeros
             DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
             int passengerCount = m.getRowCount();
             if (passengerCount <= 0) {
@@ -311,18 +312,16 @@ public class BookFlightPanel extends JPanel {
             }
             if (passengerCount != desired) {
                 JOptionPane.showMessageDialog(this,
-                        "Ingresaste " + desired + " pasaje(s) pero hay " + passengerCount + " pasajero(s) cargado(s).\n" +
-                                "La cantidad debe coincidir.",
+                        "Ingresaste " + desired + " pasaje(s) pero hay " + passengerCount + " pasajero(s) cargado(s).",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            // Validaciones por fila
+
             for (int i = 0; i < passengerCount; i++) {
                 Object tipo = m.getValueAt(i, 0);
                 String doc = String.valueOf(m.getValueAt(i, 1));
                 String nombre = String.valueOf(m.getValueAt(i, 2));
                 String ape = String.valueOf(m.getValueAt(i, 3));
-
                 if (nombre == null || nombre.isBlank() || ape == null || ape.isBlank()) {
                     JOptionPane.showMessageDialog(this,
                             "Fila " + (i + 1) + ": Nombre y Apellido son obligatorios.",
@@ -337,13 +336,26 @@ public class BookFlightPanel extends JPanel {
                 }
             }
 
-            // Equipaje seleccionado en GUI
-            int basicUnits = parseNonNegativeInt(basicLuggageTextField2.getText(), 1); // por defecto 1 básico
-            int extraUnits = parseNonNegativeInt(extraLuggageTextField.getText(), 0);
+            EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
+
+            if (seatType == EnumTipoAsiento.EJECUTIVO &&
+                    (flightDTO.getMaxBusinessSeats() == null || flightDTO.getMaxBusinessSeats() <= 0)) {
+                JOptionPane.showMessageDialog(this, "No hay asientos ejecutivos disponibles en este vuelo.",
+                        "Sin disponibilidad", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (seatType == EnumTipoAsiento.TURISTA &&
+                    (flightDTO.getMaxEconomySeats() == null || flightDTO.getMaxEconomySeats() <= 0)) {
+                JOptionPane.showMessageDialog(this, "No hay asientos turista disponibles en este vuelo.",
+                        "Sin disponibilidad", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int basicUnits = parseNonNegativeIntOrNo(basicLuggageTextField2.getText(), 1);
+            int extraUnits = parseNonNegativeIntOrNo(extraLuggageTextField.getText(), 0);
             EnumEquipajeBasico basicCat = (EnumEquipajeBasico) basicLuggageCatetTypeComboBox3.getSelectedItem();
             EnumCategoria extraCat = (EnumCategoria) extraCategoryTypeComboBox2.getSelectedItem();
 
-            // ticketMap
             Map<BaseTicketDTO, List<LuggageDTO>> ticketMap = new LinkedHashMap<>();
             for (int i = 0; i < passengerCount; i++) {
                 String doc = String.valueOf(m.getValueAt(i, 1));
@@ -355,49 +367,44 @@ public class BookFlightPanel extends JPanel {
                 t.setSurname(ape);
                 t.setNumDoc(doc);
 
+                // <<< fuerza tipo de asiento en el ticket (enum y string como fallback)
+                applyTicketSeatType(t, seatType);
+
                 List<LuggageDTO> l = new LinkedList<>();
 
-                // básicos (>=1 normalmente; usamos basicUnits)
-                int bu = Math.max(0, basicUnits);
-                for (int k = 0; k < bu; k++) {
-                    BasicLuggageDTO basic = new BasicLuggageDTO();
-                    basic.setWeight(8.0);
-                    basic.setCategory(basicCat != null ? basicCat : EnumEquipajeBasico.BOLSO);
-                    l.add(basic);
+                for (int k = 0; k < Math.max(0, basicUnits); k++) {
+                    BasicLuggageDTO b = new BasicLuggageDTO();
+                    b.setWeight(8.0);
+                    b.setCategory(basicCat != null ? basicCat : EnumEquipajeBasico.BOLSO);
+                    l.add(b);
                 }
-
-                // extras
-                int eu = Math.max(0, extraUnits);
-                for (int k = 0; k < eu; k++) {
+                for (int k = 0; k < Math.max(0, extraUnits); k++) {
                     ExtraLuggageDTO ex = new ExtraLuggageDTO();
                     ex.setWeight(10.0);
                     ex.setCategory(extraCat != null ? extraCat : EnumCategoria.MALETA);
                     l.add(ex);
                 }
-
                 ticketMap.put(t, l);
             }
 
-            // Precio total
-            EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
-            double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
+            double unitPrice = (seatType == EnumTipoAsiento.EJECUTIVO)
                     ? nzDouble(flightRouteDTO.getPriceBusinessClass())
                     : nzDouble(flightRouteDTO.getPriceTouristClass());
-
             double extraPrice = nzDouble(flightRouteDTO.getPriceExtraUnitBaggage());
             double total = (unitPrice * passengerCount) + (extraUnits * passengerCount * extraPrice);
 
-            // Reserva
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
             booking.setTotalPrice(total);
-            booking.setCreatedAt(LocalDateTime.now()); // ← fecha actual desde GUI
+
+            // <<< fuerza createdAt (varios nombres / tipos) y también seatType a nivel booking
+            applyBookingMetadata(booking, seatType);
 
             BaseBookFlightDTO created = bookingController.createBooking(
                     booking, ticketMap, customerNickname, flightDTO.getName()
             );
 
             JOptionPane.showMessageDialog(this,
-                    "Reserva registrada con éxito\nTotal: $" + String.format(java.util.Locale.US, "%.2f", created.getTotalPrice()),
+                    "Reserva registrada con éxito\nTotal: $" + String.format(Locale.US, "%.2f", created.getTotalPrice()),
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             resetForm();
@@ -409,32 +416,86 @@ public class BookFlightPanel extends JPanel {
         }
     }
 
-    /* =====================  HELPERS  ===================== */
+    /* ======= HELPERS (reflexión) ======= */
+
+    private void applyBookingMetadata(BaseBookFlightDTO booking, EnumTipoAsiento seatType) {
+        // createdAt: probar LocalDateTime y LocalDate con diferentes nombres
+        LocalDateTime now = LocalDateTime.now();
+        trySet(booking, "setCreatedAt", LocalDateTime.class, now);
+        trySet(booking, "setCreationDate", LocalDateTime.class, now);
+        trySet(booking, "setFechaCreacion", LocalDateTime.class, now);
+        trySet(booking, "setCreated_at", LocalDateTime.class, now);
+
+        LocalDate today = now.toLocalDate();
+        trySet(booking, "setCreatedAt", LocalDate.class, today);
+        trySet(booking, "setCreationDate", LocalDate.class, today);
+        trySet(booking, "setFechaCreacion", LocalDate.class, today);
+        trySet(booking, "setCreated_at", LocalDate.class, today);
+
+        // seatType a nivel booking (por si el servicio lo toma desde aquí)
+        trySet(booking, "setSeatType", EnumTipoAsiento.class, seatType);
+        trySet(booking, "setTypeSeat", EnumTipoAsiento.class, seatType);
+        trySet(booking, "setTipoAsiento", EnumTipoAsiento.class, seatType);
+        trySet(booking, "setSeat", EnumTipoAsiento.class, seatType);
+        trySet(booking, "setType", EnumTipoAsiento.class, seatType);
+
+        // fallback String
+        String st = seatType != null ? seatType.name() : "TURISTA";
+        trySet(booking, "setSeatType", String.class, st);
+        trySet(booking, "setTypeSeat", String.class, st);
+        trySet(booking, "setTipoAsiento", String.class, st);
+        trySet(booking, "setSeat", String.class, st);
+        trySet(booking, "setType", String.class, st);
+    }
+
+    private void applyTicketSeatType(BaseTicketDTO t, EnumTipoAsiento seatType) {
+        // enum primero
+        trySet(t, "setSeatType", EnumTipoAsiento.class, seatType);
+        trySet(t, "setTypeSeat", EnumTipoAsiento.class, seatType);
+        trySet(t, "setTipoAsiento", EnumTipoAsiento.class, seatType);
+        trySet(t, "setSeat", EnumTipoAsiento.class, seatType);
+        trySet(t, "setType", EnumTipoAsiento.class, seatType);
+
+        // fallback String
+        String st = seatType != null ? seatType.name() : "TURISTA";
+        trySet(t, "setSeatType", String.class, st);
+        trySet(t, "setTypeSeat", String.class, st);
+        trySet(t, "setTipoAsiento", String.class, st);
+        trySet(t, "setSeat", String.class, st);
+        trySet(t, "setType", String.class, st);
+    }
+
+    private <T> void trySet(Object target, String methodName, Class<T> paramType, T value) {
+        try {
+            Method m = target.getClass().getMethod(methodName, paramType);
+            m.invoke(target, value);
+        } catch (Exception ignored) {
+        }
+    }
+
+    /* ======= misc helpers ======= */
 
     private boolean isCI(Object tipoDoc) {
         return tipoDoc != null && String.valueOf(tipoDoc).equalsIgnoreCase("CI");
     }
 
-    private boolean isEightDigits(String s) {
-        return s != null && s.matches("\\d{8}");
-    }
+    private boolean isEightDigits(String s) { return s != null && s.matches("\\d{8}"); }
 
     private int getDesiredTickets() {
         try {
             String txt = numTicketsTextField.getText();
             return (txt == null || txt.isBlank()) ? -1 : Integer.parseInt(txt.trim());
-        } catch (Exception e) {
-            return -1;
-        }
+        } catch (Exception e) { return -1; }
     }
 
-    private int parseNonNegativeInt(String s, int def) {
-        try {
-            int v = Integer.parseInt(s == null ? "" : s.trim());
-            return Math.max(0, v);
-        } catch (Exception e) {
-            return Math.max(0, def);
-        }
+    private int parseNonNegativeIntOrNo(String s, int defWhenEmpty) {
+        if (s == null) return Math.max(0, defWhenEmpty);
+        String t = s.trim();
+        if (t.isEmpty()) return Math.max(0, defWhenEmpty);
+        String tl = t.toLowerCase(Locale.ROOT);
+        if (tl.equals("no") || tl.equals("n")) return 0;
+        try { return Math.max(0, Integer.parseInt(t)); }
+        catch (Exception e) { return Math.max(0, defWhenEmpty); }
     }
 
     private String parseNickname(String comboItem) {
@@ -458,28 +519,20 @@ public class BookFlightPanel extends JPanel {
     }
 
     private void resetForm() {
-        // pasajeros
         DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
         for (int i = m.getRowCount() - 1; i >= 0; i--) m.removeRow(i);
         ((DefaultTableModel) passsengerTable.getModel()).setRowCount(0);
-
-        // cantidades
-        basicLuggageTextField2.setText("");
-        extraLuggageTextField.setText("");
-
-        // cliente
+        basicLuggageTextField2.setText("1");
+        extraLuggageTextField.setText("0");
         if (customerComboBox.getItemCount() > 0 && customerComboBox.getSelectedIndex() < 0) {
             customerComboBox.setSelectedIndex(0);
         }
     }
 
-    private String money(Double d) {
-        return (d == null) ? "" : String.format(java.util.Locale.US, "$ %.2f", d);
-    }
-
+    private String money(Double d) { return (d == null) ? "" : String.format(Locale.US, "$ %.2f", d); }
     private double nzDouble(Double d) { return d == null ? 0.0 : d; }
 
-    /* =====================  DIALOGO PASAJEROS  ===================== */
+    /* ======= diálogo pasajeros ======= */
 
     private void openAddPassengerDialog() {
         Window owner = SwingUtilities.getWindowAncestor(this);
@@ -491,7 +544,6 @@ public class BookFlightPanel extends JPanel {
         d.setResizable(false);
         d.setLocationRelativeTo(owner);
 
-        // Botón por defecto (Enter)
         d.getRootPane().setDefaultButton(form.getConfirmButton());
 
         form.getConfirmButton().addActionListener(ev -> {
@@ -508,7 +560,6 @@ public class BookFlightPanel extends JPanel {
                         "Datos incompletos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
             if (isCI(tipo) && !isEightDigits(doc)) {
                 JOptionPane.showMessageDialog(d,
                         "Para Tipo Doc = CI, el documento debe tener exactamente 8 dígitos.",
@@ -524,9 +575,7 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            DefaultTableModel m =
-                    (DefaultTableModel) passsengerTable.getModel();
-
+            DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
             if (m.getRowCount() >= desired) {
                 JOptionPane.showMessageDialog(d,
                         "Ya cargaste " + desired + " pasajero(s). No podés agregar más.",
@@ -534,12 +583,7 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            m.addRow(new Object[]{
-                    String.valueOf(tipo),
-                    doc.trim(),
-                    nombre.trim(),
-                    apellido.trim()
-            });
+            m.addRow(new Object[]{ String.valueOf(tipo), doc.trim(), nombre.trim(), apellido.trim() });
 
             if (m.getRowCount() == desired) {
                 JOptionPane.showMessageDialog(d,
@@ -550,7 +594,6 @@ public class BookFlightPanel extends JPanel {
             d.dispose();
         });
 
-        // Cerrar con ESC
         KeyStroke esc = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         d.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(esc, "close");
         d.getRootPane().getActionMap().put("close", new AbstractAction() {
@@ -559,6 +602,7 @@ public class BookFlightPanel extends JPanel {
 
         d.setVisible(true);
     }
+
 
     private void initComponents() {
 
