@@ -16,7 +16,6 @@ import shared.utils.ValidatorUtil;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 
 

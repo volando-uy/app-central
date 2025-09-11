@@ -154,6 +154,9 @@ new FormModel {
 					name: "basicLuggageTypeComboBox"
 					"minimumSize": #Dimension0
 					"preferredSize": #Dimension1
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "EnumEquipajeBasico"
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
@@ -183,18 +186,18 @@ new FormModel {
 					"minimumSize": new java.awt.Dimension( 70, 15 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
-					name: "extraLuggageTypeComboBox2"
+					name: "extraLuggageTypeComboBox"
 					"minimumSize": new java.awt.Dimension( 100, 30 )
 					"preferredSize": new java.awt.Dimension( 120, 30 )
 					auxiliary() {
-						"JavaCodeGenerator.typeParameters": "EnumTipoAsiento"
+						"JavaCodeGenerator.typeParameters": "EnumEquipajeExtra"
 					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "extraLuggageLabel"
-					"text": "Equipaje Extra:"
+					"text": "Cant. Equi. Extra:"
 					"horizontalAlignment": 4
 					"horizontalTextPosition": 4
 					"preferredSize": new java.awt.Dimension( 120, 30 )
@@ -203,12 +206,15 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
 				} )
-				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "extraLuggageTextField"
+				add( new FormComponent( "javax.swing.JSpinner" ) {
+					name: "extraLuggageUnitsSpinner"
 					"preferredSize": new java.awt.Dimension( 120, 30 )
 					"minimumSize": new java.awt.Dimension( 100, 30 )
 					"maximumSize": new java.awt.Dimension( 100, 30 )
 					"opaque": false
+					"model": new javax.swing.SpinnerNumberModel {
+						maximum: 5
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 				} )

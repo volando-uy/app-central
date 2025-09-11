@@ -1,14 +1,10 @@
 package domain.dtos.luggage;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public abstract class LuggageDTO {
-    private double weight;
+    protected Double weight;
 }

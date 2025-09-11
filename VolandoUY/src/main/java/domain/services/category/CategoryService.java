@@ -9,6 +9,7 @@ import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,9 @@ public class CategoryService implements ICategoryService {
 
         // Validamos la entidad
         ValidatorUtil.validate(category);
+
+        // Seteamos las rutas de vuelo en que se usan
+        category.setFlightRoutes(new ArrayList<>());
 
         // Guardamos y devolvemos el DTO
         categoryRepository.save(category);

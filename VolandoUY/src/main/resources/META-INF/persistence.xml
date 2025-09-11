@@ -4,33 +4,20 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-    <persistence-unit name="VolandoAppProd" transaction-type="RESOURCE_LOCAL">
-        <!-- Proveedor JPA: Hibernate -->
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <properties>
-            <!-- Configuración de conexión JDBC para PostgreSQL -->
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-
-            <!-- Configuraciones específicas de Hibernate -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
-        </properties>
-    </persistence-unit>
     <persistence-unit name="VolandoApp" transaction-type="RESOURCE_LOCAL">
         <!-- Proveedor JPA: Hibernate -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <!-- Configuración de conexión JDBC para PostgreSQL -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/volandodb"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/volandodb2"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="4342"/>
+            <property name="jakarta.persistence.jdbc.password" value="admin"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <!-- Configuraciones específicas de Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.default_schema" value="public"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>

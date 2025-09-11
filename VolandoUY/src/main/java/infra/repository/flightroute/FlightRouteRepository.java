@@ -1,6 +1,7 @@
 package infra.repository.flightroute;
 
 import app.DBConnection;
+import domain.models.category.Category;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
@@ -107,6 +108,10 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
 
             // Add the flightroute to the relationships
             managedAirline.getFlightRoutes().add(flightRoute);
+            for (Category c : flightRoute.getCategories()) {
+                Category managedCategory = em.merge(c);
+                managedCategory.getFlightRoutes().add(flightRoute);
+            }
             em.merge(managedAirline);
 
             em.getTransaction().commit();

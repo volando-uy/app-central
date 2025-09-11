@@ -53,14 +53,19 @@ public class FlightRoute {
     @ManyToOne()
     private City destinationCity;
 
-    @ManyToMany()
+    @ManyToMany
+    @JoinTable(
+            name = "flightroute_category",
+            joinColumns = @JoinColumn(name = "flightroute_name"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     private List<Category> categories = new ArrayList<>();
 
     // RELACIÓN BIDIRECCIONAL: vuelo -> ruta
     @OneToMany(mappedBy = "flightRoute")
     private List<Flight> flights = new ArrayList<>();
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "flightRoutes")
     private List<FlightRoutePackage> inPackages = new ArrayList<>();
 
     @ManyToOne()
@@ -83,8 +88,6 @@ public class FlightRoute {
     @Override
     public String toString() {
         return "FlightRoute{" +
-                ", originCity=" + originCity +
-                ", destinationCity=" + destinationCity +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +

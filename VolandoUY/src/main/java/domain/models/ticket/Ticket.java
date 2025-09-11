@@ -1,5 +1,6 @@
 package domain.models.ticket;
 
+import domain.models.enums.EnumTipoDocumento;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.luggage.Luggage;
@@ -24,6 +25,7 @@ public class Ticket {
     private String name;
     private String surname;
     private String numDoc;
+    private EnumTipoDocumento typeDoc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_flight_id")
@@ -39,10 +41,11 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket")
     private List<ExtraLuggage> extraLuggages = new ArrayList<>();
 
-    public Ticket(String name, String surname, String numDoc) {
+    public Ticket(String name, String surname, String numDoc, EnumTipoDocumento typeDoc) {
         this.name = name;
         this.surname = surname;
         this.numDoc = numDoc;
+        this.typeDoc = typeDoc;
     }
 
     /** Helper que no rompe si las listas están en null y mantiene bidireccionalidad. */

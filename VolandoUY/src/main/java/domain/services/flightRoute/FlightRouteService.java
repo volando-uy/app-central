@@ -59,7 +59,13 @@ public class FlightRouteService implements IFlightRouteService {
         // Tira throw si ya existe
         Airline airline = userService.getAirlineByNickname(airlineNickname, true);
         City originCity = cityService.getCityByName(originCityName);
+        if (originCity == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, originCityName));
+        }
         City destinationCity = cityService.getCityByName(destinationCityName);
+        if (destinationCity == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, destinationCityName));
+        }
 
         // Crear la lista de las categorias (si es que hay)
         List<Category> categories = new ArrayList<>();

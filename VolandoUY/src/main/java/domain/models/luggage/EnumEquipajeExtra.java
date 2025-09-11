@@ -1,5 +1,5 @@
 package domain.models.luggage;
 
-public enum EnumCategoria {
+public enum EnumEquipajeExtra {
     MALETA,ANIMAL
 }

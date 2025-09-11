@@ -1,6 +1,5 @@
 package domain.models.luggage;
 
-import domain.models.bookflight.BookFlight;
 import domain.models.ticket.Ticket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,9 +16,5 @@ public final class ExtraLuggage extends Luggage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EnumCategoria category;
-
-    //Estan asociados a 1 ticket
-    @ManyToOne()
-    private Ticket ticket;
+    private EnumEquipajeExtra type;
 }

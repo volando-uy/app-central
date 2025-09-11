@@ -42,26 +42,22 @@ public class DBConnection {
         try {
             tx.begin();
 
+
+
             em.createNativeQuery("TRUNCATE TABLE airline CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE airport CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE basicluggage CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE bookflight CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE bookflight_ticket CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE buypackage CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE buypackage_bookflight CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE category CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE city CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE customer CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE customer_bookflight CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE customer_buypackage CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE extraluggage CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE flight CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE flight_seat CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE flightroute CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE flightroute_category CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE flightroutepackage CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE flightroutepackage_buypackage CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE flightroutepackage_flightroute CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE flight_route_package_join CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE seat CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE ticket CASCADE").executeUpdate();
 
