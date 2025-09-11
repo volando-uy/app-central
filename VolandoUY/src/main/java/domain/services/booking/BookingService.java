@@ -61,7 +61,7 @@ public class BookingService implements IBookingService {
         Customer customer = userService.getCustomerByNickname(userNickname,true);
 
 
-        List<Seat> availableSeats = seatService.getLimitedAvailableSeatsByFlightName(flightName, tickets.size());
+        List<Seat> availableSeats = seatService.getLimitedAvailableSeatsByFlightNameAndSeatType(flightName, tickets.size(), bookingDTO.getSeatType());
         if (availableSeats == null || availableSeats.isEmpty())
             throw new UnsupportedOperationException("No hay asientos disponibles");
         if (availableSeats.size() < tickets.size())
