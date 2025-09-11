@@ -6,7 +6,6 @@
 - Nahuel Martinez		
 - Juan Quian
 - Ignacio Suarez
-- Denis Barreto
 
 ------------
 
