@@ -72,7 +72,7 @@ public class ReservationPanel extends JPanel {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         NavPanel = new JPanel();
         createReservationBtn = new JButton();
 
@@ -91,9 +91,9 @@ public class ReservationPanel extends JPanel {
 
         //======== NavPanel ========
         {
-            NavPanel.setMinimumSize(new Dimension(640, 60));
-            NavPanel.setPreferredSize(new Dimension(640, 60));
-            NavPanel.setMaximumSize(new Dimension(640, 60));
+            NavPanel.setMinimumSize(new Dimension(640, 40));
+            NavPanel.setPreferredSize(new Dimension(640, 40));
+            NavPanel.setMaximumSize(new Dimension(640, 40));
             NavPanel.setBackground(new Color(0x386aac));
             NavPanel.setBorder(new EtchedBorder());
             NavPanel.setLayout(new GridLayout());
@@ -107,7 +107,7 @@ public class ReservationPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel NavPanel;
     private JButton createReservationBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
