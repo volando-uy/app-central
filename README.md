@@ -5,7 +5,7 @@
 - Jose Hernandez		
 - Nahuel Martinez		
 - Juan Quian
-- Ignacio Suarez
+- Ignacio Suárez
 
 ------------
 
