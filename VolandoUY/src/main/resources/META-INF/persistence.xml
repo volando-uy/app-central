@@ -25,7 +25,7 @@
             <!-- Configuración de conexión JDBC para PostgreSQL -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/volandodb"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="4342"/>
+            <property name="jakarta.persistence.jdbc.password" value="admin"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <!-- Configuraciones específicas de Hibernate -->

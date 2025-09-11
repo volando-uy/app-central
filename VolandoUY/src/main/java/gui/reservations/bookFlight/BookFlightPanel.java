@@ -387,8 +387,6 @@ public class BookFlightPanel extends JPanel {
                 ticketMap.put(t, l);
             }
 
-            // Agarrar el tipo de asiento
-            EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
             double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
                     ? nzDouble(flightRouteDTO.getPriceBusinessClass())
                     : nzDouble(flightRouteDTO.getPriceTouristClass());
