@@ -5,6 +5,8 @@
 package gui.user.getUser;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Method;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -145,6 +147,11 @@ public class GetUserPanel extends JPanel {
 
         cmbTipo.addActionListener(e -> reloadUsuarios());
         tblUsuarios.getSelectionModel().addListSelectionListener(e -> { if (!e.getValueIsAdjusting()) onUsuarioSeleccionado(); });
+
+        reloadUserTableLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) { reloadUsuarios(); }
+        });
         btnDetalleRuta.addActionListener(e -> abrirDetalleRuta());
         btnDetalleReserva.addActionListener(e -> abrirDetalleReservaEnPanel());
         btnDetallePaquete.addActionListener(e -> abrirDetallePaquete());
@@ -765,7 +772,7 @@ public class GetUserPanel extends JPanel {
         panel4 = new JPanel();
         scrollPane1 = new JScrollPane();
         panel13 = new JPanel();
-        label5 = new JLabel();
+        reloadUserTableLabel = new JLabel();
         cmbTipo = new JComboBox();
         scrollPane2 = new JScrollPane();
         tblUsuarios = new JTable();
@@ -808,12 +815,11 @@ public class GetUserPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-                ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-                .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-                . Color .red ) ,panel4. getBorder () ) ); panel4. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-                propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-                ;} } );
+                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+                0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+                . BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+                red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+                beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -823,18 +829,24 @@ public class GetUserPanel extends JPanel {
                     //======== panel13 ========
                     {
                         panel13.setLayout(new GridBagLayout());
-                        ((GridBagLayout)panel13.getLayout()).columnWidths = new int[] {0, 144, 0};
+                        ((GridBagLayout)panel13.getLayout()).columnWidths = new int[] {30, 156, 0};
                         ((GridBagLayout)panel13.getLayout()).rowHeights = new int[] {0, 0};
                         ((GridBagLayout)panel13.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
-                        ((GridBagLayout)panel13.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+                        ((GridBagLayout)panel13.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
 
-                        //---- label5 ----
-                        label5.setText("Buscar");
-                        label5.setFont(new Font("Inter", Font.PLAIN, 12));
-                        label5.setForeground(new Color(0x5f6368));
-                        panel13.add(label5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                        //---- reloadUserTableLabel ----
+                        reloadUserTableLabel.setText("\ud83d\udd04");
+                        reloadUserTableLabel.setFont(new Font("Inter", Font.PLAIN, 13));
+                        reloadUserTableLabel.setForeground(new Color(0x5f6368));
+                        reloadUserTableLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                        reloadUserTableLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                        reloadUserTableLabel.setMaximumSize(new Dimension(17, 17));
+                        reloadUserTableLabel.setMinimumSize(new Dimension(17, 17));
+                        reloadUserTableLabel.setPreferredSize(new Dimension(17, 17));
+                        reloadUserTableLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                        panel13.add(reloadUserTableLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                            new Insets(0, 0, 0, 5), 0, 0));
+                            new Insets(0, 0, 0, 0), 0, 0));
 
                         //---- cmbTipo ----
                         cmbTipo.setPreferredSize(new Dimension(110, 28));
@@ -1017,7 +1029,7 @@ public class GetUserPanel extends JPanel {
     private JPanel panel4;
     private JScrollPane scrollPane1;
     private JPanel panel13;
-    private JLabel label5;
+    private JLabel reloadUserTableLabel;
     private JComboBox cmbTipo;
     private JScrollPane scrollPane2;
     private JTable tblUsuarios;
