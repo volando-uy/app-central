@@ -2,6 +2,7 @@ package domain.services.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
 import domain.dtos.seat.SeatDTO;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
 import domain.models.seat.Seat;
 import domain.services.flight.IFlightService;
@@ -59,8 +60,8 @@ public class SeatService implements ISeatService {
     }
 
     @Override
-    public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
-        return seatRepository.getLimitedAvailableSeatsByFlightName(flightName, size);
+    public List<Seat> getLimitedAvailableSeatsByFlightNameAndSeatType(String flightName, int size, EnumTipoAsiento seatType) {
+        return seatRepository.getLimitedAvailableSeatsByFlightNameAndSeatType(flightName, size, seatType);
     }
 
     @Override

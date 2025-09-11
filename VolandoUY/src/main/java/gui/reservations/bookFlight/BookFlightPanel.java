@@ -387,7 +387,9 @@ public class BookFlightPanel extends JPanel {
                 ticketMap.put(t, l);
             }
 
-            double unitPrice = (seatType == EnumTipoAsiento.EJECUTIVO)
+            // Agarrar el tipo de asiento
+            EnumTipoAsiento seatType = (EnumTipoAsiento) seatTypeComboBox.getSelectedItem();
+            double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
                     ? nzDouble(flightRouteDTO.getPriceBusinessClass())
                     : nzDouble(flightRouteDTO.getPriceTouristClass());
             double extraPrice = nzDouble(flightRouteDTO.getPriceExtraUnitBaggage());
@@ -395,9 +397,8 @@ public class BookFlightPanel extends JPanel {
 
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
             booking.setTotalPrice(total);
-
-            // <<< fuerza createdAt (varios nombres / tipos) y también seatType a nivel booking
-            applyBookingMetadata(booking, seatType);
+            booking.setSeatType(seatType);
+            booking.setCreatedAt(LocalDateTime.now()); // ← fecha actual desde GUI
 
             BaseBookFlightDTO created = bookingController.createBooking(
                     booking, ticketMap, customerNickname, flightDTO.getName()

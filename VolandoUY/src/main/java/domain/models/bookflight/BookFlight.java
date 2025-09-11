@@ -1,6 +1,7 @@
 package domain.models.bookflight;
 
 import domain.models.buypackage.BuyPackage;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
@@ -30,6 +31,9 @@ public class BookFlight {
 
     // Fecha de compra
     private LocalDateTime created_at;
+
+    @Enumerated(EnumType.ORDINAL)
+    private EnumTipoAsiento seatType;
 
     // Si la reserva viene de un paquete o no
     @ManyToOne()

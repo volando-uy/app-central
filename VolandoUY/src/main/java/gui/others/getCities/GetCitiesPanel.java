@@ -48,48 +48,12 @@ public class GetCitiesPanel extends JPanel {
         }
 
         // 4) Config de tabla (igual que en GetUsersPanel)
-        cityTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        // 5) Ajustes de ancho/alto con la MISMA lógica que tu panel de usuarios
-        adjustDynamicWidthAndHeightToTable(cityTable);
+        cityTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         // 6) Modo de selección
         cityTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
 
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-        // Ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
+        cityTable.setModel(cityTableModel);
     }
     
     private void initListeners() {
@@ -104,7 +68,7 @@ public class GetCitiesPanel extends JPanel {
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
         vSpacer17 = new JPanel(null);
         cityInfoPanel = new JPanel();
         cityLabel = new JLabel();
@@ -122,12 +86,13 @@ public class GetCitiesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax
-        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,
-        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
-        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .
-        getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax
+        . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing
+        .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .
+        Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red
+        ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override
+        public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName (
+        ) ) )throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -231,7 +196,7 @@ public class GetCitiesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
     private JPanel vSpacer17;
     private JPanel cityInfoPanel;
     private JLabel cityLabel;
