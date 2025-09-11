@@ -21,7 +21,12 @@ import java.util.List;
 @Entity
 public class FlightRoutePackage {
 
-    @ManyToMany()
+    @ManyToMany
+    @JoinTable(
+            name = "flight_route_package_join",
+            joinColumns = @JoinColumn(name = "package_id"),
+            inverseJoinColumns = @JoinColumn(name = "flight_route_id")
+    )
     private List<FlightRoute> flightRoutes;
 
     //Tiene muchos compras de paquete

@@ -30,17 +30,17 @@ public class BookFlight {
     private double totalPrice;
 
     // Fecha de compra
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.ORDINAL)
     private EnumTipoAsiento seatType;
 
     // Si la reserva viene de un paquete o no
-    @ManyToOne()
+    @ManyToOne
     private BuyPackage buyPackage = null;
 
     // Cliente que lo reservó
-    @ManyToOne()
+    @ManyToOne
     private Customer customer;
 
     // Tiene muchos tickets

@@ -4,6 +4,7 @@ import app.DBConnection;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.luggage.BasicLuggage;
+import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
 import domain.models.ticket.Ticket;
 import domain.models.user.Customer;
@@ -38,9 +39,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             // Persistir tickets y relaciones seat/luggage ...
             for (int i = 0; i < savedTickets.size(); i++) {
                 Ticket ticket = savedTickets.get(i);
-                Seat detachedSeat = seats.get(i);
-
-                Seat managedSeat = em.getReference(Seat.class, detachedSeat.getId());
+                Seat managedSeat = em.merge(seats.get(i));
 
                 ticket.setSeat(managedSeat);
 
@@ -56,15 +55,20 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                 em.merge(bookFlight);
 
                 if (ticket.getBasicLuggages() != null) {
-                    for (domain.models.luggage.BasicLuggage b : ticket.getBasicLuggages()) {
+                    for (BasicLuggage b : ticket.getBasicLuggages()) {
                         b.setTicket(ticket);
-                        if (b.getId() == null && !em.contains(b)) em.persist(b);
+                        if (b.getId() == null && !em.contains(b)) {
+                            em.persist(b);
+                        };
                     }
                 }
+
                 if (ticket.getExtraLuggages() != null) {
-                    for (domain.models.luggage.ExtraLuggage e : ticket.getExtraLuggages()) {
+                    for (ExtraLuggage e : ticket.getExtraLuggages()) {
                         e.setTicket(ticket);
-                        if (e.getId() == null && !em.contains(e)) em.persist(e);
+                        if (e.getId() == null && !em.contains(e)) {
+                            em.persist(e);
+                        }
                     }
                 }
 
@@ -133,7 +137,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             List<BookFlight> list = em.createQuery(
                             "SELECT bf FROM BookFlight bf " +
                                     "WHERE bf.customer.nickname = :nick " +
-                                    "ORDER BY bf.created_at DESC",
+                                    "ORDER BY bf.createdAt DESC",
                             BookFlight.class
                     )
                     .setParameter("nick", nickname)
@@ -144,7 +148,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                 BookFlightDTO dto = new BookFlightDTO();
                 dto.setId(bf.getId());
                 dto.setTotalPrice(bf.getTotalPrice());
-                dto.setCreatedAt(bf.getCreated_at());
+                dto.setCreatedAt(bf.getCreatedAt());
                 out.add(dto);
             }
             return out;
@@ -177,7 +181,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
     public List<BookFlight> findByCustomerNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
-                            "SELECT DISTINCT bf FROM BookFlight bf WHERE c.nickname = :nickname", BookFlight.class)
+                            "SELECT DISTINCT bf FROM BookFlight bf JOIN FETCH bf.customer c WHERE c.nickname = :nickname", BookFlight.class)
                     .setParameter("nickname", nickname)
                     .getResultList();
         }

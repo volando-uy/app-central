@@ -11,32 +11,19 @@ import domain.dtos.bookFlight.BaseBookFlightDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
-import domain.dtos.city.CityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.luggage.BasicLuggageDTO;
-import domain.dtos.luggage.ExtraLuggageDTO;
-import domain.dtos.luggage.LuggageDTO;
+import domain.dtos.luggage.*;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.ticket.TicketDTO;
-import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
-import domain.models.bookflight.BookFlight;
-import domain.models.category.Category;
-import domain.models.city.City;
 import domain.models.enums.EnumTipoDocumento;
-import domain.models.luggage.BasicLuggage;
-import domain.models.luggage.EnumCategoria;
+import domain.models.luggage.EnumEquipajeExtra;
 import domain.models.luggage.EnumEquipajeBasico;
-import domain.models.luggage.ExtraLuggage;
-import domain.models.ticket.Ticket;
 import factory.ControllerFactory;
-import infra.repository.booking.BookingRepository;
-import infra.repository.city.CityRepository;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +32,6 @@ import utils.TestUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.jupiter.api.Assertions.*;
@@ -359,19 +345,20 @@ public class BookFlightTest {
         BaseTicketDTO t1 = new BaseTicketDTO();
         t1.setName("Customer 3");       // nombre pasajero
         t1.setSurname("Apellido3");     // apellido pasajero
-        t1.setNumDoc("34567890");       // doc pasajero (coincide con customer3)
+        t1.setDoc("34567890");       // doc pasajero (coincide con customer3)
+        t1.setDocType(EnumTipoDocumento.CI);
 
         // Equipaje del pasajero
         var luggagesT1 = new java.util.ArrayList<LuggageDTO>();
 
         // ⚠️ Asegurate que tus DTOs de equipaje tengan getters/setters (agregá @Getter/@Setter de Lombok si falta)
-        BasicLuggageDTO basic = new BasicLuggageDTO();
+        BaseBasicLuggageDTO basic = new BaseBasicLuggageDTO();
         basic.setWeight(8.0);
         basic.setCategory(EnumEquipajeBasico.BOLSO); // ajustá a tu enum real
 
-        ExtraLuggageDTO extra = new ExtraLuggageDTO();
+        BaseExtraLuggageDTO extra = new BaseExtraLuggageDTO();
         extra.setWeight(10.0);
-        extra.setCategory(EnumCategoria.MALETA); // ajustá a tu enum real
+        extra.setCategory(EnumEquipajeExtra.MALETA); // ajustá a tu enum real
 
         luggagesT1.add(basic);
         luggagesT1.add(extra);
@@ -397,7 +384,7 @@ public class BookFlightTest {
         assertEquals(100.0, created.getTotalPrice());
 
 // ====== Asserts extra fuertes ======
-        List<BookFlightDTO> persistedBookings = bookingController.findAllBookFlightDetails();
+        List<BookFlightDTO> persistedBookings = bookingController.getAllBookFlightsDetails();
 
 // 1) Hay una (y solo una) reserva persistida
         assertEquals(1, persistedBookings.size(), "Debe existir 1 reserva persistida");
@@ -419,7 +406,7 @@ public class BookFlightTest {
 // 4) Datos del ticket
         assertEquals("Customer 3", persistedTicket.getName());
         assertEquals("Apellido3", persistedTicket.getSurname());
-        assertEquals("34567890", persistedTicket.getNumDoc());
+        assertEquals("34567890", persistedTicket.getDoc());
 
 // 5) El ticket debe estar asociado a un asiento
         assertNotNull(persistedTicket.getSeatNumber(), "El seatNumber no puede ser null");
@@ -440,7 +427,7 @@ public class BookFlightTest {
 // 6.b) Validar el equipaje extra
         ExtraLuggageDTO el = persistedTicket.getExtraLuggages().get(0);
         assertEquals(10.0, el.getWeight());
-        assertEquals(EnumCategoria.MALETA, el.getCategory());
+        assertEquals(EnumEquipajeExtra.MALETA, el.getCategory());
         assertEquals(persistedTicket.getId(), el.getTicketId()  );
 
 // 7) (Opcional) Intento negativo: crear reserva sin tickets -> debe tirar

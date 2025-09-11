@@ -3,12 +3,12 @@ package domain.services.booking;
 import domain.dtos.bookFlight.BaseBookFlightDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.luggage.BasicLuggageDTO;
-import domain.dtos.luggage.ExtraLuggageDTO;
-import domain.dtos.luggage.LuggageDTO;
+import domain.dtos.luggage.*;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.flight.Flight;
+import domain.models.luggage.BasicLuggage;
+import domain.models.luggage.ExtraLuggage;
 import domain.models.luggage.Luggage;
 import domain.models.seat.Seat;
 import domain.models.ticket.Ticket;
@@ -52,6 +52,7 @@ public class BookingService implements IBookingService {
                                            String userNickname,
                                            String flightName) {
         BookFlight bookFlight = customModelMapper.map(bookingDTO, BookFlight.class);
+        bookFlight.setTickets(new ArrayList<>());
         ValidatorUtil.validate(bookFlight);
 
         if (tickets == null || tickets.isEmpty())
@@ -96,14 +97,16 @@ public class BookingService implements IBookingService {
     private Luggage mapToLuggageEntity(LuggageDTO dto) {
         if (dto == null) return null;
 
-        if (dto instanceof BasicLuggageDTO b) {
-            Luggage l =  customModelMapper.map(b, domain.models.luggage.BasicLuggage.class);
+        if (dto instanceof BaseBasicLuggageDTO b) {
+            BasicLuggage l =  customModelMapper.map(b, BasicLuggage.class);
             l.setWeight(b.getWeight());
+            l.setTicket(null);
             return l;
         }
-        if (dto instanceof ExtraLuggageDTO e) {
-            Luggage l =  customModelMapper.map(e, domain.models.luggage.ExtraLuggage.class);
+        if (dto instanceof BaseExtraLuggageDTO e) {
+            ExtraLuggage l =  customModelMapper.map(e, ExtraLuggage.class);
             l.setWeight(e.getWeight());
+            l.setTicket(null);
             return l;
         }
         throw new IllegalArgumentException("Tipo de LuggageDTO no soportado: " + dto.getClass().getName());

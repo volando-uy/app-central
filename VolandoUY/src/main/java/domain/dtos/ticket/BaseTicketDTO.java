@@ -1,6 +1,7 @@
 package domain.dtos.ticket;
 
 import domain.models.enums.EnumTipoAsiento;
+import domain.models.enums.EnumTipoDocumento;
 import lombok.*;
 
 @Getter
@@ -12,4 +13,5 @@ public class BaseTicketDTO {
     private String name;
     private String surname;
     private String numDoc;
+    private EnumTipoDocumento docType;
 }

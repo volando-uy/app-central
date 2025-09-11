@@ -9,19 +9,19 @@ import controllers.flight.IFlightController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.luggage.BaseBasicLuggageDTO;
+import domain.dtos.luggage.BaseExtraLuggageDTO;
 import domain.dtos.luggage.BasicLuggageDTO;
-import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.models.enums.EnumTipoAsiento;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.luggage.EnumCategoria;
+import domain.models.enums.EnumTipoDocumento;
 import domain.models.luggage.EnumEquipajeBasico;
+import domain.models.luggage.EnumEquipajeExtra;
 import gui.reservations.addPassenger.AddPassenger;
 
 import java.awt.*;
@@ -33,7 +33,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -78,7 +77,7 @@ public class BookFlightPanel extends JPanel {
 
     private void initPassengersTable() {
         passsengerTable.setModel(new DefaultTableModel(
-                new Object[][]{}, new String[]{"Tipo Doc", "Documento", "Nombre", "Apellido"}) {
+                new Object[][]{}, new String[]{"Tipo Doc", "Documento", "Nombre", "Apellido", "Tipo de equipaje básico", "Tipo de equipaje extra", "Cantidad de equipaje extra"}) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         });
         passsengerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -304,18 +303,23 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
+            // Iterar para validar cada pasajero
             for (int i = 0; i < passengerCount; i++) {
-                Object tipo = m.getValueAt(i, 0);
-                String doc = String.valueOf(m.getValueAt(i, 1));
-                String nombre = String.valueOf(m.getValueAt(i, 2));
-                String ape = String.valueOf(m.getValueAt(i, 3));
-                if (nombre == null || nombre.isBlank() || ape == null || ape.isBlank()) {
+                EnumTipoDocumento idType = EnumTipoDocumento.valueOf(m.getValueAt(i, 0).toString());
+                String id = String.valueOf(m.getValueAt(i, 1));
+                String name = String.valueOf(m.getValueAt(i, 2));
+                String surname = String.valueOf(m.getValueAt(i, 3));
+                EnumEquipajeBasico basicLuggageType = EnumEquipajeBasico.valueOf(m.getValueAt(i, 4).toString());
+                EnumEquipajeExtra extraLuggageType = EnumEquipajeExtra.valueOf(m.getValueAt(i, 5).toString());
+                Integer extraLuggageUnits = parseNonNegativeIntOrNo(String.valueOf(m.getValueAt(i, 6)), 0);
+                
+                if (name == null || name.isBlank() || surname == null || surname.isBlank()) {
                     JOptionPane.showMessageDialog(this,
                             "Fila " + (i + 1) + ": Nombre y Apellido son obligatorios.",
                             "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if (isCI(tipo) && !isEightDigits(doc)) {
+                if (isCI(idType) && !isEightDigits(id)) {
                     JOptionPane.showMessageDialog(this,
                             "Fila " + (i + 1) + ": para Tipo Doc = CI el documento debe tener exactamente 8 dígitos.",
                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -338,27 +342,50 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            // Mapa de tickets -> sin equipaje (listas vacías)
+            // Iterar para agregar cada pasajero al ticketMap
+            int extraLuggageCount = 0;
             Map<BaseTicketDTO, List<LuggageDTO>> ticketMap = new LinkedHashMap<>();
             for (int i = 0; i < passengerCount; i++) {
+                EnumTipoDocumento docType = EnumTipoDocumento.valueOf(m.getValueAt(i, 0).toString());
                 String doc = String.valueOf(m.getValueAt(i, 1));
-                String nombre = String.valueOf(m.getValueAt(i, 2));
-                String ape = String.valueOf(m.getValueAt(i, 3));
+                String name = String.valueOf(m.getValueAt(i, 2));
+                String surname = String.valueOf(m.getValueAt(i, 3));
+                EnumEquipajeBasico basicLuggageType = EnumEquipajeBasico.valueOf(m.getValueAt(i, 4).toString());
+                EnumEquipajeExtra extraLuggageType = EnumEquipajeExtra.valueOf(m.getValueAt(i, 5).toString());
+                Integer extraLuggageUnits = parseNonNegativeIntOrNo(String.valueOf(m.getValueAt(i, 6)), 0);
+                extraLuggageCount += extraLuggageUnits;
 
                 BaseTicketDTO t = new BaseTicketDTO();
-                t.setName(nombre);
-                t.setSurname(ape);
+                t.setName(name);
+                t.setSurname(surname);
                 t.setNumDoc(doc);
+                t.setDocType(docType);
 
-                applyTicketSeatType(t, seatType);
+                List<LuggageDTO> luggageList = new ArrayList<>();
 
-                ticketMap.put(t, new ArrayList<>()); // ← sin equipaje
+                // Create basic luggage
+                BaseBasicLuggageDTO basicLuggageDTO = new BaseBasicLuggageDTO();
+                basicLuggageDTO.setCategory(basicLuggageType);
+                basicLuggageDTO.setWeight(0.0); // default
+                luggageList.add(basicLuggageDTO);
+
+                // Create extra luggages
+                for (int x = 0; x < extraLuggageUnits; x++) {
+                    BaseExtraLuggageDTO extraLuggageDTO = new BaseExtraLuggageDTO();
+                    extraLuggageDTO.setCategory(extraLuggageType);
+                    extraLuggageDTO.setWeight(0.0); // default weight
+                    luggageList.add(extraLuggageDTO);
+
+                }
+
+                ticketMap.put(t, luggageList);
+
             }
 
             double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
                     ? nzDouble(flightRouteDTO.getPriceBusinessClass())
                     : nzDouble(flightRouteDTO.getPriceTouristClass());
-            double total = unitPrice * passengerCount;
+            double total = unitPrice * passengerCount + flightRouteDTO.getPriceExtraUnitBaggage() * extraLuggageCount;
 
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
             booking.setTotalPrice(total);
@@ -376,54 +403,9 @@ public class BookFlightPanel extends JPanel {
             resetForm();
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al registrar la reserva: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al registrar la reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             resetForm();
         }
-    }
-
-    /* ======= HELPERS (reflexión) ======= */
-
-    private void applyBookingMetadata(BaseBookFlightDTO booking, EnumTipoAsiento seatType) {
-        LocalDateTime now = LocalDateTime.now();
-        trySet(booking, "setCreatedAt", LocalDateTime.class, now);
-        trySet(booking, "setCreationDate", LocalDateTime.class, now);
-        trySet(booking, "setFechaCreacion", LocalDateTime.class, now);
-        trySet(booking, "setCreated_at", LocalDateTime.class, now);
-
-        LocalDate today = now.toLocalDate();
-        trySet(booking, "setCreatedAt", LocalDate.class, today);
-        trySet(booking, "setCreationDate", LocalDate.class, today);
-        trySet(booking, "setFechaCreacion", LocalDate.class, today);
-        trySet(booking, "setCreated_at", LocalDate.class, today);
-
-        trySet(booking, "setSeatType", EnumTipoAsiento.class, seatType);
-        trySet(booking, "setTypeSeat", EnumTipoAsiento.class, seatType);
-        trySet(booking, "setTipoAsiento", EnumTipoAsiento.class, seatType);
-        trySet(booking, "setSeat", EnumTipoAsiento.class, seatType);
-        trySet(booking, "setType", EnumTipoAsiento.class, seatType);
-
-        String st = seatType != null ? seatType.name() : "TURISTA";
-        trySet(booking, "setSeatType", String.class, st);
-        trySet(booking, "setTypeSeat", String.class, st);
-        trySet(booking, "setTipoAsiento", String.class, st);
-        trySet(booking, "setSeat", String.class, st);
-        trySet(booking, "setType", String.class, st);
-    }
-
-    private void applyTicketSeatType(BaseTicketDTO t, EnumTipoAsiento seatType) {
-        trySet(t, "setSeatType", EnumTipoAsiento.class, seatType);
-        trySet(t, "setTypeSeat", EnumTipoAsiento.class, seatType);
-        trySet(t, "setTipoAsiento", EnumTipoAsiento.class, seatType);
-        trySet(t, "setSeat", EnumTipoAsiento.class, seatType);
-        trySet(t, "setType", EnumTipoAsiento.class, seatType);
-
-        String st = seatType != null ? seatType.name() : "TURISTA";
-        trySet(t, "setSeatType", String.class, st);
-        trySet(t, "setTypeSeat", String.class, st);
-        trySet(t, "setTipoAsiento", String.class, st);
-        trySet(t, "setSeat", String.class, st);
-        trySet(t, "setType", String.class, st);
     }
 
     private <T> void trySet(Object target, String methodName, Class<T> paramType, T value) {
@@ -506,20 +488,26 @@ public class BookFlightPanel extends JPanel {
         d.getRootPane().setDefaultButton(form.getConfirmButton());
 
         form.getConfirmButton().addActionListener(ev -> {
-            Object tipo = form.getTipoDoc();
-            String doc = form.getDocumento();
-            String nombre = form.getNombre();
-            String apellido = form.getApellido();
+            EnumTipoDocumento idType = form.getIdType();
+            String id = form.getId();
+            String name = form.getName();
+            String surname = form.getSurname();
 
-            if (tipo == null || doc == null || doc.trim().isEmpty()
-                    || nombre == null || nombre.trim().isEmpty()
-                    || apellido == null || apellido.trim().isEmpty()) {
+            EnumEquipajeBasico basicLuggageType = form.getBasicLuggageType();
+            EnumEquipajeExtra extraLuggageType = form.getExtraLuggageType();
+            Integer extraLuggageUnits = form.getExtraLuggageUnits();
+
+            if (idType == null || id == null || id.trim().isEmpty()
+                    || name == null || name.trim().isEmpty()
+                    || surname == null || surname.trim().isEmpty()
+                    || basicLuggageType == null || extraLuggageType == null
+                    || extraLuggageUnits == null ) {
                 JOptionPane.showMessageDialog(d,
-                        "Completa Tipo Doc, Documento, Nombre y Apellido.",
+                        "Completa todos los datos del pasajero",
                         "Datos incompletos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            if (isCI(tipo) && !isEightDigits(doc)) {
+            if (isCI(idType) && !isEightDigits(id)) {
                 JOptionPane.showMessageDialog(d,
                         "Para Tipo Doc = CI, el documento debe tener exactamente 8 dígitos.",
                         "Documento inválido", JOptionPane.WARNING_MESSAGE);
@@ -542,7 +530,15 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            m.addRow(new Object[]{ String.valueOf(tipo), doc.trim(), nombre.trim(), apellido.trim() });
+            m.addRow(new Object[]{
+                    String.valueOf(idType),
+                    id.trim(),
+                    name.trim(),
+                    surname.trim(),
+                    basicLuggageType,
+                    extraLuggageType,
+                    extraLuggageUnits
+            });
 
             if (m.getRowCount() == desired) {
                 JOptionPane.showMessageDialog(d,

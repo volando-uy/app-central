@@ -48,7 +48,7 @@ public class Customer extends User {
     private String numDoc;
 
 
-    @ManyToMany()
+    @OneToMany(mappedBy = "customer")
     private List<BuyPackage> boughtPackages;
 
 

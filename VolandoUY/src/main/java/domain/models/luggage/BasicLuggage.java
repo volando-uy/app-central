@@ -17,9 +17,5 @@ public final class BasicLuggage extends Luggage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EnumEquipajeBasico category;
-
-    // Estan asociados a 1 ticket
-    @ManyToOne()
-    private Ticket ticket;
+    private EnumEquipajeBasico type;
 }

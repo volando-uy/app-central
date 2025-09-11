@@ -4,6 +4,7 @@ import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.seat.SeatDTO;
 import domain.models.bookflight.BookFlight;
+import domain.models.enums.EnumTipoDocumento;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
@@ -26,8 +27,8 @@ public class TicketDTO extends BaseTicketDTO {
 
     private Long bookFlightId;
 
-    public TicketDTO(Long id, String name,String surname,String numdoc) {
-        super(id, name,surname,numdoc);
+    public TicketDTO(Long id, String name, String surname, String doc, EnumTipoDocumento docType) {
+        super(id, name, surname, doc, docType);
         this.extraLuggages=null;
         this.basicLuggages=null;
         this.seatNumber=null;
