@@ -2,6 +2,7 @@ package domain.services.seat;
 
 import domain.dtos.seat.BaseSeatDTO;
 import domain.dtos.seat.SeatDTO;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.seat.Seat;
 import domain.services.ticket.ITicketService;
 
@@ -21,7 +22,7 @@ public interface ISeatService {
     boolean seatExists(Long seatId);
 
 
-    List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size);
+    List<Seat> getLimitedAvailableSeatsByFlightNameAndSeatType(String flightName, int size, EnumTipoAsiento seatType);
 
     SeatDTO getSeatDetailsById(Long id, boolean full);
 

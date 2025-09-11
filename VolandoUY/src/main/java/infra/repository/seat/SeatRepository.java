@@ -1,6 +1,7 @@
 package infra.repository.seat;
 
 import app.DBConnection;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
 import domain.models.seat.Seat;
 import jakarta.persistence.EntityManager;
@@ -40,11 +41,12 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
     }
 
     @Override
-    public List<Seat> getLimitedAvailableSeatsByFlightName(String flightName, int size) {
+    public List<Seat> getLimitedAvailableSeatsByFlightNameAndSeatType(String flightName, int size, EnumTipoAsiento seatType) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
-                            "SELECT s FROM Seat s JOIN s.flight f WHERE f.name = :name AND s.isAvailable = true", Seat.class)
+                            "SELECT s FROM Seat s JOIN s.flight f WHERE f.name = :name AND s.isAvailable = true AND s.type = :seatType", Seat.class)
                     .setParameter("name", flightName)
+                    .setParameter("seatType", seatType)
                     .setMaxResults(size)
                     .getResultList();
         }
