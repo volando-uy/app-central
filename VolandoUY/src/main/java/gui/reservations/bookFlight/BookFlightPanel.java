@@ -67,7 +67,6 @@ public class BookFlightPanel extends JPanel {
         initComponents();          // ← autogenerado
         initPassengersTable();
         initRoutesTable();
-        initLuggageWidgets();
         loadAirlines();
         loadClients();
         loadSeatTypes();
@@ -92,17 +91,6 @@ public class BookFlightPanel extends JPanel {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         });
         flightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
-
-    private void initLuggageWidgets() {
-        basicLuggageCatetTypeComboBox3.setModel(new DefaultComboBoxModel<>(EnumEquipajeBasico.values()));
-        extraCategoryTypeComboBox2.setModel(new DefaultComboBoxModel<>(EnumCategoria.values()));
-        basicLuggageCatetTypeComboBox3.setSelectedItem(EnumEquipajeBasico.BOLSO);
-        extraCategoryTypeComboBox2.setSelectedItem(EnumCategoria.MALETA);
-        addDigitsAlphaFilter(basicLuggageTextField2);
-        addDigitsAlphaFilter(extraLuggageTextField);
-        basicLuggageTextField2.setText("1");
-        extraLuggageTextField.setText("0");
     }
 
     private void addDigitsAlphaFilter(JTextField tf) {
@@ -257,7 +245,6 @@ public class BookFlightPanel extends JPanel {
             data[i][1] = f.getFlightRouteName();
             data[i][2] = f.getDepartureTime();
             data[i][3] = f.getDuration();
-            // turista = economy, ejecutivo = business (corregido)
             data[i][4] = f.getMaxEconomySeats();
             data[i][5] = f.getMaxBusinessSeats();
             LocalDate created = (f.getCreatedAt() != null) ? f.getCreatedAt().toLocalDate() : null;
@@ -351,11 +338,7 @@ public class BookFlightPanel extends JPanel {
                 return;
             }
 
-            int basicUnits = parseNonNegativeIntOrNo(basicLuggageTextField2.getText(), 1);
-            int extraUnits = parseNonNegativeIntOrNo(extraLuggageTextField.getText(), 0);
-            EnumEquipajeBasico basicCat = (EnumEquipajeBasico) basicLuggageCatetTypeComboBox3.getSelectedItem();
-            EnumCategoria extraCat = (EnumCategoria) extraCategoryTypeComboBox2.getSelectedItem();
-
+            // Mapa de tickets -> sin equipaje (listas vacías)
             Map<BaseTicketDTO, List<LuggageDTO>> ticketMap = new LinkedHashMap<>();
             for (int i = 0; i < passengerCount; i++) {
                 String doc = String.valueOf(m.getValueAt(i, 1));
@@ -367,31 +350,15 @@ public class BookFlightPanel extends JPanel {
                 t.setSurname(ape);
                 t.setNumDoc(doc);
 
-                // <<< fuerza tipo de asiento en el ticket (enum y string como fallback)
                 applyTicketSeatType(t, seatType);
 
-                List<LuggageDTO> l = new LinkedList<>();
-
-                for (int k = 0; k < Math.max(0, basicUnits); k++) {
-                    BasicLuggageDTO b = new BasicLuggageDTO();
-                    b.setWeight(8.0);
-                    b.setCategory(basicCat != null ? basicCat : EnumEquipajeBasico.BOLSO);
-                    l.add(b);
-                }
-                for (int k = 0; k < Math.max(0, extraUnits); k++) {
-                    ExtraLuggageDTO ex = new ExtraLuggageDTO();
-                    ex.setWeight(10.0);
-                    ex.setCategory(extraCat != null ? extraCat : EnumCategoria.MALETA);
-                    l.add(ex);
-                }
-                ticketMap.put(t, l);
+                ticketMap.put(t, new ArrayList<>()); // ← sin equipaje
             }
 
             double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
                     ? nzDouble(flightRouteDTO.getPriceBusinessClass())
                     : nzDouble(flightRouteDTO.getPriceTouristClass());
-            double extraPrice = nzDouble(flightRouteDTO.getPriceExtraUnitBaggage());
-            double total = (unitPrice * passengerCount) + (extraUnits * passengerCount * extraPrice);
+            double total = unitPrice * passengerCount;
 
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
             booking.setTotalPrice(total);
@@ -418,7 +385,6 @@ public class BookFlightPanel extends JPanel {
     /* ======= HELPERS (reflexión) ======= */
 
     private void applyBookingMetadata(BaseBookFlightDTO booking, EnumTipoAsiento seatType) {
-        // createdAt: probar LocalDateTime y LocalDate con diferentes nombres
         LocalDateTime now = LocalDateTime.now();
         trySet(booking, "setCreatedAt", LocalDateTime.class, now);
         trySet(booking, "setCreationDate", LocalDateTime.class, now);
@@ -431,14 +397,12 @@ public class BookFlightPanel extends JPanel {
         trySet(booking, "setFechaCreacion", LocalDate.class, today);
         trySet(booking, "setCreated_at", LocalDate.class, today);
 
-        // seatType a nivel booking (por si el servicio lo toma desde aquí)
         trySet(booking, "setSeatType", EnumTipoAsiento.class, seatType);
         trySet(booking, "setTypeSeat", EnumTipoAsiento.class, seatType);
         trySet(booking, "setTipoAsiento", EnumTipoAsiento.class, seatType);
         trySet(booking, "setSeat", EnumTipoAsiento.class, seatType);
         trySet(booking, "setType", EnumTipoAsiento.class, seatType);
 
-        // fallback String
         String st = seatType != null ? seatType.name() : "TURISTA";
         trySet(booking, "setSeatType", String.class, st);
         trySet(booking, "setTypeSeat", String.class, st);
@@ -448,14 +412,12 @@ public class BookFlightPanel extends JPanel {
     }
 
     private void applyTicketSeatType(BaseTicketDTO t, EnumTipoAsiento seatType) {
-        // enum primero
         trySet(t, "setSeatType", EnumTipoAsiento.class, seatType);
         trySet(t, "setTypeSeat", EnumTipoAsiento.class, seatType);
         trySet(t, "setTipoAsiento", EnumTipoAsiento.class, seatType);
         trySet(t, "setSeat", EnumTipoAsiento.class, seatType);
         trySet(t, "setType", EnumTipoAsiento.class, seatType);
 
-        // fallback String
         String st = seatType != null ? seatType.name() : "TURISTA";
         trySet(t, "setSeatType", String.class, st);
         trySet(t, "setTypeSeat", String.class, st);
@@ -521,8 +483,6 @@ public class BookFlightPanel extends JPanel {
         DefaultTableModel m = (DefaultTableModel) passsengerTable.getModel();
         for (int i = m.getRowCount() - 1; i >= 0; i--) m.removeRow(i);
         ((DefaultTableModel) passsengerTable.getModel()).setRowCount(0);
-        basicLuggageTextField2.setText("1");
-        extraLuggageTextField.setText("0");
         if (customerComboBox.getItemCount() > 0 && customerComboBox.getSelectedIndex() < 0) {
             customerComboBox.setSelectedIndex(0);
         }
@@ -634,16 +594,6 @@ public class BookFlightPanel extends JPanel {
         numTicketsLabel = new JLabel();
         numTicketsTextField = new JTextField();
         hSpacer8 = new JPanel(null);
-        secondRowCustomerPanel2 = new JPanel();
-        basicLuggageCatetLabel3 = new JLabel();
-        basicLuggageCatetTypeComboBox3 = new JComboBox<>();
-        basicLuggageLabel2 = new JLabel();
-        basicLuggageTextField2 = new JTextField();
-        secondRowCustomerPanel = new JPanel();
-        extraCategory = new JLabel();
-        extraCategoryTypeComboBox2 = new JComboBox<>();
-        extraLuggageLabel = new JLabel();
-        extraLuggageTextField = new JTextField();
         passengersPanel = new JPanel();
         addPassengerLabel = new JLabel();
         passengerScrollPane = new JScrollPane();
@@ -661,12 +611,12 @@ public class BookFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-        border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
-        , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
-        .BOLD ,12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
-        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
-        .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
+        .EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax
+        .swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,
+        12),java.awt.Color.red), getBorder())); addPropertyChangeListener(new java.beans
+        .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.
+        getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0};
@@ -906,114 +856,6 @@ public class BookFlightPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
-            //======== secondRowCustomerPanel2 ========
-            {
-                secondRowCustomerPanel2.setPreferredSize(new Dimension(510, 30));
-                secondRowCustomerPanel2.setMinimumSize(new Dimension(510, 30));
-                secondRowCustomerPanel2.setMaximumSize(new Dimension(510, 510));
-                secondRowCustomerPanel2.setOpaque(false);
-                secondRowCustomerPanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)secondRowCustomerPanel2.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
-                ((GridBagLayout)secondRowCustomerPanel2.getLayout()).rowHeights = new int[] {30, 0};
-                ((GridBagLayout)secondRowCustomerPanel2.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)secondRowCustomerPanel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
-
-                //---- basicLuggageCatetLabel3 ----
-                basicLuggageCatetLabel3.setText("Tipo Equipaje:");
-                basicLuggageCatetLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
-                basicLuggageCatetLabel3.setHorizontalTextPosition(SwingConstants.RIGHT);
-                basicLuggageCatetLabel3.setPreferredSize(new Dimension(120, 30));
-                basicLuggageCatetLabel3.setMaximumSize(new Dimension(70, 15));
-                basicLuggageCatetLabel3.setMinimumSize(new Dimension(70, 15));
-                secondRowCustomerPanel2.add(basicLuggageCatetLabel3, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- basicLuggageCatetTypeComboBox3 ----
-                basicLuggageCatetTypeComboBox3.setMinimumSize(new Dimension(100, 30));
-                basicLuggageCatetTypeComboBox3.setPreferredSize(new Dimension(120, 30));
-                secondRowCustomerPanel2.add(basicLuggageCatetTypeComboBox3, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- basicLuggageLabel2 ----
-                basicLuggageLabel2.setText("Cantidad Equipaje:");
-                basicLuggageLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
-                basicLuggageLabel2.setHorizontalTextPosition(SwingConstants.RIGHT);
-                basicLuggageLabel2.setPreferredSize(new Dimension(120, 30));
-                basicLuggageLabel2.setMaximumSize(new Dimension(70, 15));
-                basicLuggageLabel2.setMinimumSize(new Dimension(70, 15));
-                secondRowCustomerPanel2.add(basicLuggageLabel2, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- basicLuggageTextField2 ----
-                basicLuggageTextField2.setPreferredSize(new Dimension(120, 30));
-                basicLuggageTextField2.setMinimumSize(new Dimension(100, 30));
-                basicLuggageTextField2.setMaximumSize(new Dimension(100, 30));
-                basicLuggageTextField2.setOpaque(false);
-                secondRowCustomerPanel2.add(basicLuggageTextField2, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            InfoFlightPanel.add(secondRowCustomerPanel2, new GridBagConstraints(2, 5, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== secondRowCustomerPanel ========
-            {
-                secondRowCustomerPanel.setPreferredSize(new Dimension(510, 30));
-                secondRowCustomerPanel.setMinimumSize(new Dimension(510, 30));
-                secondRowCustomerPanel.setMaximumSize(new Dimension(510, 510));
-                secondRowCustomerPanel.setOpaque(false);
-                secondRowCustomerPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)secondRowCustomerPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
-                ((GridBagLayout)secondRowCustomerPanel.getLayout()).rowHeights = new int[] {30, 0};
-                ((GridBagLayout)secondRowCustomerPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)secondRowCustomerPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
-
-                //---- extraCategory ----
-                extraCategory.setText("Tipo EquipajeExtra:");
-                extraCategory.setHorizontalAlignment(SwingConstants.RIGHT);
-                extraCategory.setHorizontalTextPosition(SwingConstants.RIGHT);
-                extraCategory.setPreferredSize(new Dimension(120, 30));
-                extraCategory.setMaximumSize(new Dimension(70, 15));
-                extraCategory.setMinimumSize(new Dimension(70, 15));
-                secondRowCustomerPanel.add(extraCategory, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- extraCategoryTypeComboBox2 ----
-                extraCategoryTypeComboBox2.setMinimumSize(new Dimension(100, 30));
-                extraCategoryTypeComboBox2.setPreferredSize(new Dimension(120, 30));
-                secondRowCustomerPanel.add(extraCategoryTypeComboBox2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- extraLuggageLabel ----
-                extraLuggageLabel.setText("Equipaje Extra:");
-                extraLuggageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                extraLuggageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                extraLuggageLabel.setPreferredSize(new Dimension(120, 30));
-                extraLuggageLabel.setMaximumSize(new Dimension(70, 15));
-                extraLuggageLabel.setMinimumSize(new Dimension(70, 15));
-                secondRowCustomerPanel.add(extraLuggageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- extraLuggageTextField ----
-                extraLuggageTextField.setPreferredSize(new Dimension(120, 30));
-                extraLuggageTextField.setMinimumSize(new Dimension(100, 30));
-                extraLuggageTextField.setMaximumSize(new Dimension(100, 30));
-                extraLuggageTextField.setOpaque(false);
-                secondRowCustomerPanel.add(extraLuggageTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            InfoFlightPanel.add(secondRowCustomerPanel, new GridBagConstraints(2, 6, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
             //======== passengersPanel ========
             {
                 passengersPanel.setPreferredSize(new Dimension(510, 80));
@@ -1056,7 +898,7 @@ public class BookFlightPanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoFlightPanel.add(passengersPanel, new GridBagConstraints(2, 7, 1, 1, 0.0, 0.0,
+            InfoFlightPanel.add(passengersPanel, new GridBagConstraints(2, 6, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -1122,16 +964,6 @@ public class BookFlightPanel extends JPanel {
     private JLabel numTicketsLabel;
     private JTextField numTicketsTextField;
     private JPanel hSpacer8;
-    private JPanel secondRowCustomerPanel2;
-    private JLabel basicLuggageCatetLabel3;
-    private JComboBox<EnumEquipajeBasico> basicLuggageCatetTypeComboBox3;
-    private JLabel basicLuggageLabel2;
-    private JTextField basicLuggageTextField2;
-    private JPanel secondRowCustomerPanel;
-    private JLabel extraCategory;
-    private JComboBox<EnumCategoria> extraCategoryTypeComboBox2;
-    private JLabel extraLuggageLabel;
-    private JTextField extraLuggageTextField;
     private JPanel passengersPanel;
     private JLabel addPassengerLabel;
     private JScrollPane passengerScrollPane;
