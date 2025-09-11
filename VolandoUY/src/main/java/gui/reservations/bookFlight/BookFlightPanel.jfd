@@ -212,14 +212,14 @@ new FormModel {
 						"text": "Tipo asiento:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
-						"preferredSize": &Dimension13 new java.awt.Dimension( 120, 30 )
-						"maximumSize": &Dimension14 new java.awt.Dimension( 70, 15 )
-						"minimumSize": &Dimension15 new java.awt.Dimension( 70, 15 )
+						"preferredSize": new java.awt.Dimension( 120, 30 )
+						"maximumSize": new java.awt.Dimension( 70, 15 )
+						"minimumSize": new java.awt.Dimension( 70, 15 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "seatTypeComboBox"
-						"minimumSize": &Dimension16 new java.awt.Dimension( 100, 30 )
-						"preferredSize": &Dimension17 new java.awt.Dimension( 120, 30 )
+						"minimumSize": new java.awt.Dimension( 100, 30 )
+						"preferredSize": new java.awt.Dimension( 120, 30 )
 						auxiliary() {
 							"JavaCodeGenerator.typeParameters": "EnumTipoAsiento"
 						}
@@ -240,7 +240,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "numTicketsTextField"
 						"preferredSize": new java.awt.Dimension( 120, 30 )
-						"minimumSize": &Dimension18 new java.awt.Dimension( 100, 30 )
+						"minimumSize": new java.awt.Dimension( 100, 30 )
 						"maximumSize": new java.awt.Dimension( 100, 30 )
 						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -259,116 +259,6 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 4
 					"gridx": 4
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "120, 120, 120, 120"
-					"$rowSpecs": "center:30"
-					"$hGap": 10
-					"$alignTop": true
-					"$alignLeft": true
-				} ) {
-					name: "secondRowCustomerPanel2"
-					"preferredSize": &Dimension19 new java.awt.Dimension( 510, 30 )
-					"minimumSize": &Dimension20 new java.awt.Dimension( 510, 30 )
-					"maximumSize": &Dimension21 new java.awt.Dimension( 510, 510 )
-					"opaque": false
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "basicLuggageCatetLabel3"
-						"text": "Tipo Equipaje:"
-						"horizontalAlignment": 4
-						"horizontalTextPosition": 4
-						"preferredSize": #Dimension13
-						"maximumSize": #Dimension14
-						"minimumSize": #Dimension15
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "basicLuggageCatetTypeComboBox3"
-						"minimumSize": #Dimension16
-						"preferredSize": #Dimension17
-						auxiliary() {
-							"JavaCodeGenerator.typeParameters": "EnumTipoAsiento"
-						}
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 1
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "basicLuggageLabel2"
-						"text": "Cantidad Equipaje:"
-						"horizontalAlignment": 4
-						"horizontalTextPosition": 4
-						"preferredSize": &Dimension22 new java.awt.Dimension( 120, 30 )
-						"maximumSize": &Dimension23 new java.awt.Dimension( 70, 15 )
-						"minimumSize": &Dimension24 new java.awt.Dimension( 70, 15 )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 2
-					} )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "basicLuggageTextField2"
-						"preferredSize": &Dimension25 new java.awt.Dimension( 120, 30 )
-						"minimumSize": #Dimension18
-						"maximumSize": &Dimension26 new java.awt.Dimension( 100, 30 )
-						"opaque": false
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 3
-					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 2
-					"gridy": 5
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "120, 120, 120, 120"
-					"$rowSpecs": "center:30"
-					"$hGap": 10
-					"$alignTop": true
-					"$alignLeft": true
-				} ) {
-					name: "secondRowCustomerPanel"
-					"preferredSize": #Dimension19
-					"minimumSize": #Dimension20
-					"maximumSize": #Dimension21
-					"opaque": false
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "extraCategory"
-						"text": "Tipo EquipajeExtra:"
-						"horizontalAlignment": 4
-						"horizontalTextPosition": 4
-						"preferredSize": #Dimension13
-						"maximumSize": #Dimension14
-						"minimumSize": #Dimension15
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "extraCategoryTypeComboBox2"
-						"minimumSize": #Dimension16
-						"preferredSize": #Dimension17
-						auxiliary() {
-							"JavaCodeGenerator.typeParameters": "EnumTipoAsiento"
-						}
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 1
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "extraLuggageLabel"
-						"text": "Equipaje Extra:"
-						"horizontalAlignment": 4
-						"horizontalTextPosition": 4
-						"preferredSize": #Dimension22
-						"maximumSize": #Dimension23
-						"minimumSize": #Dimension24
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 2
-					} )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "extraLuggageTextField"
-						"preferredSize": #Dimension25
-						"minimumSize": #Dimension18
-						"maximumSize": #Dimension26
-						"opaque": false
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 3
-					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 2
-					"gridy": 6
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "120, 376"
@@ -410,7 +300,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
-					"gridy": 7
+					"gridy": 6
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 					name: "createBtnPanel"
