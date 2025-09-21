@@ -345,7 +345,7 @@ public class BookFlightTest {
         BaseTicketDTO t1 = new BaseTicketDTO();
         t1.setName("Customer 3");       // nombre pasajero
         t1.setSurname("Apellido3");     // apellido pasajero
-        t1.setDoc("34567890");       // doc pasajero (coincide con customer3)
+        t1.setNumDoc("34567890");       // doc pasajero (coincide con customer3)
         t1.setDocType(EnumTipoDocumento.CI);
 
         // Equipaje del pasajero
@@ -406,7 +406,7 @@ public class BookFlightTest {
 // 4) Datos del ticket
         assertEquals("Customer 3", persistedTicket.getName());
         assertEquals("Apellido3", persistedTicket.getSurname());
-        assertEquals("34567890", persistedTicket.getDoc());
+        assertEquals("34567890", persistedTicket.getNumDoc());
 
 // 5) El ticket debe estar asociado a un asiento
         assertNotNull(persistedTicket.getSeatNumber(), "El seatNumber no puede ser null");

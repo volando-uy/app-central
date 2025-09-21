@@ -6,7 +6,7 @@ import app.DBConnection;
 
 import java.util.List;
 
-public class BaseRepository<T> {
+public abstract class BaseRepository<T> implements IBaseRepository<T> {
 
     private final Class<T> entityClass;
 

@@ -9,8 +9,10 @@ import domain.models.user.Airline;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import factory.ServiceFactory;
 import infra.repository.flightroutepackage.FlightRoutePackageRepository;
+import infra.repository.flightroutepackage.IFlightRoutePackageRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
@@ -22,7 +24,7 @@ import java.util.List;
 
 public class FlightRoutePackageService implements IFlightRoutePackageService {
 
-    private FlightRoutePackageRepository flightRoutePackageRepository;
+    private final IFlightRoutePackageRepository flightRoutePackageRepository;
 
     @Setter
     private IFlightRouteService flightRouteService;
@@ -30,7 +32,7 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public FlightRoutePackageService() {
-        flightRoutePackageRepository = new FlightRoutePackageRepository();
+        flightRoutePackageRepository = RepositoryFactory.getFlightRoutePackageRepository();
     }
 
     @Override

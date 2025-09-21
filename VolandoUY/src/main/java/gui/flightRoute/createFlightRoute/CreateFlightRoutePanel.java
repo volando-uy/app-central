@@ -8,6 +8,7 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import shared.utils.NonEditableTableModel;
 
 import javax.swing.*;
@@ -148,7 +149,8 @@ public class CreateFlightRoutePanel extends JPanel {
                 ;
 
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al crear la ruta de vuelo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Error al crear la ruta de vuelo: " + ex, "Error", JOptionPane.ERROR_MESSAGE);
+                throw ex;
             }
         });
         

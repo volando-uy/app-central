@@ -2,14 +2,11 @@ package infra.repository.user;
 
 import app.DBConnection;
 import domain.models.user.Airline;
-import domain.models.user.Customer;
-import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-
 import java.util.List;
 
-public class AirlineRepository extends AbstractUserRepository<Airline> {
+public class AirlineRepository extends AbstractUserRepository<Airline> implements IAirlineRepository {
+
     public AirlineRepository() {
         super(Airline.class);
     }
@@ -24,6 +21,7 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
         return Airline.class;
     }
 
+    @Override
     public Airline getAirlineByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
@@ -34,6 +32,8 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
                     .orElse(null);
         }
     }
+
+    @Override
     public Airline getAirlineByEmail(String email) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
@@ -45,21 +45,24 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
         }
     }
 
+    @Override
     public List<Airline> findFullAll() {
         try (EntityManager em = DBConnection.getEntityManager()) {
-            List<Airline> airline = em.createQuery("SELECT a FROM Airline a", Airline.class)
+            List<Airline> airlines = em.createQuery(
+                            "SELECT a FROM Airline a", Airline.class)
                     .getResultList();
 
-            // Load flights to avoid lazy loading issues
-            for (Airline a : airline) {
+            // Evitar lazy loading posterior
+            for (Airline a : airlines) {
                 a.getFlights().size();
                 a.getFlightRoutes().size();
             }
 
-            return airline;
+            return airlines;
         }
     }
 
+    @Override
     public Airline findFullByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Airline airline = em.createQuery(
@@ -69,7 +72,6 @@ public class AirlineRepository extends AbstractUserRepository<Airline> {
                     .findFirst()
                     .orElse(null);
 
-            // Load flights to avoid lazy loading issues
             if (airline != null) {
                 airline.getFlights().size();
                 airline.getFlightRoutes().size();

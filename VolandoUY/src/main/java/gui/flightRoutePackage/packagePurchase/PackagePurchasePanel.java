@@ -104,9 +104,9 @@ public class PackagePurchasePanel extends JPanel {
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al registrar la compra: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                throw ex;
+
+
             }
         });
         

@@ -5,11 +5,15 @@ import domain.models.user.User;
 import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
 
-public abstract class AbstractUserRepository<T extends User> extends BaseRepository<T> {
+public abstract class AbstractUserRepository<T extends User>
+        extends BaseRepository<T>
+        implements IAbstractUserRepository<T> {
+
     public AbstractUserRepository(Class<T> clazz) {
         super(clazz);
     }
 
+    @Override
     public boolean existsByEmail(String email) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Long count = em.createQuery(
@@ -20,6 +24,7 @@ public abstract class AbstractUserRepository<T extends User> extends BaseReposit
         }
     }
 
+    @Override
     public boolean existsByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Long count = em.createQuery(
@@ -30,6 +35,7 @@ public abstract class AbstractUserRepository<T extends User> extends BaseReposit
         }
     }
 
+    @Override
     public T findByNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
@@ -41,6 +47,7 @@ public abstract class AbstractUserRepository<T extends User> extends BaseReposit
         }
     }
 
+    @Override
     public T findByEmail(String email) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(

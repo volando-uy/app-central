@@ -5,13 +5,14 @@ import domain.models.buypackage.BuyPackage;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
+import domain.models.user.User;
 import infra.repository.BaseRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
 import java.util.List;
 
-public class CustomerRepository extends AbstractUserRepository<Customer> {
+public class CustomerRepository extends AbstractUserRepository<Customer> implements ICustomerRepository {
     public CustomerRepository() {
         super(Customer.class);
     }

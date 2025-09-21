@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserRepository extends BaseRepository<User> implements IUserRepository {
-    private final CustomerRepository customerRepo = new CustomerRepository();
-    private final AirlineRepository airlineRepo = new AirlineRepository();
+    private final ICustomerRepository customerRepo = new CustomerRepository();
+    private final IAirlineRepository airlineRepo = new AirlineRepository();
 
     public UserRepository() {
         super(User.class);

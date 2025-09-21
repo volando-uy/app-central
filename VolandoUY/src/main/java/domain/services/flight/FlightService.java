@@ -13,8 +13,10 @@ import domain.services.flightRoute.IFlightRouteService;
 import domain.services.seat.ISeatService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
+import infra.repository.flight.IFlightRepository;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
@@ -40,11 +42,11 @@ public class FlightService implements IFlightService {
 
     // Al sacar esto para el repo, hay que agregar
     // el @AllArgsConstructor y eliminar el constructor
-    private final FlightRepository flightRepository;
+    private final IFlightRepository flightRepository;
 
     // Constructor
     public FlightService() {
-        this.flightRepository = new FlightRepository();
+        this.flightRepository = RepositoryFactory.getFlightRepository();
     }
 
     @Override

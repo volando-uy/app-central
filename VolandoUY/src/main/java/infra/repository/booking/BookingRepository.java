@@ -17,6 +17,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
     public BookingRepository() {
         super();
     }
+
     @Override
     public void saveBookflightWithTicketsAndAddToSeats(BookFlight bookFlight,
                                                        List<Ticket> savedTickets,
@@ -59,7 +60,8 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                         b.setTicket(ticket);
                         if (b.getId() == null && !em.contains(b)) {
                             em.persist(b);
-                        };
+                        }
+                        ;
                     }
                 }
 
@@ -84,6 +86,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
         }
     }
 
+    @Override
     public List<BookFlight> findFullAll() {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<BookFlight> bf = em.createQuery("SELECT DISTINCT bf FROM BookFlight bf " +
@@ -112,50 +115,50 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
 
         }
     }
-
-    @Override
-    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
-        EntityManager em = DBConnection.getEntityManager();
-        try {
-            // Si TENÉS un constructor projection en BookFlightDTO(id, totalPrice, createdAt)
-            // descomenta esta versión:
-        /*
-        return em.createQuery(
-                "SELECT new domain.dtos.bookFlight.BookFlightDTO(" +
-                "  bf.id, bf.totalPrice, bf.created_at" +
-                ") " +
-                "FROM BookFlight bf " +
-                "WHERE bf.customer.nickname = :nick " +
-                "ORDER BY bf.created_at DESC",
-                BookFlightDTO.class
-        )
-        .setParameter("nick", nickname)
-        .getResultList();
-        */
-
-            // Versión segura (sin depender de constructor en el DTO):
-            List<BookFlight> list = em.createQuery(
-                            "SELECT bf FROM BookFlight bf " +
-                                    "WHERE bf.customer.nickname = :nick " +
-                                    "ORDER BY bf.createdAt DESC",
-                            BookFlight.class
-                    )
-                    .setParameter("nick", nickname)
-                    .getResultList();
-
-            List<BookFlightDTO> out = new java.util.ArrayList<>();
-            for (BookFlight bf : list) {
-                BookFlightDTO dto = new BookFlightDTO();
-                dto.setId(bf.getId());
-                dto.setTotalPrice(bf.getTotalPrice());
-                dto.setCreatedAt(bf.getCreatedAt());
-                out.add(dto);
-            }
-            return out;
-        } finally {
-            em.close();
-        }
-    }
+//
+//    @Override
+//    public List<BookFlightDTO> findDTOsByCustomerNickname(String nickname) {
+//        EntityManager em = DBConnection.getEntityManager();
+//        try {
+//            // Si TENÉS un constructor projection en BookFlightDTO(id, totalPrice, createdAt)
+//            // descomenta esta versión:
+//        /*
+//        return em.createQuery(
+//                "SELECT new domain.dtos.bookFlight.BookFlightDTO(" +
+//                "  bf.id, bf.totalPrice, bf.created_at" +
+//                ") " +
+//                "FROM BookFlight bf " +
+//                "WHERE bf.customer.nickname = :nick " +
+//                "ORDER BY bf.created_at DESC",
+//                BookFlightDTO.class
+//        )
+//        .setParameter("nick", nickname)
+//        .getResultList();
+//        */
+//
+//            // Versión segura (sin depender de constructor en el DTO):
+//            List<BookFlight> list = em.createQuery(
+//                            "SELECT bf FROM BookFlight bf " +
+//                                    "WHERE bf.customer.nickname = :nick " +
+//                                    "ORDER BY bf.createdAt DESC",
+//                            BookFlight.class
+//                    )
+//                    .setParameter("nick", nickname)
+//                    .getResultList();
+//
+//            List<BookFlightDTO> out = new java.util.ArrayList<>();
+//            for (BookFlight bf : list) {
+//                BookFlightDTO dto = new BookFlightDTO();
+//                dto.setId(bf.getId());
+//                dto.setTotalPrice(bf.getTotalPrice());
+//                dto.setCreatedAt(bf.getCreatedAt());
+//                out.add(dto);
+//            }
+//            return out;
+//        } finally {
+//            em.close();
+//        }
+//    }
 
     @Override
     public BookFlight getFullBookingById(Long id) {
@@ -178,6 +181,8 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
             }
         }
     }
+
+    @Override
     public List<BookFlight> findByCustomerNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             return em.createQuery(
@@ -186,6 +191,8 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                     .getResultList();
         }
     }
+
+    @Override
     public List<BookFlight> findFullByFlightName(String flightName) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<BookFlight> bfList = em.createQuery(
@@ -213,6 +220,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
         }
     }
 
+    @Override
     public List<BookFlight> findByFlightName(String flightName) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<BookFlight> bfList = em.createQuery(
@@ -229,6 +237,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
 
     }
 
+    @Override
     public List<BookFlight> findFullByCustomerNickname(String nickname) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<BookFlight> bfList = em.createQuery(

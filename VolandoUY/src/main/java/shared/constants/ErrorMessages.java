@@ -38,6 +38,8 @@ public class ErrorMessages {
     public static final String ERROR_MAX_LATITUDE = "Latitud máxima 90";
     public static final String ERROR_MIN_LONGITUDE = "Longitud mínima -180";
     public static final String ERROR_MAX_LONGITUDE = "Longitud máxima 180";
+    public static final String CITY_NOT_FOUND = "No se puede agregar un aeropuerto a una ciudad nula";
+
     // ================================Fin City errors==============================
 
 
@@ -57,7 +59,7 @@ public class ErrorMessages {
     // ================================Fin Flight errors==============================
 
 
-    
+
     // ================================Vuelo errors==============================
     public static final String ERR_FLIGHT_ALREADY_EXISTS = "El vuelo %s ya existe";
     public static final String ERR_FLIGHT_DEPARTURE_FUTURE = "La salida debe ser en el futuro";
@@ -78,4 +80,13 @@ public class ErrorMessages {
     public static final String ERR_FLIGHT_ROUTE_NOT_BELONGS_TO_AIRLINE = "La ruta de vuelo %s no pertenece a la aerolínea %s";
     public static final String ERR_NO_FLIGHT_ROUTE_PACKAGES_FOUND = "No se encontraron paquetes de ruta de vuelo para este paquete";
     // ================================Fin Paquete Ruta Vuelo errors==============================
+
+
+
+    // ================================Inicio Tickets==============================
+    public static final String ERROR_TICKET_NOT_FOUND = "Ticket no encontrado";
+    // ================================Fin Tickets==============================
+
+
+
 }

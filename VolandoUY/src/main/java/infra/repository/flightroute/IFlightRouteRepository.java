@@ -4,11 +4,12 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
+import infra.repository.IBaseRepository;
 
 import java.util.Arrays;
 import java.util.List;
 
-public interface IFlightRouteRepository {
+public interface IFlightRouteRepository extends IBaseRepository<FlightRoute> {
     boolean existsByName(String name);
 
     Iterable<FlightRoute> getAllByAirlineNickname(String airlineNickname);
@@ -18,4 +19,8 @@ public interface IFlightRouteRepository {
     FlightRoute getFullByName(String routeName);
 
     void createFlightRoute(FlightRoute flightRoute, Airline airline);
+
+    List<FlightRoute> getFullAllByPackageName(String packageName);
+
+    List<FlightRoute> getAllByPackageName(String packageName);
 }

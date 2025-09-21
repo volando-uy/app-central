@@ -5,7 +5,9 @@ import domain.dtos.city.CityDTO;
 
 import domain.models.city.City;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.city.CityRepository;
+import infra.repository.city.ICityRepository;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -17,11 +19,11 @@ import java.util.stream.Collectors;
 
 public class CityService implements ICityService {
 
-    private CityRepository cityRepository;
+    private final ICityRepository cityRepository;
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public CityService() {
-        this.cityRepository = new CityRepository();
+        this.cityRepository = RepositoryFactory.getCityRepository();
     }
 
     @Override

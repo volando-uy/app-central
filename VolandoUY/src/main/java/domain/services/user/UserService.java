@@ -11,6 +11,7 @@ import domain.services.buyPackage.IBuyPackageService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.user.IUserRepository;
 import infra.repository.user.UserRepository;
 import lombok.Setter;
@@ -27,7 +28,7 @@ public class UserService implements IUserService {
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
-    private final UserRepository userRepository;
+    private final IUserRepository userRepository;
 
     @Setter
     private IFlightRoutePackageService flightRoutePackageService;
@@ -36,7 +37,7 @@ public class UserService implements IUserService {
     private IBuyPackageService buyPackageService;
 
     public UserService() {
-        this.userRepository = new UserRepository();
+        this.userRepository = RepositoryFactory.getUserRepository();
     }
 
 
