@@ -4,6 +4,7 @@ import app.DBConnection;
 import domain.models.airport.Airport;
 import domain.models.city.City;
 import jakarta.persistence.EntityManager;
+import shared.constants.ErrorMessages;
 
 public class AirportRepository extends AirportAbstractRepository implements IAirportRepository {
     public AirportRepository() {
@@ -21,6 +22,7 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
         }
     }
 
+    @Override
     public Airport getFullAirportByCode(String code) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Airport airport = em.createQuery("SELECT a FROM Airport a WHERE LOWER(a.code) = :code", Airport.class)
@@ -47,9 +49,10 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
         }
     }
 
+    @Override
     public void saveAirportAndAddToCity(Airport airport, City city) {
         if (city == null) {
-            throw new IllegalArgumentException("No se puede agregar un aeropuerto a una ciudad nula.");
+            throw new IllegalArgumentException(ErrorMessages.CITY_NOT_FOUND);
         }
         EntityManager em = DBConnection.getEntityManager();
         try {

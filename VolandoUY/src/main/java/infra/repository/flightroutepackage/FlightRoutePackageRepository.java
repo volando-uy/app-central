@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRepository implements IFlightRoutePackageRepository{
+public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRepository implements IFlightRoutePackageRepository {
     public FlightRoutePackageRepository(){
         super();
     }
@@ -55,19 +55,21 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
             return count > 0;
         }
     }
-    public List<BuyPackage> findByCustomerNickname(String nickname) {
-        try (EntityManager em = DBConnection.getEntityManager()) {
-            return em.createQuery(
-                            "SELECT DISTINCT bp FROM BuyPackage bp " +
-                                    "LEFT JOIN FETCH bp.customer c " +
-                                    "LEFT JOIN FETCH bp.bookFlights bf " +
-                                    "LEFT JOIN FETCH bp.flightRoutePackage frp " +
-                                    "WHERE c.nickname = :nickname", BuyPackage.class)
-                    .setParameter("nickname", nickname)
-                    .getResultList();
-        }
-    }
+//    @Override
+//    public List<BuyPackage> findByCustomerNickname(String nickname) {
+//        try (EntityManager em = DBConnection.getEntityManager()) {
+//            return em.createQuery(
+//                            "SELECT DISTINCT bp FROM BuyPackage bp " +
+//                                    "LEFT JOIN FETCH bp.customer c " +
+//                                    "LEFT JOIN FETCH bp.bookFlights bf " +
+//                                    "LEFT JOIN FETCH bp.flightRoutePackage frp " +
+//                                    "WHERE c.nickname = :nickname", BuyPackage.class)
+//                    .setParameter("nickname", nickname)
+//                    .getResultList();
+//        }
+//    }
 
+    @Override
     public List<FlightRoutePackage> findAllWithFlightRoutes() {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<FlightRoutePackage> packages = em.createQuery(
@@ -78,6 +80,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
         }
     }
 
+    @Override
     public List<FlightRoutePackage> findAllFullWithFlightRoutes() {
         try (EntityManager em = DBConnection.getEntityManager()) {
             List<FlightRoutePackage> packages = em.createQuery(
@@ -96,6 +99,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
         }
     }
 
+    @Override
     public FlightRoutePackage getFlightRoutePackageFullByName(String flightRoutePackageName) {
         try(EntityManager em= DBConnection.getEntityManager()){
             FlightRoutePackage frp = em.createQuery("SELECT frp FROM FlightRoutePackage frp WHERE LOWER(frp.name)=:name", FlightRoutePackage.class)
@@ -116,6 +120,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
         }
     }
 
+    @Override
     public void addFlightRouteToPackage(FlightRoute flightRoute, FlightRoutePackage flightRoutePackage) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             em.getTransaction().begin();

@@ -20,6 +20,7 @@ public class CityRepository extends AbstractCityRepository implements ICityRepos
         }
     }
 
+    @Override
     public City getFullCityByName(String cityName) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             City city = em.createQuery("SELECT c FROM City c WHERE LOWER(c.name) = :name", City.class)

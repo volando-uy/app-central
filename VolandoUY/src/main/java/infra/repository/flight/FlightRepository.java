@@ -64,6 +64,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
         }
     }
 
+    @Override
     public List<Flight> getFlightsByRouteName(String routeName) {
         try(EntityManager em= DBConnection.getEntityManager()){
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.flightRoute.name)=:name", Flight.class)
@@ -72,6 +73,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
         }
     }
 
+    @Override
     public void saveFlightWithSeatsAndAddToAirlineAndAddToFlightRoute(Flight flight, Airline airline, FlightRoute flightRoute, List<Seat> seats) {
         EntityManager em = DBConnection.getEntityManager();
         try {

@@ -22,8 +22,10 @@ import domain.services.seat.ISeatService;
 import domain.services.ticket.ITicketService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.booking.BookingRepository;
 import infra.repository.buyPackage.BuyPackageRepository;
+import infra.repository.buyPackage.IBuyPackageRepository;
 import lombok.Setter;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -41,12 +43,12 @@ public class BuyPackageService implements IBuyPackageService {
     @Setter
     private IFlightRoutePackageService flightRoutePackageService;
 
-    private final BuyPackageRepository buyPackageRepository;
+    private final IBuyPackageRepository buyPackageRepository;
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public BuyPackageService() {
-        this.buyPackageRepository = new BuyPackageRepository();
+        this.buyPackageRepository = RepositoryFactory.getBuyPackageRepository();
     }
 
 

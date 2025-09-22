@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 
 public class BuyPackageRepository extends AbstractBuyPackageRepository implements IBuyPackageRepository {
 
+    @Override
     public void buyPackage(BuyPackage buyPackage, Customer customer, FlightRoutePackage flightRoutePackage) {
         // Persist the buyPackage, add it to customer and add it to flightRoutePackage
         EntityManager em = DBConnection.getEntityManager();
@@ -37,6 +38,7 @@ public class BuyPackageRepository extends AbstractBuyPackageRepository implement
         }
     }
 
+    @Override
     public BuyPackage getFullBuyPackageById(Long id) {
         EntityManager em = DBConnection.getEntityManager();
         try (em) {
@@ -58,6 +60,7 @@ public class BuyPackageRepository extends AbstractBuyPackageRepository implement
         }
     }
 
+    @Override
     public BuyPackage getBuyPackageById(Long id) {
         return findByKey(id);
     }

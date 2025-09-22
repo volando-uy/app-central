@@ -6,8 +6,10 @@ import domain.models.airport.Airport;
 import domain.models.city.City;
 import domain.services.city.ICityService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import factory.ServiceFactory;
 import infra.repository.airport.AirportRepository;
+import infra.repository.airport.IAirportRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
@@ -15,7 +17,7 @@ import shared.utils.ValidatorUtil;
 
 
 public class AirportService implements IAirportService {
-    private AirportRepository airportRepository;
+    private final IAirportRepository airportRepository;
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
@@ -23,7 +25,7 @@ public class AirportService implements IAirportService {
     private ICityService cityService;
 
     public AirportService() {
-        this.airportRepository = new AirportRepository();
+        this.airportRepository = RepositoryFactory.getAirportRepository();
     }
 
     @Override

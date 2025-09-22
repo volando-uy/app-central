@@ -10,9 +10,11 @@ import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import factory.ServiceFactory;
 import infra.repository.flight.FlightRepository;
 import infra.repository.flightroute.FlightRouteRepository;
+import infra.repository.flightroute.IFlightRouteRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
@@ -25,7 +27,7 @@ public class FlightRouteService implements IFlightRouteService {
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
-    FlightRouteRepository flightRouteRepository;
+    private final IFlightRouteRepository flightRouteRepository;
 
     @Setter
     private ICategoryService categoryService;
@@ -37,7 +39,7 @@ public class FlightRouteService implements IFlightRouteService {
     private IUserService userService;
 
     public FlightRouteService() {
-        this.flightRouteRepository = new FlightRouteRepository();
+        this.flightRouteRepository = RepositoryFactory.getFlightRouteRepository();
     }
 
 
@@ -104,7 +106,7 @@ public class FlightRouteService implements IFlightRouteService {
 
     @Override
     public List<FlightRouteDTO> getFlightRoutesDetailsByAirlineNickname(String airlineNickname, boolean full) {
-        List<FlightRoute> fr = full ? flightRouteRepository.getFullAllByAirlineNickname(airlineNickname) : flightRouteRepository.getAllByAirlineNickname(airlineNickname);
+        List<FlightRoute> fr = (List<FlightRoute>) (full ? flightRouteRepository.getFullAllByAirlineNickname(airlineNickname) : flightRouteRepository.getAllByAirlineNickname(airlineNickname));
         if (fr == null) {
             return null;
         }

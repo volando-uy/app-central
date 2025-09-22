@@ -8,6 +8,8 @@ import domain.models.seat.Seat;
 import domain.services.flight.IFlightService;
 import domain.services.ticket.ITicketService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
+import infra.repository.seat.ISeatRepository;
 import infra.repository.seat.SeatRepository;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public class SeatService implements ISeatService {
 
-    private SeatRepository seatRepository;
+    private final ISeatRepository seatRepository;
 
     @Setter
     private ITicketService ticketService;
@@ -28,7 +30,7 @@ public class SeatService implements ISeatService {
     private CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public SeatService() {
-        this.seatRepository = new SeatRepository();
+        this.seatRepository = RepositoryFactory.getSeatRepository();
     }
 
     @Override

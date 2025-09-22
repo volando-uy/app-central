@@ -19,7 +19,9 @@ import domain.services.ticket.ITicketService;
 import domain.services.ticket.TicketService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.booking.BookingRepository;
+import infra.repository.booking.IBookingRepository;
 import lombok.Setter;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -38,12 +40,12 @@ public class BookingService implements IBookingService {
     @Setter
     private IUserService userService;
 
-    private BookingRepository bookingRepository;
+    private final IBookingRepository bookingRepository;
 
     private CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public BookingService() {
-        this.bookingRepository = new BookingRepository();
+        this.bookingRepository = RepositoryFactory.getBookingRepository();
     }
 
     @Override

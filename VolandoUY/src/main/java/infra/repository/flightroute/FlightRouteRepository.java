@@ -69,6 +69,7 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
         }
     }
 
+    @Override
     public FlightRoute getFullByName(String name) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
             FlightRoute flightRoute = entityManager.createQuery("SELECT fr FROM FlightRoute fr WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
@@ -123,6 +124,7 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
         }
     }
 
+    @Override
     public List<FlightRoute> getFullAllByPackageName(String packageName) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
             List<FlightRoute> flightRoutes = entityManager.createQuery("SELECT fr FROM FlightRoute fr JOIN fr.inPackages frp WHERE LOWER(frp.name) = LOWER(:packageName)", FlightRoute.class)
@@ -150,6 +152,7 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
         }
     }
 
+    @Override
     public List<FlightRoute> getAllByPackageName(String packageName) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
             return entityManager.createQuery("SELECT fr FROM FlightRoute fr JOIN fr.inPackages frp WHERE LOWER(frp.name) = LOWER(:packageName)", FlightRoute.class)

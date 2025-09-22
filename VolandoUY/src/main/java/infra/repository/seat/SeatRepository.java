@@ -52,6 +52,7 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
         }
     }
 
+    @Override
     public Seat getFullSeatById(Long id) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Seat seat = em.createQuery(
@@ -66,7 +67,7 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
         }
     }
 
-
+    @Override
     public Seat getFullSeatByTicketId(Long ticketId) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Seat seat = em.createQuery(
@@ -81,6 +82,7 @@ public class SeatRepository extends AbstractSeatRepository implements ISeatRepos
         }
     }
 
+    @Override
     public Seat getSeatByTicketId(Long ticketId) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             Seat seat = em.createQuery(

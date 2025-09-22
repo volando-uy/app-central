@@ -4,7 +4,9 @@ package domain.services.category;
 import domain.dtos.category.CategoryDTO;
 import domain.models.category.Category;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.category.CategoryRepository;
+import infra.repository.category.ICategoryRepository;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
@@ -15,12 +17,12 @@ import java.util.stream.Collectors;
 
 public class CategoryService implements ICategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final ICategoryRepository categoryRepository;
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public CategoryService() {
-        this.categoryRepository = new CategoryRepository();
+        this.categoryRepository = RepositoryFactory.getCategoryRepository();
     }
 
     @Override

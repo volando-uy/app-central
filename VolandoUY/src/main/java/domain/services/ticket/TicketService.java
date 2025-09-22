@@ -6,18 +6,21 @@ import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.ticket.TicketDTO;
 import domain.models.ticket.Ticket;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
+import infra.repository.ticket.ITicketRepository;
 import infra.repository.ticket.TicketRepository;
+import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 
 import java.util.ArrayList;
 
 public class TicketService implements ITicketService {
-    private TicketRepository ticketRepository;
+    private final ITicketRepository ticketRepository;
 
-    private CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public TicketService() {
-        this.ticketRepository = new TicketRepository();
+        this.ticketRepository = RepositoryFactory.getTicketRepository();
     }
 
     @Override
@@ -35,7 +38,7 @@ public class TicketService implements ITicketService {
 
         Ticket ticket = full ? ticketRepository.getFullTicketById(ticketId) : ticketRepository.findByKey(ticketId);
         if (ticket == null) {
-            throw new IllegalArgumentException("Ticket not found");
+            throw new IllegalArgumentException(ErrorMessages.ERROR_TICKET_NOT_FOUND);
         }
 
         return full ? customModelMapper.mapFullTicket(ticket) : customModelMapper.map(ticket, TicketDTO.class);

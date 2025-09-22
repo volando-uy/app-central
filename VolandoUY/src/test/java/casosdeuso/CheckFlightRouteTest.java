@@ -13,7 +13,9 @@ import domain.dtos.user.AirlineDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
 import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.city.CityRepository;
+import infra.repository.city.ICityRepository;
 import jdk.swing.interop.SwingInterOpUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ public class CheckFlightRouteTest {
     private IFlightRouteController flightRouteController;
     private IFlightController flightController;
     private ICategoryController categoryController;
-    private CityRepository cityRepository;
+    private ICityRepository cityRepository;
 
 
 
@@ -42,7 +44,7 @@ public class CheckFlightRouteTest {
         flightRouteController = ControllerFactory.getFlightRouteController();
         flightController = ControllerFactory.getFlightController();
         categoryController = ControllerFactory.getCategoryController();
-        cityRepository = new CityRepository();
+        cityRepository = RepositoryFactory.getCityRepository();
         // Registrar aerolínea
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setName("Aerolineas Argentinas");
