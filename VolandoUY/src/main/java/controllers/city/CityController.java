@@ -39,7 +39,7 @@ public class CityController implements ICityController {
     }
 
     @Override
-    public List<String> getAllCities(){;
-        return this.cityService.getAllCities();
+    public List<String> getAllCitiesNames(){;
+        return this.cityService.getAllCitiesNames();
     }
 }

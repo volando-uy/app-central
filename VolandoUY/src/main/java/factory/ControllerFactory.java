@@ -48,8 +48,6 @@ import java.util.List;
 public class ControllerFactory {
 
     private static CustomModelMapper customModelMapper;
-    private static UserMapper userMapper;
-    private static UserFactoryMapper userFactoryMapper;
 
     private static IUserController userController;
     private static IFlightRouteController flightRouteController;

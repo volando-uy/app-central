@@ -118,12 +118,12 @@ public class AddPassenger extends JPanel {
             InfoUserPanel2.setOpaque(false);
             InfoUserPanel2.setMinimumSize(new Dimension(440, 258));
             InfoUserPanel2.setMaximumSize(new Dimension(440, 258));
-            InfoUserPanel2.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-            border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER
-            , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font
-            .BOLD ,12 ), java. awt. Color. red) ,InfoUserPanel2. getBorder( )) ); InfoUserPanel2. addPropertyChangeListener (
-            new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order"
-            .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            InfoUserPanel2.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing
+            . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ),
+            java. awt. Color. red) ,InfoUserPanel2. getBorder( )) ); InfoUserPanel2. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () ))
+            throw new RuntimeException( ); }} );
             InfoUserPanel2.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel2.getLayout()).columnWidths = new int[] {0, 0};
             ((GridBagLayout)InfoUserPanel2.getLayout()).rowHeights = new int[] {0, 20, 0, 0, 0, 0, 0, 34, 38, 0};
@@ -336,7 +336,7 @@ public class AddPassenger extends JPanel {
                 extraLuggageUnitsSpinner.setMinimumSize(new Dimension(100, 30));
                 extraLuggageUnitsSpinner.setMaximumSize(new Dimension(100, 30));
                 extraLuggageUnitsSpinner.setOpaque(false);
-                extraLuggageUnitsSpinner.setModel(new SpinnerNumberModel(0, null, 5, 1));
+                extraLuggageUnitsSpinner.setModel(new SpinnerNumberModel(0, 0, 5, 1));
                 secondRowCustomerPanel.add(extraLuggageUnitsSpinner, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));

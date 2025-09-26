@@ -18,7 +18,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    public CategoryDTO getCategoryByName(String categoryName) {
+    public CategoryDTO getCategoryDetailsByName(String categoryName) {
         return categoryService.getCategoryDetailsByName(categoryName);
     }
 

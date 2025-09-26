@@ -3,7 +3,6 @@ package domain.dtos.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import shared.annotations.Required;
 import shared.constants.CTCliente;
 
 @Data
