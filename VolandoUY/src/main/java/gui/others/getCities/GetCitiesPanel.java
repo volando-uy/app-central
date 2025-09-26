@@ -34,7 +34,7 @@ public class GetCitiesPanel extends JPanel {
 
     private void loadCitiesTable() {
         // 1) Traer datos del controller
-        List<String> allCities = cityController.getAllCities();
+        List<String> allCities = cityController.getAllCitiesNames();
 
         // 2) Crear modelo y columnas
         String[] columnNames = {"Ciudad"};

@@ -32,8 +32,6 @@ public class Customer extends User {
     @Size(min = 2, max = 100)
     private String surname;
 
-
-
     @NotNull
     @Past(message = ErrorMessages.ERR_BIRTHDAY_IN_PAST)
     private LocalDate birthDate;

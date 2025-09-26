@@ -212,9 +212,7 @@ new FormModel {
 					"minimumSize": new java.awt.Dimension( 100, 30 )
 					"maximumSize": new java.awt.Dimension( 100, 30 )
 					"opaque": false
-					"model": new javax.swing.SpinnerNumberModel {
-						maximum: 5
-					}
+					"model": new javax.swing.SpinnerNumberModel( 0, 0, 5, 1 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 				} )

@@ -124,7 +124,7 @@ class CityServiceTest {
         cityService.createCity(crearCiudadBasica("Ciudad2"));
         cityService.createCity(crearCiudadBasica("Ciudad3"));
 
-        var cities = cityService.getAllCities();
+        var cities = cityService.getAllCitiesNames();
 
         assertEquals(3, cities.size());
         assertTrue(cities.contains("Ciudad1"));
@@ -135,7 +135,7 @@ class CityServiceTest {
     @Test
     @DisplayName("GIVEN no cities WHEN getAllCities THEN return empty list")
     void getAllCities_shouldReturnEmptyListIfNoCities() {
-        var cities = cityService.getAllCities();
+        var cities = cityService.getAllCitiesNames();
 
         assertNotNull(cities);
         assertTrue(cities.isEmpty());

@@ -8,13 +8,11 @@ import domain.models.enums.EnumTipoDocumento;
 import domain.models.user.mapper.UserMapper;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
-import factory.UserFactoryMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

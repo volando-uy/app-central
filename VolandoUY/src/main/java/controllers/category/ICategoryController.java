@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ICategoryController {
     CategoryDTO createCategory(CategoryDTO category);
-    CategoryDTO getCategoryByName(String categoryName);
+    CategoryDTO getCategoryDetailsByName(String categoryName);
     List<String> getAllCategoriesNames();
 }

@@ -46,7 +46,7 @@ class CategoryControllerTest {
         when(categoryService.getCategoryDetailsByName("Negocios")).thenReturn(expectedDTO);
 
         // WHEN
-        CategoryDTO result = categoryController.getCategoryByName("Negocios");
+        CategoryDTO result = categoryController.getCategoryDetailsByName("Negocios");
 
         // THEN
         assertNotNull(result);

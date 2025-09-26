@@ -41,7 +41,7 @@ public class FlightRouteDetailWindow extends JFrame {
 
         try { infoPanel.setBorder(null); } catch (Exception ignored) {}
 
-        // Llenar labels con datos de la ruta
+        // Llenar labels con datos de la rutaiin
         label1.setText("Nombre: " + safe(route.getName()));
         label2.setText("Descripción: " + safe(route.getDescription()));
         label3.setText("Creación: " +

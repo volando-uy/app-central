@@ -14,5 +14,5 @@ public interface ICityController {
     BaseCityDTO getCitySimpleDetailsByName(String cityName);
     CityDTO getCityDetailsByName(String cityName);
 
-    List<String> getAllCities();
+    List<String> getAllCitiesNames();
 }

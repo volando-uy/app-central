@@ -35,7 +35,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-//            initDB();
+            //initDB();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class DBInitThread extends Thread {
         }
     }
     private void initDB() {
-        DBConnection.cleanDB();
+        //DBConnection.cleanDB();
 
         IUserController userController = ControllerFactory.getUserController();
         ICategoryController categoryController = ControllerFactory.getCategoryController();

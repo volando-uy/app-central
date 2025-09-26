@@ -43,16 +43,6 @@ import static java.util.stream.Collectors.toList;
 
 public class CustomModelMapper extends ModelMapper {
 
-//    public CustomModelMapper() {
-//        Converter<PersistentBag, List<?>> persistentBagToListConverter = new Converter<>() {
-//            @Override
-//            public java.util.List<?> convert(MappingContext<PersistentBag, java.util.List<?>> context) {
-//                return new java.util.ArrayList<>(context.getSource());
-//            }
-//        };
-//        this.addConverter(persistentBagToListConverter);
-//    }
-
     public CustomerDTO mapFullCustomer(Customer customer) {
         CustomerDTO customerDTO = this.map(customer, CustomerDTO.class);
         if (customer.getBookedFlights() != null) {
