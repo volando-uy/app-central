@@ -15,12 +15,14 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,24 +57,11 @@ public class Customer extends User {
     private List<BookFlight> bookedFlights;
 
 
-
-
-
-
     @Override
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof CustomerDTO newDataCasted)) return;
-
-//        this.setName(newDataCasted.getName());
-//        this.setSurname(newDataCasted.getSurname());
-//        this.setBirthDate(newDataCasted.getBirthDate());
-//        this.setDocType(newDataCasted.getDocType());
-//        this.setNumDoc(newDataCasted.getNumDoc());
-//        this.setCitizenship(newDataCasted.getCitizenship());
         if(newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
             this.setName(newDataCasted.getName());
-//        if(newDataCasted.getMail() != null && !newDataCasted.getMail().isBlank())
-//            this.setMail(newDataCasted.getMail());
         if(newDataCasted.getSurname() != null && !newDataCasted.getSurname().isBlank())
             this.setSurname(newDataCasted.getSurname());
         if(newDataCasted.getBirthDate() != null )
@@ -83,6 +72,8 @@ public class Customer extends User {
             this.setNumDoc(newDataCasted.getNumDoc());
         if(newDataCasted.getCitizenship() != null && !newDataCasted.getCitizenship().isBlank())
             this.setCitizenship(newDataCasted.getCitizenship());
+        if (newDataCasted.getImage() != null && !newDataCasted.getImage().isBlank())
+            this.setImage(newDataCasted.getImage());
     }
 
     @Override

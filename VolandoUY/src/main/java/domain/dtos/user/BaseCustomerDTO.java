@@ -19,13 +19,15 @@ public class BaseCustomerDTO extends UserDTO {
             String nickname,
             String name,
             String mail,
+            String password,
+            String image,
             String surname,
             String citizenship,
             LocalDate birthDate,
             String numDoc,
             EnumTipoDocumento docType
     ) {
-        super(nickname, name, mail);
+        super(nickname, name, mail, password, image);
         this.surname = surname;
         this.citizenship = citizenship;
         this.birthDate = birthDate;

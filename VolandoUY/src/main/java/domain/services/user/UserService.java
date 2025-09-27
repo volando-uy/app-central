@@ -16,6 +16,7 @@ import infra.repository.user.IUserRepository;
 import infra.repository.user.UserRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
+import shared.constants.Images;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
@@ -73,6 +74,7 @@ public class UserService implements IUserService {
         Customer customer = customModelMapper.map(customerDTO, Customer.class);
         customer.setBoughtPackages(new ArrayList<>());
         customer.setBookedFlights(new ArrayList<>());
+        customer.setImage(Images.USER_DEFAULT);
 
         // Lo validamos
         ValidatorUtil.validate(customer);
@@ -95,6 +97,7 @@ public class UserService implements IUserService {
         Airline airline = customModelMapper.map(airlineDTO, Airline.class);
         airline.setFlightRoutes(new ArrayList<>());
         airline.setFlights(new ArrayList<>());
+        airline.setImage(Images.USER_DEFAULT);
 
         // Validamos la entidad
         ValidatorUtil.validate(airline);
