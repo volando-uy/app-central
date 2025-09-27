@@ -50,7 +50,22 @@ public class RegisterCustomerPanel extends JPanel {
                 String id = idTextField.getText();
                 EnumTipoDocumento idType = (EnumTipoDocumento) idTypeComboBox.getSelectedItem();
 
-                BaseCustomerDTO baseCustomerDTO = new BaseCustomerDTO(nickname, name, mail, surname, citizenship, birthDate, id, idType);
+                // TODO: unhardcode this variables
+                String password = "defaultPassword123"; // Default password
+                String image = ""; // Default image path or URL
+
+                BaseCustomerDTO baseCustomerDTO = new BaseCustomerDTO(
+                        nickname,
+                        name,
+                        mail,
+                        password,
+                        image,
+                        surname,
+                        citizenship,
+                        birthDate,
+                        id,
+                        idType
+                );
 
                 BaseCustomerDTO createdCustomerDTO = userController.registerCustomer(baseCustomerDTO);
 

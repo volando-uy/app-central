@@ -4,6 +4,7 @@ import domain.models.enums.EnumTipoDocumento;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,31 +18,16 @@ public class CustomerDTO extends BaseCustomerDTO {
             String nickname,
             String name,
             String mail,
+            String password,
+            String image,
             String surname,
             String citizenship,
             LocalDate birthDate,
             String numDoc,
             EnumTipoDocumento docType
     ) {
-        super(nickname, name, mail, surname, citizenship, birthDate, numDoc, docType);
-        this.boughtPackagesIds = null;
-        this.bookFlightsIds = null;
-    }
-
-    public CustomerDTO(
-            String nickname,
-            String name,
-            String mail,
-            String surname,
-            String citizenship,
-            LocalDate birthDate,
-            String numDoc,
-            EnumTipoDocumento docType,
-            List<Long> boughtPackagesIds,
-            List<Long> bookFlightsIds
-    ) {
-        super(nickname, name, mail, surname, citizenship, birthDate, numDoc, docType);
-        this.boughtPackagesIds = boughtPackagesIds;
-        this.bookFlightsIds = bookFlightsIds;
+        super(nickname, name, mail, password, image, surname, citizenship, birthDate, numDoc, docType);
+        this.boughtPackagesIds = new ArrayList<>();
+        this.bookFlightsIds = new ArrayList<>();
     }
 }
