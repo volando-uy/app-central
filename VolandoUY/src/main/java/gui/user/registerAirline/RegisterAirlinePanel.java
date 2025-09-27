@@ -32,7 +32,19 @@ public class RegisterAirlinePanel extends JPanel {
                 String email = mailTextField.getText();
                 String web = webTextField.getText();
 
-                BaseAirlineDTO baseAirlineDTO = new BaseAirlineDTO(nickname, name, email, description, web);
+                // TODO: Unhardcode this variables later
+                String password = "defaultPassword123";
+                String image = "";
+
+                BaseAirlineDTO baseAirlineDTO = new BaseAirlineDTO(
+                        nickname,
+                        name,
+                        email,
+                        password,
+                        image,
+                        description,
+                        web
+                );
 
                 BaseAirlineDTO createdAirlineDTO = userController.registerAirline(baseAirlineDTO);
 

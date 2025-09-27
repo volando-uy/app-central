@@ -13,8 +13,16 @@ public class AirlineDTO extends BaseAirlineDTO {
     private List<String> flightsNames;
     private List<String> flightRoutesNames;
 
-    public AirlineDTO(String nickname, String name, String mail, String description, String web) {
-        super(nickname, name, mail, description, web);
+    public AirlineDTO(
+            String nickname,
+            String name,
+            String mail,
+            String password,
+            String image,
+            String description,
+            String web
+    ) {
+        super(nickname, name, mail, password, image, description, web);
         this.flightsNames = new ArrayList<>();
         this.flightRoutesNames = new ArrayList<>();
     }

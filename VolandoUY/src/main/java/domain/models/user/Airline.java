@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
 import shared.constants.RegexPatterns;
@@ -17,10 +18,13 @@ import shared.constants.RegexPatterns;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "airline")
 public class Airline extends User {
 
     @NotBlank
@@ -38,24 +42,17 @@ public class Airline extends User {
     @OneToMany(mappedBy = "airline")
     private List<FlightRoute> flightRoutes = new ArrayList<>();
 
-    public Airline(String nickname, String name, String mail, String description, String web) {
-        super(nickname, name, mail);
-        this.description = description;
-        this.web = web;
-    }
-
     @Override
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof AirlineDTO newDataCasted)) return;
         if (newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
             this.setName(newDataCasted.getName());
-//        if (newDataCasted.getMail() != null && !newDataCasted.getMail().isBlank())
-//            this.setMail(newDataCasted.getMail());
         if (newDataCasted.getDescription() != null && !newDataCasted.getDescription().isBlank())
             this.setDescription(newDataCasted.getDescription());
         if (newDataCasted.getWeb() != null && !newDataCasted.getWeb().isBlank())
             this.setWeb(newDataCasted.getWeb());
-
+        if (newDataCasted.getImage() != null && !newDataCasted.getImage().isBlank())
+            this.setImage(newDataCasted.getImage());
     }
 
     @Override
@@ -66,3 +63,4 @@ public class Airline extends User {
                 "} " + super.toString();
     }
 }
+

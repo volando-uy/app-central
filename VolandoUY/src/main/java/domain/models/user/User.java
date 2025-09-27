@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.utils.ValidatorUtil;
 
@@ -31,6 +32,13 @@ public abstract class User {
     @NotBlank
     @Email
     private String mail;
+
+    @NotBlank
+    @Size(min = 6, max = 70)
+    private String password;
+
+    @NotBlank
+    private String image;
 
     public abstract void updateDataFrom(UserDTO newData);
 }
