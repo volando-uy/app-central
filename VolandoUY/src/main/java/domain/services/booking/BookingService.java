@@ -6,7 +6,9 @@ import domain.dtos.flight.FlightDTO;
 import domain.dtos.luggage.*;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.models.bookflight.BookFlight;
+import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
+import domain.models.flightRoute.FlightRoute;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.luggage.Luggage;
@@ -60,9 +62,10 @@ public class BookingService implements IBookingService {
         if (tickets == null || tickets.isEmpty())
             throw new UnsupportedOperationException("No se pueden crear reservas sin tickets");
 
-        Flight flight = flightService.getFlightByName(flightName, false);
+        Flight flight = flightService.getFlightByName(flightName, true);
         Customer customer = userService.getCustomerByNickname(userNickname,true);
 
+        FlightRoute flightRoute = flight.getFlightRoute();
 
         List<Seat> availableSeats = seatService.getLimitedAvailableSeatsByFlightNameAndSeatType(flightName, tickets.size(), bookingDTO.getSeatType());
         if (availableSeats == null || availableSeats.isEmpty())
@@ -71,19 +74,31 @@ public class BookingService implements IBookingService {
             throw new UnsupportedOperationException("No hay suficientes asientos disponibles");
 
         List<Ticket> savedTickets = new ArrayList<>();
-        int idx = 0;
         for (BaseTicketDTO ticketDTO : tickets.keySet()) {
             Ticket t = ticketService.createTicketWithoutPersistence(ticketDTO);
 
-            // no hace falta setear seat acá (lo hace el repo con el managedSeat)
-            // pero si lo dejás, no pasa nada.
-
             List<LuggageDTO> lugDTOs = tickets.get(ticketDTO);
+            boolean alreadyPassedBasic = false;
             if (lugDTOs != null) {
                 for (LuggageDTO ldto : lugDTOs) {
                     t.addLuggage(mapToLuggageEntity(ldto));
+
+                    // Si hay más de un equipaje, significa que hay extra
+                    if (!alreadyPassedBasic)
+                        bookFlight.setTotalPrice(bookingDTO.getTotalPrice() + flightRoute.getPriceExtraUnitBaggage());
+                    alreadyPassedBasic = true;
                 }
             }
+
+            // Agregamos el precio del asiento
+            bookFlight.setTotalPrice(
+                    bookFlight.getSeatType() == EnumTipoAsiento.TURISTA
+                            ? bookFlight.getTotalPrice() + flightRoute.getPriceTouristClass()
+                            : bookFlight.getTotalPrice() + flightRoute.getPriceBusinessClass()
+            );
+
+
+
             savedTickets.add(t);
         }
         // Asignamos el vuelo y el usuario (cliente) al BookFlight

@@ -343,7 +343,6 @@ public class BookFlightPanel extends JPanel {
             }
 
             // Iterar para agregar cada pasajero al ticketMap
-            int extraLuggageCount = 0;
             Map<BaseTicketDTO, List<LuggageDTO>> ticketMap = new LinkedHashMap<>();
             for (int i = 0; i < passengerCount; i++) {
                 EnumTipoDocumento docType = EnumTipoDocumento.valueOf(m.getValueAt(i, 0).toString());
@@ -353,7 +352,6 @@ public class BookFlightPanel extends JPanel {
                 EnumEquipajeBasico basicLuggageType = EnumEquipajeBasico.valueOf(m.getValueAt(i, 4).toString());
                 EnumEquipajeExtra extraLuggageType = EnumEquipajeExtra.valueOf(m.getValueAt(i, 5).toString());
                 Integer extraLuggageUnits = parseNonNegativeIntOrNo(String.valueOf(m.getValueAt(i, 6)), 0);
-                extraLuggageCount += extraLuggageUnits;
 
                 BaseTicketDTO t = new BaseTicketDTO();
                 t.setName(name);
@@ -382,13 +380,8 @@ public class BookFlightPanel extends JPanel {
 
             }
 
-            double unitPrice = seatType == EnumTipoAsiento.EJECUTIVO
-                    ? nzDouble(flightRouteDTO.getPriceBusinessClass())
-                    : nzDouble(flightRouteDTO.getPriceTouristClass());
-            double total = unitPrice * passengerCount + flightRouteDTO.getPriceExtraUnitBaggage() * extraLuggageCount;
-
             BaseBookFlightDTO booking = new BaseBookFlightDTO();
-            booking.setTotalPrice(total);
+            booking.setTotalPrice(0.0); // Se calcula en el servicio
             booking.setSeatType(seatType);
             booking.setCreatedAt(LocalDateTime.now()); // ← fecha actual desde GUI
 
