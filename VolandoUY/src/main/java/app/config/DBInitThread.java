@@ -10,6 +10,8 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.airport.BaseAirportDTO;
+import domain.dtos.bookFlight.BaseBookFlightDTO;
+import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
@@ -19,16 +21,23 @@ import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.dtos.luggage.BaseBasicLuggageDTO;
+import domain.dtos.luggage.BaseExtraLuggageDTO;
+import domain.dtos.luggage.LuggageDTO;
+import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.user.*;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
+import domain.models.luggage.EnumEquipajeBasico;
+import domain.models.luggage.EnumEquipajeExtra;
 import domain.models.user.Customer;
 import factory.ControllerFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,13 +91,15 @@ public class DBInitThread extends Thread {
 
         // Se necesita la aerolinea también para crear el vuelo
         // Pero la aerolinea ya va dentro de cada ruta de vuelo.
-        List<FlightDTO> flights = seed_generateFlights(flightRoutes);
+        List<BaseFlightDTO> flights = seed_generateFlights(flightRoutes);
         System.out.println("Flights: " + flights);
 
         List<BaseFlightRoutePackageDTO> flightRoutePackages = seed_generateFlightRoutePackages(flightRoutes);
         System.out.println("Flight Route Packages: " + flightRoutePackages);
 
         // TODO: Agregar seed para reservas de vuelos y compras de paquetes
+        List<BaseBookFlightDTO> bookFlights = seed_generateBookFlights(customers, flights);
+        System.out.println("Book Flights: " + bookFlights);
     }
 
     private List<BaseAirlineDTO> seed_generateAirlines() {
@@ -283,10 +294,10 @@ public class DBInitThread extends Thread {
         return flightRoutesDTOs;
     }
 
-    private List<FlightDTO> seed_generateFlights(List<FlightRouteDTO> flightRoutes) {
+    private List<BaseFlightDTO> seed_generateFlights(List<FlightRouteDTO> flightRoutes) {
         IFlightController flightController = ControllerFactory.getFlightController();
 
-        List<FlightDTO> flightsDTOs = new ArrayList<>();
+        List<BaseFlightDTO> flightsDTOs = new ArrayList<>();
         for (FlightRouteDTO flightRoute : flightRoutes) {
             int numFlights = (int) (Math.random() * 3); // Entre 0 y 2 vuelos por ruta
             for (int i = 1; i <= numFlights; i++) {
@@ -299,13 +310,11 @@ public class DBInitThread extends Thread {
                 baseFlightDTO.setCreatedAt(LocalDateTime.now());
 
                 // Crear el vuelo
-                flightController.createFlight(
+                BaseFlightDTO createdFlight = flightController.createFlight(
                         baseFlightDTO,
                         flightRoute.getAirlineNickname(),
                         flightRoute.getName()
                 );
-
-                FlightDTO createdFlight = flightController.getFlightDetailsByName(baseFlightDTO.getName());
 
                 flightsDTOs.add(createdFlight);
             }
@@ -361,4 +370,73 @@ public class DBInitThread extends Thread {
         return flightRoutePackagesDTOs;
     }
 
+    private List<BaseBookFlightDTO> seed_generateBookFlights(
+            List<BaseCustomerDTO> customers,
+            List<BaseFlightDTO> flights
+    ) {
+
+        List<BaseBookFlightDTO> bookFlightsDTOs = new ArrayList<>();
+        int numBookings = 10; // Crear 10 reservas de vuelos
+        for (int i = 1; i <= numBookings; i++) {
+            if (flights.isEmpty() || customers.isEmpty()) break;
+
+            // Seleccionar un cliente aleatorio
+            String customerNickname = customers.get((int) (Math.random() * customers.size())).getNickname();
+
+            // Seleccionar un vuelo aleatorio
+            String flightName = flights.get((int) (Math.random() * flights.size())).getName();
+
+
+            BaseBookFlightDTO baseBookFlightDTO = new BaseBookFlightDTO();
+
+            // Seleccionar tipo de asiento aleatoriamente
+            EnumTipoAsiento seatType = Math.random() > 0.5 ? EnumTipoAsiento.TURISTA : EnumTipoAsiento.EJECUTIVO;
+            baseBookFlightDTO.setSeatType(seatType);
+
+            baseBookFlightDTO.setCreatedAt(LocalDateTime.now());
+            baseBookFlightDTO.setTotalPrice(0.0); // Se calculará luego
+
+            // Crear los tickets con sus equipajes
+            Map<BaseTicketDTO, List<LuggageDTO>> tickets = new HashMap<>();
+            int numTickets = 1 + (int) (Math.random() * 3); // Entre 1 y 3 tickets por reserva
+            for (int j = 1; j <= numTickets; j++) {
+                BaseTicketDTO baseTicketDTO = new BaseTicketDTO();
+                baseTicketDTO.setName("Passenger " + j);
+                baseTicketDTO.setSurname("Surname " + j);
+                baseTicketDTO.setDocType(EnumTipoDocumento.CI);
+                baseTicketDTO.setNumDoc(String.valueOf(20000000 + (int) (Math.random() * 80000000)));
+
+
+                // Crear lista de equipajes (1 básico + equipajes extra)
+                List<LuggageDTO> luggageDTOs = new ArrayList<>();
+
+                // 1 basic luggage per ticket
+                BaseBasicLuggageDTO basicLuggageDTO = new BaseBasicLuggageDTO();
+                basicLuggageDTO.setWeight(15.0 + Math.random() * 10);
+                basicLuggageDTO.setCategory(EnumEquipajeBasico.MOCHILA);
+                luggageDTOs.add(basicLuggageDTO);
+
+                // 50% de probabilidad de agregar 1 equipaje extra
+                if (Math.random() > 0.5) {
+                    BaseExtraLuggageDTO extraLuggageDTO = new BaseExtraLuggageDTO();
+                    extraLuggageDTO.setWeight(20.0 + Math.random() * 20);
+                    extraLuggageDTO.setCategory(EnumEquipajeExtra.MALETA);
+                    luggageDTOs.add(extraLuggageDTO);
+                }
+
+                tickets.put(baseTicketDTO, luggageDTOs);
+            }
+
+            // Crear la reserva de vuelo
+            BaseBookFlightDTO createdBooking = ControllerFactory.getBookingController().createBooking(
+                    baseBookFlightDTO,
+                    tickets,
+                    customerNickname,
+                    flightName
+            );
+            bookFlightsDTOs.add(createdBooking);
+        }
+
+        return bookFlightsDTOs;
+    }
 }
