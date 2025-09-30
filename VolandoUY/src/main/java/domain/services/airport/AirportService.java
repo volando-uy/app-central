@@ -31,8 +31,10 @@ public class AirportService implements IAirportService {
     @Override
     public BaseAirportDTO createAirport(BaseAirportDTO dto, String cityName) {
         // Buscamos la ciudad a la que se agrega el aeropuerto
-        // Tira throw si no encuentra
         City city = cityService.getCityByName(cityName);
+        if (city == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, cityName));
+        }
 
         // Checkeamos que no exista un aeropuerto con el mismo código
         if (airportExists(dto.getCode())) {

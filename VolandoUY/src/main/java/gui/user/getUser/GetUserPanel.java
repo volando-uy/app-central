@@ -38,6 +38,7 @@ import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import gui.flightRoute.details.FlightRouteDetailWindow;
+import gui.flightRoutePackage.details.FlightRoutePackageDetailWindow;
 
 /**
  * @author AparicioQuian
@@ -440,64 +441,6 @@ public class GetUserPanel extends JPanel {
         }
     }
 
-    private void ensureDetalleRutaUI() {
-        if (panelDetalleRuta != null) return;
-
-        panelDetalleRuta = new JPanel(new BorderLayout(6,6));
-        panelDetalleRuta.setBackground(new Color(0xF7F9FC));
-        panelDetalleRuta.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1,0,0,0, Color.LIGHT_GRAY),
-                new EmptyBorder(8,8,8,8)
-        ));
-        panelDetalleRuta.setPreferredSize(new Dimension(10, 220));
-        panelDetalleRuta.setVisible(false);
-
-        // Top bar
-        JPanel top = new JPanel(new BorderLayout());
-        top.setOpaque(false);
-        rlTitulo = new JLabel("Detalle de ruta");
-        rlTitulo.setFont(rlTitulo.getFont().deriveFont(Font.BOLD, 13f));
-        top.add(rlTitulo, BorderLayout.WEST);
-
-        JButton btnOcultar = new JButton("Ocultar detalle");
-        btnOcultar.addActionListener(e -> {
-            panelDetalleRuta.setVisible(false);
-            airlineBody.revalidate();
-            airlineBody.repaint();
-        });
-        JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        right.setOpaque(false);
-        right.add(btnOcultar);
-        top.add(right, BorderLayout.EAST);
-        panelDetalleRuta.add(top, BorderLayout.NORTH);
-
-        // Info grid
-        JPanel grid = new JPanel(new GridLayout(2,3,8,4));
-        grid.setOpaque(false);
-        rlRuta        = new JLabel("Ruta: -");
-        rlOrigen      = new JLabel("Origen: -");
-        rlDestino     = new JLabel("Destino: -");
-        rlEstado      = new JLabel("Estado: -");
-        rlPrecioExtra = new JLabel("Equipaje extra (unidad): -");
-        grid.add(rlRuta); grid.add(rlOrigen); grid.add(rlDestino);
-        grid.add(rlEstado); grid.add(rlPrecioExtra); grid.add(new JLabel(""));
-        panelDetalleRuta.add(grid, BorderLayout.CENTER);
-
-        // Tabla inferior
-        modelDetalleRuta = new DefaultTableModel(new Object[]{"Vuelo","Fecha","Hora","Estado"}, 0) {
-            public boolean isCellEditable(int r,int c){ return false; }
-        };
-        tblDetalleRuta = new JTable(modelDetalleRuta);
-        tblDetalleRuta.setRowHeight(22);
-        tblDetalleRuta.setFillsViewportHeight(true);
-        tblDetalleRuta.getTableHeader().setReorderingAllowed(false);
-        JScrollPane sc = new JScrollPane(tblDetalleRuta);
-        panelDetalleRuta.add(sc, BorderLayout.SOUTH);
-
-        // Insertar al final del contenedor
-        airlineBody.add(panelDetalleRuta, BorderLayout.SOUTH);
-    }
-
     // ---------- cliente: reservas ----------
     private void loadCustomerReservations(String customerNickname) {
         List<BookFlightDTO> reservas = bookingController.getBookFlightsDetailsByCustomerNickname(customerNickname);
@@ -690,49 +633,16 @@ public class GetUserPanel extends JPanel {
         int r = tblPaquetes.convertRowIndexToModel(v);
         String name = Objects.toString(modelPaquetes.getValueAt(r, 1), "");
         try {
-            FlightRoutePackageDTO p = flightRoutePackageController.getFlightRoutePackageDetailsByName(name);
-            mostrarDialogoDetalle("Detalle de Paquete: " + name, detallePaqueteAsText(p));
+            SwingUtilities.invokeLater(() -> {
+                JFrame win = new FlightRoutePackageDetailWindow(name, flightRoutePackageController, flightRouteController);
+                win.setVisible(true);
+            });
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudo cargar el paquete: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /** Construye un panel de texto con el detalle del paquete. */
-    private JComponent detallePaqueteAsText(FlightRoutePackageDTO p) {
-        if (p == null) {
-            JTextArea ta = new JTextArea("No se encontró el paquete.");
-            ta.setEditable(false);
-            ta.setLineWrap(true);
-            ta.setWrapStyleWord(true);
-            return new JScrollPane(ta);
-        }
-
-        String code   = callGetterString(p, "getCode");
-        String name   = callGetterString(p, "getName");
-        String desc   = callGetterString(p, "getDescription");
-        String days   = callGetterNumber(p, "getValidityPeriodDays");
-        String disc   = callGetterNumber(p, "getDiscount");
-        String rutas  = "";
-        try {
-            var list = p.getFlightRouteNames();
-            if (list != null && !list.isEmpty()) rutas = String.join(", ", list);
-        } catch (Throwable ignored) {}
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Código: ").append(code.isBlank() ? "-" : code).append("\n");
-        sb.append("Nombre: ").append(name.isBlank() ? "-" : name).append("\n");
-        sb.append("Descripción: ").append(desc.isBlank() ? "-" : desc).append("\n");
-        sb.append("Validez: ").append(days.isBlank() ? "-" : days + " días").append("\n");
-        if (!disc.isBlank()) sb.append("Descuento: ").append(disc).append("\n");
-        sb.append("Rutas incluidas: ").append(rutas.isBlank() ? "-" : rutas);
-
-        JTextArea ta = new JTextArea(sb.toString());
-        ta.setEditable(false);
-        ta.setLineWrap(true);
-        ta.setWrapStyleWord(true);
-        return new JScrollPane(ta);
-    }
 
     private void showCard(String key) { ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key); }
 
@@ -819,17 +729,6 @@ public class GetUserPanel extends JPanel {
         return null;
     }
 
-    private String callGetterDate(Object target, String... candidates) {
-        Object v = callGetter(target, candidates);
-        if (v == null) return "";
-        try {
-            Method fmt = v.getClass().getMethod("format", java.time.format.DateTimeFormatter.class);
-            return String.valueOf(fmt.invoke(v, DTF));
-        } catch (Exception ignore) {
-            return String.valueOf(v);
-        }
-    }
-
     private void mostrarDialogoDetalle(String titulo, JComponent contenido) {
         Window owner = SwingUtilities.getWindowAncestor(this);
         JDialog d = new JDialog(owner, titulo, Dialog.ModalityType.APPLICATION_MODAL);
@@ -839,32 +738,7 @@ public class GetUserPanel extends JPanel {
         d.setLocationRelativeTo(this);
         d.setVisible(true);
     }
-    private void mostrarDialogoDetalle(String titulo, String texto) {
-        JTextArea area = new JTextArea(texto);
-        area.setEditable(false);
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
-        JScrollPane scroll = new JScrollPane(area);
-        scroll.setPreferredSize(new Dimension(620, 360));
-        mostrarDialogoDetalle(titulo, scroll);
-    }
 
-    private String[] getRouteEndsByName(String routeName) {
-        if (routeName == null || routeName.isBlank()) return new String[]{"", ""};
-        String[] cached = routeEndsCache.get(routeName);
-        if (cached != null) return cached;
-        try {
-            FlightRouteDTO dto = flightRouteController.getFlightRouteDetailsByName(routeName);
-            String org = callGetterString(dto, "getOriginCityName", "getOrigin", "getOriginName", "getOriginCity");
-            String dst = callGetterString(dto, "getDestinationCityName", "getDestination", "getDestinationName", "getDestinationCity");
-            String[] out = new String[]{ nz(org), nz(dst) };
-            routeEndsCache.put(routeName, out);
-            return out;
-        } catch (Exception e) {
-            routeEndsCache.put(routeName, new String[]{"", ""});
-            return new String[]{"", ""};
-        }
-    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Ignacio Suarez
