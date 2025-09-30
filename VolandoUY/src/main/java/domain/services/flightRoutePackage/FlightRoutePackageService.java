@@ -109,9 +109,9 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
             // Actualizar el totalPrice del paquete
             Double priceToAdd;
             if (flightRoutePackage.getSeatType().equals(EnumTipoAsiento.TURISTA)) {
-                priceToAdd = flightRoute.getPriceTouristClass();
+                priceToAdd = (flightRoute.getPriceTouristClass() * (1 - flightRoutePackage.getDiscount() / 100));
             } else if (flightRoutePackage.getSeatType().equals(EnumTipoAsiento.EJECUTIVO)) {
-                priceToAdd = flightRoute.getPriceBusinessClass();
+                priceToAdd = flightRoute.getPriceBusinessClass() * (1 - flightRoutePackage.getDiscount() / 100);
             } else {
                 throw new IllegalArgumentException(String.format(ErrorMessages.ERR_INVALID_SEAT_TYPE, flightRoutePackage.getSeatType()));
             }
