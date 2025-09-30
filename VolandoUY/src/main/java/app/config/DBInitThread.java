@@ -12,6 +12,8 @@ import domain.dtos.airport.AirportDTO;
 import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.bookFlight.BaseBookFlightDTO;
 import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.buyPackage.BaseBuyPackageDTO;
+import domain.dtos.buyPackage.BuyPackageDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
@@ -27,6 +29,7 @@ import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.user.*;
 import domain.dtos.user.BaseAirlineDTO;
+import domain.models.buypackage.BuyPackage;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.luggage.EnumEquipajeBasico;
@@ -100,6 +103,9 @@ public class DBInitThread extends Thread {
         // TODO: Agregar seed para reservas de vuelos y compras de paquetes
         List<BaseBookFlightDTO> bookFlights = seed_generateBookFlights(customers, flights);
         System.out.println("Book Flights: " + bookFlights);
+
+        List<BaseBuyPackageDTO> buyPackages = seed_generateBuyPackages(customers, flightRoutePackages);
+        System.out.println("Buy Packages: " + buyPackages);
     }
 
     private List<BaseAirlineDTO> seed_generateAirlines() {
@@ -438,5 +444,41 @@ public class DBInitThread extends Thread {
         }
 
         return bookFlightsDTOs;
+    }
+
+    private List<BaseBuyPackageDTO> seed_generateBuyPackages(
+            List<BaseCustomerDTO> customers,
+            List<BaseFlightRoutePackageDTO> flightRoutePackages
+    ) {
+
+        Map<String, String> alreadyBought = new HashMap<>();
+        List<BaseBuyPackageDTO> boughtPackagesDTOs = new ArrayList<>();
+        int numPurchases = 10; // Crear 10 compras de paquetes
+        for (int i = 1; i <= numPurchases; i++) {
+            if (flightRoutePackages.isEmpty() || customers.isEmpty()) break;
+
+            // Seleccionar un cliente aleatorio
+            String customerNickname = customers.get((int) (Math.random() * customers.size())).getNickname();
+
+            // Seleccionar un paquete de rutas de vuelo aleatorio
+            String packageName = flightRoutePackages.get((int) (Math.random() * flightRoutePackages.size())).getName();
+
+            if (alreadyBought.containsKey(customerNickname) &&
+                    alreadyBought.get(customerNickname).equals(packageName)) {
+                // El cliente ya compró este paquete, saltar esta iteración
+                continue;
+            }
+
+            // Crear la compra del paquete
+            BaseBuyPackageDTO boughtPackageDTO = ControllerFactory.getBuyPackageController().createBuyPackage(
+                    customerNickname,
+                    packageName
+            );
+
+            boughtPackagesDTOs.add(boughtPackageDTO);
+            alreadyBought.put(customerNickname, packageName);
+        }
+
+        return boughtPackagesDTOs;
     }
 }
