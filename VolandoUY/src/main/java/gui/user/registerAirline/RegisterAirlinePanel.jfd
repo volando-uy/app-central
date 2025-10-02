@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -108,8 +108,16 @@ new FormModel {
 					"vAlign": 0
 					"hAlign": 2
 				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+					name: "vSpacer13"
+					"opaque": false
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 5
+					"weighty": 400.0
+					"gridx": 1
+				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "120, 380"
+					"$columnSpecs": "120, 120, 114, 0"
 					"$rowSpecs": "center:30"
 					"$hGap": 10
 					"$alignTop": true
@@ -121,8 +129,8 @@ new FormModel {
 					"maximumSize": &Dimension3 new java.awt.Dimension( 510, 510 )
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "descriptionLabel"
-						"text": "Descripcion:"
+						name: "mailLabel"
+						"text": "Email:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": &Dimension4 new java.awt.Dimension( 120, 30 )
@@ -130,54 +138,10 @@ new FormModel {
 						"minimumSize": &Dimension6 new java.awt.Dimension( 70, 15 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "descriptionTextField"
+						name: "mailTextField"
 						"preferredSize": &Dimension7 new java.awt.Dimension( 120, 30 )
 						"minimumSize": #Dimension0
 						"maximumSize": &Dimension8 new java.awt.Dimension( 100, 30 )
-						"opaque": false
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 1
-					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 1
-					"gridy": 3
-					"hAlign": 2
-					"vAlign": 0
-				} )
-				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-					name: "vSpacer13"
-					"opaque": false
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 4
-					"weighty": 400.0
-					"gridx": 1
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "120, 120, 114, 0"
-					"$rowSpecs": "center:30"
-					"$hGap": 10
-					"$alignTop": true
-					"$alignLeft": true
-				} ) {
-					name: "thirdRowPanel"
-					"preferredSize": #Dimension1
-					"minimumSize": #Dimension2
-					"maximumSize": #Dimension3
-					"opaque": false
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "mailLabel"
-						"text": "Email:"
-						"horizontalAlignment": 4
-						"horizontalTextPosition": 4
-						"preferredSize": #Dimension4
-						"maximumSize": #Dimension5
-						"minimumSize": #Dimension6
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "mailTextField"
-						"preferredSize": #Dimension7
-						"minimumSize": #Dimension0
-						"maximumSize": #Dimension8
 						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
@@ -204,6 +168,86 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 2
+					"hAlign": 2
+					"vAlign": 0
+					"gridx": 1
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "120, 380"
+					"$rowSpecs": "center:30"
+					"$hGap": 10
+					"$alignTop": true
+					"$alignLeft": true
+				} ) {
+					name: "thirdRowPanel"
+					"preferredSize": #Dimension1
+					"minimumSize": #Dimension2
+					"maximumSize": #Dimension3
+					"opaque": false
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "descriptionLabel"
+						"text": "Descripcion:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension4
+						"maximumSize": #Dimension5
+						"minimumSize": #Dimension6
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "descriptionTextField"
+						"preferredSize": #Dimension7
+						"minimumSize": #Dimension0
+						"maximumSize": #Dimension8
+						"opaque": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 3
+					"hAlign": 2
+					"vAlign": 0
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "153, 68, 0"
+					"$rowSpecs": "center:30, 0"
+					"$hGap": 10
+					"$alignTop": true
+					"$alignLeft": true
+				} ) {
+					name: "fourthRowPanel"
+					"preferredSize": #Dimension1
+					"minimumSize": #Dimension2
+					"maximumSize": #Dimension3
+					"opaque": false
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "uploadImageLabel"
+						"text": "Subir una imagen:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension4
+						"maximumSize": #Dimension5
+						"minimumSize": #Dimension6
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "uploadImageBtn"
+						"text": "Nueva"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "uploadedImageLabel"
+						"text": "Subir una imagen:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension4
+						"maximumSize": #Dimension5
+						"minimumSize": #Dimension6
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 4
 					"hAlign": 2
 					"vAlign": 0
 					"gridx": 1

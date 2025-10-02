@@ -82,7 +82,7 @@ new FormModel {
 						"text": "Nombre"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "tipo"
+						name: "nickname"
 						"foreground": #Color0
 						"text": "Nombre"
 					} )
@@ -95,6 +95,10 @@ new FormModel {
 						name: "doc"
 						"foreground": #Color0
 						"text": "Nombre"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "image"
+						"foreground": #Color0
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "North"
