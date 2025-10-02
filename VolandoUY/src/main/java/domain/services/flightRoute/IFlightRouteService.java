@@ -27,4 +27,6 @@ public interface IFlightRouteService {
     void setUserService(IUserService userService);
 
     List<FlightRouteDTO> getFlightRoutesDetailsByPackageName(String packageName, boolean full);
+
+    void setStatusFlightRouteByName(String routeName, boolean confirmed);
 }

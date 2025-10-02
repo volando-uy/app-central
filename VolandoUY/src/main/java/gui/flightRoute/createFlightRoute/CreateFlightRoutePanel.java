@@ -7,6 +7,7 @@ import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
+import domain.models.enums.EnumEstatusRuta;
 import lombok.Setter;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import shared.utils.NonEditableTableModel;
@@ -121,7 +122,8 @@ public class CreateFlightRoutePanel extends JPanel {
                     LocalDate.parse(createdAtTextField.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     Double.parseDouble(touristCostTextField.getText()),
                     Double.parseDouble(businessCostTextField.getText()),
-                    Double.parseDouble(additionalLuggageCostTextField.getText())
+                    Double.parseDouble(additionalLuggageCostTextField.getText()),
+                    EnumEstatusRuta.SIN_ESTADO
                 );
 
                 // Call the controller to create the flight route

@@ -2,6 +2,7 @@ package domain.models.flightRoute;
 
 import domain.models.category.Category;
 import domain.models.city.City;
+import domain.models.enums.EnumEstatusRuta;
 import domain.models.flight.Flight;
 import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
@@ -45,6 +46,9 @@ public class FlightRoute {
 
     @PositiveOrZero()
     private Double priceExtraUnitBaggage;
+
+    @NotNull
+    private EnumEstatusRuta status = EnumEstatusRuta.SIN_ESTADO;
 
 
     @ManyToOne()

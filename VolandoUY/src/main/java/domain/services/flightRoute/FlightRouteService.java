@@ -4,6 +4,7 @@ import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
+import domain.models.enums.EnumEstatusRuta;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.services.category.ICategoryService;
@@ -21,6 +22,7 @@ import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FlightRouteService implements IFlightRouteService {
@@ -88,6 +90,7 @@ public class FlightRouteService implements IFlightRouteService {
         flightRoute.setAirline(airline);
         flightRoute.setCategories(categories);
         flightRoute.setFlights(new ArrayList<>());
+        flightRoute.setStatus(EnumEstatusRuta.SIN_ESTADO);
 
         // Validar antes del primer save
         ValidatorUtil.validate(flightRoute);
@@ -146,6 +149,19 @@ public class FlightRouteService implements IFlightRouteService {
         } else {
             return customModelMapper.mapBaseFlightRoute(flightRoute);
         }
+    }
+
+    @Override
+    public void setStatusFlightRouteByName(String routeName, boolean confirmed) {
+        FlightRoute flightRoute = this.getFlightRouteByName(routeName, false);
+        if (flightRoute == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
+        }
+
+        EnumEstatusRuta status = confirmed ? EnumEstatusRuta.CONFIRMADA : EnumEstatusRuta.RECHAZADA;
+
+        flightRoute.setStatus(status);
+        flightRouteRepository.update(flightRoute);
     }
 }
 

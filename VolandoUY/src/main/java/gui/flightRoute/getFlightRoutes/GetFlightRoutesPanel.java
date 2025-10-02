@@ -36,6 +36,10 @@ public class GetFlightRoutesPanel extends JPanel {
     private List<FlightRouteDTO> flightRoutes = new ArrayList<>();
     private boolean areAirlinesLoading = false;
 
+    private JPopupMenu flightRoutePopupMenu = new JPopupMenu();
+    JMenuItem confirmItem = new JMenuItem("Confirm");
+    JMenuItem rejectItem = new JMenuItem("Reject");
+
     // --- Datos auxiliares ---
     private  List<BaseAirlineDTO> airlines = new ArrayList<>();
     private static  DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -51,6 +55,10 @@ public class GetFlightRoutesPanel extends JPanel {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.flightController = flightController;
+
+        // Add menu items to popup menu
+        flightRoutePopupMenu.add(confirmItem);
+        flightRoutePopupMenu.add(rejectItem);
 
         initComponents();
         initListeners();
@@ -93,12 +101,46 @@ public class GetFlightRoutesPanel extends JPanel {
         });
         FlightRouteTable.addMouseListener(new MouseAdapter() {
             @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) showPopup(e);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) showPopup(e);
+            }
+            private void showPopup(MouseEvent e) {
+                int row = FlightRouteTable.rowAtPoint(e.getPoint());
+                if (row >= 0 && row < FlightRouteTable.getRowCount()) {
+                    FlightRouteTable.setRowSelectionInterval(row, row);
+                    flightRoutePopupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && FlightRouteTable.getSelectedRow() != -1) {
                     int fila = FlightRouteTable.getSelectedRow();
                     FlightRouteDTO route = flightRoutes.get(fila);
                     new FlightRouteDetailWindow(route, flightController).setVisible(true);
                 }
+            }
+        });
+
+        // Add action listeners for menu items
+        confirmItem.addActionListener(e -> {
+            int row = FlightRouteTable.getSelectedRow();
+            if (row >= 0) {
+                FlightRouteDTO route = flightRoutes.get(row);
+                flightRouteController.setStatusFlightRouteByName(route.getName(), true);
+                loadFlightRoutesTable(route.getAirlineNickname());
+            }
+        });
+        rejectItem.addActionListener(e -> {
+            int row = FlightRouteTable.getSelectedRow();
+            if (row >= 0) {
+                FlightRouteDTO route = flightRoutes.get(row);
+                flightRouteController.setStatusFlightRouteByName(route.getName(), false);
+                loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
     }
@@ -164,7 +206,7 @@ public class GetFlightRoutesPanel extends JPanel {
         flightRoutes = routes;
 
         String[] cols = {
-                "Nombre", "Descripción", "Creado",
+                "Estado", "Nombre", "Descripción", "Creado",
                 "Origen", "Destino", "Aerolínea",
                 "$ Turista", "$ Business", "$ Extra Bulto",
                 "Categorías"
@@ -186,6 +228,7 @@ public class GetFlightRoutesPanel extends JPanel {
             }
             //this.flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
             model.addRow(new Object[]{
+                    r.getStatus().toString(),
                     safe(r.getName()),
                     safe(r.getDescription()),
                     created,

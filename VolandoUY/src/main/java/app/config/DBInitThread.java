@@ -30,6 +30,7 @@ import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.user.*;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.models.buypackage.BuyPackage;
+import domain.models.enums.EnumEstatusRuta;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.luggage.EnumEquipajeBasico;
@@ -293,7 +294,17 @@ public class DBInitThread extends Thread {
 
                 // Agarrar la ruta de vuelo con todas las relaciones
                 FlightRouteDTO createdFlightRoute = flightRouteController.getFlightRouteDetailsByName(baseFlightRouteDTO.getName());
-                flightRoutesDTOs.add(createdFlightRoute);
+
+                // 80% de probabilidad de cambiar el estado de la ruta: 60% de confirmarla, 40% de rechazarla
+                if (Math.random() < 0.8) {
+                    boolean confirm = Math.random() < 0.6;
+                    flightRouteController.setStatusFlightRouteByName(createdFlightRoute.getName(), confirm);
+                    if (confirm) {
+                        createdFlightRoute.setStatus(EnumEstatusRuta.CONFIRMADA);
+                        flightRoutesDTOs.add(createdFlightRoute);
+                    }
+                }
+
             }
         }
 
@@ -305,7 +316,7 @@ public class DBInitThread extends Thread {
 
         List<BaseFlightDTO> flightsDTOs = new ArrayList<>();
         for (FlightRouteDTO flightRoute : flightRoutes) {
-            int numFlights = (int) (Math.random() * 3); // Entre 0 y 2 vuelos por ruta
+            int numFlights = (int) (Math.random() * 15); // Entre 0 y 14 vuelos por ruta
             for (int i = 1; i <= numFlights; i++) {
                 BaseFlightDTO baseFlightDTO = new BaseFlightDTO();
                 baseFlightDTO.setName(flightRoute.getName() + " Flight " + i);
