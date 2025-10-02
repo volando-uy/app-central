@@ -7,6 +7,7 @@ package gui.user.getUser;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -39,6 +40,8 @@ import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import gui.flightRoute.details.FlightRouteDetailWindow;
 import gui.flightRoutePackage.details.FlightRoutePackageDetailWindow;
+import shared.constants.Images;
+import shared.utils.ImageProcessor;
 
 /**
  * @author AparicioQuian
@@ -77,7 +80,8 @@ public class GetUserPanel extends JPanel {
 
     // labels aerolínea (manuales; los de cliente son los de JFD: name, tipo, email, doc)
     private JLabel aName;
-    private JLabel aTipo;
+    private JLabel aNickname;
+    private JLabel aImage;
     private JLabel aEmail;
     private JLabel aWeb;
     private JLabel aDesc;
@@ -110,9 +114,10 @@ public class GetUserPanel extends JPanel {
 
     // labels de CLIENTE (los provee JFD)
     private JLabel name;
-    private JLabel tipo;
+    private JLabel nickname;
     private JLabel email;
     private JLabel doc;
+    private JLabel image = new JLabel(ImageProcessor.makeRoundedIcon(Images.USER_DEFAULT, 100));
 
     private JPanel cardsPanel;
     private JPanel cardEmpty;
@@ -239,28 +244,31 @@ public class GetUserPanel extends JPanel {
         headerCards = headerDatos;
 
         // Card CLIENTE: reutiliza labels existentes
-        headerClientePanel = new JPanel(new GridLayout(2, 2));
-        headerClientePanel.setOpaque(false);
+        headerClientePanel = new JPanel(new GridLayout(2, 3));
         headerClientePanel.add(name);
-        headerClientePanel.add(tipo);
-        headerClientePanel.add(email);
+        headerClientePanel.add(nickname);
+        headerClientePanel.add(image);
         headerClientePanel.add(doc);
+        headerClientePanel.add(email);
 
+        headerClientePanel.add(new JLabel("")); // espacio vacío
         // Card AEROLÍNEA: labels nuevos
-        headerAirlinePanel = new JPanel(new GridLayout(3, 2));
+        headerAirlinePanel = new JPanel(new GridLayout(2, 3));
         headerAirlinePanel.setOpaque(false);
         aName = new JLabel("Nombre");
-        aTipo = new JLabel("Tipo");
-        aEmail = new JLabel("Email");
+        aNickname = new JLabel("Nickname");
+        aImage = new JLabel(ImageProcessor.makeRoundedIcon(Images.USER_DEFAULT, 100));
         aWeb  = new JLabel("Web");
+        aEmail = new JLabel("Email");
         aDesc = new JLabel("Descripción");
 
+
         headerAirlinePanel.add(aName);
-        headerAirlinePanel.add(aTipo);
-        headerAirlinePanel.add(aEmail);
+        headerAirlinePanel.add(aNickname);
+        headerAirlinePanel.add(aImage);
         headerAirlinePanel.add(aWeb);
+        headerAirlinePanel.add(aEmail);
         headerAirlinePanel.add(aDesc);
-        headerAirlinePanel.add(new JLabel(""));
 
         headerCards.add(headerClientePanel, CARD_CLIENT);
         headerCards.add(headerAirlinePanel, CARD_AIRLINE);
@@ -274,31 +282,28 @@ public class GetUserPanel extends JPanel {
         headerCards.repaint();
     }
 
-    private void headerClienteSet(String n, String t, String e, String d) {
-        name.setText("Nombre: " + nz(n));
-        tipo.setText("Tipo: " + nz(t));
-        email.setText("Email: " + nz(e));
-        doc.setText("Documento: " + nz(d));
+    private void headerClienteSet(String n, String nick, ImageIcon i, String e, String d) {
+        name.setText(nz(n));
+        nickname.setText(nick);
+        image.setIcon(i);
+        email.setText(nz(e));
+        doc.setText(nz(d));
         showHeaderCard(CARD_CLIENT);
     }
 
-    private void headerAirlineSet(Object airlineDTO) {
-        String n   = callGetterString(airlineDTO, "getName");
-        String e   = callGetterString(airlineDTO, "getMail","getEmail");
-        String web = callGetterString(airlineDTO, "getWebsite","getWeb","getUrl","getSite");
-        String d   = callGetterString(airlineDTO, "getDescription","getDesc");
-
-        aName.setText("Nombre: " + nz(n));
-        aTipo.setText("Tipo: Aerolínea");
-        aEmail.setText("Email: " + nz(e));
-        aWeb.setText("Web: " + (web.isBlank() ? "-" : web));
-        aDesc.setText("Descripción: " + (d.isBlank() ? "-" : d));
+    private void headerAirlineSet(String n, String nick,ImageIcon i, String e, String w, String d) {
+        aName.setText(nz(n));
+        aNickname.setText(nick);
+        aImage.setIcon(i);
+        aEmail.setText(nz(e));
+        aWeb.setText((w.isBlank() ? "-Sin web-" : w));
+        aDesc.setText((d.isBlank() ? "-Sin descripción-" : d));
         showHeaderCard(CARD_AIRLINE);
     }
 
     private void headerDatosReset() {
         name.setText("Nombre");
-        tipo.setText("Tipo");
+        nickname.setText("Nickname");
         email.setText("Email");
         doc.setText("Documento");
         showHeaderCard(CARD_CLIENT);
@@ -366,18 +371,31 @@ public class GetUserPanel extends JPanel {
         try {
             if (usuarioSeleccionadoTipo.equalsIgnoreCase("Aerolínea")) {
                 BaseAirlineDTO a = userController.getAirlineSimpleDetailsByNickname(usuarioSeleccionadoNick);
-                headerAirlineSet(a);                       // usa tus labels de aerolínea (web/desc/email)
+                if (a == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontró la aerolínea seleccionada.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                ImageIcon image = ImageProcessor.makeRoundedIcon(!a.getImage().equals(Images.USER_DEFAULT) ? a.getImage() : Images.USER_DEFAULT, 100);
+                headerAirlineSet(a.getName(), a.getNickname(), image, a.getMail(), a.getWeb(), a.getDescription());                       // usa tus labels de aerolínea (web/desc/email)
                 loadAirlineRoutes(usuarioSeleccionadoNick);
                 showCard(CARD_AIRLINE);
             } else {
                 // Cliente: ahora levantamos todos los datos vía controller (no desde la tabla)
                 CustomerDTO c = userController.getCustomerDetailsByNickname(usuarioSeleccionadoNick);
-                String nombre   = c == null ? Objects.toString(modelUsuarios.getValueAt(r, 1), "")
-                        : (nz(c.getName()) + " " + nz(c.getSurname())).trim();
-                String docTxt   = c == null ? "" : (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim();
-                String emailTxt = c == null ? "" : nz(c.getMail());
+                if (c == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontró el cliente seleccionado.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                headerClienteSet(nombre, "Cliente", emailTxt, docTxt);
+                String nombre   = (nz(c.getName()) + " " + nz(c.getSurname())).trim();
+                String docTxt   = (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim();
+                String emailTxt = nz(c.getMail());
+                ImageIcon image = ImageProcessor.makeRoundedIcon(!c.getImage().equals(Images.USER_DEFAULT) ? c.getImage() : Images.USER_DEFAULT, 100);
+
+
+                headerClienteSet(nombre, c.getNickname(), image, emailTxt, docTxt);
 
                 loadCustomerReservations(usuarioSeleccionadoNick);
                 loadCustomerPackages(usuarioSeleccionadoNick);
@@ -729,19 +747,9 @@ public class GetUserPanel extends JPanel {
         return null;
     }
 
-    private void mostrarDialogoDetalle(String titulo, JComponent contenido) {
-        Window owner = SwingUtilities.getWindowAncestor(this);
-        JDialog d = new JDialog(owner, titulo, Dialog.ModalityType.APPLICATION_MODAL);
-        d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        d.getContentPane().add(contenido);
-        d.setSize(520, 420);
-        d.setLocationRelativeTo(this);
-        d.setVisible(true);
-    }
-
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - asd
         splitPane1 = new JSplitPane();
         panel4 = new JPanel();
         scrollPane1 = new JScrollPane();
@@ -753,9 +761,10 @@ public class GetUserPanel extends JPanel {
         panel5 = new JPanel();
         headerDatos = new JPanel();
         name = new JLabel();
-        tipo = new JLabel();
+        nickname = new JLabel();
         email = new JLabel();
         doc = new JLabel();
+        image = new JLabel();
         cardsPanel = new JPanel();
         cardEmpty = new JPanel();
         label4 = new JLabel();
@@ -789,13 +798,12 @@ public class GetUserPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-                swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border
-                . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog"
-                ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel4. getBorder
-                ( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-                .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException
-                ( ); }} );
+                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+                ( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+                . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt
+                . Color. red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+                propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( )
+                ; }} );
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -868,10 +876,10 @@ public class GetUserPanel extends JPanel {
                     name.setText("Nombre");
                     headerDatos.add(name);
 
-                    //---- tipo ----
-                    tipo.setForeground(new Color(0x1f1f1f));
-                    tipo.setText("Nombre");
-                    headerDatos.add(tipo);
+                    //---- nickname ----
+                    nickname.setForeground(new Color(0x1f1f1f));
+                    nickname.setText("Nombre");
+                    headerDatos.add(nickname);
 
                     //---- email ----
                     email.setForeground(new Color(0x1f1f1f));
@@ -882,6 +890,10 @@ public class GetUserPanel extends JPanel {
                     doc.setForeground(new Color(0x1f1f1f));
                     doc.setText("Nombre");
                     headerDatos.add(doc);
+
+                    //---- image ----
+                    image.setForeground(new Color(0x1f1f1f));
+                    headerDatos.add(image);
                 }
                 panel5.add(headerDatos, BorderLayout.NORTH);
 
@@ -997,9 +1009,11 @@ public class GetUserPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
-
+    // Generated using JFormDesigner Evaluation license - asd
     private JLabel reloadUserTableLabel;
-
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
+/*
+private JLabel reloadUserTableLabel;
+private JLabel imagen;
+ */

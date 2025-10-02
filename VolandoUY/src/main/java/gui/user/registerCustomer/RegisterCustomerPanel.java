@@ -7,6 +7,7 @@ package gui.user.registerCustomer;
 import javax.swing.border.*;
 
 import controllers.user.IUserController;
+import controllers.utils.IUtilsController;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.enums.EnumTipoDocumento;
@@ -18,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+import java.io.File;
 
 /**
  * @author ignac
@@ -26,9 +28,13 @@ import javax.swing.*;
 public class RegisterCustomerPanel extends JPanel {
 
     private IUserController userController;
+    private IUtilsController utilsController;
+    
+    File selectedImageFile = null;
 
-    public RegisterCustomerPanel(IUserController userController) {
+    public RegisterCustomerPanel(IUserController userController, IUtilsController utilsController) {
         this.userController = userController;
+        this.utilsController = utilsController;
 
         initComponents();
         initComponentsManually();
@@ -50,6 +56,13 @@ public class RegisterCustomerPanel extends JPanel {
                 String id = idTextField.getText();
                 EnumTipoDocumento idType = (EnumTipoDocumento) idTypeComboBox.getSelectedItem();
 
+                // Upload image
+                String imagePath = null;
+                if (selectedImageFile != null) {
+                    imagePath = utilsController.uploadImage(selectedImageFile, "users/customers/" + nickname);
+                }
+
+
                 // TODO: unhardcode this variables
                 String password = "defaultPassword123"; // Default password
                 String image = ""; // Default image path or URL
@@ -59,7 +72,7 @@ public class RegisterCustomerPanel extends JPanel {
                         name,
                         mail,
                         password,
-                        image,
+                        imagePath,
                         surname,
                         citizenship,
                         birthDate,
@@ -74,6 +87,18 @@ public class RegisterCustomerPanel extends JPanel {
             } catch (Exception ex) {
                 // Create a dialog to show the error
                 JOptionPane.showMessageDialog(this, "Error al crear el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        uploadImageBtn.addActionListener(e -> {
+            // Open a new FileChooser in a new window
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Get the selected file
+                selectedImageFile = fileChooser.getSelectedFile();
+                // Set the image path to the label
+                uploadedImageLabel.setText(selectedImageFile.getName());
             }
         });
     }
@@ -112,7 +137,7 @@ public class RegisterCustomerPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - asd
         titleLabel = new JLabel();
         InfoUserPanel = new JPanel();
         hSpacer5 = new JPanel(null);
@@ -130,15 +155,19 @@ public class RegisterCustomerPanel extends JPanel {
         emailTextField = new JTextField();
         vSpacer13 = new JPanel(null);
         thirdRowPanel = new JPanel();
-        citizenshipLabel = new JLabel();
-        citizenshipTextField = new JTextField();
-        idLabel = new JLabel();
-        idTextField = new JTextField();
-        fourthRowPanel = new JPanel();
         birthDateLabel = new JLabel();
         birthDateTextField = new JTextField();
         idTypeLabel = new JLabel();
         idTypeComboBox = new JComboBox<>();
+        fourthRowPanel = new JPanel();
+        citizenshipLabel = new JLabel();
+        citizenshipTextField = new JTextField();
+        idLabel = new JLabel();
+        idTextField = new JTextField();
+        fifthRowPanel = new JPanel();
+        uploadImageLabel = new JLabel();
+        uploadImageBtn = new JButton();
+        uploadedImageLabel = new JLabel();
         updateBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
         hSpacer2 = new JPanel(null);
@@ -152,14 +181,11 @@ public class RegisterCustomerPanel extends JPanel {
         setBackground(new Color(0xeeeeee));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (
-        new javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion"
-        , javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
-        , new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 )
-        , java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
-        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-        ) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
+        , 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+        , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
+         getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -317,7 +343,7 @@ public class RegisterCustomerPanel extends JPanel {
 
             //---- vSpacer13 ----
             vSpacer13.setOpaque(false);
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 5, 1, 1, 0.0, 200.0,
+            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 6, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
 
@@ -325,13 +351,67 @@ public class RegisterCustomerPanel extends JPanel {
             {
                 thirdRowPanel.setPreferredSize(new Dimension(510, 30));
                 thirdRowPanel.setMinimumSize(new Dimension(510, 30));
-                thirdRowPanel.setMaximumSize(new Dimension(510, 510));
+                thirdRowPanel.setMaximumSize(new Dimension(510, 30));
                 thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
-                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {20, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- birthDateLabel ----
+                birthDateLabel.setText("Fecha de Nacimiento:");
+                birthDateLabel.setPreferredSize(new Dimension(70, 15));
+                birthDateLabel.setMaximumSize(new Dimension(70, 15));
+                birthDateLabel.setMinimumSize(new Dimension(70, 15));
+                birthDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                birthDateLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                thirdRowPanel.add(birthDateLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- birthDateTextField ----
+                birthDateTextField.setPreferredSize(new Dimension(120, 30));
+                birthDateTextField.setMinimumSize(new Dimension(100, 30));
+                birthDateTextField.setText("dd/mm/yyyy");
+                birthDateTextField.setOpaque(false);
+                thirdRowPanel.add(birthDateTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- idTypeLabel ----
+                idTypeLabel.setText("Tipo de ID:");
+                idTypeLabel.setPreferredSize(new Dimension(70, 15));
+                idTypeLabel.setMaximumSize(new Dimension(70, 15));
+                idTypeLabel.setMinimumSize(new Dimension(70, 15));
+                idTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                thirdRowPanel.add(idTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- idTypeComboBox ----
+                idTypeComboBox.setMinimumSize(new Dimension(100, 30));
+                idTypeComboBox.setPreferredSize(new Dimension(100, 30));
+                idTypeComboBox.setOpaque(false);
+                thirdRowPanel.add(idTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //======== fourthRowPanel ========
+            {
+                fourthRowPanel.setPreferredSize(new Dimension(510, 30));
+                fourthRowPanel.setMinimumSize(new Dimension(510, 30));
+                fourthRowPanel.setMaximumSize(new Dimension(510, 510));
+                fourthRowPanel.setOpaque(false);
+                fourthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)fourthRowPanel.getLayout()).columnWidths = new int[] {130, 130, 124, 0, 0};
+                ((GridBagLayout)fourthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)fourthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)fourthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- citizenshipLabel ----
                 citizenshipLabel.setText("Nacionalidad:");
@@ -340,7 +420,7 @@ public class RegisterCustomerPanel extends JPanel {
                 citizenshipLabel.setPreferredSize(new Dimension(120, 30));
                 citizenshipLabel.setMaximumSize(new Dimension(70, 15));
                 citizenshipLabel.setMinimumSize(new Dimension(70, 15));
-                thirdRowPanel.add(citizenshipLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                fourthRowPanel.add(citizenshipLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
@@ -349,7 +429,7 @@ public class RegisterCustomerPanel extends JPanel {
                 citizenshipTextField.setMinimumSize(new Dimension(100, 30));
                 citizenshipTextField.setMaximumSize(new Dimension(100, 30));
                 citizenshipTextField.setOpaque(false);
-                thirdRowPanel.add(citizenshipTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                fourthRowPanel.add(citizenshipTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
@@ -360,7 +440,7 @@ public class RegisterCustomerPanel extends JPanel {
                 idLabel.setPreferredSize(new Dimension(120, 30));
                 idLabel.setMaximumSize(new Dimension(70, 15));
                 idLabel.setMinimumSize(new Dimension(70, 15));
-                thirdRowPanel.add(idLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                fourthRowPanel.add(idLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
@@ -369,65 +449,55 @@ public class RegisterCustomerPanel extends JPanel {
                 idTextField.setMinimumSize(new Dimension(100, 30));
                 idTextField.setMaximumSize(new Dimension(100, 30));
                 idTextField.setOpaque(false);
-                thirdRowPanel.add(idTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                fourthRowPanel.add(idTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
 
-            //======== fourthRowPanel ========
+            //======== fifthRowPanel ========
             {
-                fourthRowPanel.setPreferredSize(new Dimension(510, 30));
-                fourthRowPanel.setMinimumSize(new Dimension(510, 30));
-                fourthRowPanel.setMaximumSize(new Dimension(510, 30));
-                fourthRowPanel.setOpaque(false);
-                fourthRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)fourthRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
-                ((GridBagLayout)fourthRowPanel.getLayout()).rowHeights = new int[] {20, 0};
-                ((GridBagLayout)fourthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)fourthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+                fifthRowPanel.setPreferredSize(new Dimension(510, 30));
+                fifthRowPanel.setMinimumSize(new Dimension(510, 30));
+                fifthRowPanel.setMaximumSize(new Dimension(510, 510));
+                fifthRowPanel.setOpaque(false);
+                fifthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)fifthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
+                ((GridBagLayout)fifthRowPanel.getLayout()).rowHeights = new int[] {30, 0, 0};
+                ((GridBagLayout)fifthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)fifthRowPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
-                //---- birthDateLabel ----
-                birthDateLabel.setText("Fecha de Nacimiento:");
-                birthDateLabel.setPreferredSize(new Dimension(70, 15));
-                birthDateLabel.setMaximumSize(new Dimension(70, 15));
-                birthDateLabel.setMinimumSize(new Dimension(70, 15));
-                birthDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                birthDateLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                fourthRowPanel.add(birthDateLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                //---- uploadImageLabel ----
+                uploadImageLabel.setText("Subir una imagen:");
+                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
+                fifthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- birthDateTextField ----
-                birthDateTextField.setPreferredSize(new Dimension(120, 30));
-                birthDateTextField.setMinimumSize(new Dimension(100, 30));
-                birthDateTextField.setText("dd/mm/yyyy");
-                birthDateTextField.setOpaque(false);
-                fourthRowPanel.add(birthDateTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- idTypeLabel ----
-                idTypeLabel.setText("Tipo de ID:");
-                idTypeLabel.setPreferredSize(new Dimension(70, 15));
-                idTypeLabel.setMaximumSize(new Dimension(70, 15));
-                idTypeLabel.setMinimumSize(new Dimension(70, 15));
-                idTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                fourthRowPanel.add(idTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                //---- uploadImageBtn ----
+                uploadImageBtn.setText("Nueva");
+                fifthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- idTypeComboBox ----
-                idTypeComboBox.setMinimumSize(new Dimension(100, 30));
-                idTypeComboBox.setPreferredSize(new Dimension(100, 30));
-                idTypeComboBox.setOpaque(false);
-                fourthRowPanel.add(idTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                //---- uploadedImageLabel ----
+                uploadedImageLabel.setText("Subir una imagen:");
+                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
+                fifthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+            InfoUserPanel.add(fifthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
@@ -469,7 +539,7 @@ public class RegisterCustomerPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - asd
     private JLabel titleLabel;
     private JPanel InfoUserPanel;
     private JPanel hSpacer5;
@@ -487,15 +557,19 @@ public class RegisterCustomerPanel extends JPanel {
     private JTextField emailTextField;
     private JPanel vSpacer13;
     private JPanel thirdRowPanel;
-    private JLabel citizenshipLabel;
-    private JTextField citizenshipTextField;
-    private JLabel idLabel;
-    private JTextField idTextField;
-    private JPanel fourthRowPanel;
     private JLabel birthDateLabel;
     private JTextField birthDateTextField;
     private JLabel idTypeLabel;
     private JComboBox<EnumTipoDocumento> idTypeComboBox;
+    private JPanel fourthRowPanel;
+    private JLabel citizenshipLabel;
+    private JTextField citizenshipTextField;
+    private JLabel idLabel;
+    private JTextField idTextField;
+    private JPanel fifthRowPanel;
+    private JLabel uploadImageLabel;
+    private JButton uploadImageBtn;
+    private JLabel uploadedImageLabel;
     private JPanel updateBtnPanel;
     private JPanel hSpacer1;
     private JPanel hSpacer2;

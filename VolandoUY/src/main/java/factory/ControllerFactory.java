@@ -22,6 +22,8 @@ import controllers.user.IUserController;
 import controllers.user.UserController;
 import controllers.flightRoutePackage.FlightRoutePackageController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.utils.IUtilsController;
+import controllers.utils.UtilsController;
 import domain.models.user.mapper.UserMapper;
 import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
@@ -40,7 +42,9 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import shared.utils.CustomModelMapper;
+import shared.utils.ImageProcessor;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +64,7 @@ public class ControllerFactory {
     private static ITicketController ticketController;
     private static IBookingController bookingController;
     private static IBuyPackageController buyPackageController;
+    private static IUtilsController utilsController;
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
 
@@ -188,5 +193,12 @@ public class ControllerFactory {
             buyPackageController = new BuyPackageController(ServiceFactory.getBuyPackageService());
         }
         return buyPackageController;
+    }
+
+    public static IUtilsController getUtilsController() {
+        if (utilsController == null) {
+            utilsController = new UtilsController(new ImageProcessor());
+        }
+        return utilsController;
     }
 }
