@@ -6,6 +6,7 @@ import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
+import domain.models.enums.EnumEstatusRuta;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -25,8 +26,8 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
     private List<String> flightsNames;
     private List<String> inPackagesNames;
 
-    public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage) {
-        super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage);
+    public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage, EnumEstatusRuta status) {
+        super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage, status);
         this.originCityName = null;
         this.destinationCityName = null;
         this.airlineNickname = null;

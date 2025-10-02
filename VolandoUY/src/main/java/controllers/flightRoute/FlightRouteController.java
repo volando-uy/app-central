@@ -37,6 +37,11 @@ public class FlightRouteController implements IFlightRouteController{
     }
 
     @Override
+    public void setStatusFlightRouteByName(String routeName, boolean confirmed) {
+        flightRouteService.setStatusFlightRouteByName(routeName, confirmed);
+    }
+
+    @Override
     public FlightRouteDTO getFlightRouteDetailsByName(String routeName) {
         return flightRouteService.getFlightRouteDetailsByName(routeName, true);
     }

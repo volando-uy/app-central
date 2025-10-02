@@ -10,7 +10,7 @@ import java.util.List;
 public interface IFlightRouteController {
     boolean existFlightRoute(String name);
     BaseFlightRouteDTO createFlightRoute(BaseFlightRouteDTO baseFlightRouteDTO, String originCityName, String destinationCityName, String airlineNickname, List<String> categoriesNames);
-
+    void setStatusFlightRouteByName(String routeName, boolean confirmed);
     // Get flight route by name
     // Simple and full versions
     FlightRouteDTO getFlightRouteDetailsByName(String routeName);

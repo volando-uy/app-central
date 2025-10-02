@@ -19,6 +19,7 @@ import controllers.flight.IFlightController;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.models.enums.EnumEstatusRuta;
 import gui.flight.flightDetails.FlightDetailWindow;
 import shared.utils.NonEditableTableModel;
 
@@ -42,12 +43,13 @@ public class FlightRouteDetailWindow extends JFrame {
         try { infoPanel.setBorder(null); } catch (Exception ignored) {}
 
         // Llenar labels con datos de la rutaiin
-        label1.setText("Nombre: " + safe(route.getName()));
-        label2.setText("Descripción: " + safe(route.getDescription()));
-        label3.setText("Creación: " +
+        nameLabel.setText("Nombre: " + safe(route.getName()));
+        descriptionLabel.setText("Descripción: " + safe(route.getDescription()));
+        createdAtLabel.setText("Creación: " +
                 (route.getCreatedAt() != null
                         ? route.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         : ""));
+        statusLabel.setText("Estado: " + route.getStatus().toString());
 
         // Configurar tabla SOLO para vuelos
         String[] columnNames = {
@@ -89,11 +91,12 @@ public class FlightRouteDetailWindow extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - asd
         infoPanel = new JPanel();
-        label1 = new JLabel();
-        label2 = new JLabel();
-        label3 = new JLabel();
+        nameLabel = new JLabel();
+        descriptionLabel = new JLabel();
+        createdAtLabel = new JLabel();
+        statusLabel = new JLabel();
         scrollPane1 = new JScrollPane();
         tablaVuelos = new JTable();
 
@@ -107,34 +110,40 @@ public class FlightRouteDetailWindow extends JFrame {
 
         //======== infoPanel ========
         {
-            infoPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-            . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing
-            . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-            Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-            ) ,infoPanel. getBorder( )) ); infoPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-            public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName (
-            ) )) throw new RuntimeException( ); }} );
+            infoPanel.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+            swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border
+            . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog"
+            , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,infoPanel. getBorder
+            () ) ); infoPanel. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+            . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException
+            ( ) ;} } );
             infoPanel.setLayout(new GridBagLayout());
-            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {0, 0};
+            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {259, 202, 0};
             ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
             ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
 
-            //---- label1 ----
-            label1.setText("Nombre de la ruta de vuelo:");
-            infoPanel.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            //---- nameLabel ----
+            nameLabel.setText("Nombre de la ruta de vuelo:");
+            infoPanel.add(nameLabel, new GridBagConstraints(0, 0, 2, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
-            //---- label2 ----
-            label2.setText("Creaci\u00f3n:");
-            infoPanel.add(label2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            //---- descriptionLabel ----
+            descriptionLabel.setText("Descripci\u00f3n:");
+            infoPanel.add(descriptionLabel, new GridBagConstraints(0, 1, 2, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
-            //---- label3 ----
-            label3.setText("Aerol\u00ednea:");
-            infoPanel.add(label3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+            //---- createdAtLabel ----
+            createdAtLabel.setText("Creaci\u00f3n:");
+            infoPanel.add(createdAtLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- statusLabel ----
+            statusLabel.setText("Estado:");
+            infoPanel.add(statusLabel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
@@ -164,11 +173,12 @@ public class FlightRouteDetailWindow extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - asd
     private JPanel infoPanel;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
+    private JLabel nameLabel;
+    private JLabel descriptionLabel;
+    private JLabel createdAtLabel;
+    private JLabel statusLabel;
     private JScrollPane scrollPane1;
     private JTable tablaVuelos;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
