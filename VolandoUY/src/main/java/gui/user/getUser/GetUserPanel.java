@@ -7,7 +7,6 @@ package gui.user.getUser;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -31,7 +30,6 @@ import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.buyPackage.BuyPackageDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.seat.BaseSeatDTO;
 import domain.dtos.seat.SeatDTO;
 import domain.dtos.ticket.TicketDTO;
@@ -71,7 +69,6 @@ public class GetUserPanel extends JPanel {
     // --------- estado selección ----------
     private String usuarioSeleccionadoTipo = null;
     private String usuarioSeleccionadoNick = null;
-    private final Map<String, String[]> routeEndsCache = new HashMap<>();
 
     // --------- header dinámico (manual, NO JFD) ----------
     private JPanel headerCards;        // contenedor con CardLayout (reusa headerDatos)
@@ -94,52 +91,7 @@ public class GetUserPanel extends JPanel {
 
     // --------- detalle ruta (manual) ----------
     private JPanel panelDetalleRuta, airlineBody;
-    private JLabel rlTitulo, rlRuta, rlOrigen, rlDestino, rlEstado, rlPrecioExtra;
-    private JTable tblDetalleRuta;
-    private DefaultTableModel modelDetalleRuta;
 
-    // --------- UI generada por JFormDesigner ----------
-    private JSplitPane splitPane1;
-    private JPanel panel4;
-    private JScrollPane scrollPane1;
-    private JPanel panel13;
-    private JLabel label5;
-    private JComboBox<String> cmbTipo;
-    private JScrollPane scrollPane2;
-    private JTable tblUsuarios;
-    private JPanel panel5;
-
-    // este panel lo reusamos como contenedor de cards
-    private JPanel headerDatos;
-
-    // labels de CLIENTE (los provee JFD)
-    private JLabel name;
-    private JLabel nickname;
-    private JLabel email;
-    private JLabel doc;
-    private JLabel image = new JLabel(ImageProcessor.makeRoundedIcon(Images.USER_DEFAULT, 100));
-
-    private JPanel cardsPanel;
-    private JPanel cardEmpty;
-    private JLabel label4;
-    private JPanel airline;
-    private JPanel panel9;
-    private JButton btnDetalleRuta;
-    private JScrollPane scrollPane3;
-    private JTable tblRutas;
-    private JPanel client;
-    private JTabbedPane tabbedPane1;
-    private JPanel panelReservas;
-    private JPanel panelToolbarReserva;
-    private JButton btnDetalleReserva;
-    private JScrollPane scrollPaneReservas;
-    private JTable tblReservas;
-    private JPanel panelPaquetes;
-    private JPanel panelToolbarPaquete;
-    private JButton btnDetallePaquete;
-    private JScrollPane scrollPanePaquetes;
-    private JTable tblPaquetes;
-    private FlowLayout flowLayout1;
 
     // --------- ctor ----------
     public GetUserPanel(
@@ -798,12 +750,13 @@ public class GetUserPanel extends JPanel {
             //======== panel4 ========
             {
                 panel4.setBorder(new EmptyBorder(8, 8, 8, 8));
-                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-                ( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-                . TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt
-                . Color. red) ,panel4. getBorder( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-                propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( )
-                ; }} );
+                panel4.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+                swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border
+                . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog"
+                ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel4. getBorder
+                ( )) ); panel4. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+                .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException
+                ( ); }} );
                 panel4.setLayout(new BorderLayout());
 
                 //======== scrollPane1 ========
@@ -1010,7 +963,42 @@ public class GetUserPanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - asd
+    private JSplitPane splitPane1;
+    private JPanel panel4;
+    private JScrollPane scrollPane1;
+    private JPanel panel13;
     private JLabel reloadUserTableLabel;
+    private JComboBox cmbTipo;
+    private JScrollPane scrollPane2;
+    private JTable tblUsuarios;
+    private JPanel panel5;
+    private JPanel headerDatos;
+    private JLabel name;
+    private JLabel nickname;
+    private JLabel email;
+    private JLabel doc;
+    private JLabel image;
+    private JPanel cardsPanel;
+    private JPanel cardEmpty;
+    private JLabel label4;
+    private JPanel airline;
+    private JPanel panel9;
+    private JButton btnDetalleRuta;
+    private JScrollPane scrollPane3;
+    private JTable tblRutas;
+    private JPanel client;
+    private JTabbedPane tabbedPane1;
+    private JPanel panelReservas;
+    private JPanel panelToolbarReserva;
+    private JButton btnDetalleReserva;
+    private JScrollPane scrollPaneReservas;
+    private JTable tblReservas;
+    private JPanel panelPaquetes;
+    private JPanel panelToolbarPaquete;
+    private JButton btnDetallePaquete;
+    private JScrollPane scrollPanePaquetes;
+    private JTable tblPaquetes;
+    private FlowLayout flowLayout1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
 /*
