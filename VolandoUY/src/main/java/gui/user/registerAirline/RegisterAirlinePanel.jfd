@@ -26,7 +26,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
-				"$rowSpecs": "0, 20, top:38, 0, 0, 0"
+				"$rowSpecs": "0, 20, top:38, 0, 0, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
 			} ) {
@@ -151,17 +151,17 @@ new FormModel {
 						"text": "Web:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
-						"preferredSize": new java.awt.Dimension( 120, 30 )
-						"maximumSize": new java.awt.Dimension( 70, 15 )
-						"minimumSize": new java.awt.Dimension( 70, 15 )
+						"preferredSize": &Dimension9 new java.awt.Dimension( 120, 30 )
+						"maximumSize": &Dimension10 new java.awt.Dimension( 70, 15 )
+						"minimumSize": &Dimension11 new java.awt.Dimension( 70, 15 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 2
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "webTextField"
-						"preferredSize": new java.awt.Dimension( 120, 30 )
+						"preferredSize": &Dimension12 new java.awt.Dimension( 120, 30 )
 						"minimumSize": #Dimension0
-						"maximumSize": new java.awt.Dimension( 100, 30 )
+						"maximumSize": &Dimension13 new java.awt.Dimension( 100, 30 )
 						"opaque": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 3
@@ -209,13 +209,69 @@ new FormModel {
 					"vAlign": 0
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "120, 120, 114, 0"
+					"$rowSpecs": "center:30"
+					"$hGap": 10
+					"$alignTop": true
+					"$alignLeft": true
+				} ) {
+					name: "fourthRowPanel"
+					"preferredSize": #Dimension1
+					"minimumSize": #Dimension2
+					"maximumSize": #Dimension3
+					"opaque": false
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "passwordLabel"
+						"text": "Contraseña:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension4
+						"maximumSize": #Dimension5
+						"minimumSize": #Dimension6
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JPasswordField" ) {
+						name: "passwordField"
+						"preferredSize": #Dimension7
+						"minimumSize": #Dimension0
+						"maximumSize": #Dimension8
+						"opaque": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "confirmPasswordLabel"
+						"text": "Confirmar contraseña:"
+						"horizontalAlignment": 4
+						"horizontalTextPosition": 4
+						"preferredSize": #Dimension9
+						"maximumSize": #Dimension10
+						"minimumSize": #Dimension11
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JPasswordField" ) {
+						name: "confirmPasswordField"
+						"preferredSize": #Dimension12
+						"minimumSize": #Dimension0
+						"maximumSize": #Dimension13
+						"opaque": false
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 4
+					"hAlign": 2
+					"vAlign": 0
+					"gridx": 1
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "153, 68, 0"
 					"$rowSpecs": "center:30, 0"
 					"$hGap": 10
 					"$alignTop": true
 					"$alignLeft": true
 				} ) {
-					name: "fourthRowPanel"
+					name: "fifthRowPanel"
 					"preferredSize": #Dimension1
 					"minimumSize": #Dimension2
 					"maximumSize": #Dimension3
@@ -247,7 +303,7 @@ new FormModel {
 						"gridx": 2
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 4
+					"gridy": 5
 					"hAlign": 2
 					"vAlign": 0
 					"gridx": 1

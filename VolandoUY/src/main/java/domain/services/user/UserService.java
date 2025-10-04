@@ -18,6 +18,7 @@ import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.constants.Images;
 import shared.utils.CustomModelMapper;
+import shared.utils.PasswordManager;
 import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
@@ -78,6 +79,10 @@ public class UserService implements IUserService {
         // Lo validamos
         ValidatorUtil.validate(customer);
 
+        // Hash the password
+        String hashedPassword = PasswordManager.hashPassword(customer.getPassword());
+        customer.setPassword(hashedPassword);
+
         // Lo guardamos en el repository
         userRepository.save(customer);
 
@@ -99,6 +104,10 @@ public class UserService implements IUserService {
 
         // Validamos la entidad
         ValidatorUtil.validate(airline);
+
+        // Hash the password
+        String hashedPassword = PasswordManager.hashPassword(airline.getPassword());
+        airline.setPassword(hashedPassword);
 
         // Guardamos la nueva aerolinea
         userRepository.save(airline);
