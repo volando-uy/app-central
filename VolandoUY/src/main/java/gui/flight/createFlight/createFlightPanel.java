@@ -12,11 +12,14 @@ import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.flight.FlightDTO;
+import shared.constants.Images;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,20 +34,24 @@ import javax.swing.table.TableColumn;
  * @author AparicioQuian
  */
 public class createFlightPanel extends JPanel {
-     IFlightController flightController;
-     IFlightRouteController flightRouteController;
-     IUserController userController;
+    IFlightController flightController;
+    IFlightRouteController flightRouteController;
+    IUserController userController;
 
-     List<AirlineDTO> airlines = new ArrayList<>();
+    File selectedImageFile = null;
+
+    List<AirlineDTO> airlines = new ArrayList<>();
     AirlineDTO selectedAirline;
     private static final String PH_CREATED_AT = "dd/MM/yyyy HH:mm";
     private static final String PH_DEPARTURE  = "dd/MM/yyyy HH:mm";
 
     private boolean areAirlinesLoading = false;
 
-    public createFlightPanel(IFlightController flightController,
-                             IFlightRouteController flightRouteController,
-                             IUserController userController) {
+    public createFlightPanel(
+            IFlightController flightController,
+            IFlightRouteController flightRouteController,
+            IUserController userController
+    ) {
         this.flightController = flightController;
         this.flightRouteController = flightRouteController;
         this.userController = userController;
@@ -194,6 +201,7 @@ public class createFlightPanel extends JPanel {
                     }
                 }
 
+
                 // Construcción del DTO
                 BaseFlightDTO baseFlightDTO = new BaseFlightDTO(
                         flightName,
@@ -201,11 +209,15 @@ public class createFlightPanel extends JPanel {
                         durationMinutes,
                         seatsEconomy,
                         seatsBusiness,
-                        createdAt
+                        createdAt,
+                        null
                 );
 
                 // Llamada al controlador
-                flightController.createFlight(baseFlightDTO, selectedAirlineNickname, selectedFlightRouteName);
+                flightController.createFlight(baseFlightDTO, selectedAirlineNickname, selectedFlightRouteName, selectedImageFile);
+
+
+                resetImageSelector();
 
                 JOptionPane.showMessageDialog(this,
                         "Vuelo creado con éxito.",
@@ -224,6 +236,24 @@ public class createFlightPanel extends JPanel {
                 loadAirlinesIntoCombo();
             }
         });
+
+        uploadImageBtn.addActionListener(e -> {
+            // Open a new FileChooser in a new window
+            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Get the selected file
+                selectedImageFile = fileChooser.getSelectedFile();
+                // Set the image path to the label
+                uploadedImageLabel.setText(selectedImageFile.getName());
+            }
+        });
+
+    }
+
+    private void resetImageSelector() {
+        selectedImageFile = null;
+        uploadedImageLabel.setText("-");
     }
 
     /** Placeholders */
@@ -302,7 +332,7 @@ public class createFlightPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - asd
         vSpacer19 = new JPanel(null);
         InfoFlightPanel = new JPanel();
         titleLabel = new JLabel();
@@ -331,6 +361,10 @@ public class createFlightPanel extends JPanel {
         createdDateAtTextField = new JTextField();
         dateFlightLabel = new JLabel();
         dateFlightTextField = new JTextField();
+        sixthRowPanel = new JPanel();
+        uploadImageLabel = new JLabel();
+        uploadImageBtn = new JButton();
+        uploadedImageLabel = new JLabel();
         vSpacer20 = new JPanel(null);
         createBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
@@ -349,11 +383,12 @@ public class createFlightPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder ( 0
-        , 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
-        , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,
-         getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+        (0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+        .TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
+        .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+        propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -365,9 +400,9 @@ public class createFlightPanel extends JPanel {
             InfoFlightPanel.setOpaque(false);
             InfoFlightPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoFlightPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoFlightPanel.getLayout()).rowHeights = new int[] {0, 0, 43, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoFlightPanel.getLayout()).rowHeights = new int[] {0, 0, 43, 0, 0, 0, 0, 0, 0};
             ((GridBagLayout)InfoFlightPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoFlightPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoFlightPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
             //---- titleLabel ----
             titleLabel.setText("Crear vuelo");
@@ -626,6 +661,50 @@ public class createFlightPanel extends JPanel {
             }
             InfoFlightPanel.add(thirdRowPanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== sixthRowPanel ========
+            {
+                sixthRowPanel.setPreferredSize(new Dimension(510, 30));
+                sixthRowPanel.setMinimumSize(new Dimension(510, 30));
+                sixthRowPanel.setMaximumSize(new Dimension(510, 510));
+                sixthRowPanel.setOpaque(false);
+                sixthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- uploadImageLabel ----
+                uploadImageLabel.setText("Subir una imagen:");
+                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadImageBtn ----
+                uploadImageBtn.setText("Nueva");
+                sixthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadedImageLabel ----
+                uploadedImageLabel.setText("-");
+                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoFlightPanel.add(sixthRowPanel, new GridBagConstraints(1, 7, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
         add(InfoFlightPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
@@ -673,7 +752,7 @@ public class createFlightPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - asd
     private JPanel vSpacer19;
     private JPanel InfoFlightPanel;
     private JLabel titleLabel;
@@ -702,6 +781,10 @@ public class createFlightPanel extends JPanel {
     private JTextField createdDateAtTextField;
     private JLabel dateFlightLabel;
     private JTextField dateFlightTextField;
+    private JPanel sixthRowPanel;
+    private JLabel uploadImageLabel;
+    private JButton uploadImageBtn;
+    private JLabel uploadedImageLabel;
     private JPanel vSpacer20;
     private JPanel createBtnPanel;
     private JPanel hSpacer1;

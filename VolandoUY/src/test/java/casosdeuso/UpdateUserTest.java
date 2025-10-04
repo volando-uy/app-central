@@ -67,7 +67,7 @@ class UpdateUserTest {
         modificado.setBirthDate(LocalDate.of(1995, 5, 15));
         modificado.setDocType(EnumTipoDocumento.RUT);
 
-        userController.updateUser(nickname, modificado);
+        userController.updateUser(nickname, modificado, null);
 
         // THEN
         BaseCustomerDTO actualizado = (BaseCustomerDTO) userController.getUserSimpleDetailsByNickname(nickname);
@@ -99,7 +99,7 @@ class UpdateUserTest {
         modificado.setDescription("Nueva descripción");
         modificado.setWeb("www.flyuy.net");
 
-        userController.updateUser(nickname, modificado);
+        userController.updateUser(nickname, modificado, null);
 
         // THEN
         BaseAirlineDTO actualizado = (BaseAirlineDTO) userController.getUserSimpleDetailsByNickname(nickname);

@@ -2,14 +2,15 @@ package controllers.user;
 
 import domain.dtos.user.*;
 
+import java.io.File;
 import java.util.List;
 
 //Aca al no trabajarse directamente en el dominio, para mayor abstraccion se usan los DTO
 public interface IUserController {
-    BaseCustomerDTO registerCustomer(BaseCustomerDTO dto);
-    BaseAirlineDTO registerAirline(BaseAirlineDTO dto);
+    BaseCustomerDTO registerCustomer(BaseCustomerDTO dto, File imageFile);
+    BaseAirlineDTO registerAirline(BaseAirlineDTO dto, File imageFile);
 
-    UserDTO updateUser(String nickname, UserDTO user);
+    UserDTO updateUser(String nickname, UserDTO user, File imageFile);
 
     // Getters for all users
     // Simple and full versions

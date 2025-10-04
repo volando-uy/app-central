@@ -4,6 +4,7 @@ import domain.dtos.user.*;
 import domain.services.user.IUserService;
 import lombok.AllArgsConstructor;
 
+import java.io.File;
 import java.util.List;
 
 @AllArgsConstructor
@@ -11,13 +12,13 @@ public class UserController implements IUserController {
     IUserService userService;
 
     @Override
-    public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO) {
-        return userService.registerCustomer(customerDTO);
+    public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO, File imageFile) {
+        return userService.registerCustomer(customerDTO, imageFile);
     }
 
     @Override
-    public BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO) {
-        return userService.registerAirline(airlineDTO);
+    public BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO, File imageFile) {
+        return userService.registerAirline(airlineDTO, imageFile);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public UserDTO updateUser(String nickname, UserDTO user) {
-        return userService.updateUser(nickname, user);
+    public UserDTO updateUser(String nickname, UserDTO user, File imageFile) {
+        return userService.updateUser(nickname, user, imageFile);
     }
 
     @Override

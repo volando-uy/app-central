@@ -75,6 +75,7 @@ public class FlightRoute {
     @ManyToOne()
     private Airline airline;
 
+    private String image;
 
 
 

@@ -20,4 +20,5 @@ public class BaseFlightRouteDTO {
     private Double priceBusinessClass;
     private Double priceExtraUnitBaggage;
     private EnumEstatusRuta status;
+    private String image;
 }

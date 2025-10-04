@@ -8,6 +8,7 @@ import domain.services.flight.IFlightService;
 import gui.flight.flightDetails.FlightDetailWindow;
 import lombok.AllArgsConstructor;
 
+import java.io.File;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,8 +17,13 @@ public class FlightController implements IFlightController {
     private final IFlightService flightService;
 
     @Override
-    public BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName) {
-        return flightService.createFlight(baseFlightDTO, airlineNickname, flightRouteName);
+    public BaseFlightDTO createFlight(
+            BaseFlightDTO baseFlightDTO,
+            String airlineNickname,
+            String flightRouteName,
+            File imageFile
+    ) {
+        return flightService.createFlight(baseFlightDTO, airlineNickname, flightRouteName, imageFile);
     }
 
     @Override

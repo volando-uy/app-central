@@ -138,7 +138,7 @@ class UserControllerTest {
         updated.setName("NuevoNombre");
 
 
-        UserDTO result = usuarioController.updateUser("gyabisito", updated);
+        UserDTO result = usuarioController.updateUser("gyabisito", updated, null);
 
         assertNotNull(result);
         assertEquals("NuevoNombre", result.getName());

@@ -70,14 +70,18 @@ public class Flight {
     @OneToMany(mappedBy = "flight")
     private List<Seat> seats;
 
+    @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Flight(String name, LocalDateTime departureTime, Long duration, Integer maxEconomySeats, Integer maxBusinessSeats) {
+    private String image;
+
+    public Flight(String name, LocalDateTime departureTime, Long duration, Integer maxEconomySeats, Integer maxBusinessSeats, String image) {
         this.name = name;
         this.departureTime = departureTime;
         this.duration = duration;
         this.maxEconomySeats = maxEconomySeats;
         this.maxBusinessSeats = maxBusinessSeats;
+        this.image = image;
     }
 
     @Override
@@ -90,6 +94,7 @@ public class Flight {
                 ", maxEconomySeats=" + maxEconomySeats +
                 ", maxBusinessSeats=" + maxBusinessSeats +
                 ", createdAt=" + createdAt +
+                ", image='" + image +
                 '}';
     }
 

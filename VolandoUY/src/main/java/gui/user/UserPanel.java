@@ -10,7 +10,6 @@ import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.seat.ISeatController;
 import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
-import controllers.utils.IUtilsController;
 import gui.user.getUser.GetUserPanel;
 import gui.user.registerAirline.RegisterAirlinePanel;
 import gui.user.registerCustomer.RegisterCustomerPanel;
@@ -34,7 +33,6 @@ public class UserPanel extends JPanel {
     private IBuyPackageController buyPackageController;
     private ITicketController ticketController;
     private ISeatController seatController;
-    private IUtilsController utilsController;
 
 
     private JPanel registerCustomerPanel;
@@ -52,8 +50,7 @@ public class UserPanel extends JPanel {
             IBookingController bookingController,
             IBuyPackageController buyPackageController,
             ITicketController ticketController,
-            ISeatController seatController,
-            IUtilsController utilsController
+            ISeatController seatController
     ) {
         this.userController = userController;
         this.flightRouteController = flightRouteController;
@@ -63,7 +60,6 @@ public class UserPanel extends JPanel {
         this.buyPackageController = buyPackageController;
         this.ticketController = ticketController;
         this.seatController = seatController;
-        this.utilsController = utilsController;
         initComponents();
         initPanels();
         initListeners();
@@ -74,8 +70,8 @@ public class UserPanel extends JPanel {
     }
 
     private void initPanels() {
-        registerCustomerPanel = new RegisterCustomerPanel(userController, utilsController);
-        registerAirlinePanel = new RegisterAirlinePanel(userController, utilsController);
+        registerCustomerPanel = new RegisterCustomerPanel(userController);
+        registerAirlinePanel = new RegisterAirlinePanel(userController);
         updateUserPanel = new UpdateUserPanel(userController);
         getUsersPanel = new GetUserPanel(userController, flightRouteController, flightController, flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
 

@@ -3,13 +3,15 @@ package gui.flightRoute.createFlightRoute;
 import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.models.enums.EnumEstatusRuta;
 import lombok.Setter;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
+import shared.constants.Images;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import javax.swing.*;
@@ -18,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,10 +33,16 @@ public class CreateFlightRoutePanel extends JPanel {
     IUserController userController;
     ICategoryController categoryController;
 
+    File selectedImageFile = null;
+
     private List<BaseAirlineDTO> airlines = new ArrayList<>();
 
 
-    public CreateFlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController) {
+    public CreateFlightRoutePanel(
+            IFlightRouteController flightRouteController,
+            IUserController userController,
+            ICategoryController categoryController
+    ) {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.categoryController = categoryController;
@@ -115,6 +124,7 @@ public class CreateFlightRoutePanel extends JPanel {
                     selectedCategories.add(categoriesTable.getValueAt(row, 0).toString());
                 }
 
+
                 // Create the DTO
                 BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO(
                     nameTextField.getText(),
@@ -123,8 +133,10 @@ public class CreateFlightRoutePanel extends JPanel {
                     Double.parseDouble(touristCostTextField.getText()),
                     Double.parseDouble(businessCostTextField.getText()),
                     Double.parseDouble(additionalLuggageCostTextField.getText()),
-                    EnumEstatusRuta.SIN_ESTADO
+                    EnumEstatusRuta.SIN_ESTADO,
+                    null
                 );
+
 
                 // Call the controller to create the flight route
                 BaseFlightRouteDTO createdFlightRouteDTO = flightRouteController.createFlightRoute(
@@ -132,8 +144,11 @@ public class CreateFlightRoutePanel extends JPanel {
                         originCityTextField.getText(),
                         destinationCityTextField.getText(),
                         selectedAirline,
-                        selectedCategories
+                        selectedCategories,
+                        selectedImageFile
                 );
+
+                resetImageSelector();
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -151,7 +166,7 @@ public class CreateFlightRoutePanel extends JPanel {
                 ;
 
             } catch (Exception ex) {
-//                JOptionPane.showMessageDialog(this, "Error al crear la ruta de vuelo: " + ex, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al crear la ruta de vuelo: " + ex, "Error", JOptionPane.ERROR_MESSAGE);
                 throw ex;
             }
         });
@@ -169,6 +184,25 @@ public class CreateFlightRoutePanel extends JPanel {
                 loadAirlinesIntoCombo();
             }
         });
+
+
+        uploadImageBtn.addActionListener(e -> {
+            // Open a new FileChooser in a new window
+            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Get the selected file
+                selectedImageFile = fileChooser.getSelectedFile();
+                // Set the image path to the label
+                uploadedImageLabel.setText(selectedImageFile.getName());
+            }
+        });
+
+    }
+
+    private void resetImageSelector() {
+        selectedImageFile = null;
+        uploadedImageLabel.setText("-");
     }
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
@@ -197,13 +231,13 @@ public class CreateFlightRoutePanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+        // Generated using JFormDesigner Evaluation license - asd
         titleLabel = new JLabel();
         vSpacer18 = new JPanel(null);
         selectAirlinePanel = new JPanel();
         airlineLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
-        InfoUserPanel = new JPanel();
+        InfoFlightRoutePanel = new JPanel();
         vSpacer17 = new JPanel(null);
         hSpacer5 = new JPanel(null);
         hSpacer6 = new JPanel(null);
@@ -228,10 +262,14 @@ public class CreateFlightRoutePanel extends JPanel {
         originCityTextField = new JTextField();
         destinationCityLabel = new JLabel();
         destinationCityTextField = new JTextField();
-        CategoriesTablePanel = new JPanel();
+        categoriesTablePanel = new JPanel();
         categoriesLabel = new JLabel();
         CategoriesScrollPane = new JScrollPane();
         categoriesTable = new JTable();
+        sixthRowPanel = new JPanel();
+        uploadImageLabel = new JLabel();
+        uploadImageBtn = new JButton();
+        uploadedImageLabel = new JLabel();
         vSpacer14 = new JPanel(null);
         createFlightRouteBtn = new JButton();
 
@@ -242,12 +280,13 @@ public class CreateFlightRoutePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
+        swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
+        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
+        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
+        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
+        .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
+        ();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
@@ -287,34 +326,34 @@ public class CreateFlightRoutePanel extends JPanel {
             GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
             new Insets(10, 0, 0, 0), 0, 0));
 
-        //======== InfoUserPanel ========
+        //======== InfoFlightRoutePanel ========
         {
-            InfoUserPanel.setOpaque(false);
-            InfoUserPanel.setLayout(new GridBagLayout());
-            ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 0, 22, 40, 17, 0, 0, 0, 0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            InfoFlightRoutePanel.setOpaque(false);
+            InfoFlightRoutePanel.setLayout(new GridBagLayout());
+            ((GridBagLayout)InfoFlightRoutePanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)InfoFlightRoutePanel.getLayout()).rowHeights = new int[] {0, 0, 22, 40, 17, 0, 0, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoFlightRoutePanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoFlightRoutePanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 20));
             vSpacer17.setPreferredSize(new Dimension(10, 20));
             vSpacer17.setOpaque(false);
-            InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
+            InfoFlightRoutePanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 2, 0), 0, 0));
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
             hSpacer5.setOpaque(false);
-            InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(hSpacer5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 2, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
             hSpacer6.setOpaque(false);
-            InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(hSpacer6, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 2, 0), 0, 0));
 
@@ -369,7 +408,7 @@ public class CreateFlightRoutePanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(firstRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 2, 0), 0, 0));
 
@@ -426,15 +465,15 @@ public class CreateFlightRoutePanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 2, 0), 0, 0));
 
             //---- vSpacer13 ----
             vSpacer13.setOpaque(false);
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 9, 1, 1, 0.0, 200.0,
+            InfoFlightRoutePanel.add(vSpacer13, new GridBagConstraints(1, 10, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 2, 0), 0, 0));
+                new Insets(0, 0, 0, 0), 0, 0));
 
             //======== thirdRowPanel ========
             {
@@ -488,7 +527,7 @@ public class CreateFlightRoutePanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 2, 0), 0, 0));
 
@@ -544,21 +583,21 @@ public class CreateFlightRoutePanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(fourthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 2, 0), 0, 0));
 
-            //======== CategoriesTablePanel ========
+            //======== categoriesTablePanel ========
             {
-                CategoriesTablePanel.setPreferredSize(new Dimension(510, 100));
-                CategoriesTablePanel.setMinimumSize(new Dimension(510, 100));
-                CategoriesTablePanel.setMaximumSize(new Dimension(510, 510));
-                CategoriesTablePanel.setOpaque(false);
-                CategoriesTablePanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)CategoriesTablePanel.getLayout()).columnWidths = new int[] {130, 376, 0};
-                ((GridBagLayout)CategoriesTablePanel.getLayout()).rowHeights = new int[] {67, 0};
-                ((GridBagLayout)CategoriesTablePanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)CategoriesTablePanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+                categoriesTablePanel.setPreferredSize(new Dimension(510, 100));
+                categoriesTablePanel.setMinimumSize(new Dimension(510, 100));
+                categoriesTablePanel.setMaximumSize(new Dimension(510, 510));
+                categoriesTablePanel.setOpaque(false);
+                categoriesTablePanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)categoriesTablePanel.getLayout()).columnWidths = new int[] {130, 376, 0};
+                ((GridBagLayout)categoriesTablePanel.getLayout()).rowHeights = new int[] {67, 0};
+                ((GridBagLayout)categoriesTablePanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)categoriesTablePanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- categoriesLabel ----
                 categoriesLabel.setText("\ud83d\udd04 Categorias:");
@@ -568,7 +607,7 @@ public class CreateFlightRoutePanel extends JPanel {
                 categoriesLabel.setMaximumSize(new Dimension(120, 30));
                 categoriesLabel.setMinimumSize(new Dimension(120, 30));
                 categoriesLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                CategoriesTablePanel.add(categoriesLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                categoriesTablePanel.add(categoriesLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
@@ -584,41 +623,85 @@ public class CreateFlightRoutePanel extends JPanel {
                     categoriesTable.setOpaque(false);
                     CategoriesScrollPane.setViewportView(categoriesTable);
                 }
-                CategoriesTablePanel.add(CategoriesScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                categoriesTablePanel.add(CategoriesScrollPane, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            InfoUserPanel.add(CategoriesTablePanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(categoriesTablePanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 2, 0), 0, 0));
+
+            //======== sixthRowPanel ========
+            {
+                sixthRowPanel.setPreferredSize(new Dimension(510, 30));
+                sixthRowPanel.setMinimumSize(new Dimension(510, 30));
+                sixthRowPanel.setMaximumSize(new Dimension(510, 510));
+                sixthRowPanel.setOpaque(false);
+                sixthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- uploadImageLabel ----
+                uploadImageLabel.setText("Subir una imagen:");
+                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadImageBtn ----
+                uploadImageBtn.setText("Nueva");
+                sixthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadedImageLabel ----
+                uploadedImageLabel.setText("-");
+                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoFlightRoutePanel.add(sixthRowPanel, new GridBagConstraints(1, 7, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 2, 0), 0, 0));
 
             //---- vSpacer14 ----
             vSpacer14.setOpaque(false);
-            InfoUserPanel.add(vSpacer14, new GridBagConstraints(1, 7, 1, 1, 0.0, 200.0,
+            InfoFlightRoutePanel.add(vSpacer14, new GridBagConstraints(1, 8, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 2, 0), 0, 0));
 
             //---- createFlightRouteBtn ----
             createFlightRouteBtn.setText("+ Crear Ruta de Vuelo");
             createFlightRouteBtn.setOpaque(false);
-            InfoUserPanel.add(createFlightRouteBtn, new GridBagConstraints(1, 8, 1, 1, 0.0, 0.0,
+            InfoFlightRoutePanel.add(createFlightRouteBtn, new GridBagConstraints(1, 9, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 2, 0), 0, 0));
         }
-        add(InfoUserPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+        add(InfoFlightRoutePanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
+    // Generated using JFormDesigner Evaluation license - asd
     private JLabel titleLabel;
     private JPanel vSpacer18;
     private JPanel selectAirlinePanel;
     private JLabel airlineLabel;
     private JComboBox<String> airlineComboBox;
-    private JPanel InfoUserPanel;
+    private JPanel InfoFlightRoutePanel;
     private JPanel vSpacer17;
     private JPanel hSpacer5;
     private JPanel hSpacer6;
@@ -643,10 +726,14 @@ public class CreateFlightRoutePanel extends JPanel {
     private JTextField originCityTextField;
     private JLabel destinationCityLabel;
     private JTextField destinationCityTextField;
-    private JPanel CategoriesTablePanel;
+    private JPanel categoriesTablePanel;
     private JLabel categoriesLabel;
     private JScrollPane CategoriesScrollPane;
     private JTable categoriesTable;
+    private JPanel sixthRowPanel;
+    private JLabel uploadImageLabel;
+    private JButton uploadImageBtn;
+    private JLabel uploadedImageLabel;
     private JPanel vSpacer14;
     private JButton createFlightRouteBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

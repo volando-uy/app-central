@@ -7,10 +7,11 @@ import domain.services.flightRoute.IFlightRouteService;
 import domain.services.seat.ISeatService;
 import domain.services.user.IUserService;
 
+import java.io.File;
 import java.util.List;
 
 public interface IFlightService {
-    BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName);
+    BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName, File imageFile);
 
     List<FlightDTO> getAllFlights(boolean full);
 

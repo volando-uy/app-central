@@ -1,6 +1,7 @@
 package domain.models.user;
 
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.flight.Flight;
 import domain.models.flightRoute.FlightRoute;
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
+import shared.constants.Images;
 import shared.constants.RegexPatterns;
 
 import java.util.ArrayList;
@@ -44,15 +46,19 @@ public class Airline extends User {
 
     @Override
     public void updateDataFrom(UserDTO newData) {
-        if (!(newData instanceof AirlineDTO newDataCasted)) return;
+        if (!(newData instanceof BaseAirlineDTO newDataCasted)) return;
         if (newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
             this.setName(newDataCasted.getName());
         if (newDataCasted.getDescription() != null && !newDataCasted.getDescription().isBlank())
             this.setDescription(newDataCasted.getDescription());
         if (newDataCasted.getWeb() != null && !newDataCasted.getWeb().isBlank())
             this.setWeb(newDataCasted.getWeb());
-        if (newDataCasted.getImage() != null && !newDataCasted.getImage().isBlank())
-            this.setImage(newDataCasted.getImage());
+        if (newDataCasted.getImage() != null) {
+            if (newDataCasted.getImage().isBlank())
+                newDataCasted.setImage(Images.USER_DEFAULT);
+            else
+                this.setImage(newDataCasted.getImage());
+        }
     }
 
     @Override

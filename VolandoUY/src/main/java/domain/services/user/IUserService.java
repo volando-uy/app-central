@@ -6,12 +6,13 @@ import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 
+import java.io.File;
 import java.util.List;
 
 //Aca no entran los DTO, porque se trabaja directamente con el dominio
 public interface IUserService {
-    BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO);
-    BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO);
+    BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO, File imageFile);
+    BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO, File imageFile);
 
     List<UserDTO> getAllUsers(boolean full);
     List<String> getAllUsersNicknames();
@@ -23,7 +24,7 @@ public interface IUserService {
     CustomerDTO getCustomerDetailsByNickname(String nickname, boolean full);
 
     UserDTO getUserDetailsByNickname(String nickname, boolean full);
-    UserDTO updateUser(String nickname, UserDTO userDTO);
+    UserDTO updateUser(String nickname, UserDTO userDTO, File imgaeFile);
     void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute);
 
     Airline getAirlineByNickname(String nickname, boolean full);

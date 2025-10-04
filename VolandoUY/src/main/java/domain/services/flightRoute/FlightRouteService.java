@@ -18,9 +18,12 @@ import infra.repository.flightroute.FlightRouteRepository;
 import infra.repository.flightroute.IFlightRouteRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
+import shared.constants.Images;
 import shared.utils.CustomModelMapper;
+import shared.utils.ImageProcessor;
 import shared.utils.ValidatorUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +54,8 @@ public class FlightRouteService implements IFlightRouteService {
             String originCityName,
             String destinationCityName,
             String airlineNickname,
-            List<String> categoriesNames
+            List<String> categoriesNames,
+            File imageFile
     ) {
         // Comprobar que la ruta de vuelo no exista
         if (existFlightRoute(baseFlightRouteDTO.getName())) {
@@ -92,8 +96,18 @@ public class FlightRouteService implements IFlightRouteService {
         flightRoute.setFlights(new ArrayList<>());
         flightRoute.setStatus(EnumEstatusRuta.SIN_ESTADO);
 
+
         // Validar antes del primer save
         ValidatorUtil.validate(flightRoute);
+
+        // Cargar la imagen al servidor si tiene
+        if (imageFile != null) {
+            String imagePath = Images.AIRLINES_PATH + airline.getNickname() + Images.FORMAT_DEFAULT;
+            String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
+            flightRoute.setImage(uploadedImagePath);
+        } else {
+            flightRoute.setImage(Images.FLIGHT_ROUTE_DEFAULT);
+        }
 
         // Guardar la ruta de vuelo
         flightRouteRepository.createFlightRoute(flightRoute, airline);

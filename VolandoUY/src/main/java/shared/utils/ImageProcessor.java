@@ -1,5 +1,7 @@
 package shared.utils;
 
+import shared.constants.Images;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +13,19 @@ import java.nio.file.StandardCopyOption;
 
 public class ImageProcessor {
 
-    public String uploadImage(File imageFile, String imagePath) {
-        if (imageFile == null || !imageFile.exists()) {
+    public static String uploadImage(File imageFile, String imagePath) {
+        if (imageFile == null || imagePath == null) {
             return null;
         }
+
+        if (!imageFile.exists()) {
+            deleteImage(imagePath);
+        }
+
         // process image
         processImage(imageFile);
 
-        File output = new File("images", imagePath + ".jpg");
+        File output = new File(Images.IMAGES_PATH, imagePath);
         output.getParentFile().mkdirs(); // Ensure directory exists
         try {
             Files.copy(imageFile.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -27,14 +34,25 @@ public class ImageProcessor {
         }
 
         // return path: e.g. "images/filename.jpg"
+        System.out.println(output.getPath().replace("\\", "/"));
         return output.getPath().replace("\\", "/");
+    }
+
+    private static void deleteImage(String imagePath) {
+        if (imagePath == null || imagePath.isEmpty()) {
+            return;
+        }
+        File file = new File(imagePath);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     // Process image to required format (e.g., resize, compress)
     // 100 x 100 pixels
     // Compress to reduce file size
     // .jpg
-    private void processImage(File imageFile) {
+    private static void processImage(File imageFile) {
         try {
             BufferedImage originalImage = ImageIO.read(imageFile);
             Image scaledImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -43,7 +61,7 @@ public class ImageProcessor {
             g2d.drawImage(scaledImage, 0, 0, null);
             g2d.dispose();
 
-            ImageIO.write(resizedImage, "jpg", imageFile);
+            ImageIO.write(resizedImage, Images.FORMAT_DEFAULT, imageFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

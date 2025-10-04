@@ -1,10 +1,11 @@
 package gui.user.registerAirline;
 
 import controllers.user.IUserController;
-import controllers.utils.IUtilsController;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
+import shared.constants.Images;
+import shared.utils.GUIUtils;
 
 import java.awt.*;
 import javax.swing.*;
@@ -15,13 +16,11 @@ import java.io.File;
 public class RegisterAirlinePanel extends JPanel {
     
     IUserController userController;
-    IUtilsController utilsController;
-    
+
     File selectedImageFile = null;
     
-    public RegisterAirlinePanel(IUserController userController, IUtilsController utilsController) {
+    public RegisterAirlinePanel(IUserController userController) {
         this.userController = userController;
-        this.utilsController = utilsController;
 
         initComponents();
         initListeners();
@@ -42,23 +41,20 @@ public class RegisterAirlinePanel extends JPanel {
                     return;
                 }
 
-                // Upload image
-                String imagePath = null;
-                if (selectedImageFile != null) {
-                    imagePath = utilsController.uploadImage(selectedImageFile, "users/airlines/" + nickname);
-                }
 
                 BaseAirlineDTO baseAirlineDTO = new BaseAirlineDTO(
                         nickname,
                         name,
                         email,
                         password,
-                        imagePath,
+                        null,
                         description,
                         web
                 );
 
-                BaseAirlineDTO createdAirlineDTO = userController.registerAirline(baseAirlineDTO);
+                BaseAirlineDTO createdAirlineDTO = userController.registerAirline(baseAirlineDTO, selectedImageFile);
+
+                resetImageSelector();
 
                 JOptionPane.showMessageDialog(this,
                         "Nickname: " + createdAirlineDTO.getNickname() +
@@ -76,7 +72,7 @@ public class RegisterAirlinePanel extends JPanel {
         
         uploadImageBtn.addActionListener(e -> {
             // Open a new FileChooser in a new window
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
@@ -85,6 +81,11 @@ public class RegisterAirlinePanel extends JPanel {
                 uploadedImageLabel.setText(selectedImageFile.getName());
             }
         });
+    }
+
+    private void resetImageSelector() {
+        selectedImageFile = null;
+        uploadedImageLabel.setText("-");
     }
     
 
@@ -101,7 +102,6 @@ public class RegisterAirlinePanel extends JPanel {
         nicknameTextField = new JTextField();
         nameLabel = new JLabel();
         nameTextField = new JTextField();
-        vSpacer13 = new JPanel(null);
         secondRowPanel = new JPanel();
         mailLabel = new JLabel();
         mailTextField = new JTextField();
@@ -119,6 +119,7 @@ public class RegisterAirlinePanel extends JPanel {
         uploadImageLabel = new JLabel();
         uploadImageBtn = new JButton();
         uploadedImageLabel = new JLabel();
+        vSpacer13 = new JPanel(null);
         updateBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
         hSpacer2 = new JPanel(null);
@@ -132,16 +133,17 @@ public class RegisterAirlinePanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
-        0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
-        .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
-        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
-        beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.
+        border.EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing.border.TitledBorder.CENTER
+        ,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dialo\u0067",java.awt.Font
+        .BOLD,12),java.awt.Color.red), getBorder())); addPropertyChangeListener(
+        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072"
+        .equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
+        ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
         ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 0.0, 0.0, 1.0E-4};
 
         //---- titleLabel ----
         titleLabel.setText("Crear nueva aerolinea");
@@ -155,7 +157,7 @@ public class RegisterAirlinePanel extends JPanel {
             InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 23, 33, 0, 0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
@@ -164,7 +166,7 @@ public class RegisterAirlinePanel extends JPanel {
             hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
@@ -172,14 +174,14 @@ public class RegisterAirlinePanel extends JPanel {
             vSpacer17.setOpaque(false);
             InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
             hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== firstRowPanel ========
             {
@@ -234,13 +236,7 @@ public class RegisterAirlinePanel extends JPanel {
             }
             InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //---- vSpacer13 ----
-            vSpacer13.setOpaque(false);
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 5, 1, 1, 0.0, 400.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== secondRowPanel ========
             {
@@ -296,7 +292,7 @@ public class RegisterAirlinePanel extends JPanel {
             }
             InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== thirdRowPanel ========
             {
@@ -332,7 +328,7 @@ public class RegisterAirlinePanel extends JPanel {
             }
             InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== fourthRowPanel ========
             {
@@ -388,7 +384,7 @@ public class RegisterAirlinePanel extends JPanel {
             }
             InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== fifthRowPanel ========
             {
@@ -398,9 +394,9 @@ public class RegisterAirlinePanel extends JPanel {
                 fifthRowPanel.setOpaque(false);
                 fifthRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)fifthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
-                ((GridBagLayout)fifthRowPanel.getLayout()).rowHeights = new int[] {30, 0, 0};
+                ((GridBagLayout)fifthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
                 ((GridBagLayout)fifthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)fifthRowPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)fifthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
                 //---- uploadImageLabel ----
                 uploadImageLabel.setText("Subir una imagen:");
@@ -420,7 +416,7 @@ public class RegisterAirlinePanel extends JPanel {
                     new Insets(0, 0, 0, 10), 0, 0));
 
                 //---- uploadedImageLabel ----
-                uploadedImageLabel.setText("Subir una imagen:");
+                uploadedImageLabel.setText("-");
                 uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
                 uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
@@ -432,9 +428,15 @@ public class RegisterAirlinePanel extends JPanel {
             }
             InfoUserPanel.add(fifthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
         }
         add(InfoUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //---- vSpacer13 ----
+        vSpacer13.setOpaque(false);
+        add(vSpacer13, new GridBagConstraints(0, 4, 1, 1, 0.0, 400.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
@@ -483,7 +485,6 @@ public class RegisterAirlinePanel extends JPanel {
     private JTextField nicknameTextField;
     private JLabel nameLabel;
     private JTextField nameTextField;
-    private JPanel vSpacer13;
     private JPanel secondRowPanel;
     private JLabel mailLabel;
     private JTextField mailTextField;
@@ -501,6 +502,7 @@ public class RegisterAirlinePanel extends JPanel {
     private JLabel uploadImageLabel;
     private JButton uploadImageBtn;
     private JLabel uploadedImageLabel;
+    private JPanel vSpacer13;
     private JPanel updateBtnPanel;
     private JPanel hSpacer1;
     private JPanel hSpacer2;

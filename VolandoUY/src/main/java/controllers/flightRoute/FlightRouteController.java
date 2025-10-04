@@ -7,6 +7,7 @@ import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import lombok.AllArgsConstructor;
 
+import java.io.File;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,14 +26,16 @@ public class FlightRouteController implements IFlightRouteController{
             String originCityName,
             String destinationCityName,
             String airlineNickname,
-            List<String> categoriesNames
+            List<String> categoriesNames,
+            File imageFile
     ){
         return flightRouteService.createFlightRoute(
                 baseFlightRouteDTO,
                 originCityName,
                 destinationCityName,
                 airlineNickname,
-                categoriesNames
+                categoriesNames,
+                imageFile
         );
     }
 
