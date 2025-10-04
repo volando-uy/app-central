@@ -11,7 +11,7 @@ new FormModel {
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "300:1.0, right:175:1.0"
+				"$columnSpecs": "208:1.0, right:137:1.0, 72"
 				"$rowSpecs": "0, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
@@ -20,13 +20,13 @@ new FormModel {
 				name: "infoPanel"
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "flightNameLabel"
-					"text": "Nombre del vuelo:"
+					"text": "Nombre. "
 					"horizontalTextPosition": 2
 					"horizontalAlignment": 2
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "departureLabel"
-					"text": "Salida:"
+					"text": "Sal."
 					"horizontalTextPosition": 2
 					"horizontalAlignment": 2
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -34,8 +34,14 @@ new FormModel {
 					"hAlign": 2
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "imageLabel"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+					"gridheight": 3
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "flightRouteNameLabel"
-					"text": "Nombre de la ruta del vuelo:"
+					"text": "Rut. "
 					"horizontalTextPosition": 2
 					"horizontalAlignment": 2
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -43,7 +49,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "durationLabel"
-					"text": "Duracion:"
+					"text": "Dur."
 					"horizontalTextPosition": 2
 					"horizontalAlignment": 2
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -53,7 +59,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "flightAirlineNameLabel"
-					"text": "Aerolinea:"
+					"text": "Aero."
 					"horizontalTextPosition": 2
 					"horizontalAlignment": 2
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
@@ -62,7 +68,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"vAlign": 0
 				"insets": new java.awt.Insets( 0, 10, 0, 10 )
-				"hAlign": 0
+				"hAlign": 5
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"

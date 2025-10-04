@@ -7,11 +7,12 @@ package gui.user.registerCustomer;
 import javax.swing.border.*;
 
 import controllers.user.IUserController;
-import controllers.utils.IUtilsController;
 import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
+import shared.constants.Images;
+import shared.utils.GUIUtils;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -28,13 +29,11 @@ import java.io.File;
 public class RegisterCustomerPanel extends JPanel {
 
     private IUserController userController;
-    private IUtilsController utilsController;
-    
+
     File selectedImageFile = null;
 
-    public RegisterCustomerPanel(IUserController userController, IUtilsController utilsController) {
+    public RegisterCustomerPanel(IUserController userController) {
         this.userController = userController;
-        this.utilsController = utilsController;
 
         initComponents();
         initComponentsManually();
@@ -61,18 +60,12 @@ public class RegisterCustomerPanel extends JPanel {
                     return;
                 }
 
-                // Upload image
-                String imagePath = null;
-                if (selectedImageFile != null) {
-                    imagePath = utilsController.uploadImage(selectedImageFile, "users/customers/" + nickname);
-                }
-
                 BaseCustomerDTO baseCustomerDTO = new BaseCustomerDTO(
                         nickname,
                         name,
                         mail,
                         password,
-                        imagePath,
+                        null,
                         surname,
                         citizenship,
                         birthDate,
@@ -80,7 +73,9 @@ public class RegisterCustomerPanel extends JPanel {
                         idType
                 );
 
-                BaseCustomerDTO createdCustomerDTO = userController.registerCustomer(baseCustomerDTO);
+                BaseCustomerDTO createdCustomerDTO = userController.registerCustomer(baseCustomerDTO, selectedImageFile);
+
+                resetImageSelector();
 
                 JOptionPane.showMessageDialog(this, createdCustomerDTO, "Cliente creado exitosamente", JOptionPane.INFORMATION_MESSAGE);
 
@@ -92,7 +87,7 @@ public class RegisterCustomerPanel extends JPanel {
 
         uploadImageBtn.addActionListener(e -> {
             // Open a new FileChooser in a new window
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
@@ -101,6 +96,11 @@ public class RegisterCustomerPanel extends JPanel {
                 uploadedImageLabel.setText(selectedImageFile.getName());
             }
         });
+    }
+
+    private void resetImageSelector() {
+        selectedImageFile = null;
+        uploadedImageLabel.setText("-");
     }
 
     private void initComponentsManually() {
@@ -153,7 +153,6 @@ public class RegisterCustomerPanel extends JPanel {
         surnameTextField = new JTextField();
         emailLabel = new JLabel();
         emailTextField = new JTextField();
-        vSpacer13 = new JPanel(null);
         thirdRowPanel = new JPanel();
         birthDateLabel = new JLabel();
         birthDateTextField = new JTextField();
@@ -164,15 +163,16 @@ public class RegisterCustomerPanel extends JPanel {
         citizenshipTextField = new JTextField();
         idLabel = new JLabel();
         idTextField = new JTextField();
-        sixthRowPanel = new JPanel();
-        uploadImageLabel = new JLabel();
-        uploadImageBtn = new JButton();
-        uploadedImageLabel = new JLabel();
         fifthRowPanel = new JPanel();
         passwordLabel = new JLabel();
         passwordField = new JPasswordField();
         confirmPasswordLabel = new JLabel();
         confirmPasswordField = new JPasswordField();
+        sixthRowPanel = new JPanel();
+        uploadImageLabel = new JLabel();
+        uploadImageBtn = new JButton();
+        uploadedImageLabel = new JLabel();
+        vSpacer13 = new JPanel(null);
         updateBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
         hSpacer2 = new JPanel(null);
@@ -186,12 +186,11 @@ public class RegisterCustomerPanel extends JPanel {
         setBackground(new Color(0xeeeeee));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+        0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+        .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
+        red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+        beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -210,16 +209,16 @@ public class RegisterCustomerPanel extends JPanel {
             InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 20, 38, 15, 0, 0, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 33, 33, 18, 0, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
             //---- hSpacer5 ----
             hSpacer5.setPreferredSize(new Dimension(40, 10));
             hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- vSpacer17 ----
             vSpacer17.setMinimumSize(new Dimension(12, 70));
@@ -227,14 +226,14 @@ public class RegisterCustomerPanel extends JPanel {
             vSpacer17.setOpaque(false);
             InfoUserPanel.add(vSpacer17, new GridBagConstraints(1, 0, 1, 1, 0.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
             hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== firstRowPanel ========
             {
@@ -289,7 +288,7 @@ public class RegisterCustomerPanel extends JPanel {
             }
             InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== secondRowPanel ========
             {
@@ -345,13 +344,7 @@ public class RegisterCustomerPanel extends JPanel {
             }
             InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //---- vSpacer13 ----
-            vSpacer13.setOpaque(false);
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 6, 1, 1, 0.0, 200.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== thirdRowPanel ========
             {
@@ -405,7 +398,7 @@ public class RegisterCustomerPanel extends JPanel {
             }
             InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== fourthRowPanel ========
             {
@@ -461,51 +454,7 @@ public class RegisterCustomerPanel extends JPanel {
             }
             InfoUserPanel.add(fourthRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-
-            //======== sixthRowPanel ========
-            {
-                sixthRowPanel.setPreferredSize(new Dimension(510, 30));
-                sixthRowPanel.setMinimumSize(new Dimension(510, 30));
-                sixthRowPanel.setMaximumSize(new Dimension(510, 510));
-                sixthRowPanel.setOpaque(false);
-                sixthRowPanel.setLayout(new GridBagLayout());
-                ((GridBagLayout)sixthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
-                ((GridBagLayout)sixthRowPanel.getLayout()).rowHeights = new int[] {30, 0, 0};
-                ((GridBagLayout)sixthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-                ((GridBagLayout)sixthRowPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
-
-                //---- uploadImageLabel ----
-                uploadImageLabel.setText("Subir una imagen:");
-                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
-                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
-                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
-                sixthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- uploadImageBtn ----
-                uploadImageBtn.setText("Nueva");
-                sixthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 10), 0, 0));
-
-                //---- uploadedImageLabel ----
-                uploadedImageLabel.setText("Subir una imagen:");
-                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
-                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
-                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
-                sixthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            InfoUserPanel.add(sixthRowPanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== fifthRowPanel ========
             {
@@ -561,9 +510,59 @@ public class RegisterCustomerPanel extends JPanel {
             }
             InfoUserPanel.add(fifthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 3, 0), 0, 0));
+
+            //======== sixthRowPanel ========
+            {
+                sixthRowPanel.setPreferredSize(new Dimension(510, 30));
+                sixthRowPanel.setMinimumSize(new Dimension(510, 30));
+                sixthRowPanel.setMaximumSize(new Dimension(510, 510));
+                sixthRowPanel.setOpaque(false);
+                sixthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- uploadImageLabel ----
+                uploadImageLabel.setText("Subir una imagen:");
+                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadImageBtn ----
+                uploadImageBtn.setText("Nueva");
+                sixthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadedImageLabel ----
+                uploadedImageLabel.setText("-");
+                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(sixthRowPanel, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
         add(InfoUserPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //---- vSpacer13 ----
+        vSpacer13.setOpaque(false);
+        add(vSpacer13, new GridBagConstraints(0, 4, 1, 1, 0.0, 200.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
@@ -617,7 +616,6 @@ public class RegisterCustomerPanel extends JPanel {
     private JTextField surnameTextField;
     private JLabel emailLabel;
     private JTextField emailTextField;
-    private JPanel vSpacer13;
     private JPanel thirdRowPanel;
     private JLabel birthDateLabel;
     private JTextField birthDateTextField;
@@ -628,15 +626,16 @@ public class RegisterCustomerPanel extends JPanel {
     private JTextField citizenshipTextField;
     private JLabel idLabel;
     private JTextField idTextField;
-    private JPanel sixthRowPanel;
-    private JLabel uploadImageLabel;
-    private JButton uploadImageBtn;
-    private JLabel uploadedImageLabel;
     private JPanel fifthRowPanel;
     private JLabel passwordLabel;
     private JPasswordField passwordField;
     private JLabel confirmPasswordLabel;
     private JPasswordField confirmPasswordField;
+    private JPanel sixthRowPanel;
+    private JLabel uploadImageLabel;
+    private JButton uploadImageBtn;
+    private JLabel uploadedImageLabel;
+    private JPanel vSpacer13;
     private JPanel updateBtnPanel;
     private JPanel hSpacer1;
     private JPanel hSpacer2;

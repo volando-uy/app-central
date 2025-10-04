@@ -8,6 +8,8 @@ import controllers.flight.IFlightController;
 import controllers.user.IUserController;
 import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.flight.FlightDTO;
+import shared.constants.Images;
+import shared.utils.ImageProcessor;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
@@ -60,11 +62,14 @@ public class FlightDetailWindow extends JFrame {
 
     private void loadFlightDetails(FlightDTO flight) {
         try { infoPanel.setBorder(null); } catch (Exception e) {}
-        flightNameLabel.setText("Nombre del vuelo: " + safe(flight.getName()));
-        flightRouteNameLabel.setText("Ruta: " + safe(flight.getFlightRouteName()));
-        flightAirlineNameLabel.setText( "Aerolínea: " + safe(flight.getAirlineNickname()));
-        departureLabel.setText("Salida: " + (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A"));
-        durationLabel.setText("Duración: " + formatDuration(flight.getDuration()));
+        flightNameLabel.setText("Nombre. " + safe(flight.getName()));
+        flightRouteNameLabel.setText("Rut. " + safe(flight.getFlightRouteName()));
+        flightAirlineNameLabel.setText( "Aero. " + safe(flight.getAirlineNickname()));
+        departureLabel.setText("Sal. " + (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A"));
+        durationLabel.setText("Dur. " + formatDuration(flight.getDuration()));
+        ImageIcon image = ImageProcessor.makeRoundedIcon(!flight.getImage().equals(Images.FLIGHT_DEFAULT) ? flight.getImage() : Images.FLIGHT_DEFAULT, 50);
+        imageLabel.setIcon(image);
+
     }
     private String safe(String s) {
         return s == null ? "" : s;
@@ -78,10 +83,11 @@ public class FlightDetailWindow extends JFrame {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - asd
         infoPanel = new JPanel();
         flightNameLabel = new JLabel();
         departureLabel = new JLabel();
+        imageLabel = new JLabel();
         flightRouteNameLabel = new JLabel();
         durationLabel = new JLabel();
         flightAirlineNameLabel = new JLabel();
@@ -98,21 +104,20 @@ public class FlightDetailWindow extends JFrame {
 
         //======== infoPanel ========
         {
-            infoPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder
-            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .
-            awt .Font .BOLD ,12 ), java. awt. Color. red) ,infoPanel. getBorder( )) )
-            ; infoPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-            ;
+            infoPanel.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.
+            EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax.swing
+            .border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12),
+            java.awt.Color.red),infoPanel. getBorder()));infoPanel. addPropertyChangeListener(new java.beans.PropertyChangeListener()
+            {@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))
+            throw new RuntimeException();}});
             infoPanel.setLayout(new GridBagLayout());
-            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {300, 175, 0};
+            ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {208, 137, 72, 0};
             ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+            ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {1.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
 
             //---- flightNameLabel ----
-            flightNameLabel.setText("Nombre del vuelo:");
+            flightNameLabel.setText("Nombre. ");
             flightNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             flightNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(flightNameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -120,15 +125,18 @@ public class FlightDetailWindow extends JFrame {
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- departureLabel ----
-            departureLabel.setText("Salida:");
+            departureLabel.setText("Sal.");
             departureLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             departureLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(departureLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 0), 0, 0));
+            infoPanel.add(imageLabel, new GridBagConstraints(2, 0, 1, 3, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
 
             //---- flightRouteNameLabel ----
-            flightRouteNameLabel.setText("Nombre de la ruta del vuelo:");
+            flightRouteNameLabel.setText("Rut. ");
             flightRouteNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             flightRouteNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(flightRouteNameLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
@@ -136,7 +144,7 @@ public class FlightDetailWindow extends JFrame {
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- durationLabel ----
-            durationLabel.setText("Duracion:");
+            durationLabel.setText("Dur.");
             durationLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             durationLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(durationLabel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
@@ -144,7 +152,7 @@ public class FlightDetailWindow extends JFrame {
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- flightAirlineNameLabel ----
-            flightAirlineNameLabel.setText("Aerolinea:");
+            flightAirlineNameLabel.setText("Aero.");
             flightAirlineNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
             flightAirlineNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(flightAirlineNameLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -152,7 +160,7 @@ public class FlightDetailWindow extends JFrame {
                 new Insets(0, 0, 0, 0), 0, 0));
         }
         contentPane.add(infoPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-            GridBagConstraints.CENTER, GridBagConstraints.NONE,
+            GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
             new Insets(0, 10, 0, 10), 0, 0));
 
         //======== scrollPane2 ========
@@ -177,10 +185,11 @@ public class FlightDetailWindow extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - asd
     private JPanel infoPanel;
     private JLabel flightNameLabel;
     private JLabel departureLabel;
+    private JLabel imageLabel;
     private JLabel flightRouteNameLabel;
     private JLabel durationLabel;
     private JLabel flightAirlineNameLabel;

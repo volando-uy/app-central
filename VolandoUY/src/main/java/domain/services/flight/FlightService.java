@@ -20,9 +20,12 @@ import infra.repository.flight.IFlightRepository;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
+import shared.constants.Images;
 import shared.utils.CustomModelMapper;
+import shared.utils.ImageProcessor;
 import shared.utils.ValidatorUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,12 +53,22 @@ public class FlightService implements IFlightService {
     }
 
     @Override
-    public BaseFlightDTO createFlight(BaseFlightDTO baseFlightDTO, String airlineNickname, String flightRouteName) {
+    public BaseFlightDTO createFlight(
+            BaseFlightDTO baseFlightDTO,
+            String airlineNickname,
+            String flightRouteName,
+            File imageFile
+    ) {
 
         // Verificar si el vuelo ya existe
         Flight flight = customModelMapper.map(baseFlightDTO, Flight.class);
         if (_flightExists(flight)) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_FLIGHT_ALREADY_EXISTS, flight.getName()));
+        }
+
+        // Asignar la imagen default en caso de que no tenga.
+        if (flight.getImage() == null) {
+            flight.setImage(Images.FLIGHT_DEFAULT);
         }
 
         // Validar el vuelo
@@ -93,6 +106,15 @@ public class FlightService implements IFlightService {
                     EnumTipoAsiento.EJECUTIVO
             );
             seats.add(seatService.createSeatWithoutPersistance(baseSeatDTO));
+        }
+
+        // Subir la imagen si tiene
+        if (imageFile != null) {
+            String imagePath = Images.FLIGHTS_PATH + flight.getName() + Images.FORMAT_DEFAULT;
+            String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
+            flight.setImage(uploadedImagePath);
+        } else {
+            flight.setImage(Images.FLIGHT_DEFAULT);
         }
 
         // Guardamos el vuelo y actualizamos la aerolínea y la ruta de vuelo

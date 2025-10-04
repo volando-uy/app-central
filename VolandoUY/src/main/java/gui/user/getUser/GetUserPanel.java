@@ -345,7 +345,7 @@ public class GetUserPanel extends JPanel {
                 String docTxt   = (enumToString(c.getDocType()) + " " + nz(c.getNumDoc())).trim();
                 String emailTxt = nz(c.getMail());
                 ImageIcon image = ImageProcessor.makeRoundedIcon(!c.getImage().equals(Images.USER_DEFAULT) ? c.getImage() : Images.USER_DEFAULT, 100);
-
+                System.out.println(c.getImage());
 
                 headerClienteSet(nombre, c.getNickname(), image, emailTxt, docTxt);
 

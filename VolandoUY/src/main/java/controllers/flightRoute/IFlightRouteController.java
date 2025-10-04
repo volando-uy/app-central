@@ -5,11 +5,13 @@ package controllers.flightRoute;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flight.FlightDTO;
+
+import java.io.File;
 import java.util.List;
 
 public interface IFlightRouteController {
     boolean existFlightRoute(String name);
-    BaseFlightRouteDTO createFlightRoute(BaseFlightRouteDTO baseFlightRouteDTO, String originCityName, String destinationCityName, String airlineNickname, List<String> categoriesNames);
+    BaseFlightRouteDTO createFlightRoute(BaseFlightRouteDTO baseFlightRouteDTO, String originCityName, String destinationCityName, String airlineNickname, List<String> categoriesNames, File imageFile);
     void setStatusFlightRouteByName(String routeName, boolean confirmed);
     // Get flight route by name
     // Simple and full versions

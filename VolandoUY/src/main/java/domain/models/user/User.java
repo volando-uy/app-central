@@ -37,7 +37,6 @@ public abstract class User {
     @Size(min = 6, max = 70)
     private String password;
 
-    @NotBlank
     private String image;
 
     public abstract void updateDataFrom(UserDTO newData);

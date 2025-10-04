@@ -24,18 +24,21 @@ public class FlightRoutePanel extends JPanel {
     private IUserController userController;
     private IFlightController flightController;
     private ICategoryController categoryController;
-
     private JPanel createFlightRoutePanel;
     private JPanel getFlightsRoutesPanel;
 
     private JPanel contentPanel;
 
-    public FlightRoutePanel(IFlightRouteController flightRouteController, IUserController userController, ICategoryController categoryController, IFlightController flightController) {
+    public FlightRoutePanel(
+            IFlightRouteController flightRouteController,
+            IUserController userController,
+            ICategoryController categoryController,
+            IFlightController flightController
+    ) {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.categoryController = categoryController;
-        this.flightController = flightController;
-        initComponents();
+        this.flightController = flightController;initComponents();
         initPanels();
         initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch ( Exception ignored ) {}
@@ -43,7 +46,7 @@ public class FlightRoutePanel extends JPanel {
 
     private void initPanels() {
         createFlightRoutePanel = new CreateFlightRoutePanel(flightRouteController, userController, categoryController);
-    getFlightsRoutesPanel = new GetFlightRoutesPanel(flightRouteController, userController, flightController);
+        getFlightsRoutesPanel = new GetFlightRoutesPanel(flightRouteController, userController, flightController);
     }
 
     private void initListeners() {

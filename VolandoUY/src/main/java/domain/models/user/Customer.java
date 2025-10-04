@@ -1,6 +1,7 @@
 package domain.models.user;
 
 
+import domain.dtos.user.BaseCustomerDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.bookflight.BookFlight;
@@ -18,6 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
+import shared.constants.Images;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -59,7 +61,7 @@ public class Customer extends User {
 
     @Override
     public void updateDataFrom(UserDTO newData) {
-        if (!(newData instanceof CustomerDTO newDataCasted)) return;
+        if (!(newData instanceof BaseCustomerDTO newDataCasted)) return;
         if(newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
             this.setName(newDataCasted.getName());
         if(newDataCasted.getSurname() != null && !newDataCasted.getSurname().isBlank())
@@ -72,8 +74,12 @@ public class Customer extends User {
             this.setNumDoc(newDataCasted.getNumDoc());
         if(newDataCasted.getCitizenship() != null && !newDataCasted.getCitizenship().isBlank())
             this.setCitizenship(newDataCasted.getCitizenship());
-        if (newDataCasted.getImage() != null && !newDataCasted.getImage().isBlank())
-            this.setImage(newDataCasted.getImage());
+        if (newDataCasted.getImage() != null) {
+            if (newDataCasted.getImage().isBlank())
+                newDataCasted.setImage(Images.USER_DEFAULT);
+            else
+                this.setImage(newDataCasted.getImage());
+        }
     }
 
     @Override

@@ -158,7 +158,7 @@ class UserServiceTest {
         userService.registerCustomer(original);
 
         // WHEN
-        BaseCustomerDTO customerResult = (BaseCustomerDTO) userService.updateUser("cliente1", updated);
+        BaseCustomerDTO customerResult = (BaseCustomerDTO) userService.updateUser("cliente1", updated, null);
 
         // THEN
         assertEquals("Pedro Actualizado", customerResult.getName());
@@ -174,7 +174,7 @@ class UserServiceTest {
         userService.registerAirline(original);
 
         // WHEN
-        UserDTO result = userService.updateUser("airline1", updated);
+        UserDTO result = userService.updateUser("airline1", updated, null);
 
         // THEN
         assertNotNull(result);
@@ -191,7 +191,7 @@ class UserServiceTest {
 
         // WHEN + THEN
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            userService.updateUser("notFound", updatedDTO);
+            userService.updateUser("notFound", updatedDTO, null);
         });
 
         assertTrue(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "notFound").contains("notFound"));

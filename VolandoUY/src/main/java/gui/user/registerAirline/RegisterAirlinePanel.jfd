@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "0, 0:1.0, 0, 0"
+			"$rowSpecs": "0, 0:1.0, 0, 0, 0"
 			"$alignTop": true
 			"$alignLeft": true
 		} ) {
@@ -26,9 +26,10 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0, 0:1.0, 0"
-				"$rowSpecs": "0, 20, top:38, 0, 0, 0, 0"
+				"$rowSpecs": "0, 20, top:30, 0, 0, 0, 0"
 				"$alignTop": true
 				"$alignLeft": true
+				"$vGap": 3
 			} ) {
 				name: "InfoUserPanel"
 				"opaque": false
@@ -107,14 +108,6 @@ new FormModel {
 					"gridy": 1
 					"vAlign": 0
 					"hAlign": 2
-				} )
-				add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-					name: "vSpacer13"
-					"opaque": false
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 5
-					"weighty": 400.0
-					"gridx": 1
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "120, 120, 114, 0"
@@ -266,7 +259,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "153, 68, 0"
-					"$rowSpecs": "center:30, 0"
+					"$rowSpecs": "center:30"
 					"$hGap": 10
 					"$alignTop": true
 					"$alignLeft": true
@@ -293,7 +286,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "uploadedImageLabel"
-						"text": "Subir una imagen:"
+						"text": "-"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": #Dimension4
@@ -310,6 +303,13 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 1
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer13"
+				"opaque": false
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 4
+				"weighty": 400.0
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "updateBtnPanel"

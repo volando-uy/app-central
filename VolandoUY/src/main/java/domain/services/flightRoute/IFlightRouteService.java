@@ -11,10 +11,11 @@ import domain.services.city.ICityService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 
+import java.io.File;
 import java.util.List;
 
 public interface IFlightRouteService {
-    BaseFlightRouteDTO createFlightRoute(BaseFlightRouteDTO baseFlightRouteDTO, String originCityName, String destinationCityName, String airlineNickname, List<String> categoriesNames);
+    BaseFlightRouteDTO createFlightRoute(BaseFlightRouteDTO baseFlightRouteDTO, String originCityName, String destinationCityName, String airlineNickname, List<String> categoriesNames, File imageFile);
     FlightRouteDTO getFlightRouteDetailsByName(String routeName, boolean full);
 
     FlightRoute getFlightRouteByName(String routeName, boolean full);

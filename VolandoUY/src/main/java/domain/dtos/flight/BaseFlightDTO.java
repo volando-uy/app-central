@@ -18,4 +18,5 @@ public class BaseFlightDTO {
     private Integer maxEconomySeats;
     private Integer maxBusinessSeats;
     private LocalDateTime createdAt;
+    private String image;
 }

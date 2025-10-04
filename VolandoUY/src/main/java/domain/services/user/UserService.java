@@ -18,9 +18,11 @@ import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.constants.Images;
 import shared.utils.CustomModelMapper;
+import shared.utils.ImageProcessor;
 import shared.utils.PasswordManager;
 import shared.utils.ValidatorUtil;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
@@ -65,7 +67,7 @@ public class UserService implements IUserService {
 
     // REGISTRO DE CUSTOMER
     @Override
-    public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO) {
+    public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO, File imageFile) {
         // Comprobamos que el usuario no exista
         if (existsUserByNickname(customerDTO.getNickname()) || _emailExists(customerDTO.getMail())) {
             throw new UnsupportedOperationException(String.format(ErrorMessages.ERR_USER_EXISTS, customerDTO.getNickname()));
@@ -79,6 +81,14 @@ public class UserService implements IUserService {
         // Lo validamos
         ValidatorUtil.validate(customer);
 
+        if (imageFile != null) {
+            String imagePath = Images.CUSTOMERS_PATH + customer.getNickname() + Images.FORMAT_DEFAULT;
+            String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
+            customer.setImage(uploadedImagePath);
+        } else {
+            customer.setImage(Images.USER_DEFAULT);
+        }
+
         // Hash the password
         String hashedPassword = PasswordManager.hashPassword(customer.getPassword());
         customer.setPassword(hashedPassword);
@@ -91,7 +101,7 @@ public class UserService implements IUserService {
 
     // REGISTRO DE AEROLINEA
     @Override
-    public BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO) {
+    public BaseAirlineDTO registerAirline(BaseAirlineDTO airlineDTO, File imageFile) {
         // Comprobamos que el usuario no exista
         if (existsUserByNickname(airlineDTO.getNickname()) || _emailExists(airlineDTO.getMail())) {
             throw new UnsupportedOperationException(ErrorMessages.ERR_USER_EXISTS);
@@ -104,6 +114,15 @@ public class UserService implements IUserService {
 
         // Validamos la entidad
         ValidatorUtil.validate(airline);
+
+        // Subir la imagen si tiene
+        if (imageFile != null) {
+            String imagePath = Images.AIRLINES_PATH + airline.getNickname() + Images.FORMAT_DEFAULT;
+            String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
+            airline.setImage(uploadedImagePath);
+        } else {
+            airline.setImage(Images.USER_DEFAULT);
+        }
 
         // Hash the password
         String hashedPassword = PasswordManager.hashPassword(airline.getPassword());
@@ -147,7 +166,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO updateUser(String nickname, UserDTO updatedUserDTO) {
+    public UserDTO updateUser(String nickname, UserDTO updatedUserDTO, File imageFile) {
         // 1) Buscar usuario
         User user = userRepository.getUserByNickname(nickname, false);
         if (user == null) {
@@ -159,6 +178,20 @@ public class UserService implements IUserService {
 
         // 3) Validar el estado completo tras el merge (ya no faltan campos)
         ValidatorUtil.validate(user);
+
+        // Subir la imagen si tiene
+        if (imageFile != null) {
+            String imagePath;
+            if (user instanceof Customer) {
+                imagePath = Images.CUSTOMERS_PATH + user.getNickname() + Images.FORMAT_DEFAULT;
+            } else if (user instanceof Airline) {
+                imagePath = Images.AIRLINES_PATH + user.getNickname() + Images.FORMAT_DEFAULT;
+            } else {
+                throw new IllegalStateException("Error interno: tipo de usuario desconocido");
+            }
+            String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
+            user.setImage(uploadedImagePath);
+        }
 
         // 4) Persistir
         userRepository.update(user);

@@ -52,7 +52,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-            seed();
+            //seed();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -130,7 +130,7 @@ public class DBInitThread extends Thread {
             baseAirlineDTO.setWeb("www." + baseAirlineDTO.getNickname() + ".com");
             baseAirlineDTO.setDescription("Somos" + airlineName + ", la mejor aerolínea del mundo.");
 
-            BaseAirlineDTO createdAirline = ControllerFactory.getUserController().registerAirline(baseAirlineDTO);
+            BaseAirlineDTO createdAirline = ControllerFactory.getUserController().registerAirline(baseAirlineDTO, null);
             airlinesDTOs.add(createdAirline);
         }
 
@@ -168,7 +168,7 @@ public class DBInitThread extends Thread {
             baseCustomerDTO.setDocType(EnumTipoDocumento.CI);
             baseCustomerDTO.setNumDoc(String.valueOf(10000000 + (int) (Math.random() * 90000000)));
 
-            BaseCustomerDTO createdCustomer = ControllerFactory.getUserController().registerCustomer(baseCustomerDTO);
+            BaseCustomerDTO createdCustomer = ControllerFactory.getUserController().registerCustomer(baseCustomerDTO, null);
             customersDTOs.add(createdCustomer);
         }
 
@@ -289,7 +289,8 @@ public class DBInitThread extends Thread {
                         originCity.getName(),
                         destinationCity.getName(),
                         airline.getNickname(),
-                        categoryNames
+                        categoryNames,
+                        null
                 );
 
                 // Agarrar la ruta de vuelo con todas las relaciones
@@ -330,7 +331,8 @@ public class DBInitThread extends Thread {
                 BaseFlightDTO createdFlight = flightController.createFlight(
                         baseFlightDTO,
                         flightRoute.getAirlineNickname(),
-                        flightRoute.getName()
+                        flightRoute.getName(),
+                        null
                 );
 
                 flightsDTOs.add(createdFlight);

@@ -4,11 +4,14 @@ import controllers.user.IUserController;
 import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
+import shared.constants.Images;
+import shared.utils.GUIUtils;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -20,14 +23,17 @@ import javax.swing.border.*;
 public class UpdateUserPanel extends JPanel {
 
     IUserController userController;
+
     UserDTO selectedUser;
     
     private boolean isLoadingUsers = false;
+
+    File selectedImageFile = null;
     
     List<UserDTO> users = new ArrayList<>();
 
-    public UpdateUserPanel(IUserController uController) {
-        userController = uController;
+    public UpdateUserPanel(IUserController userController) {
+        this.userController = userController;
         initComponents();
         loadUserList();
         initListeners();
@@ -139,11 +145,12 @@ public class UpdateUserPanel extends JPanel {
                 String variable3 = variableTextField3.getText();
                 String variable4 = variableTextField4.getText();
 
+
                 if (selectedUser instanceof BaseAirlineDTO airline) {
                     airline.setName(name);
                     airline.setDescription(variable1);
                     airline.setWeb(variable2);
-                    userController.updateUser(airline.getNickname(), airline);
+                    userController.updateUser(airline.getNickname(), airline, selectedImageFile);
                 } else if (selectedUser instanceof BaseCustomerDTO customer) {
                     customer.setName(name);
                     customer.setSurname(variable1);
@@ -151,18 +158,34 @@ public class UpdateUserPanel extends JPanel {
                     customer.setNumDoc(variable3);
                     customer.setBirthDate(LocalDate.parse(variable4, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     customer.setDocType((EnumTipoDocumento) idTypeComboBox.getSelectedItem());
-                    userController.updateUser(customer.getNickname(), customer);
+                    userController.updateUser(customer.getNickname(), customer, selectedImageFile);
                 } else {
                     JOptionPane.showMessageDialog(this, "Error del sistema", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+
+                resetImageSelector();
 
                 JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        uploadImageBtn.addActionListener(e -> {
+            // Open a new FileChooser in a new window
+            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Get the selected file
+                selectedImageFile = fileChooser.getSelectedFile();
+                // Set the image path to the label
+                uploadedImageLabel.setText(selectedImageFile.getName());
+            }
+        });
     }
+
+
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
 
@@ -186,9 +209,14 @@ public class UpdateUserPanel extends JPanel {
         });
     }
 
+    private void resetImageSelector() {
+        selectedImageFile = null;
+        uploadedImageLabel.setText("-");
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - asd
         titleLabel = new JLabel();
         vSpacer18 = new JPanel(null);
         selectUserPanel = new JPanel();
@@ -214,12 +242,16 @@ public class UpdateUserPanel extends JPanel {
         variableTextField4 = new JTextField();
         idTypeLabel = new JLabel();
         idTypeComboBox = new JComboBox<>();
+        sixthRowPanel = new JPanel();
+        uploadImageLabel = new JLabel();
+        uploadImageBtn = new JButton();
+        uploadedImageLabel = new JLabel();
         vSpacer13 = new JPanel(null);
+        vSpacer19 = new JPanel(null);
         updateBtnPanel = new JPanel();
         hSpacer1 = new JPanel(null);
         hSpacer2 = new JPanel(null);
         updateUserBtn = new JButton();
-        vSpacer19 = new JPanel(null);
 
         //======== this ========
         setPreferredSize(new Dimension(640, 540));
@@ -227,14 +259,13 @@ public class UpdateUserPanel extends JPanel {
         setMaximumSize(new Dimension(640, 540));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder (
-        new javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion"
-        , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
-        , new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 )
-        ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener(
-        new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border
+        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog"
+        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
+        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+        . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException
+        ( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0};
@@ -301,7 +332,7 @@ public class UpdateUserPanel extends JPanel {
             InfoUserPanel.setOpaque(false);
             InfoUserPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 0, 20, 38, 104, 0, 0, 0};
+            ((GridBagLayout)InfoUserPanel.getLayout()).rowHeights = new int[] {0, 0, 23, 39, 33, 0, 0, 0};
             ((GridBagLayout)InfoUserPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)InfoUserPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0E-4};
 
@@ -310,20 +341,20 @@ public class UpdateUserPanel extends JPanel {
             hSpacer5.setOpaque(false);
             InfoUserPanel.add(hSpacer5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- hSpacer6 ----
             hSpacer6.setPreferredSize(new Dimension(40, 10));
             hSpacer6.setOpaque(false);
             InfoUserPanel.add(hSpacer6, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- vSpacer14 ----
             vSpacer14.setOpaque(false);
             InfoUserPanel.add(vSpacer14, new GridBagConstraints(1, 1, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== firstRowPanel ========
             {
@@ -378,7 +409,7 @@ public class UpdateUserPanel extends JPanel {
             }
             InfoUserPanel.add(firstRowPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== secondRowPanel ========
             {
@@ -434,7 +465,7 @@ public class UpdateUserPanel extends JPanel {
             }
             InfoUserPanel.add(secondRowPanel, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //======== thirdRowPanel ========
             {
@@ -444,7 +475,7 @@ public class UpdateUserPanel extends JPanel {
                 thirdRowPanel.setOpaque(false);
                 thirdRowPanel.setLayout(new GridBagLayout());
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWidths = new int[] {130, 130, 130, 120, 0};
-                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {20, 0};
+                ((GridBagLayout)thirdRowPanel.getLayout()).rowHeights = new int[] {30, 0};
                 ((GridBagLayout)thirdRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)thirdRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
@@ -464,6 +495,7 @@ public class UpdateUserPanel extends JPanel {
                 variableTextField4.setMinimumSize(new Dimension(100, 30));
                 variableTextField4.setText("dd/mm/yyyy");
                 variableTextField4.setOpaque(false);
+                variableTextField4.setMaximumSize(new Dimension(100, 30));
                 thirdRowPanel.add(variableTextField4, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
@@ -482,21 +514,73 @@ public class UpdateUserPanel extends JPanel {
                 idTypeComboBox.setMinimumSize(new Dimension(100, 30));
                 idTypeComboBox.setPreferredSize(new Dimension(100, 30));
                 idTypeComboBox.setOpaque(false);
+                idTypeComboBox.setMaximumSize(new Dimension(100, 30));
                 thirdRowPanel.add(idTypeComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
             InfoUserPanel.add(thirdRowPanel, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
-                new Insets(0, 0, 0, 0), 0, 0));
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 3, 0), 0, 0));
+
+            //======== sixthRowPanel ========
+            {
+                sixthRowPanel.setPreferredSize(new Dimension(510, 30));
+                sixthRowPanel.setMinimumSize(new Dimension(510, 30));
+                sixthRowPanel.setMaximumSize(new Dimension(510, 510));
+                sixthRowPanel.setOpaque(false);
+                sixthRowPanel.setLayout(new GridBagLayout());
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWidths = new int[] {163, 78, 0, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowHeights = new int[] {30, 0};
+                ((GridBagLayout)sixthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)sixthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- uploadImageLabel ----
+                uploadImageLabel.setText("Subir una imagen:");
+                uploadImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadImageLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadImageBtn ----
+                uploadImageBtn.setText("Nueva");
+                sixthRowPanel.add(uploadImageBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 10), 0, 0));
+
+                //---- uploadedImageLabel ----
+                uploadedImageLabel.setText("-");
+                uploadedImageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                uploadedImageLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                uploadedImageLabel.setPreferredSize(new Dimension(120, 30));
+                uploadedImageLabel.setMaximumSize(new Dimension(70, 15));
+                uploadedImageLabel.setMinimumSize(new Dimension(70, 15));
+                sixthRowPanel.add(uploadedImageLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            InfoUserPanel.add(sixthRowPanel, new GridBagConstraints(1, 5, 1, 1, 0.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 3, 0), 0, 0));
 
             //---- vSpacer13 ----
             vSpacer13.setOpaque(false);
-            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 5, 1, 1, 0.0, 200.0,
+            InfoUserPanel.add(vSpacer13, new GridBagConstraints(1, 6, 1, 1, 0.0, 200.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
         add(InfoUserPanel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+            new Insets(0, 0, 0, 0), 0, 0));
+
+        //---- vSpacer19 ----
+        vSpacer19.setPreferredSize(new Dimension(10, 100));
+        vSpacer19.setOpaque(false);
+        add(vSpacer19, new GridBagConstraints(0, 5, 1, 1, 0.0, 2.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
 
@@ -523,18 +607,11 @@ public class UpdateUserPanel extends JPanel {
         add(updateBtnPanel, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
-
-        //---- vSpacer19 ----
-        vSpacer19.setPreferredSize(new Dimension(10, 100));
-        vSpacer19.setOpaque(false);
-        add(vSpacer19, new GridBagConstraints(0, 5, 1, 1, 0.0, 2.0,
-            GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-            new Insets(0, 0, 0, 0), 0, 0));
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - asd
     private JLabel titleLabel;
     private JPanel vSpacer18;
     private JPanel selectUserPanel;
@@ -560,11 +637,15 @@ public class UpdateUserPanel extends JPanel {
     private JTextField variableTextField4;
     private JLabel idTypeLabel;
     private JComboBox<EnumTipoDocumento> idTypeComboBox;
+    private JPanel sixthRowPanel;
+    private JLabel uploadImageLabel;
+    private JButton uploadImageBtn;
+    private JLabel uploadedImageLabel;
     private JPanel vSpacer13;
+    private JPanel vSpacer19;
     private JPanel updateBtnPanel;
     private JPanel hSpacer1;
     private JPanel hSpacer2;
     private JButton updateUserBtn;
-    private JPanel vSpacer19;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
