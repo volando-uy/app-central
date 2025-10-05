@@ -62,7 +62,6 @@ public class GetFlightRoutesPanel extends JPanel {
 
 
         initComponents();
-        fixScrollPaneConstraints();
         initListeners();
         loadAirlinesIntoCombo();      // llena el combo al iniciar
         clearTable();                 // deja la tabla vacía hasta que elijas
@@ -145,38 +144,6 @@ public class GetFlightRoutesPanel extends JPanel {
                 loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
-    }
-    private void fixScrollPaneConstraints() {
-        // Obtener el layout del FlightRouteTablePanel
-        LayoutManager layout = FlightRouteTablePanel.getLayout();
-        if (layout instanceof GridBagLayout) {
-            GridBagLayout gbl = (GridBagLayout) layout;
-            GridBagConstraints gbc = gbl.getConstraints(FlightRouteScrollPane);
-
-            // Cambiar fill a BOTH para que se expanda vertical y horizontalmente
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
-
-            // Aplicar las nuevas constraints
-            gbl.setConstraints(FlightRouteScrollPane, gbc);
-
-            // También necesitamos actualizar los rowWeights del layout
-            gbl.rowWeights = new double[] {1.0, 1.0E-4};
-
-            // Remover los tamaños fijos del ScrollPane para que pueda expandirse
-            FlightRouteScrollPane.setPreferredSize(null);
-            FlightRouteScrollPane.setMinimumSize(new Dimension(560, 150));
-            FlightRouteScrollPane.setMaximumSize(null);
-
-            // Remover los tamaños fijos del panel también
-            FlightRouteTablePanel.setPreferredSize(null);
-            FlightRouteTablePanel.setMinimumSize(new Dimension(560, 150));
-            FlightRouteTablePanel.setMaximumSize(null);
-
-            FlightRouteTablePanel.revalidate();
-            FlightRouteTablePanel.repaint();
-        }
     }
 
 
