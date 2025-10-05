@@ -94,16 +94,15 @@ new FormModel {
 					"opaque": false
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 						name: "FlightRouteScrollPane"
-						"preferredSize": new java.awt.Dimension( 560, 150 )
-						"minimumSize": new java.awt.Dimension( 560, 150 )
-						"maximumSize": new java.awt.Dimension( 560, 150 )
-						"enabled": false
+						"preferredSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
+						"minimumSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
+						"maximumSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
 						"opaque": false
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "FlightRouteTable"
-							"preferredSize": new java.awt.Dimension( 560, 150 )
-							"maximumSize": new java.awt.Dimension( 560, 150 )
-							"minimumSize": new java.awt.Dimension( 560, 150 )
+							"preferredSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
+							"maximumSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
+							"minimumSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
 							"opaque": false
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {

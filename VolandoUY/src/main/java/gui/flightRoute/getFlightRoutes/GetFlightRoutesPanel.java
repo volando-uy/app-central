@@ -60,7 +60,9 @@ public class GetFlightRoutesPanel extends JPanel {
         flightRoutePopupMenu.add(confirmItem);
         flightRoutePopupMenu.add(rejectItem);
 
+
         initComponents();
+        fixScrollPaneConstraints();
         initListeners();
         loadAirlinesIntoCombo();      // llena el combo al iniciar
         clearTable();                 // deja la tabla vacía hasta que elijas
@@ -144,6 +146,39 @@ public class GetFlightRoutesPanel extends JPanel {
             }
         });
     }
+    private void fixScrollPaneConstraints() {
+        // Obtener el layout del FlightRouteTablePanel
+        LayoutManager layout = FlightRouteTablePanel.getLayout();
+        if (layout instanceof GridBagLayout) {
+            GridBagLayout gbl = (GridBagLayout) layout;
+            GridBagConstraints gbc = gbl.getConstraints(FlightRouteScrollPane);
+
+            // Cambiar fill a BOTH para que se expanda vertical y horizontalmente
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+
+            // Aplicar las nuevas constraints
+            gbl.setConstraints(FlightRouteScrollPane, gbc);
+
+            // También necesitamos actualizar los rowWeights del layout
+            gbl.rowWeights = new double[] {1.0, 1.0E-4};
+
+            // Remover los tamaños fijos del ScrollPane para que pueda expandirse
+            FlightRouteScrollPane.setPreferredSize(null);
+            FlightRouteScrollPane.setMinimumSize(new Dimension(560, 150));
+            FlightRouteScrollPane.setMaximumSize(null);
+
+            // Remover los tamaños fijos del panel también
+            FlightRouteTablePanel.setPreferredSize(null);
+            FlightRouteTablePanel.setMinimumSize(new Dimension(560, 150));
+            FlightRouteTablePanel.setMaximumSize(null);
+
+            FlightRouteTablePanel.revalidate();
+            FlightRouteTablePanel.repaint();
+        }
+    }
+
 
     private void loadAirlinesIntoCombo() {
         areAirlinesLoading = true;
@@ -244,6 +279,8 @@ public class GetFlightRoutesPanel extends JPanel {
 
         FlightRouteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         FlightRouteTable.setModel(model);
+        FlightRouteScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        FlightRouteScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         adjustDynamicWidthAndHeightToTable(FlightRouteTable);
         FlightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -288,19 +325,12 @@ public class GetFlightRoutesPanel extends JPanel {
             tableWidth += preferredWidth;
         }
 
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
     }
 
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
         selectAirlinePanel = new JPanel();
         airlineLabel = new JLabel();
         airlineComboBox = new JComboBox<>();
@@ -321,13 +351,12 @@ public class GetFlightRoutesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-        .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing
-        .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-        Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red
-        ), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-        public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName(
-        )))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+        . EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,
+        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .
+        getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0};
@@ -369,7 +398,7 @@ public class GetFlightRoutesPanel extends JPanel {
             FlightRouteInfoPanel.setOpaque(false);
             FlightRouteInfoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)FlightRouteInfoPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0};
-            ((GridBagLayout)FlightRouteInfoPanel.getLayout()).rowHeights = new int[] {35, 0, 0};
+            ((GridBagLayout)FlightRouteInfoPanel.getLayout()).rowWeights = new double[] {0.0, 1.0, 1.0E-4};
             ((GridBagLayout)FlightRouteInfoPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)FlightRouteInfoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
@@ -407,26 +436,33 @@ public class GetFlightRoutesPanel extends JPanel {
 
                 //======== FlightRouteScrollPane ========
                 {
-                    FlightRouteScrollPane.setPreferredSize(new Dimension(560, 150));
-                    FlightRouteScrollPane.setMinimumSize(new Dimension(560, 150));
-                    FlightRouteScrollPane.setMaximumSize(new Dimension(560, 150));
-                    FlightRouteScrollPane.setEnabled(false);
+                    FlightRouteScrollPane.setPreferredSize(null);
+                    FlightRouteScrollPane.setMinimumSize(null);
+                    FlightRouteScrollPane.setMaximumSize(null);
                     FlightRouteScrollPane.setOpaque(false);
 
                     //---- FlightRouteTable ----
-                    FlightRouteTable.setPreferredSize(new Dimension(560, 150));
-                    FlightRouteTable.setMaximumSize(new Dimension(560, 150));
-                    FlightRouteTable.setMinimumSize(new Dimension(560, 150));
+                    FlightRouteTable.setPreferredSize(null);
+                    FlightRouteTable.setMaximumSize(null);
+                    FlightRouteTable.setMinimumSize(null);
                     FlightRouteTable.setOpaque(false);
                     FlightRouteScrollPane.setViewportView(FlightRouteTable);
                 }
-                FlightRouteTablePanel.add(FlightRouteScrollPane, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
+                FlightRouteTablePanel.add(FlightRouteScrollPane, new GridBagConstraints(
+                        0, 0, 1, 1,
+                        1.0, 1.0,
+                        GridBagConstraints.CENTER,
+                        GridBagConstraints.BOTH,
+                        new Insets(8, 12, 12, 12),   // <- margen interno: top,left,bottom,right
+                        0, 0
+                ));
             }
-            FlightRouteInfoPanel.add(FlightRouteTablePanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+            FlightRouteInfoPanel.add(FlightRouteTablePanel, new GridBagConstraints(
+                    1, 1, 1, 1,
+                    1.0, 1.0,
+                    GridBagConstraints.CENTER,
+                    GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
 
             //---- hSpacer8 ----
             hSpacer8.setPreferredSize(new Dimension(40, 10));
@@ -450,7 +486,7 @@ public class GetFlightRoutesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - Juan Aparicio Quián Rodríguez
     private JPanel selectAirlinePanel;
     private JLabel airlineLabel;
     private JComboBox<String> airlineComboBox;
