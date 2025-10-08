@@ -7,6 +7,8 @@ import jakarta.persistence.Persistence;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DBConnection {
 
@@ -20,17 +22,19 @@ public class DBConnection {
 
         if (persistenceUnitName.equals("VolandoAppProd")) {
             String dbUrl = System.getenv("DATABASE_URL");
-            // Separar la DB URL en partes para el JDBC
-            // Ejemplo: postgres://user:password@host:port/dbname
-            if (dbUrl == null || !dbUrl.startsWith("postgres://")) {
-                throw new IllegalArgumentException("DATABASE_URL is not set or is not a valid Postgres URL");
+
+            Pattern pattern = Pattern.compile("postgres://([^:]+):([^@]+)@([^:/]+):(\\d+)/(\\w+)");
+            Matcher matcher = pattern.matcher(dbUrl);
+
+            if (!matcher.matches()) {
+                throw new IllegalArgumentException("DATABASE_URL format is invalid");
             }
 
-            String dbUser = dbUrl.split("//")[1].split(":")[0];
-            String dbPassword = dbUrl.split(":")[2].split("@")[0];
-            String dbHost = dbUrl.split("@")[1].split(":")[0];
-            String dbPort = dbUrl.split(":")[2].split("/")[0];
-            String dbName = dbUrl.split("/")[3];
+            String dbUser = matcher.group(1);
+            String dbPassword = matcher.group(2);
+            String dbHost = matcher.group(3);
+            String dbPort = matcher.group(4);
+            String dbName = matcher.group(5);
 
             Map<String, String> properties = new HashMap<>();
             properties.put("jakarta.persistence.jdbc.url", String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName));
