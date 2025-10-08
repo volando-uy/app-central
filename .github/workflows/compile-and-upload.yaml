@@ -23,14 +23,13 @@ jobs:
 
       - name: Compile JAR
         run: |
-          cd VolandoUY && mvn clean install -Dmaven.test.skip=true
+          cd VolandoUY && mvn clean package -Dmaven.test.skip=true
 
       - name: Publish the new JAR
         run: |
-          pwd
-          ls -l
-          mkdir release
-          mv VolandoUY/target/VolandoUY-1.0-SNAPSHOT.jar ./release/
+          mkdir -p release
+          rm -f release/*.jar
+          mv VolandoUY/target/VolandoUY-1.0-SNAPSHOT.jar release/VolandoUY-1.0-SNAPSHOT.jar
 
       - name: Create commit and push
         run: |
