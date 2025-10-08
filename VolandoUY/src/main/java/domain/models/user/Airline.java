@@ -53,12 +53,6 @@ public class Airline extends User {
             this.setDescription(newDataCasted.getDescription());
         if (newDataCasted.getWeb() != null && !newDataCasted.getWeb().isBlank())
             this.setWeb(newDataCasted.getWeb());
-        if (newDataCasted.getImage() != null) {
-            if (newDataCasted.getImage().isBlank())
-                newDataCasted.setImage(Images.USER_DEFAULT);
-            else
-                this.setImage(newDataCasted.getImage());
-        }
     }
 
     @Override

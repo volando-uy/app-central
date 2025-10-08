@@ -74,12 +74,6 @@ public class Customer extends User {
             this.setNumDoc(newDataCasted.getNumDoc());
         if(newDataCasted.getCitizenship() != null && !newDataCasted.getCitizenship().isBlank())
             this.setCitizenship(newDataCasted.getCitizenship());
-        if (newDataCasted.getImage() != null) {
-            if (newDataCasted.getImage().isBlank())
-                newDataCasted.setImage(Images.USER_DEFAULT);
-            else
-                this.setImage(newDataCasted.getImage());
-        }
     }
 
     @Override

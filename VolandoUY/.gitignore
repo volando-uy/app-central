@@ -5,6 +5,7 @@ target/
 
 images/*
 !images/default
+.idea
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
