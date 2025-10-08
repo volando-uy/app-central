@@ -33,11 +33,29 @@ jobs:
           mkdir -p release
           rm -f release/*.jar
           mv VolandoUY/target/$JAR_NAME release/$JAR_NAME
-
-      - name: Create commit and push
+          
+      - name: Create commit, push to new branch, and open PR
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'action@github.com'
+      
+          # Create and switch to new branch
+          BRANCH_NAME="new_release_$(date +%Y%m%d_%H%M%S)"
+          git checkout -b "$BRANCH_NAME"
+      
+          # Stage and commit files
           git add -f release/$JAR_NAME
           git commit -m "[AUTO] New JAR release"
-          git push origin HEAD:main
+      
+          # Push to new branch and set upstream
+          git push --set-upstream origin "$BRANCH_NAME"
+          
+      - name: Create PR via API
+        run: |
+          gh pr create \
+            --title "[AUTO] New JAR release" \
+            --body "This PR was automatically generated." \
+            --base main \
+            --head "$BRANCH_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
