@@ -4,14 +4,11 @@ import controllers.user.IUserController;
 import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.Setter;
-import shared.constants.Images;
-import shared.utils.GUIUtils;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,17 +20,14 @@ import javax.swing.border.*;
 public class UpdateUserPanel extends JPanel {
 
     IUserController userController;
-
     UserDTO selectedUser;
     
     private boolean isLoadingUsers = false;
-
-    File selectedImageFile = null;
     
     List<UserDTO> users = new ArrayList<>();
 
-    public UpdateUserPanel(IUserController userController) {
-        this.userController = userController;
+    public UpdateUserPanel(IUserController uController) {
+        userController = uController;
         initComponents();
         loadUserList();
         initListeners();
@@ -145,12 +139,11 @@ public class UpdateUserPanel extends JPanel {
                 String variable3 = variableTextField3.getText();
                 String variable4 = variableTextField4.getText();
 
-
                 if (selectedUser instanceof BaseAirlineDTO airline) {
                     airline.setName(name);
                     airline.setDescription(variable1);
                     airline.setWeb(variable2);
-                    userController.updateUser(airline.getNickname(), airline, selectedImageFile);
+                    userController.updateUser(airline.getNickname(), airline);
                 } else if (selectedUser instanceof BaseCustomerDTO customer) {
                     customer.setName(name);
                     customer.setSurname(variable1);
@@ -158,34 +151,18 @@ public class UpdateUserPanel extends JPanel {
                     customer.setNumDoc(variable3);
                     customer.setBirthDate(LocalDate.parse(variable4, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     customer.setDocType((EnumTipoDocumento) idTypeComboBox.getSelectedItem());
-                    userController.updateUser(customer.getNickname(), customer, selectedImageFile);
+                    userController.updateUser(customer.getNickname(), customer);
                 } else {
                     JOptionPane.showMessageDialog(this, "Error del sistema", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-                resetImageSelector();
 
                 JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-        uploadImageBtn.addActionListener(e -> {
-            // Open a new FileChooser in a new window
-            JFileChooser fileChooser = GUIUtils.getImagesFileChooser();
-            int result = fileChooser.showOpenDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                // Get the selected file
-                selectedImageFile = fileChooser.getSelectedFile();
-                // Set the image path to the label
-                uploadedImageLabel.setText(selectedImageFile.getName());
-            }
-        });
     }
-
-
 
     private void initPlaceholderForTextField(JTextField textField, String placeholder) {
 
@@ -207,11 +184,6 @@ public class UpdateUserPanel extends JPanel {
                 }
             }
         });
-    }
-
-    private void resetImageSelector() {
-        selectedImageFile = null;
-        uploadedImageLabel.setText("-");
     }
 
     private void initComponents() {
@@ -259,13 +231,12 @@ public class UpdateUserPanel extends JPanel {
         setMaximumSize(new Dimension(640, 540));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
-        swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border
-        . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog"
-        , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder
-        () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
-        . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException
-        ( ) ;} } );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border
+        .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax
+        . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,
+        12 ) ,java . awt. Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans
+        .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e.
+        getPropertyName () ) )throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0};

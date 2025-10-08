@@ -20,9 +20,7 @@ public class DBConnection {
 
         if (ENVIRONMENT != null && ENVIRONMENT.equals("PROD")) {
             Map<String, String> properties = new HashMap<>();
-            properties.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
-            properties.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
-            properties.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
+            properties.put("jakarta.persistence.jdbc.url", System.getenv("DATABASE_URL"));
             return Persistence.createEntityManagerFactory(persistenceUnitName, properties);
         } else {
             return Persistence.createEntityManagerFactory(persistenceUnitName);

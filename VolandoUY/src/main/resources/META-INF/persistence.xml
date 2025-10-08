@@ -21,5 +21,17 @@
             <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="VolandoAppProd" transaction-type="RESOURCE_LOCAL">
+        <!-- Proveedor JPA: Hibernate -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+            <!-- Configuraciones específicas de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
 
