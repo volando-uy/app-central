@@ -18,9 +18,25 @@ public class DBConnection {
 
         String persistenceUnitName = ENVIRONMENT != null && ENVIRONMENT.equals("PROD") ? "VolandoAppProd" : "VolandoApp";
 
-        if (ENVIRONMENT != null && ENVIRONMENT.equals("PROD")) {
+        if (persistenceUnitName.equals("VolandoAppProd")) {
+            String dbUrl = System.getenv("DATABASE_URL");
+            // Separar la DB URL en partes para el JDBC
+            // Ejemplo: postgres://user:password@host:port/dbname
+            if (dbUrl == null || !dbUrl.startsWith("postgres://")) {
+                throw new IllegalArgumentException("DATABASE_URL is not set or is not a valid Postgres URL");
+            }
+
+            String dbUser = dbUrl.split("//")[1].split(":")[0];
+            String dbPassword = dbUrl.split(":")[2].split("@")[0];
+            String dbHost = dbUrl.split("@")[1].split(":")[0];
+            String dbPort = dbUrl.split(":")[2].split("/")[0];
+            String dbName = dbUrl.split("/")[3];
+
             Map<String, String> properties = new HashMap<>();
-            properties.put("jakarta.persistence.jdbc.url", System.getenv("DATABASE_URL"));
+            properties.put("jakarta.persistence.jdbc.url", String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName));
+            properties.put("jakarta.persistence.jdbc.user", dbUser);
+            properties.put("jakarta.persistence.jdbc.password", dbPassword);
+            properties.put("jakarta.persistence.jdbc.driver", "org.postgresql.Driver");
             return Persistence.createEntityManagerFactory(persistenceUnitName, properties);
         } else {
             return Persistence.createEntityManagerFactory(persistenceUnitName);
