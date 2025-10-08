@@ -1,0 +1,37 @@
+name: compile-and-upload.yaml
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5.0.0
+        with:
+          java-version: 17
+
+      - name: Compile JAR
+        run: |
+          cd VolandoUY && mvn clean install -Dmaven.test.skip=true
+
+      - name: Publish the new JAR
+        run: |
+          mkdir release
+          mv VolandoUY/target/VolandoUY-1.0-SNAPSHOT.jar ./release/
+
+      - name: Create commit and push
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'action@github.com'
+          git add .
+          git commit -m "[AUTO] New JAR release"
+          git push origin HEAD:main
