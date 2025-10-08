@@ -27,11 +27,15 @@ jobs:
 
       - name: Publish the new JAR
         run: |
+          pwd
+          ls -l
           mkdir release
           mv VolandoUY/target/VolandoUY-1.0-SNAPSHOT.jar ./release/
 
       - name: Create commit and push
         run: |
+          pwd
+          ls -l
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'action@github.com'
           git add .
