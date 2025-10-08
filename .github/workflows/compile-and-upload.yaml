@@ -37,6 +37,6 @@ jobs:
           ls -l release
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'action@github.com'
-          git add .
+          git add release/VolandoUY-1.0-SNAPSHOT.jar
           git commit -m "[AUTO] New JAR release"
           git push origin HEAD:main
