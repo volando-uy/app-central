@@ -1,8 +1,6 @@
 name: compile-and-upload.yaml
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
