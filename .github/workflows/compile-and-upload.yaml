@@ -46,6 +46,7 @@ jobs:
           git checkout -b "$BRANCH_NAME"
       
           # Stage and commit files
+          ls -l release
           git add -f release/$JAR_NAME
           git commit -m "[AUTO] New JAR release"
       
