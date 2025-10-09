@@ -56,11 +56,3 @@ jobs:
           # Push to new branch and set upstream
           git push --set-upstream origin "$BRANCH_NAME"
           
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ env.BRANCH_NAME }}
-          title: '[AUTO] New JAR release'
-          body: 'This PR was automatically generated.'
-          base: main
