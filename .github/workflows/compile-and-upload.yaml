@@ -32,31 +32,18 @@ jobs:
           mkdir -p release
           rm -f release/*.jar
           mv VolandoUY/target/$JAR_NAME release/$JAR_NAME
+
+      - name: Create Pull Request with Updated JAR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: 'release/${{ env.JAR_NAME }}'
           
-      - name: Create commit, push to new branch, and open PR
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'action@github.com'
-      
-          # Create and switch to new branch
-          BRANCH_NAME="new_release_$(date +%Y%m%d_%H%M%S)"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          git checkout -b "$BRANCH_NAME"
-      
-          # Stage and commit files
-          git add -f release/$JAR_NAME
-          git commit -m "chore: compile new JAR"
-      
-          # Push to new branch and set upstream
-          git push --set-upstream origin "$BRANCH_NAME"
+          branch: 'feature/compiled-jar-release-${{ github.run_id }}'
+          
+          # PR and Commit details
+          commit-message: 'chore: compile and update new JAR release'
+          title: '[AUTO] New JAR release'
+          body: 'This PR was automatically generated with the newly compiled JAR file in the `release/` directory.'
+          base: 'main' # Target branch for the PR
 
-
-      - name: Create Pull Request
-        run: |
-          gh pr create \
-            --title "[AUTO] New JAR release" \
-            --body "This PR was automatically generated." \
-            --base main \
-            --head "$BRANCH_NAME"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
