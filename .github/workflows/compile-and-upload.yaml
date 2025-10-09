@@ -49,6 +49,9 @@ jobs:
           ls -l release
           git add -f release/$JAR_NAME
           git commit -m "[AUTO] New JAR release"
+
+          git show --stat
+          git status
       
           # Push to new branch and set upstream
           git push --set-upstream origin "$BRANCH_NAME"
