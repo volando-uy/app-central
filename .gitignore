@@ -10,6 +10,9 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+!release
+!release/*
+
 # Package Files #
 *.war
 *.nar
