@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  content: write
+  contents: write
     
 env:
   JAR_NAME: VolandoUY-1.0-SNAPSHOT.jar
