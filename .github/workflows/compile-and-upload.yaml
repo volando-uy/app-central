@@ -53,14 +53,17 @@ jobs:
       - name: Create PR via API
         id: create_pr
         run: |
-          # Create PR and capture its URL
-          PR_URL=$(gh pr create \
+          # Create PR and capture output (prints something like: "https://github.com/org/repo/pull/123")
+          OUTPUT=$(gh pr create \
             --title "[AUTO] New JAR release" \
             --body "This PR was automatically generated." \
             --base main \
-            --head "$BRANCH_NAME" \
-            --json url -q .url)
-          
+            --head "$BRANCH_NAME")
+
+          echo "PR output: $OUTPUT"
+
+          # Extract URL (last word in output)
+          PR_URL=$(echo "$OUTPUT" | grep -Eo 'https://github.com[^ ]+')
           echo "PR_URL=$PR_URL" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.APP_CENTRAL_PAT }}
