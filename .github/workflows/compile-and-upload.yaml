@@ -3,6 +3,9 @@ name: Compile and Upload the JAR
 on:
   push:
     branches: [main]
+
+permissions:
+  content: write
     
 env:
   JAR_NAME: VolandoUY-1.0-SNAPSHOT.jar
