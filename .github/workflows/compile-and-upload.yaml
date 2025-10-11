@@ -17,6 +17,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Check changes in the app
+        run: |
+          git fetch origin ${{ github.event.before }} --depth=1 || true
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          if ! echo "$CHANGED_FILES" | grep -q '^VolandoUY/'; then
+            exit 0
+          fi
         
       - name: Setup Java JDK
         uses: actions/setup-java@v5.0.0
@@ -27,6 +39,7 @@ jobs:
       - name: Compile JAR
         run: |
           cd VolandoUY && mvn clean package -Dmaven.test.skip=true
+          
 
       - name: Publish the new JAR
         run: |
