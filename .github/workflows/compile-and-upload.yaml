@@ -13,7 +13,7 @@ env:
 jobs:
   check_validity:
     if: "!contains(github.event.head_commit.message, '[AUTO] New JAR release')"
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     outputs:
       continue: ${{ steps.checking.outputs.continue }}
     steps:
