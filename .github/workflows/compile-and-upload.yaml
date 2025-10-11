@@ -51,12 +51,22 @@ jobs:
           git push --set-upstream origin "$BRANCH_NAME"
 
       - name: Create PR via API
+        id: create_pr
         run: |
-          gh pr create \
+          # Create PR and capture its URL
+          PR_URL=$(gh pr create \
             --title "[AUTO] New JAR release" \
             --body "This PR was automatically generated." \
             --base main \
-            --head "$BRANCH_NAME"
+            --head "$BRANCH_NAME" \
+            --json url -q .url)
+          
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.APP_CENTRAL_PAT }}
 
+      - name: Merge PR automatically
+        run: |
+          gh pr merge "$PR_URL" --merge --delete-branch --admin
+        env:
+          GITHUB_TOKEN: ${{ secrets.APP_CENTRAL_PAT }}
