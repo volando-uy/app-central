@@ -129,7 +129,7 @@ public class MainFrame extends JFrame {
 
     private SideBar createSideBar() {
         userPanel = new UserPanel(userController, flightRouteController, flightController,flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
-        flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController, flightController);
+        flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController, flightController, airportController);
         flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController, buyPackageController);
         flightPanel = new FlightPanel(flightController, flightRouteController, userController, bookingController);
         otherPanel = new OtherPanel(categoryController, cityController, airportController);

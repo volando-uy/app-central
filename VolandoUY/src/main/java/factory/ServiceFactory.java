@@ -59,7 +59,7 @@ public class ServiceFactory {
         if (flightRouteService == null) {
             flightRouteService = new FlightRouteService();
             flightRouteService.setCategoryService(getCategoryService());
-            flightRouteService.setCityService(getCityService());
+            flightRouteService.setAirportService(getAirportService());
             flightRouteService.setUserService(getUserService());
         }
         return flightRouteService;

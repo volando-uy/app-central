@@ -546,8 +546,8 @@ public class GetUserPanel extends JPanel {
 
         String vueloName = f.getName();
         String rutaName  = fr.getName();
-        String origen    = fr.getOriginCityName();
-        String destino   = fr.getDestinationCityName();
+        String origen    = fr.getOriginAeroCode();
+        String destino   = fr.getDestinationAeroCode();
 
         lblDetTitulo.setText("Detalle de la reserva #" + (booking.getId() != null ? booking.getId() : "-"));
         lblDetVuelo.setText("Vuelo: " + vueloName);

@@ -18,8 +18,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class FlightRouteDTO extends BaseFlightRouteDTO {
-    private String originCityName;
-    private String destinationCityName;
+    private String originAeroCode;
+    private String destinationAeroCode;
     private String airlineNickname;
 
     private List<String> categories;
@@ -28,8 +28,8 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
 
     public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage, EnumEstatusRuta status, String image) {
         super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage, status, image);
-        this.originCityName = null;
-        this.destinationCityName = null;
+        this.originAeroCode = null;
+        this.destinationAeroCode = null;
         this.airlineNickname = null;
         this.categories = null;
         this.flightsNames = null;

@@ -23,16 +23,16 @@ public class FlightRouteController implements IFlightRouteController{
     @Override
     public BaseFlightRouteDTO createFlightRoute(
             BaseFlightRouteDTO baseFlightRouteDTO,
-            String originCityName,
-            String destinationCityName,
+            String originAeroCode,
+            String destinationAeroCode,
             String airlineNickname,
             List<String> categoriesNames,
             File imageFile
     ){
         return flightRouteService.createFlightRoute(
                 baseFlightRouteDTO,
-                originCityName,
-                destinationCityName,
+                originAeroCode,
+                destinationAeroCode,
                 airlineNickname,
                 categoriesNames,
                 imageFile

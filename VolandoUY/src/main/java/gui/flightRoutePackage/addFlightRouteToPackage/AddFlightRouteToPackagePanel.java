@@ -97,7 +97,7 @@ public class AddFlightRouteToPackagePanel extends JPanel {
         List<FlightRouteDTO> flightRoutes = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
         // Create table model and set column names
-        String[] columnNames = {"Nombre", "Descripcion", "Ciudad Origen", "Ciudad Destino", "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"};
+        String[] columnNames = {"Nombre", "Descripcion", "Aero Origen", "Aero Destino", "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"};
         NonEditableTableModel tableModel = new NonEditableTableModel(columnNames, 0);
         tableModel.setColumnIdentifiers(columnNames);
 
@@ -106,8 +106,8 @@ public class AddFlightRouteToPackagePanel extends JPanel {
             Object[] rowData = {
                     flightRoute.getName(),
                     flightRoute.getDescription(),
-                    flightRoute.getOriginCityName(),
-                    flightRoute.getDestinationCityName(),
+                    flightRoute.getOriginAeroCode(),
+                    flightRoute.getDestinationAeroCode(),
                     "$" + flightRoute.getPriceTouristClass(),
                     "$" + flightRoute.getPriceBusinessClass(),
                     "$" + flightRoute.getPriceExtraUnitBaggage(),

@@ -88,7 +88,7 @@ public class createFlightPanel extends JPanel {
                 flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname);
 
         String[] columnNames = {
-                "Nombre", "Descripción", "Ciudad Origen", "Ciudad Destino",
+                "Nombre", "Descripción", "Aero Origen", "Aero Destino",
                 "Precio Turista", "Precio Ejecutivo", "Precio Equipaje Extra", "Fecha de Creación"
         };
         NonEditableTableModel tableModel = new NonEditableTableModel(columnNames, 0);
@@ -101,8 +101,8 @@ public class createFlightPanel extends JPanel {
                 Object[] rowData = {
                         nz(fr.getName()),
                         nz(fr.getDescription()),
-                        nz(fr.getOriginCityName()),
-                        nz(fr.getDestinationCityName()),
+                        nz(fr.getOriginAeroCode()),
+                        nz(fr.getDestinationAeroCode()),
                         money(fr.getPriceTouristClass()),
                         money(fr.getPriceBusinessClass()),
                         money(fr.getPriceExtraUnitBaggage()),

@@ -11,6 +11,7 @@ import domain.models.enums.EnumTipoAsiento;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.mapper.UserMapper;
+import domain.services.airport.AirportService;
 import domain.services.category.CategoryService;
 import domain.services.city.CityService;
 import domain.services.flightRoute.FlightRouteService;
@@ -47,7 +48,7 @@ class FlightRoutePackageServiceTest {
         packageService     = new FlightRoutePackageService();
 
         // Inyectar dependencias reales si hace falta
-        flightRouteService.setCityService(new CityService());
+        flightRouteService.setAirportService(new AirportService());
         flightRouteService.setCategoryService(new CategoryService());
         flightRouteService.setUserService(new UserService());
         packageService.setFlightRouteService(flightRouteService);

@@ -24,9 +24,6 @@ public class Category {
     @Size(min = 2, max = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
-    private List<FlightRoute> flightRoutes;
-
     @Override
     public String toString() {
         return "Category{" +

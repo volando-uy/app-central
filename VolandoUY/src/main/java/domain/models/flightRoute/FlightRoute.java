@@ -1,5 +1,6 @@
 package domain.models.flightRoute;
 
+import domain.models.airport.Airport;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.enums.EnumEstatusRuta;
@@ -31,7 +32,7 @@ public class FlightRoute {
 
     @NotNull
     @NotEmpty
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 300)
     private String description;
 
     @NotNull
@@ -52,10 +53,10 @@ public class FlightRoute {
 
 
     @ManyToOne()
-    private City originCity;
+    private Airport originAero;
 
     @ManyToOne()
-    private City destinationCity;
+    private Airport destinationAero;
 
     @ManyToMany
     @JoinTable(

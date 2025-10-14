@@ -90,7 +90,7 @@ public class DBInitThread extends Thread {
         List<BaseAirportDTO> airports = seed_generateAirports(cities);
         System.out.println("Airports: " + airports);
 
-        List<FlightRouteDTO> flightRoutes = seed_generateFlightRoutes(airlines, cities, categories);
+        List<FlightRouteDTO> flightRoutes = seed_generateFlightRoutes(airlines, airports, categories);
         System.out.println("Flight Routes: " + flightRoutes);
 
         // Se necesita la aerolinea también para crear el vuelo
@@ -256,22 +256,22 @@ public class DBInitThread extends Thread {
         return airportsDTOs;
     }
 
-    private List<FlightRouteDTO> seed_generateFlightRoutes(List<BaseAirlineDTO> airlines, List<BaseCityDTO> cities, List<CategoryDTO> categories) {
+    private List<FlightRouteDTO> seed_generateFlightRoutes(List<BaseAirlineDTO> airlines, List<BaseAirportDTO> airports, List<CategoryDTO> categories) {
         IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
 
         List<FlightRouteDTO> flightRoutesDTOs = new ArrayList<>();
-        for (BaseCityDTO originCity : cities) {
-            for (BaseCityDTO destinationCity : cities) {
-                if (originCity.equals(destinationCity)) continue; // Evitar rutas con la misma ciudad de origen y destino
-                if (Math.random() > 0.5) continue; // 50% de probabilidad de crear una ruta entre estas dos ciudades
+        for (BaseAirportDTO originAirport : airports) {
+            for (BaseAirportDTO destinationAirport : airports) {
+                if (originAirport.equals(destinationAirport)) continue; // Evitar rutas con el mismo aeropuerto de origen y destino
+                if (Math.random() > 0.5) continue; // 50% de probabilidad de crear una ruta entre estos dos aeropuertos
 
                 // Seleccionar una aerolínea aleatoria
                 BaseAirlineDTO airline = airlines.get((int) (Math.random() * airlines.size()));
 
                 // Creamos los datos base de la nueva ruta
                 BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO();
-                baseFlightRouteDTO.setName(originCity.getName() + " -> " + destinationCity.getName());
-                baseFlightRouteDTO.setDescription("Viaje desde " + originCity.getName() + " hasta " + destinationCity.getName() + " con " + airline.getName());
+                baseFlightRouteDTO.setName(originAirport.getCode() + " -> " + destinationAirport.getCode());
+                baseFlightRouteDTO.setDescription("Viaje desde " + originAirport.getName() + " hasta " + destinationAirport.getName() + " con " + airline.getName());
                 baseFlightRouteDTO.setCreatedAt(LocalDate.now());
                 baseFlightRouteDTO.setPriceTouristClass(100.0 + Math.random() * 400); // Precio entre 100 y 500
                 baseFlightRouteDTO.setPriceBusinessClass(500.0 + Math.random() * 1000); // Precio entre 500 y 1500
@@ -291,8 +291,8 @@ public class DBInitThread extends Thread {
                 // Crear la ruta de vuelo
                 flightRouteController.createFlightRoute(
                         baseFlightRouteDTO,
-                        originCity.getName(),
-                        destinationCity.getName(),
+                        originAirport.getCode(),
+                        destinationAirport.getCode(),
                         airline.getNickname(),
                         categoryNames,
                         null
@@ -469,7 +469,7 @@ public class DBInitThread extends Thread {
             List<BaseFlightRoutePackageDTO> flightRoutePackages
     ) {
 
-        Map<String, String> alreadyBought = new HashMap<>();
+        Map<String, List<String>> alreadyBought = new HashMap<>();
         List<BaseBuyPackageDTO> boughtPackagesDTOs = new ArrayList<>();
         int numPurchases = 10; // Crear 10 compras de paquetes
         for (int i = 1; i <= numPurchases; i++) {
@@ -482,7 +482,7 @@ public class DBInitThread extends Thread {
             String packageName = flightRoutePackages.get((int) (Math.random() * flightRoutePackages.size())).getName();
 
             if (alreadyBought.containsKey(customerNickname) &&
-                    alreadyBought.get(customerNickname).equals(packageName)) {
+                    alreadyBought.get(customerNickname).contains(packageName)) {
                 // El cliente ya compró este paquete, saltar esta iteración
                 continue;
             }
@@ -494,7 +494,8 @@ public class DBInitThread extends Thread {
             );
 
             boughtPackagesDTOs.add(boughtPackageDTO);
-            alreadyBought.put(customerNickname, packageName);
+            alreadyBought.computeIfAbsent(customerNickname, k -> new ArrayList<>());
+            alreadyBought.get(customerNickname).add(packageName);
         }
 
         return boughtPackagesDTOs;

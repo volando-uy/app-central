@@ -84,8 +84,8 @@ public class FlightRoutePackageDetailWindow extends JFrame {
                     safe(r.getName()),
                     safe(r.getDescription()),
                     created,
-                    safe(r.getOriginCityName()),
-                    safe(r.getDestinationCityName()),
+                    safe(r.getOriginAeroCode()),
+                    safe(r.getDestinationAeroCode()),
                     r.getAirlineNickname(),
                     fmtMoney(r.getPriceTouristClass()),
                     fmtMoney(r.getPriceBusinessClass()),
@@ -103,7 +103,8 @@ public class FlightRoutePackageDetailWindow extends JFrame {
     private void loadFlightRoutePackageDetails() {
         try { infoPanel.setBorder(null); } catch (Exception e) {}
         flightRoutePackageNameLabel.setText("Nombre del paquete: " + safe(flightRoutePackageDTO.getName()));
-        descriptionLabel.setText("Descripcion: " + safe(flightRoutePackageDTO.getDescription()));
+        descriptionLabel.setText("Descripción ...");
+        descriptionLabel.setToolTipText(safe(flightRoutePackageDTO.getDescription()));
         validityPeriodDaysLabel.setText( "Validez en días: " + flightRoutePackageDTO.getValidityPeriodDays());
         createdAtLabel.setText("Fecha creación: " + (flightRoutePackageDTO.getCreationDate() != null ? flightRoutePackageDTO.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A"));
         seatTypeLabel.setText("Tipo de asiento: " + (flightRoutePackageDTO.getSeatType() != null ? flightRoutePackageDTO.getSeatType().toString() : "N/A"));

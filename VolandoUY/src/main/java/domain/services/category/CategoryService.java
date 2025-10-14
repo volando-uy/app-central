@@ -36,9 +36,6 @@ public class CategoryService implements ICategoryService {
         // Validamos la entidad
         ValidatorUtil.validate(category);
 
-        // Seteamos las rutas de vuelo en que se usan
-        category.setFlightRoutes(new ArrayList<>());
-
         // Guardamos y devolvemos el DTO
         categoryRepository.save(category);
         return customModelMapper.map(category, CategoryDTO.class);
