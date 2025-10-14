@@ -2,6 +2,7 @@ package shared.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 // Esto es temporal, luego hay que implementarlo bien
 public class PasswordManager {
@@ -21,4 +22,12 @@ public class PasswordManager {
             throw new RuntimeException(e);
         }
     }
+    public static boolean validatePassword(String rawPassword, String hashedPassword) {
+        if (rawPassword == null || hashedPassword == null) {
+            return false;
+        }
+        String hashedInput = hashPassword(rawPassword);
+        return Objects.equals(hashedInput, hashedPassword);
+    }
+
 }
