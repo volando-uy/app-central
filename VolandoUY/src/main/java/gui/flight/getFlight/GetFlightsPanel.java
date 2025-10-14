@@ -11,6 +11,7 @@ import domain.dtos.bookFlight.BookFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import gui.flight.flightDetails.FlightDetailWindow;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
@@ -104,7 +105,7 @@ public class GetFlightsPanel extends JPanel {
 
         FlightTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         FlightTable.setModel(model);
-        adjustDynamicWidthAndHeightToTable(FlightTable);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(FlightTable);
         FlightTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
@@ -121,42 +122,6 @@ public class GetFlightsPanel extends JPanel {
     // ayuda: null-safe para strings
     private String safeStr(String s) {
         return s == null ? "" : s;
-    }
-
-    // ajuste dinámico (podés usar el tuyo; dejo el mismo patrón)
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-        // Ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
     }
 
     private void initListeners() {
@@ -205,7 +170,7 @@ public class GetFlightsPanel extends JPanel {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - asd
         vSpacer17 = new JPanel(null);
         FlightInfoPanel = new JPanel();
         flightLabel = new JLabel();
@@ -228,11 +193,13 @@ public class GetFlightsPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-        0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-        . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-        red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-        beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax
+        . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing
+        .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .
+        Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red
+        ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override
+        public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName (
+        ) ) )throw new RuntimeException( ) ;} } );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -367,7 +334,7 @@ public class GetFlightsPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - asd
     private JPanel vSpacer17;
     private JPanel FlightInfoPanel;
     private JLabel flightLabel;

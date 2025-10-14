@@ -39,6 +39,7 @@ import domain.dtos.user.CustomerDTO;
 import gui.flightRoute.details.FlightRouteDetailWindow;
 import gui.flightRoutePackage.details.FlightRoutePackageDetailWindow;
 import shared.constants.Images;
+import shared.utils.GUIUtils;
 import shared.utils.ImageProcessor;
 
 /**
@@ -284,7 +285,7 @@ public class GetUserPanel extends JPanel {
                     modelUsuarios.addRow(new Object[]{ "Aerolínea", nz(a.getName()), nick });
                 }
             }
-            adjustDynamicWidthAndHeightToTable(tblUsuarios);
+            GUIUtils.adjustDynamicWidthAndHeightToTable(tblUsuarios);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -373,7 +374,7 @@ public class GetUserPanel extends JPanel {
                 String status = callGetterString(r, "getStatus");
                 modelRutas.addRow(new Object[]{ nz(r.getName()), origin, dest, status });
             }
-            adjustDynamicWidthAndHeightToTable(tblRutas);
+            GUIUtils.adjustDynamicWidthAndHeightToTable(tblRutas);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudieron cargar rutas: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -442,7 +443,7 @@ public class GetUserPanel extends JPanel {
                     flights
             });
         }
-        adjustDynamicWidthAndHeightToTable(tblReservas);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(tblReservas);
     }
 
     private void buildDetalleReservaPanel() {
@@ -526,7 +527,7 @@ public class GetUserPanel extends JPanel {
 
         fillDetalleReserva(bookingDTO);
         detalleReservaPanel.setVisible(true);
-        adjustDynamicWidthAndHeightToTable(tblSeats);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(tblSeats);
     }
 
     private void fillDetalleReserva(BookFlightDTO booking) {
@@ -573,10 +574,10 @@ public class GetUserPanel extends JPanel {
         modelPaquetes.setRowCount(0);
         try {
             CustomerDTO c = userController.getCustomerDetailsByNickname(customerNickname);
-            if (c == null) { adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
+            if (c == null) { GUIUtils.adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
 
             List<Long> boughtPackagesIds = c.getBoughtPackagesIds();
-            if (boughtPackagesIds == null || boughtPackagesIds.isEmpty()) { adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
+            if (boughtPackagesIds == null || boughtPackagesIds.isEmpty()) { GUIUtils.adjustDynamicWidthAndHeightToTable(tblPaquetes); return; }
 
             for (Long id : boughtPackagesIds) {
                 BuyPackageDTO buyPackageDTO = buyPackageController.getBuyPackageDetailsById(id);
@@ -589,7 +590,7 @@ public class GetUserPanel extends JPanel {
                 });
             }
 
-            adjustDynamicWidthAndHeightToTable(tblPaquetes);
+            GUIUtils.adjustDynamicWidthAndHeightToTable(tblPaquetes);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se pudieron cargar paquetes: " + ex.getMessage(),
@@ -615,43 +616,6 @@ public class GetUserPanel extends JPanel {
 
 
     private void showCard(String key) { ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, key); }
-
-    // ---------- utils tablas ----------
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-
-        // ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
-    }
 
     private int findTableColumnIndex(JTable table, String... candidates) {
         if (table == null || candidates == null) return -1;

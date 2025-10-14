@@ -11,6 +11,7 @@ import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import gui.flightRoute.details.FlightRouteDetailWindow;
 import gui.flightRoutePackage.details.FlightRoutePackageDetailWindow;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
@@ -72,7 +73,7 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
         packageTable.setModel(model);
 
         // 5) Ajuste dinámico
-        adjustDynamicWidthAndHeightToTable(packageTable);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(packageTable);
 
         // 6) Selección
         packageTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -84,42 +85,6 @@ public class GetFlightRoutesPackagesPanel extends JPanel {
     private String formatDiscount(double d) {
         double value = (d <= 1.0 && d >= 0.0) ? d * 100.0 : d;
         return (Math.round(value * 100.0) / 100.0) + "%";
-    }
-
-    // MISMA lógica que venís usando
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-        // Ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
     }
 
     private void initListeners() {
