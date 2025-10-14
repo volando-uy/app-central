@@ -2,6 +2,7 @@ package factory;
 
 import controllers.airport.AirportController;
 import controllers.airport.IAirportController;
+import controllers.auth.IAuthController;
 import controllers.booking.BookingController;
 import controllers.booking.IBookingController;
 import controllers.buyPackage.BuyPackageController;
@@ -62,6 +63,7 @@ public class ControllerFactory {
     private static ITicketController ticketController;
     private static IBookingController bookingController;
     private static IBuyPackageController buyPackageController;
+    private static IAuthController authController;
 
     // ############ MODEL MAPPER & CUSTOM MAPPERS ############
 
@@ -190,5 +192,12 @@ public class ControllerFactory {
             buyPackageController = new BuyPackageController(ServiceFactory.getBuyPackageService());
         }
         return buyPackageController;
+    }
+
+    public static IAuthController getAuthController() {
+        if (authController == null) {
+            authController = new controllers.auth.AuthController();
+        }
+        return authController;
     }
 }

@@ -4,6 +4,8 @@ import controllers.booking.IBookingController;
 import controllers.seat.ISeatController;
 import domain.services.airport.AirportService;
 import domain.services.airport.IAirportService;
+import domain.services.auth.AuthService;
+import domain.services.auth.IAuthService;
 import domain.services.booking.BookingService;
 import domain.services.booking.IBookingService;
 import domain.services.buyPackage.BuyPackageService;
@@ -37,7 +39,7 @@ public class ServiceFactory {
     private static ITicketService ticketService;
     private static IBookingService bookingService;
     private static IBuyPackageService buyPackageService;
-
+    private static IAuthService authService;
     // ############ USER SERVICE ###########
 
     // Metodo para obtener el servicio de usuario, inicializándolo si es necesario
@@ -71,7 +73,7 @@ public class ServiceFactory {
     // ############ CATEGORY SERVICE ############
 
     public static ICategoryService getCategoryService() {
-        if(categoryService == null) {
+        if (categoryService == null) {
             categoryService = new CategoryService();
         }
         return categoryService;
@@ -121,7 +123,7 @@ public class ServiceFactory {
 
     // ############ AIRPORT SERVICE ############
     public static IAirportService getAirportService() {
-        if(airportService == null) {
+        if (airportService == null) {
             airportService = new AirportService();
             airportService.setCityService(getCityService());
         }
@@ -146,8 +148,8 @@ public class ServiceFactory {
     }
 
     // ############ BOOKING SERVICE ############
-    public static IBookingService getBookingService(){
-        if(bookingService == null){
+    public static IBookingService getBookingService() {
+        if (bookingService == null) {
             bookingService = new BookingService();
             bookingService.setFlightService(getFlightService());
             bookingService.setSeatService(getSeatService());
@@ -159,12 +161,21 @@ public class ServiceFactory {
     }
 
     // ############ BUYPACKAGE SERVICE ############
-    public static IBuyPackageService getBuyPackageService(){
-        if(buyPackageService == null){
+    public static IBuyPackageService getBuyPackageService() {
+        if (buyPackageService == null) {
             buyPackageService = new BuyPackageService();
             buyPackageService.setUserService(getUserService());
             buyPackageService.setFlightRoutePackageService(getFlightRoutePackageService());
         }
         return buyPackageService;
     }
+
+    // ############ AUTH SERVICE ############
+    public static IAuthService getAuthService() {
+        if (authService == null) {
+            authService = new AuthService();
+        }
+        return authService;
+    }
+
 }

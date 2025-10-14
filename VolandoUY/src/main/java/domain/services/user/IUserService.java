@@ -36,4 +36,6 @@ public interface IUserService {
     void updateAirline(Airline airline);
 
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
+
+
 }
