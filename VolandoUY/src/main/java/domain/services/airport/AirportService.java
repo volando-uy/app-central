@@ -15,6 +15,8 @@ import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
+import java.util.List;
+
 
 public class AirportService implements IAirportService {
     private final IAirportRepository airportRepository;
@@ -76,5 +78,14 @@ public class AirportService implements IAirportService {
     @Override
     public boolean airportExists(String code) {
         return airportRepository.existsAirportByCode(code);
+    }
+
+    @Override
+    public List<AirportDTO> getAllAirportsDetails(boolean full) {
+        List<Airport> airports = full ? airportRepository.getAllFullAirports() : airportRepository.getAllAirports();
+
+        return airports.stream()
+                .map(air -> full ? customModelMapper.mapFullAirport(air) : customModelMapper.map(air, AirportDTO.class))
+                .toList();
     }
 }

@@ -22,7 +22,7 @@ class UpdateUserTest {
     private IUserController userController;
 
     @BeforeAll
-    void cleanDBAndSetUpOnce() {
+    void cleanDBAndSetUpOne() {
         // Limpiar la base de datos
         EntityManager em = DBConnection.getEntityManager();
         em.getTransaction().begin();

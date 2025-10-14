@@ -9,6 +9,7 @@ import factory.RepositoryFactory;
 import infra.repository.city.CityRepository;
 import infra.repository.city.ICityRepository;
 import shared.constants.ErrorMessages;
+import shared.utils.CountryUtil;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
@@ -36,6 +37,12 @@ public class CityService implements ICityService {
 
         // Validamos la ciudad
         ValidatorUtil.validate(city);
+
+        // Validar si existe el pais
+        List<String> countries = CountryUtil.getAllCountries();
+        if (!countries.contains(city.getCountry())) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_COUNTRY_NOT_EXISTS, city.getCountry()));
+        }
 
         // Inicializamos la lista de aeropuertos
         city.setAirports(new ArrayList<>());
@@ -86,6 +93,13 @@ public class CityService implements ICityService {
     public List<String> getAllCitiesNames() {
         return cityRepository.findAll().stream()
                 .map(City::getName)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BaseCityDTO> getAllCitiesSimpleDetails() {
+        return cityRepository.findAll().stream()
+                .map(city -> customModelMapper.map(city, BaseCityDTO.class))
                 .collect(Collectors.toList());
     }
 }

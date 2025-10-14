@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.8" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,28 +9,69 @@ new FormModel {
 			"minimumSize": new java.awt.Dimension( 640, 600 )
 			"maximumSize": new java.awt.Dimension( 640, 600 )
 			"background": new java.awt.Color( 238, 238, 238, 255 )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) ) {
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0, 0:1.0"
+				"$rowSpecs": "34:1.0, 32"
+				"$alignTop": true
+				"$alignLeft": true
+			} ) {
 				name: "NavPanel"
-				"minimumSize": new java.awt.Dimension( 640, 60 )
-				"preferredSize": new java.awt.Dimension( 640, 60 )
-				"maximumSize": new java.awt.Dimension( 640, 60 )
+				"minimumSize": new java.awt.Dimension( 640, 70 )
+				"preferredSize": new java.awt.Dimension( 640, 70 )
+				"maximumSize": new java.awt.Dimension( 640, 70 )
 				"background": new java.awt.Color( 56, 106, 172, 255 )
 				"border": new javax.swing.border.EtchedBorder( 1, null, null )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createCityBtn"
 					"text": "+ Registrar Ciudad"
-				} )
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "createCategoryBtn"
 					"text": "+ Crear Categoria"
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+					"minimumSize": new java.awt.Dimension( 150, 34 )
+					"preferredSize": new java.awt.Dimension( 150, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "createAirportBtn"
+					"text": "+ Registrar Aeropuerto"
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+					"minimumSize": new java.awt.Dimension( 150, 34 )
+					"preferredSize": new java.awt.Dimension( 150, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getCitiesBtn"
 					"text": "\ud83d\udcc4 Listar Ciudades"
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+					"minimumSize": new java.awt.Dimension( 150, 34 )
+					"preferredSize": new java.awt.Dimension( 150, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "getCatgoriesBtn"
 					"text": "\ud83d\udcc4 Listar Categorias"
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+					"minimumSize": new java.awt.Dimension( 150, 34 )
+					"preferredSize": new java.awt.Dimension( 150, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"gridx": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "getAirportsBtn"
+					"text": "\ud83d\udcc4 Listar Aeropuertos"
+					"maximumSize": new java.awt.Dimension( 41646542, 34 )
+					"minimumSize": new java.awt.Dimension( 150, 34 )
+					"preferredSize": new java.awt.Dimension( 150, 34 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"gridx": 2
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"

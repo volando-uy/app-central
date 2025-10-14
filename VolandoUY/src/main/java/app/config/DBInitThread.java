@@ -199,20 +199,25 @@ public class DBInitThread extends Thread {
     }
 
     private List<BaseCityDTO> seed_generateCities() {
-        List<String> cityNames = List.of(
-                "Madrid",
-                "Barcelona",
-                "Brooklyn",
-                "Seattle",
-                "Chicago",
-                "Miami"
-        );
+        Map<String, String> cities = new HashMap<>();
+        cities.put("Madrid", "España");
+        cities.put("Barcelona", "España");
+        cities.put("Montevideo", "Uruguay");
+        cities.put("Salto", "Uruguay");
+        cities.put("Buenos Aires", "Argentina");
+        cities.put("Bogotá", "Colombia");
+        cities.put("Lima", "Perú");
+        cities.put("Florianopolis", "Brasil");
+        cities.put("Sydney", "Australia");
+        cities.put("Ottawa", "Canadá");
+        cities.put("Paris", "Francia");
+
 
         List<BaseCityDTO> citiesDTOs = new ArrayList<>();
-        for (String cityName : cityNames) {
+        for (Map.Entry<String, String> entry : cities.entrySet()) {
             BaseCityDTO baseCityDTO = new BaseCityDTO();
-            baseCityDTO.setName(cityName);
-            baseCityDTO.setCountry("Country of " + cityName);
+            baseCityDTO.setName(entry.getKey());
+            baseCityDTO.setCountry(entry.getValue());
             baseCityDTO.setLatitude(Math.random() * 180 - 90); // Latitud aleatoria entre -90 y 90
             baseCityDTO.setLongitude(Math.random() * 360 - 180); // Longitud aleatoria entre -180 y 180
 

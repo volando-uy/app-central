@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import controllers.airport.IAirportController;
 import controllers.booking.IBookingController;
 import controllers.buyPackage.IBuyPackageController;
 import controllers.category.ICategoryController;
@@ -38,6 +39,7 @@ public class MainFrame extends JFrame {
     private IBuyPackageController buyPackageController;
     private ITicketController ticketController;
     private ISeatController seatController;
+    private IAirportController airportController;
 
     private JPanel userPanel;
     private JPanel flightRoutePanel;
@@ -58,7 +60,8 @@ public class MainFrame extends JFrame {
                      IFlightController flightController , IBookingController bookingController,
                      IBuyPackageController buyPackageController,
                      ITicketController ticketController,
-                     ISeatController seatController
+                     ISeatController seatController,
+                     IAirportController airportController
     ) {
         this.flightController = flightController;
         this.userController = userController;
@@ -70,6 +73,7 @@ public class MainFrame extends JFrame {
         this.buyPackageController = buyPackageController;
         this.ticketController = ticketController;
         this.seatController = seatController;
+        this.airportController = airportController;
         try {
             UIManager.setLookAndFeel( new FlatLightLaf() );
         } catch( Exception ex ) {
@@ -128,7 +132,7 @@ public class MainFrame extends JFrame {
         flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController, flightController);
         flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController, buyPackageController);
         flightPanel = new FlightPanel(flightController, flightRouteController, userController, bookingController);
-        otherPanel = new OtherPanel(categoryController, cityController);
+        otherPanel = new OtherPanel(categoryController, cityController, airportController);
         reservationPanel = new ReservationPanel(userController , flightRouteController , flightController , bookingController);
 
         MouseListener userManagementBtnListener = new MouseAdapter() {

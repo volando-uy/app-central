@@ -39,7 +39,7 @@ public class ErrorMessages {
     public static final String ERROR_MIN_LONGITUDE = "Longitud mínima -180";
     public static final String ERROR_MAX_LONGITUDE = "Longitud máxima 180";
     public static final String CITY_NOT_FOUND = "No se puede agregar un aeropuerto a una ciudad nula";
-
+    public static final String ERR_COUNTRY_NOT_EXISTS = "La ciudad %s no existe";
     // ================================Fin City errors==============================
 
 

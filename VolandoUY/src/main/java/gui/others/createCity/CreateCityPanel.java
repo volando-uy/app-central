@@ -5,7 +5,9 @@ import controllers.city.ICityController;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import lombok.Setter;
+import shared.utils.CountryUtil;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -14,6 +16,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 public class CreateCityPanel extends JPanel {
@@ -23,6 +26,7 @@ public class CreateCityPanel extends JPanel {
     public CreateCityPanel(ICityController cityController) {
         this.cityController = cityController;
         initComponents();
+        loadCountryComboBox();
         initListeners();
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
     }
@@ -31,7 +35,7 @@ public class CreateCityPanel extends JPanel {
         createNewCityBtn.addActionListener(e -> {
             try {
                 String name = nameTextField.getText();
-                String country = countryTextField.getText();
+                String country = countryComboBox.getItemAt(countryComboBox.getSelectedIndex());
                 double latitude = Double.parseDouble(latitudeTextField.getText());
                 double longitude = Double.parseDouble(longitudeTextField.getText());
 
@@ -55,10 +59,24 @@ public class CreateCityPanel extends JPanel {
         });
     }
     
+    private void loadCountryComboBox() {
+        countryComboBox.removeAllItems();
+
+        // asumo que tu IUserController tiene getAllAirlines()
+        List<String> countries = CountryUtil.getAllCountries();
+        if (countries == null) return;
+
+        for (String country : countries) {
+            countryComboBox.addItem(country);
+        }
+
+        if (!countries.isEmpty()) countryComboBox.setSelectedIndex(0);
+    }
+    
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Nahuel
+        // Generated using JFormDesigner Evaluation license - asd
         titleLabel = new JLabel();
         InfoCityPanel = new JPanel();
         hSpacer5 = new JPanel(null);
@@ -74,7 +92,7 @@ public class CreateCityPanel extends JPanel {
         nameLabel = new JLabel();
         nameTextField = new JTextField();
         countryLabel = new JLabel();
-        countryTextField = new JTextField();
+        countryComboBox = new JComboBox<>();
         createNewCityPanel = new JPanel();
         hSpacer1 = new JPanel(null);
         hSpacer2 = new JPanel(null);
@@ -88,12 +106,13 @@ public class CreateCityPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
+        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
+        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
+        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+        .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
+        ( ); }} );
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -241,12 +260,12 @@ public class CreateCityPanel extends JPanel {
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- countryTextField ----
-                countryTextField.setPreferredSize(new Dimension(120, 30));
-                countryTextField.setMinimumSize(new Dimension(100, 30));
-                countryTextField.setMaximumSize(new Dimension(100, 30));
-                countryTextField.setOpaque(false);
-                firstRowPanel.add(countryTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                //---- countryComboBox ----
+                countryComboBox.setPreferredSize(new Dimension(120, 30));
+                countryComboBox.setMinimumSize(new Dimension(100, 30));
+                countryComboBox.setMaximumSize(new Dimension(100, 30));
+                countryComboBox.setOpaque(false);
+                firstRowPanel.add(countryComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
@@ -292,7 +311,7 @@ public class CreateCityPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Nahuel
+    // Generated using JFormDesigner Evaluation license - asd
     private JLabel titleLabel;
     private JPanel InfoCityPanel;
     private JPanel hSpacer5;
@@ -308,7 +327,7 @@ public class CreateCityPanel extends JPanel {
     private JLabel nameLabel;
     private JTextField nameTextField;
     private JLabel countryLabel;
-    private JTextField countryTextField;
+    private JComboBox<String> countryComboBox;
     private JPanel createNewCityPanel;
     private JPanel hSpacer1;
     private JPanel hSpacer2;

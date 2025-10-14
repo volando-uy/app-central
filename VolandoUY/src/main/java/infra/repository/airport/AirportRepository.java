@@ -6,6 +6,9 @@ import domain.models.city.City;
 import jakarta.persistence.EntityManager;
 import shared.constants.ErrorMessages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AirportRepository extends AirportAbstractRepository implements IAirportRepository {
     public AirportRepository() {
         super();
@@ -70,6 +73,30 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
         }
     }
 
+    @Override
+    public List<Airport> getAllFullAirports() {
+        try(EntityManager em= DBConnection.getEntityManager()){
+            List<Airport> airports = em.createQuery("SELECT a FROM Airport a", Airport.class)
+                    .getResultList();
+
+            // Initialize cities
+            for (Airport airport : airports) {
+                airport.getCity().getName();
+            }
+
+            return airports;
+        }
+    }
+
+    @Override
+    public List<Airport> getAllAirports() {
+        try(EntityManager em= DBConnection.getEntityManager()){
+            List<Airport> airports = em.createQuery("SELECT a FROM Airport a", Airport.class)
+                    .getResultList();
+
+            return airports;
+        }
+    }
 
 
 }
