@@ -1,8 +1,11 @@
 package infra.repository.city;
 
 import app.DBConnection;
+import domain.dtos.city.BaseCityDTO;
 import domain.models.city.City;
 import jakarta.persistence.EntityManager;
+
+import java.util.List;
 
 public class CityRepository extends AbstractCityRepository implements ICityRepository {
     public CityRepository() {
@@ -58,5 +61,26 @@ public class CityRepository extends AbstractCityRepository implements ICityRepos
         }
     }
 
+    @Override
+    public List<City> findAll() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<City> cities = em.createQuery("SELECT c FROM City c", City.class)
+                    .getResultStream()
+                    .toList();
 
+            return cities;
+        }
+    }
+
+    @Override
+    public List<City> findFullAll() {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            List<City> cities = em.createQuery("SELECT c FROM City c", City.class)
+                    .getResultStream()
+                    .toList();
+            for (City city : cities)
+                city.getAirports().size();
+            return cities;
+        }
+    }
 }

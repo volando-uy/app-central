@@ -5,14 +5,13 @@
 package gui.others.getCities;
 
 import controllers.city.ICityController;
+import domain.dtos.city.BaseCityDTO;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -34,16 +33,16 @@ public class GetCitiesPanel extends JPanel {
 
     private void loadCitiesTable() {
         // 1) Traer datos del controller
-        List<String> allCities = cityController.getAllCitiesNames();
+        List<BaseCityDTO> allCities = cityController.getAllCitiesSimpleDetails();
 
         // 2) Crear modelo y columnas
-        String[] columnNames = {"Ciudad"};
+        String[] columnNames = {"Ciudad", "Pais"};
         NonEditableTableModel cityTableModel = new NonEditableTableModel(columnNames, 0);
         cityTableModel.setColumnIdentifiers(columnNames);
 
         // 3) Agregar filas
-        for (String cityName : allCities) {
-            Object[] rowData = { cityName };
+        for (BaseCityDTO city : allCities) {
+            Object[] rowData = { city.getName(), city.getCountry() };
             cityTableModel.addRow(rowData);
         }
 
@@ -52,7 +51,7 @@ public class GetCitiesPanel extends JPanel {
 
         // 6) Modo de selección
         cityTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        GUIUtils.adjustDynamicWidthAndHeightToTable(cityTable);
         cityTable.setModel(cityTableModel);
     }
     
@@ -68,7 +67,7 @@ public class GetCitiesPanel extends JPanel {
     
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+        // Generated using JFormDesigner Evaluation license - asd
         vSpacer17 = new JPanel(null);
         cityInfoPanel = new JPanel();
         cityLabel = new JLabel();
@@ -86,13 +85,13 @@ public class GetCitiesPanel extends JPanel {
         setBackground(new Color(0x517ed6));
         setBorder(new EtchedBorder());
         setOpaque(false);
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax
-        . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing
-        .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .
-        Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red
-        ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override
-        public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName (
-        ) ) )throw new RuntimeException( ) ;} } );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
+        .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax.swing
+        .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
+        Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt.Color.red
+        ), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
+        public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".equals(e.getPropertyName(
+        )))throw new RuntimeException();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
@@ -196,7 +195,7 @@ public class GetCitiesPanel extends JPanel {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Ignacio Suarez
+    // Generated using JFormDesigner Evaluation license - asd
     private JPanel vSpacer17;
     private JPanel cityInfoPanel;
     private JLabel cityLabel;

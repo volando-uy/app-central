@@ -11,6 +11,7 @@ import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
 import domain.dtos.user.BaseAirlineDTO;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import javax.swing.*;
@@ -83,8 +84,8 @@ public class FlightRoutePackageDetailWindow extends JFrame {
                     safe(r.getName()),
                     safe(r.getDescription()),
                     created,
-                    safe(r.getOriginCityName()),
-                    safe(r.getDestinationCityName()),
+                    safe(r.getOriginAeroCode()),
+                    safe(r.getDestinationAeroCode()),
                     r.getAirlineNickname(),
                     fmtMoney(r.getPriceTouristClass()),
                     fmtMoney(r.getPriceBusinessClass()),
@@ -95,14 +96,15 @@ public class FlightRoutePackageDetailWindow extends JFrame {
 
         flightRoutesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         flightRoutesTable.setModel(model);
-        adjustDynamicWidthAndHeightToTable(flightRoutesTable);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(flightRoutesTable);
         flightRoutesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void loadFlightRoutePackageDetails() {
         try { infoPanel.setBorder(null); } catch (Exception e) {}
         flightRoutePackageNameLabel.setText("Nombre del paquete: " + safe(flightRoutePackageDTO.getName()));
-        descriptionLabel.setText("Descripcion: " + safe(flightRoutePackageDTO.getDescription()));
+        descriptionLabel.setText("Descripción ...");
+        descriptionLabel.setToolTipText(safe(flightRoutePackageDTO.getDescription()));
         validityPeriodDaysLabel.setText( "Validez en días: " + flightRoutePackageDTO.getValidityPeriodDays());
         createdAtLabel.setText("Fecha creación: " + (flightRoutePackageDTO.getCreationDate() != null ? flightRoutePackageDTO.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A"));
         seatTypeLabel.setText("Tipo de asiento: " + (flightRoutePackageDTO.getSeatType() != null ? flightRoutePackageDTO.getSeatType().toString() : "N/A"));
@@ -110,42 +112,6 @@ public class FlightRoutePackageDetailWindow extends JFrame {
                 + (flightRoutePackageDTO.getTotalPrice() != null ? String.format("$ %.2f", flightRoutePackageDTO.getTotalPrice())
                 + " | Descuento: " + String.format("%.1f%%", flightRoutePackageDTO.getDiscount())  : "N/A"));
     }
-
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-        // Ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
-    }
-
 
 
     private String safe(String s) { return s == null ? "" : s; }

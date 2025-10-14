@@ -48,10 +48,10 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
                     fr.getCategories().size(); // Initialize flights collection
                 if (fr.getInPackages() != null)
                     fr.getInPackages().size(); // Initialize packages collection
-                if (fr.getOriginCity() != null)
-                    fr.getOriginCity().getName(); // Initialize origin city
-                if (fr.getDestinationCity() != null)
-                    fr.getDestinationCity().getName(); // Initialize destination city
+                if (fr.getOriginAero() != null)
+                    fr.getOriginAero().getCode(); // Initialize origin aero
+                if (fr.getDestinationAero() != null)
+                    fr.getDestinationAero().getCode(); // Initialize destination aero
                 if (fr.getAirline() != null)
                     fr.getAirline().getName(); // Initialize airline
             }
@@ -72,26 +72,26 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
     @Override
     public FlightRoute getFullByName(String name) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
-            FlightRoute flightRoute = entityManager.createQuery("SELECT fr FROM FlightRoute fr WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
+            FlightRoute fr = entityManager.createQuery("SELECT fr FROM FlightRoute fr WHERE LOWER(fr.name) = LOWER(:name)", FlightRoute.class)
                     .setParameter("name", name)
                     .getSingleResult();
 
-            if (flightRoute != null) {
-                if (flightRoute.getFlights() != null)
-                    flightRoute.getFlights().size(); // Initialize flights collection
-                if (flightRoute.getCategories() != null)
-                    flightRoute.getCategories().size(); // Initialize categories collection
-                if (flightRoute.getInPackages() != null)
-                    flightRoute.getInPackages().size(); // Initialize packages collection
-                if (flightRoute.getOriginCity() != null)
-                    flightRoute.getOriginCity().getName(); // Initialize origin city
-                if (flightRoute.getDestinationCity() != null)
-                    flightRoute.getDestinationCity().getName(); // Initialize destination city
-                if (flightRoute.getAirline() != null)
-                    flightRoute.getAirline().getName(); // Initialize airline
+            if (fr != null) {
+                if (fr.getFlights() != null)
+                    fr.getFlights().size(); // Initialize flights collection
+                if (fr.getCategories() != null)
+                    fr.getCategories().size(); // Initialize categories collection
+                if (fr.getInPackages() != null)
+                    fr.getInPackages().size(); // Initialize packages collection
+                if (fr.getOriginAero() != null)
+                    fr.getOriginAero().getCode(); // Initialize origin aero
+                if (fr.getDestinationAero() != null)
+                    fr.getDestinationAero().getCode(); // Initialize destination aero
+                if (fr.getAirline() != null)
+                    fr.getAirline().getName(); // Initialize airline
             }
 
-            return flightRoute;
+            return fr;
         }
     }
 
@@ -109,10 +109,6 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
 
             // Add the flightroute to the relationships
             managedAirline.getFlightRoutes().add(flightRoute);
-            for (Category c : flightRoute.getCategories()) {
-                Category managedCategory = em.merge(c);
-                managedCategory.getFlightRoutes().add(flightRoute);
-            }
             em.merge(managedAirline);
 
             em.getTransaction().commit();
@@ -131,20 +127,20 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
                     .setParameter("packageName", packageName)
                     .getResultList();
 
-            for (FlightRoute flightRoute : flightRoutes) {
-                if (flightRoute != null) {
-                    if (flightRoute.getFlights() != null)
-                        flightRoute.getFlights().size(); // Initialize flights collection
-                    if (flightRoute.getCategories() != null)
-                        flightRoute.getCategories().size(); // Initialize categories collection
-                    if (flightRoute.getInPackages() != null)
-                        flightRoute.getInPackages().size(); // Initialize packages collection
-                    if (flightRoute.getOriginCity() != null)
-                        flightRoute.getOriginCity().getName(); // Initialize origin city
-                    if (flightRoute.getDestinationCity() != null)
-                        flightRoute.getDestinationCity().getName(); // Initialize destination city
-                    if (flightRoute.getAirline() != null)
-                        flightRoute.getAirline().getName(); // Initialize airline
+            for (FlightRoute fr : flightRoutes) {
+                if (fr != null) {
+                    if (fr.getFlights() != null)
+                        fr.getFlights().size(); // Initialize flights collection
+                    if (fr.getCategories() != null)
+                        fr.getCategories().size(); // Initialize categories collection
+                    if (fr.getInPackages() != null)
+                        fr.getInPackages().size(); // Initialize packages collection
+                    if (fr.getOriginAero() != null)
+                        fr.getOriginAero().getCode(); // Initialize origin aero
+                    if (fr.getDestinationAero() != null)
+                        fr.getDestinationAero().getCode(); // Initialize destination aero
+                    if (fr.getAirline() != null)
+                        fr.getAirline().getName(); // Initialize airline
                 }
             }
 

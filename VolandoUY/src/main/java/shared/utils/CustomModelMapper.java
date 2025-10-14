@@ -91,8 +91,8 @@ public class CustomModelMapper extends ModelMapper {
 
     public FlightRouteDTO mapFullFlightRoute(FlightRoute flightRoute) {
         FlightRouteDTO flightRouteDTO = this.map(flightRoute, FlightRouteDTO.class);
-        flightRouteDTO.setOriginCityName(flightRoute.getOriginCity() != null ? flightRoute.getOriginCity().getName() : null);
-        flightRouteDTO.setDestinationCityName(flightRoute.getDestinationCity() != null ? flightRoute.getDestinationCity().getName() : null);
+        flightRouteDTO.setOriginAeroCode(flightRoute.getOriginAero() != null ? flightRoute.getOriginAero().getCode() : null);
+        flightRouteDTO.setDestinationAeroCode(flightRoute.getDestinationAero() != null ? flightRoute.getDestinationAero().getCode() : null);
         flightRouteDTO.setAirlineNickname(flightRoute.getAirline() != null ? flightRoute.getAirline().getNickname() : null);
         flightRouteDTO.setCategories(
                 new ArrayList<>(flightRoute.getCategories()).stream().map(Category::getName).toList()

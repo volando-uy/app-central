@@ -21,6 +21,7 @@ import domain.models.enums.EnumTipoDocumento;
 import factory.ControllerFactory;
 import gui.MainFrame;
 import jakarta.persistence.EntityManager;
+import shared.utils.CountryUtil;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -46,7 +47,8 @@ public class VolandoApp {
                 ControllerFactory.getBookingController(),
                 ControllerFactory.getBuyPackageController(),
                 ControllerFactory.getTicketController(),
-                ControllerFactory.getSeatController()
+                ControllerFactory.getSeatController(),
+                ControllerFactory.getAirportController()
             );
         });
 

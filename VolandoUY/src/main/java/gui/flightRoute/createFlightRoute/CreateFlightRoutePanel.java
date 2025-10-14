@@ -1,8 +1,10 @@
 package gui.flightRoute.createFlightRoute;
 
+import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
@@ -32,6 +34,7 @@ public class CreateFlightRoutePanel extends JPanel {
     IFlightRouteController flightRouteController;
     IUserController userController;
     ICategoryController categoryController;
+    IAirportController airportController;
 
     File selectedImageFile = null;
 
@@ -41,14 +44,17 @@ public class CreateFlightRoutePanel extends JPanel {
     public CreateFlightRoutePanel(
             IFlightRouteController flightRouteController,
             IUserController userController,
-            ICategoryController categoryController
+            ICategoryController categoryController,
+            IAirportController airportController
     ) {
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.categoryController = categoryController;
+        this.airportController = airportController;
         initComponents();
         initListeners();
         loadAirlinesIntoCombo();
+        loadAirportsIntoCombo();
         initCategoryList();
         initPlaceholderForTextField(createdAtTextField, "dd/mm/yyyy");
         try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
@@ -76,6 +82,22 @@ public class CreateFlightRoutePanel extends JPanel {
         int idx = airlineComboBox.getSelectedIndex();
         if (idx < 0 || idx >= airlines.size()) return null;
         return airlines.get(idx).getNickname(); // lo que necesita tu método
+    }
+
+    private void loadAirportsIntoCombo() {
+        originAeroComboBox.removeAllItems();
+        destinationAeroComboBox.removeAllItems();
+
+        List<BaseAirportDTO> airports = airportController.getAllAirportsSimpleDetails();
+        for (BaseAirportDTO a : airports) {
+            originAeroComboBox.addItem(a.getCode());
+            destinationAeroComboBox.addItem(a.getCode());
+        }
+
+        if (!airports.isEmpty()) {
+            originAeroComboBox.setSelectedIndex(0);
+            destinationAeroComboBox.setSelectedIndex(0);
+        }
     }
 
 
@@ -137,12 +159,15 @@ public class CreateFlightRoutePanel extends JPanel {
                     null
                 );
 
+                String originAirportCode = (String) originAeroComboBox.getSelectedItem();
+                String destinationAirportCode = (String) destinationAeroComboBox.getSelectedItem();
+
 
                 // Call the controller to create the flight route
                 BaseFlightRouteDTO createdFlightRouteDTO = flightRouteController.createFlightRoute(
                         baseFlightRouteDTO,
-                        originCityTextField.getText(),
-                        destinationCityTextField.getText(),
+                        originAirportCode,
+                        destinationAirportCode,
                         selectedAirline,
                         selectedCategories,
                         selectedImageFile
@@ -158,8 +183,8 @@ public class CreateFlightRoutePanel extends JPanel {
                         "\nCosto equipaje extra: " + createdFlightRouteDTO.getPriceExtraUnitBaggage() +
                         "\nCosto turista: " + createdFlightRouteDTO.getPriceTouristClass() +
                         "\nCosto ejecutivo: " + createdFlightRouteDTO.getPriceBusinessClass() +
-                        "\nCiudad origen: " + originCityTextField.getText() +
-                        "\nCiudad destino: " + destinationCityTextField.getText() +
+                        "\nAeropuerto origen: " + originAirportCode +
+                        "\nAeropuerto destino: " + destinationAirportCode +
                         (selectedCategories.isEmpty() ? "\n" : "\nCategorías:" + String.join(", ", selectedCategories)),
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE)
@@ -185,6 +210,14 @@ public class CreateFlightRoutePanel extends JPanel {
             }
         });
 
+        MouseAdapter loadAirportsMouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadAirportsIntoCombo();
+            }
+        };
+        originAeroLabel.addMouseListener(loadAirportsMouseAdapter);
+        destinationAeroLabel.addMouseListener(loadAirportsMouseAdapter);
 
         uploadImageBtn.addActionListener(e -> {
             // Open a new FileChooser in a new window
@@ -258,10 +291,10 @@ public class CreateFlightRoutePanel extends JPanel {
         businessCostLabel = new JLabel();
         businessCostTextField = new JTextField();
         fourthRowPanel = new JPanel();
-        originCityLabel = new JLabel();
-        originCityTextField = new JTextField();
-        destinationCityLabel = new JLabel();
-        destinationCityTextField = new JTextField();
+        originAeroLabel = new JLabel();
+        originAeroComboBox = new JComboBox<>();
+        destinationAeroLabel = new JLabel();
+        destinationAeroComboBox = new JComboBox<>();
         categoriesTablePanel = new JPanel();
         categoriesLabel = new JLabel();
         CategoriesScrollPane = new JScrollPane();
@@ -281,11 +314,11 @@ public class CreateFlightRoutePanel extends JPanel {
         setBorder(new EtchedBorder());
         setOpaque(false);
         setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-        swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
+        swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border
         .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
         ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
         ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-        .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
+        .beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
         ();}});
         setLayout(new GridBagLayout());
         ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
@@ -543,43 +576,43 @@ public class CreateFlightRoutePanel extends JPanel {
                 ((GridBagLayout)fourthRowPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)fourthRowPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-                //---- originCityLabel ----
-                originCityLabel.setText("Ciudad origen:");
-                originCityLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                originCityLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                originCityLabel.setPreferredSize(new Dimension(120, 30));
-                originCityLabel.setMaximumSize(new Dimension(70, 15));
-                originCityLabel.setMinimumSize(new Dimension(70, 15));
-                fourthRowPanel.add(originCityLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                //---- originAeroLabel ----
+                originAeroLabel.setText("\ud83d\udd04 Aero. origen:");
+                originAeroLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                originAeroLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                originAeroLabel.setPreferredSize(new Dimension(120, 30));
+                originAeroLabel.setMaximumSize(new Dimension(70, 15));
+                originAeroLabel.setMinimumSize(new Dimension(70, 15));
+                fourthRowPanel.add(originAeroLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- originCityTextField ----
-                originCityTextField.setPreferredSize(new Dimension(120, 30));
-                originCityTextField.setMinimumSize(new Dimension(100, 30));
-                originCityTextField.setMaximumSize(new Dimension(100, 30));
-                originCityTextField.setOpaque(false);
-                fourthRowPanel.add(originCityTextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                //---- originAeroComboBox ----
+                originAeroComboBox.setPreferredSize(new Dimension(120, 30));
+                originAeroComboBox.setMinimumSize(new Dimension(100, 30));
+                originAeroComboBox.setMaximumSize(new Dimension(100, 30));
+                originAeroComboBox.setOpaque(false);
+                fourthRowPanel.add(originAeroComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- destinationCityLabel ----
-                destinationCityLabel.setText("Ciudad destino:");
-                destinationCityLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                destinationCityLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-                destinationCityLabel.setPreferredSize(new Dimension(120, 30));
-                destinationCityLabel.setMaximumSize(new Dimension(70, 15));
-                destinationCityLabel.setMinimumSize(new Dimension(70, 15));
-                fourthRowPanel.add(destinationCityLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                //---- destinationAeroLabel ----
+                destinationAeroLabel.setText("\ud83d\udd04 Aero. destino:");
+                destinationAeroLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                destinationAeroLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+                destinationAeroLabel.setPreferredSize(new Dimension(120, 30));
+                destinationAeroLabel.setMaximumSize(new Dimension(70, 15));
+                destinationAeroLabel.setMinimumSize(new Dimension(70, 15));
+                fourthRowPanel.add(destinationAeroLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 10), 0, 0));
 
-                //---- destinationCityTextField ----
-                destinationCityTextField.setPreferredSize(new Dimension(120, 30));
-                destinationCityTextField.setMinimumSize(new Dimension(100, 30));
-                destinationCityTextField.setMaximumSize(new Dimension(100, 30));
-                destinationCityTextField.setOpaque(false);
-                fourthRowPanel.add(destinationCityTextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                //---- destinationAeroComboBox ----
+                destinationAeroComboBox.setPreferredSize(new Dimension(120, 30));
+                destinationAeroComboBox.setMinimumSize(new Dimension(100, 30));
+                destinationAeroComboBox.setMaximumSize(new Dimension(100, 30));
+                destinationAeroComboBox.setOpaque(false);
+                fourthRowPanel.add(destinationAeroComboBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
@@ -722,10 +755,10 @@ public class CreateFlightRoutePanel extends JPanel {
     private JLabel businessCostLabel;
     private JTextField businessCostTextField;
     private JPanel fourthRowPanel;
-    private JLabel originCityLabel;
-    private JTextField originCityTextField;
-    private JLabel destinationCityLabel;
-    private JTextField destinationCityTextField;
+    private JLabel originAeroLabel;
+    private JComboBox<String> originAeroComboBox;
+    private JLabel destinationAeroLabel;
+    private JComboBox<String> destinationAeroComboBox;
     private JPanel categoriesTablePanel;
     private JLabel categoriesLabel;
     private JScrollPane CategoriesScrollPane;

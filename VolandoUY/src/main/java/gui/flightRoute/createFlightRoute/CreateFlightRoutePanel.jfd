@@ -278,26 +278,29 @@ new FormModel {
 					"maximumSize": new java.awt.Dimension( 510, 30 )
 					"opaque": false
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "originCityLabel"
-						"text": "Ciudad origen:"
+						name: "originAeroLabel"
+						"text": "\ud83d\udd04 Aero. origen:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": #Dimension4
 						"maximumSize": #Dimension5
 						"minimumSize": #Dimension6
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "originCityTextField"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "originAeroComboBox"
 						"preferredSize": #Dimension7
 						"minimumSize": #Dimension0
 						"maximumSize": #Dimension8
 						"opaque": false
+						auxiliary() {
+							"JavaCodeGenerator.typeParameters": "String"
+						}
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "destinationCityLabel"
-						"text": "Ciudad destino:"
+						name: "destinationAeroLabel"
+						"text": "\ud83d\udd04 Aero. destino:"
 						"horizontalAlignment": 4
 						"horizontalTextPosition": 4
 						"preferredSize": #Dimension9
@@ -306,12 +309,15 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 2
 					} )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "destinationCityTextField"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "destinationAeroComboBox"
 						"preferredSize": #Dimension12
 						"minimumSize": #Dimension0
 						"maximumSize": #Dimension13
 						"opaque": false
+						auxiliary() {
+							"JavaCodeGenerator.typeParameters": "String"
+						}
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 3
 					} )

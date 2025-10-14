@@ -218,8 +218,8 @@ public class BookFlightPanel extends JPanel {
             FlightRouteDTO fr = list.get(i);
             data[i][0] = fr.getName();
             data[i][1] = fr.getDescription();
-            data[i][2] = fr.getOriginCityName();
-            data[i][3] = fr.getDestinationCityName();
+            data[i][2] = fr.getOriginAeroCode();
+            data[i][3] = fr.getDestinationAeroCode();
             data[i][4] = money(fr.getPriceTouristClass());
             data[i][5] = money(fr.getPriceBusinessClass());
             data[i][6] = money(fr.getPriceExtraUnitBaggage());

@@ -39,7 +39,7 @@ public class ErrorMessages {
     public static final String ERROR_MIN_LONGITUDE = "Longitud mínima -180";
     public static final String ERROR_MAX_LONGITUDE = "Longitud máxima 180";
     public static final String CITY_NOT_FOUND = "No se puede agregar un aeropuerto a una ciudad nula";
-
+    public static final String ERR_COUNTRY_NOT_EXISTS = "La ciudad %s no existe";
     // ================================Fin City errors==============================
 
 
@@ -85,6 +85,8 @@ public class ErrorMessages {
 
     // ================================Inicio Tickets==============================
     public static final String ERROR_TICKET_NOT_FOUND = "Ticket no encontrado";
+    public static final String ERR_ORIGIN_AND_DESTINATION_ARIPORTS_CANNOT_BE_THE_SAME = "El aeropuerto de origen (%s) no puede ser igual al de destino (%s).";
+
     // ================================Fin Tickets==============================
 
 

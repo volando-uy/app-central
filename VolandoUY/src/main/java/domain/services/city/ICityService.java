@@ -22,5 +22,5 @@ public interface ICityService {
     boolean cityExists(String cityName);
     boolean isAirportInCity(String cityName, String airportName);
     List<String> getAllCitiesNames();
-
+    List<BaseCityDTO> getAllCitiesSimpleDetails();
 }

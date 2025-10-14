@@ -39,7 +39,12 @@ public class CityController implements ICityController {
     }
 
     @Override
-    public List<String> getAllCitiesNames(){;
+    public List<String> getAllCitiesNames(){
         return this.cityService.getAllCitiesNames();
+    }
+
+    @Override
+    public List<BaseCityDTO> getAllCitiesSimpleDetails() {
+        return this.cityService.getAllCitiesSimpleDetails();
     }
 }

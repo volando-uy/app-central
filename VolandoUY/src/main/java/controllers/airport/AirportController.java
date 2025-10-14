@@ -6,6 +6,8 @@ import domain.dtos.city.CityDTO;
 import domain.services.airport.IAirportService;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class AirportController implements IAirportController {
     private IAirportService airportService;
@@ -28,5 +30,17 @@ public class AirportController implements IAirportController {
     @Override
     public boolean airportExists(String code) {
         return airportService.airportExists(code);
+    }
+
+    @Override
+    public List<BaseAirportDTO> getAllAirportsSimpleDetails() {
+        return airportService.getAllAirportsDetails(false).stream()
+                .map(airDTO -> (BaseAirportDTO) airDTO)
+                .toList();
+    }
+
+    @Override
+    public List<AirportDTO> getAllAirportsDetails() {
+        return airportService.getAllAirportsDetails(true);
     }
 }

@@ -12,6 +12,7 @@ import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import gui.flightRoute.details.FlightRouteDetailWindow;
+import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
 
 import java.awt.*;
@@ -232,8 +233,8 @@ public class GetFlightRoutesPanel extends JPanel {
                     safe(r.getName()),
                     safe(r.getDescription()),
                     created,
-                    safe(r.getOriginCityName()),
-                    safe(r.getDestinationCityName()),
+                    safe(r.getOriginAeroCode()),
+                    safe(r.getDestinationAeroCode()),
                     airlineName,
                     fmtMoney(r.getPriceTouristClass()),
                     fmtMoney(r.getPriceBusinessClass()),
@@ -244,7 +245,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
         FlightRouteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         FlightRouteTable.setModel(model);
-        adjustDynamicWidthAndHeightToTable(FlightRouteTable);
+        GUIUtils.adjustDynamicWidthAndHeightToTable(FlightRouteTable);
         FlightRouteTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -261,41 +262,6 @@ public class GetFlightRoutesPanel extends JPanel {
 
     private String safe(String s) { return s == null ? "" : s; }
     private String fmtMoney(Double d) { return d == null ? "" : String.format("$ %.2f", d); }
-
-    private void adjustDynamicWidthAndHeightToTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int tableWidth = 0;
-        // Ancho
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int preferredWidth = 0;
-            int maxRows = table.getRowCount();
-
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComp = headerRenderer.getTableCellRendererComponent(
-                    table, column.getHeaderValue(), false, false, 0, col
-            );
-            preferredWidth = Math.max(preferredWidth, headerComp.getPreferredSize().width) + 50;
-
-            for (int row = 0; row < maxRows; row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component c = cellRenderer.getTableCellRendererComponent(
-                        table, table.getValueAt(row, col), false, false, row, col
-                );
-                preferredWidth = Math.max(preferredWidth, c.getPreferredSize().width);
-            }
-            column.setPreferredWidth(preferredWidth + 10);
-            tableWidth += preferredWidth;
-        }
-
-        // Alto
-        int minRows = 5;
-        int visibleRows = Math.max(table.getRowCount(), minRows);
-        table.setPreferredSize(new Dimension(
-                tableWidth,
-                visibleRows * table.getRowHeight()
-        ));
-    }
 
 
     private void initComponents() {

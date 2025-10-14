@@ -6,6 +6,8 @@ import domain.dtos.city.CityDTO;
 import domain.models.airport.Airport;
 import domain.services.city.ICityService;
 
+import java.util.List;
+
 public interface IAirportService {
     BaseAirportDTO createAirport(BaseAirportDTO airportDTO, String cityName);
 
@@ -16,4 +18,6 @@ public interface IAirportService {
     boolean airportExists(String code);
 
     void setCityService(ICityService cityService);
+
+    List<AirportDTO> getAllAirportsDetails(boolean full);
 }

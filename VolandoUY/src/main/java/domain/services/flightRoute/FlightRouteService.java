@@ -2,11 +2,13 @@ package domain.services.flightRoute;
 
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.models.airport.Airport;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.enums.EnumEstatusRuta;
 import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
+import domain.services.airport.IAirportService;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.user.IUserService;
@@ -38,7 +40,7 @@ public class FlightRouteService implements IFlightRouteService {
     private ICategoryService categoryService;
 
     @Setter
-    private ICityService cityService;
+    private IAirportService airportService;
 
     @Setter
     private IUserService userService;
@@ -51,8 +53,8 @@ public class FlightRouteService implements IFlightRouteService {
     @Override
     public BaseFlightRouteDTO createFlightRoute(
             BaseFlightRouteDTO baseFlightRouteDTO,
-            String originCityName,
-            String destinationCityName,
+            String originAeroCode,
+            String destinationAeroCode,
             String airlineNickname,
             List<String> categoriesNames,
             File imageFile
@@ -63,16 +65,20 @@ public class FlightRouteService implements IFlightRouteService {
                     String.format(ErrorMessages.ERR_FLIGHT_ROUTE_ALREADY_EXISTS, baseFlightRouteDTO.getName()));
         }
 
+        if (destinationAeroCode.equals(originAeroCode)) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_ORIGIN_AND_DESTINATION_ARIPORTS_CANNOT_BE_THE_SAME, originAeroCode, destinationAeroCode));
+        }
+
         // Obtener todos las entidades relacionadas
         // Tira throw si ya existe
         Airline airline = userService.getAirlineByNickname(airlineNickname, true);
-        City originCity = cityService.getCityByName(originCityName);
-        if (originCity == null) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, originCityName));
+        Airport originAero = airportService.getAirportByCode(originAeroCode, false);
+        if (originAero == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, originAeroCode));
         }
-        City destinationCity = cityService.getCityByName(destinationCityName);
-        if (destinationCity == null) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CITY_NOT_FOUND, destinationCityName));
+        Airport destinationAero = airportService.getAirportByCode(destinationAeroCode, false);
+        if (destinationAero == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, destinationAeroCode));
         }
 
         // Crear la lista de las categorias (si es que hay)
@@ -89,8 +95,8 @@ public class FlightRouteService implements IFlightRouteService {
 
         // Crear la nueva ruta de vuelo
         FlightRoute flightRoute = customModelMapper.map(baseFlightRouteDTO, FlightRoute.class);
-        flightRoute.setOriginCity(originCity);
-        flightRoute.setDestinationCity(destinationCity);
+        flightRoute.setOriginAero(originAero);
+        flightRoute.setDestinationAero(destinationAero);
         flightRoute.setAirline(airline);
         flightRoute.setCategories(categories);
         flightRoute.setFlights(new ArrayList<>());
