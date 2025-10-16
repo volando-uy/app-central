@@ -1,12 +1,14 @@
 package controllers.flight;
 
 
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
+import domain.dtos.user.BaseAirlineDTO;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,25 +32,39 @@ class FlightControllerTest {
         TestUtils.cleanDB();
 
         // Setup del sistema con datos necesarios
-//        ServiceFactory.getUserService().registerAirline(new AirlineDTO(
-//                "air123", "Test Airline", "test@mail.com", "Una aerolínea de prueba", "www.testair.com"
-//        ));
+        ServiceFactory.getUserService().registerAirline(
+                new BaseAirlineDTO(
+                    "air123",
+                    "Test Airline",
+                    "test@mail.com",
+                    "password",
+                    null,
+                    "Una aerolínea de prueba",
+                    "www.testair.com"
+                ),
+                null
+        );
 
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9, -56.2));
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Buenos Aires", "Argentina", -34.6, -58.4));
 
+        ServiceFactory.getAirportService().createAirport(
+                new BaseAirportDTO(
+                        "Aero Mtvd",
+                        "MON"
+                ),
+                "Montevideo"
+        );
+
+        ServiceFactory.getAirportService().createAirport(
+                new BaseAirportDTO(
+                        "Aero BBAA",
+                        "BAA"
+                ),
+                "Buenos Aires"
+        );
+
         // Crear ruta de vuelo para asociar vuelos
-//        FlightRouteDTO route = new FlightRouteDTO();
-//        route.setName("Ruta A");
-//        route.setDescription("De Montevideo a Buenos Aires");
-//        route.setCreatedAt(LocalDate.now());
-//        route.setPriceTouristClass(100.0);
-//        route.setPriceBusinessClass(200.0);
-//        route.setPriceExtraUnitBaggage(30.0);
-//        route.setOriginCityName("Montevideo");
-//        route.setDestinationCityName("Buenos Aires");
-//        route.setAirlineNickname("air123");
-//        route.setCategories(List.of());
         BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO();
         baseFlightRouteDTO.setName("Ruta A");
         baseFlightRouteDTO.setDescription("De Montevideo a Buenos Aires");
@@ -57,8 +73,14 @@ class FlightControllerTest {
         baseFlightRouteDTO.setPriceBusinessClass(200.0);
         baseFlightRouteDTO.setPriceExtraUnitBaggage(30.0);
 
-//        ServiceFactory.getFlightRouteService().createFlightRoute(baseFlightRouteDTO,
-//                "Montevideo", "Buenos Aires", "air123", List.of());
+        ServiceFactory.getFlightRouteService().createFlightRoute(
+                baseFlightRouteDTO,
+                "MON",
+                "BAA",
+                "air123",
+                List.of(),
+                null
+        );
 
         // Instanciar controller real
         flightController = ControllerFactory.getFlightController();
@@ -67,34 +89,78 @@ class FlightControllerTest {
     @Test
     @DisplayName("GIVEN valid BaseFlightDTO WHEN createFlight is called THEN it should return created FlightDTO")
     void createFlight_shouldReturnCreatedFlight() {
-//        // GIVEN
-//        BaseFlightDTO dto = new BaseFlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, null);
-//
-//        // WHEN
-//        BaseFlightDTO result = flightController.createFlight(dto, "air123", "Ruta A");
+        // GIVEN
+        BaseFlightDTO dto = new BaseFlightDTO(
+                "Vuelo 1",
+                LocalDateTime.now().plusDays(1),
+                120L,
+                100,
+                50,
+                LocalDateTime.now(),
+                null
+        );
 
-//        // THEN
-//        assertNotNull(result);
-//        assertEquals("Vuelo 1", result.getName());
+        // WHEN
+        BaseFlightDTO result = flightController.createFlight(
+                dto,
+                "air123",
+                "Ruta A",
+                null
+        );
+
+        // THEN
+        assertNotNull(result);
+        assertEquals("Vuelo 1", result.getName());
     }
 
     @Test
     @DisplayName("GIVEN multiple flights WHEN getAllFlights is called THEN return full list")
     void getAllFlights_shouldReturnListFromController() {
-//        flightController.createFlight(new BaseFlightDTO("Vuelo A", LocalDateTime.now().plusDays(1), 90L, 80, 40, null), "air123", "Ruta A");
-//        flightController.createFlight(new BaseFlightDTO("Vuelo B", LocalDateTime.now().plusDays(2), 60L, 70, 35, null), "air123", "Ruta A");
-//
-//        List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetails();
-//
-//        assertEquals(2, result.size());
-//        assertTrue(result.stream().anyMatch(f -> f.getName().equals("Vuelo A")));
-//        assertTrue(result.stream().anyMatch(f -> f.getName().equals("Vuelo B")));
+        flightController.createFlight(
+                new BaseFlightDTO(
+                        "Vuelo A",
+                        LocalDateTime.now().plusDays(1),
+                        90L,
+                        80,
+                        40,
+                        LocalDateTime.now(),
+                        null
+                ),
+                "air123",
+                "Ruta A",
+                null
+        );
+        flightController.createFlight(
+                new BaseFlightDTO(
+                        "Vuelo B",
+                        LocalDateTime.now().plusDays(1),
+                        90L,
+                        60,
+                        70,
+                        LocalDateTime.now(),
+                        null
+                ),
+                "air123",
+                "Ruta A",
+                null
+        );
+
+        List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetails();
+
+        assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(f -> f.getName().equals("Vuelo A")));
+        assertTrue(result.stream().anyMatch(f -> f.getName().equals("Vuelo B")));
     }
 
     @Test
     @DisplayName("GIVEN flight name WHEN getFlightByName is called THEN return correct DTO")
     void getFlightByName_shouldReturnFlightDTO() {
-//        flightController.createFlight(new BaseFlightDTO("Vuelo Unico", LocalDateTime.now().plusDays(1), 120L, 100, 50, null), "air123", "Ruta A");
+        flightController.createFlight(
+                new BaseFlightDTO("Vuelo Unico", LocalDateTime.now().plusDays(1), 120L, 100, 50, LocalDateTime.now(), null),
+                "air123",
+                "Ruta A",
+                null
+        );
 
         FlightDTO result = flightController.getFlightDetailsByName("Vuelo Unico");
 
@@ -107,7 +173,12 @@ class FlightControllerTest {
     @Test
     @DisplayName("GIVEN airline nickname WHEN getAllFlightsByAirline is called THEN return flights for that airline")
     void getAllFlightsByAirline_shouldReturnCorrectly() {
-//        flightController.createFlight(new BaseFlightDTO("Vuelo X", LocalDateTime.now().plusDays(1), 100L, 90, 45, null), "air123", "Ruta A");
+        flightController.createFlight(
+                new BaseFlightDTO("Vuelo X", LocalDateTime.now().plusDays(1), 100L, 90, 45, LocalDateTime.now(), null),
+                "air123",
+                "Ruta A",
+                null
+        );
 
         List<BaseFlightDTO> result = flightController.getAllFlightsSimpleDetailsByAirline("air123");
 
