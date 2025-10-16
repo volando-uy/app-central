@@ -166,7 +166,7 @@ class FlightRouteServiceTest {
         assertEquals("RutaDetalle", found.getName());
         assertEquals("Montevideo", found.getOriginAeroCode());
         assertEquals("Buenos Aires", found.getDestinationAeroCode());
-        assertEquals(List.of("Promo"), found.getCategories());
+        assertEquals(List.of("Promo"), found.getCategoriesNames());
     }
 
     @Test

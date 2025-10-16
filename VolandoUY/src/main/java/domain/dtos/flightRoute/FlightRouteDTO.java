@@ -22,7 +22,7 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
     private String destinationAeroCode;
     private String airlineNickname;
 
-    private List<String> categories;
+    private List<String> categoriesNames;
     private List<String> flightsNames;
     private List<String> inPackagesNames;
 
@@ -31,7 +31,7 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
         this.originAeroCode = null;
         this.destinationAeroCode = null;
         this.airlineNickname = null;
-        this.categories = null;
+        this.categoriesNames = null;
         this.flightsNames = null;
         this.inPackagesNames = null;
     }

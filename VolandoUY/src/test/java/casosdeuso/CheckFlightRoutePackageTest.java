@@ -270,8 +270,8 @@ public class CheckFlightRoutePackageTest {
         assertTrue(flightRouteInPackage.getOriginAeroCode().equals("MAD"));
         assertTrue(flightRouteInPackage.getDestinationAeroCode().equals("PAR"));
         assertTrue(flightRouteInPackage.getAirlineNickname().equals("Aerolineas Argentinas"));
-        assertNotNull(flightRouteInPackage.getCategories());
-        assertFalse(flightRouteInPackage.getCategories().isEmpty());
+        assertNotNull(flightRouteInPackage.getCategoriesNames());
+        assertFalse(flightRouteInPackage.getCategoriesNames().isEmpty());
         assertNotNull(flightRouteInPackage.getFlightsNames());
         assertFalse(flightRouteInPackage.getFlightsNames().isEmpty());
 

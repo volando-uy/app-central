@@ -78,7 +78,7 @@ public class FlightRoutePackageDetailWindow extends JFrame {
 
         for (FlightRouteDTO r : packRoutes) {
             String created = r.getCreatedAt() != null ? r.getCreatedAt().format(DTF) : "";
-            String cats    = r.getCategories()   != null ? String.join(", ", r.getCategories())   : "";
+            String cats    = r.getCategoriesNames()   != null ? String.join(", ", r.getCategoriesNames())   : "";
 
             model.addRow(new Object[]{
                     safe(r.getName()),

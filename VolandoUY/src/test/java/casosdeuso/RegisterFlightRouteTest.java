@@ -92,6 +92,6 @@ public class RegisterFlightRouteTest {
         assertEquals("Buenos Aires", retrieved.getOriginAeroCode());
         assertEquals("Madrid", retrieved.getDestinationAeroCode());
         assertEquals("AA", retrieved.getAirlineNickname());
-        assertEquals(List.of("Nacional"), retrieved.getCategories());
+        assertEquals(List.of("Nacional"), retrieved.getCategoriesNames());
     }
 }

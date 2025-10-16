@@ -217,7 +217,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
         for (FlightRouteDTO r : routes) {
             String created = r.getCreatedAt() != null ? r.getCreatedAt().format(DTF) : "";
-            String cats    = r.getCategories()   != null ? String.join(", ", r.getCategories())   : "";
+            String cats    = r.getCategoriesNames()   != null ? String.join(", ", r.getCategoriesNames())   : "";
 
             // nombre bonito de aerolínea: buscamos en la lista ya cargada
             String airlineName = r.getAirlineNickname();
