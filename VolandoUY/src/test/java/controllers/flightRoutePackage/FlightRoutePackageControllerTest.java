@@ -1,7 +1,11 @@
 package controllers.flightRoutePackage;
 
+import controllers.airport.IAirportController;
+import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.airport.BaseAirportDTO;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
@@ -25,6 +29,8 @@ class FlightRoutePackageControllerTest {
     private IFlightRoutePackageController packageController;
     private IUserController userController;
     private IFlightRouteController flightRouteController;
+    private IAirportController airportController;
+    private ICityController cityController;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +38,22 @@ class FlightRoutePackageControllerTest {
         this.packageController = ControllerFactory.getFlightRoutePackageController();
         this.userController = ControllerFactory.getUserController();
         this.flightRouteController = ControllerFactory.getFlightRouteController();
+        this.airportController = ControllerFactory.getAirportController();
+        this.cityController = ControllerFactory.getCityController();
+
+        cityController.createCity(
+                new BaseCityDTO("Montevideo", "Uruguay", 40, 40)
+        );
+
+        airportController.createAirport(
+                new BaseAirportDTO("Montevideo Airport", "MVI"),
+                "Montevideo"
+        );
+
+        airportController.createAirport(
+                new BaseAirportDTO("Montevideo 2 Airport", "MVS"),
+                "Montevideo"
+        );
     }
 
     @Test
@@ -102,6 +124,7 @@ class FlightRoutePackageControllerTest {
         airlineDTO.setNickname("Airline1");
         airlineDTO.setName("name");
         airlineDTO.setMail("agqmi@gmail.com");
+        airlineDTO.setPassword("password");
         airlineDTO.setDescription("descriptionasdasd");
         airlineDTO.setWeb("https://www.google.com");
         userController.registerAirline(airlineDTO, null);
@@ -114,7 +137,7 @@ class FlightRoutePackageControllerTest {
         flightRouteDTO.setPriceTouristClass(150.0);
         flightRouteDTO.setPriceBusinessClass(300.0);
         flightRouteDTO.setPriceExtraUnitBaggage(50.0);
-//        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Buenos Aires", "Airline1", new ArrayList<>());
+        flightRouteController.createFlightRoute(flightRouteDTO, "MVI", "MVS", "Airline1", new ArrayList<>(), null);
 
         // WHEN
         packageController.addFlightRouteToPackage("Pack Ruta A", "Ruta A", 2);

@@ -96,7 +96,7 @@ public class UserService implements IUserService {
         // Lo guardamos en el repository
         userRepository.save(customer);
 
-        return customModelMapper.mapBaseCustomer(customer);
+        return customModelMapper.mapCustomer(customer);
     }
 
     // REGISTRO DE AEROLINEA
@@ -237,7 +237,7 @@ public class UserService implements IUserService {
 
         // Checkeamos que el usuario sea un customer
         if (user instanceof Customer customer) {
-            return customModelMapper.mapFullCustomer(customer);
+            return full ? customModelMapper.mapFullCustomer(customer) : customModelMapper.mapCustomer(customer);
         } else {
             // Devolvemos error si no es un customer
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CUSTOMER_NOT_FOUND, nickname));
@@ -253,16 +253,6 @@ public class UserService implements IUserService {
         }
     }
 
-    @Override
-    public void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute) {
-        airline.getFlightRoutes().add(flightRoute);
-        userRepository.save(airline);
-    }
-
-    @Override
-    public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
-
-    }
 
 
     private boolean _emailExists(String email) {
@@ -274,9 +264,5 @@ public class UserService implements IUserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    @Override
-    public void updateAirline(Airline airline) {
-        userRepository.update(airline);
-    }
 }
 

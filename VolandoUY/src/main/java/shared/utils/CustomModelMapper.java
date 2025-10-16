@@ -60,8 +60,8 @@ public class CustomModelMapper extends ModelMapper {
         return customerDTO;
     }
 
-    public BaseCustomerDTO mapBaseCustomer(Customer customer) {
-        return this.map(customer, BaseCustomerDTO.class);
+    public CustomerDTO mapCustomer(Customer customer) {
+        return this.map(customer, CustomerDTO.class);
     }
 
     public AirlineDTO mapFullAirline(Airline airline) {
