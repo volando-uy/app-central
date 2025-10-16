@@ -1,8 +1,10 @@
 package controllers.flightRoute;
 
+import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.user.IUserController;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
@@ -26,6 +28,8 @@ class FlightRouteControllerTest {
     private IUserController userController;
     private ICategoryController categoryController;
     private ICityController cityController;
+    private IAirportController airportController;
+
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
@@ -33,11 +37,13 @@ class FlightRouteControllerTest {
         userController = ControllerFactory.getUserController();
         categoryController = ControllerFactory.getCategoryController();
         cityController = ControllerFactory.getCityController();
+        airportController = ControllerFactory.getAirportController();
 
         //Crear aereolinea LAT123
         AirlineDTO airlineDTO = new AirlineDTO();
         airlineDTO.setNickname("LAT123");
         airlineDTO.setName("LATAM");
+        airlineDTO.setPassword("password");
         airlineDTO.setMail("a@gmail.com");
         airlineDTO.setDescription("LATAMfedafewafewafewa");
         airlineDTO.setWeb("https://www.google.com");
@@ -47,6 +53,7 @@ class FlightRouteControllerTest {
         airlineDTO2.setNickname("LAT999");
         airlineDTO2.setName("LATAM2");
         airlineDTO2.setMail("a2@gmail.com");
+        airlineDTO2.setPassword("password");
         airlineDTO2.setDescription("LATAMfedafewafewafewa");
         airlineDTO2.setWeb("https://www.google.com");
         userController.registerAirline(airlineDTO2, null);
@@ -57,11 +64,22 @@ class FlightRouteControllerTest {
         categoryController.createCategory(new CategoryDTO("Business"));
 
 
-        //Crear ciudades
+        //Crear aeropuertos
         cityController.createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9011, -56.1645));
-        cityController.createCity(new BaseCityDTO("Santiago", "Chile", -33.4489, -70.6693));
-        cityController.createCity(new BaseCityDTO("Buenos Aires", "Argentina", -34.6037, -58.3816));
-        cityController.createCity(new BaseCityDTO("Lima", "Peru", -12.0464, -77.0428));
+        airportController.createAirport(
+                new BaseAirportDTO("Primer Aeropuerto", "MVI"),
+                "Montevideo"
+        );
+        airportController.createAirport(
+                new BaseAirportDTO("Segundo Aeropuerto", "MVS"),
+                "Montevideo"
+        );
+        airportController.createAirport(
+                new BaseAirportDTO("Tercer Aeropuerto", "MVE"),
+                "Montevideo"
+        );
+
+
 
         // Preload data
         BaseFlightRouteDTO baseDTO = new BaseFlightRouteDTO();
@@ -72,7 +90,14 @@ class FlightRouteControllerTest {
         baseDTO.setPriceBusinessClass(150.0);
         baseDTO.setPriceExtraUnitBaggage(25.0);
 
-//        flightRouteController.createFlightRoute(baseDTO, "Montevideo", "Santiago", "LAT123", List.of("Económica"));
+        flightRouteController.createFlightRoute(
+            baseDTO,
+            "MVI",
+            "MVS",
+            "LAT123",
+            List.of("Económica"),
+            null
+        );
     }
 
     @Test
@@ -93,10 +118,17 @@ class FlightRouteControllerTest {
         dto.setPriceBusinessClass(130.0);
         dto.setPriceExtraUnitBaggage(20.0);
 
-//        BaseFlightRouteDTO created = flightRouteController.createFlightRoute(dto, "Buenos Aires", "Lima", "LAT999", List.of("Business"));
+        BaseFlightRouteDTO created = flightRouteController.createFlightRoute(
+                dto,
+                "MVI",
+                "MVS",
+                "LAT999",
+                List.of("Business"),
+                null
+        );
 
-//        assertEquals("Ruta 2", created.getName());
-//        assertTrue(flightRouteController.existFlightRoute("Ruta 2"));
+        assertEquals("Ruta 2", created.getName());
+        assertTrue(flightRouteController.existFlightRoute("Ruta 2"));
     }
 
     @Test
@@ -106,8 +138,8 @@ class FlightRouteControllerTest {
 
         assertNotNull(dto);
         assertEquals("Ruta 1", dto.getName());
-        assertEquals("Montevideo", dto.getOriginAeroCode());
-        assertEquals("Santiago", dto.getDestinationAeroCode());
+        assertEquals("MVI", dto.getOriginAeroCode());
+        assertEquals("MVS", dto.getDestinationAeroCode());
     }
 
     @Test
