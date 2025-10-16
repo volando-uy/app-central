@@ -39,7 +39,7 @@ class UserControllerTest {
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioController.registerCustomer(customer);
+        usuarioController.registerCustomer(customer, null);
 
         UserDTO result = usuarioController.getCustomerDetailsByNickname("gyabisito");
         assertNotNull(result);
@@ -55,7 +55,7 @@ class UserControllerTest {
         airline.setMail("contacto@flyuy.com");
         airline.setDescription("Low cost desde el cielo");
 
-        usuarioController.registerAirline(airline);
+        usuarioController.registerAirline(airline, null);
 
         AirlineDTO result = usuarioController.getAirlineDetailsByNickname("flyuy");
 
@@ -76,7 +76,7 @@ class UserControllerTest {
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
         AirlineDTO airline = new AirlineDTO();
         airline.setNickname("flyuy");
@@ -84,7 +84,7 @@ class UserControllerTest {
         airline.setMail("f@gmail.com");
         airline.setDescription("Low cost desde el cielo");
 
-        usuarioService.registerAirline(airline);
+        usuarioService.registerAirline(airline, null);
 
         List<UserDTO> users = usuarioController.getAllUsersSimpleDetails();
 
@@ -104,14 +104,14 @@ class UserControllerTest {
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
         AirlineDTO airline = new AirlineDTO();
         airline.setNickname("flyuy");
         airline.setName("FlyUY");
         airline.setMail("f@gmail.com");
         airline.setDescription("Low cost desde el cielo");
-        usuarioService.registerAirline(airline);
+        usuarioService.registerAirline(airline, null);
 
         List<String> nicknames = usuarioController.getAllUsersNicknames();
 
@@ -131,7 +131,7 @@ class UserControllerTest {
         customer.setDocType(EnumTipoDocumento.CI);
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
         CustomerDTO updated = new CustomerDTO();
         updated.setNickname("gyabisito");

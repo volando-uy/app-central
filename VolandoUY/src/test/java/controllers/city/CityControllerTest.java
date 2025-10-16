@@ -110,7 +110,7 @@ class CityControllerTest {
     @Test
     @DisplayName("GIVEN cities exist WHEN getAllCities is called THEN return list of names")
     void getAllCities_shouldReturnListOfNames() {
-        List<String> cities = cityController.getAllCitiesSimpleDetails();
+        List<String> cities = cityController.getAllCitiesNames();
 
         assertNotNull(cities);
         assertTrue(cities.contains("Montevideo"));

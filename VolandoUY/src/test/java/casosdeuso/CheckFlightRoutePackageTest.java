@@ -11,7 +11,9 @@ import controllers.user.IUserController;
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
+import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
+import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
@@ -76,7 +78,7 @@ public class CheckFlightRoutePackageTest {
         airlineDTO.setNickname("Aerolineas Argentinas");
         airlineDTO.setMail("airline@gmail.com");
         airlineDTO.setDescription("Línea aérea nacional");
-        userController.registerAirline(airlineDTO);
+        userController.registerAirline(airlineDTO, null);
 
 
         //Crear categoria de Internacional
@@ -121,83 +123,98 @@ public class CheckFlightRoutePackageTest {
 
 
 
-        FlightRouteDTO flightRouteDTO = new FlightRouteDTO();
+        BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
         flightRouteDTO.setName("Madrid - Paris");
         flightRouteDTO.setDescription("Ruta de vuelo de Madrid a Paris");
         flightRouteDTO.setCreatedAt(java.time.LocalDate.now());
         flightRouteDTO.setPriceTouristClass(150.0);
         flightRouteDTO.setPriceBusinessClass(300.0);
         flightRouteDTO.setPriceExtraUnitBaggage(50.0);
-        flightRouteDTO.setOriginCityName("Madrid");
-        flightRouteDTO.setDestinationCityName("Paris");
-        flightRouteDTO.setAirlineNickname("Aerolineas Argentinas");
-        flightRouteDTO.setCategories(List.of("Internacional"));
-        flightRouteDTO.setFlightsNames(List.of("Vuelo1", "Vuelo2"));
-        flightRouteController.createFlightRoute(flightRouteDTO, "Madrid", "Paris", "Aerolineas Argentinas", List.of("Internacional"));
+        flightRouteController.createFlightRoute(
+            flightRouteDTO,
+            "MAD",
+            "PAR",
+            "Aerolineas Argentinas",
+            List.of("Internacional"),
+            null
+        );
 
 
 
-        FlightRouteDTO flightRouteDTO2 = new FlightRouteDTO();
+        BaseFlightRouteDTO flightRouteDTO2 = new BaseFlightRouteDTO();
         flightRouteDTO2.setName("Paris - Berlin");
         flightRouteDTO2.setDescription("Ruta de vuelo de Paris a Berlin");
         flightRouteDTO2.setCreatedAt(java.time.LocalDate.now());
         flightRouteDTO2.setPriceTouristClass(200.0);
         flightRouteDTO2.setPriceBusinessClass(400.0);
         flightRouteDTO2.setPriceExtraUnitBaggage(70.0);
-        flightRouteDTO2.setOriginCityName("Paris");
-        flightRouteDTO2.setDestinationCityName("Berlin");
-        flightRouteDTO2.setAirlineNickname("Aerolineas Argentinas");
-        flightRouteDTO2.setCategories(List.of("Internacional"));
-        flightRouteDTO2.setFlightsNames(List.of("Vuelo3", "Vuelo4"));
-        flightRouteController.createFlightRoute(flightRouteDTO2, "Paris", "Berlin", "Aerolineas Argentinas", List.of("Internacional"));
+        flightRouteController.createFlightRoute(
+                flightRouteDTO2,
+                "PAR",
+                "BER",
+                "Aerolineas Argentinas",
+                List.of("Internacional"),
+                null
+        );
 
 
-
-        FlightDTO flightDTO1 = new FlightDTO();
+        BaseFlightDTO flightDTO1 = new BaseFlightDTO();
         flightDTO1.setName("Vuelo1");
         flightDTO1.setDepartureTime(LocalDateTime.of(2025, 10, 1, 10, 0));
         flightDTO1.setDuration(120L);
         flightDTO1.setMaxEconomySeats(150);
         flightDTO1.setMaxBusinessSeats(50);
         flightDTO1.setCreatedAt(LocalDateTime.now());
-        flightDTO1.setAirlineNickname("Aerolineas Argentinas");
-        flightDTO1.setFlightRouteName("Madrid - Paris");
-        flightController.createFlight(flightDTO1, "Aerolineas Argentinas", "Madrid - Paris");
+        flightController.createFlight(
+                flightDTO1,
+                "Aerolineas Argentinas",
+                "Madrid - Paris",
+                null
+        );
 
-        FlightDTO flightDTO2 = new FlightDTO();
+        BaseFlightDTO flightDTO2 = new BaseFlightDTO();
         flightDTO2.setName("Vuelo2");
         flightDTO2.setDepartureTime(LocalDateTime.of(2025, 10, 2, 15, 0));
         flightDTO2.setDuration(130L);
         flightDTO2.setMaxEconomySeats(160);
         flightDTO2.setMaxBusinessSeats(40);
         flightDTO2.setCreatedAt(LocalDateTime.now());
-        flightDTO2.setAirlineNickname("Aerolineas Argentinas");
-        flightDTO2.setFlightRouteName("Madrid - Paris");
-        flightController.createFlight(flightDTO2, "Aerolineas Argentinas", "Madrid - Paris");
+        flightController.createFlight(
+                flightDTO2,
+                "Aerolineas Argentinas",
+                "Madrid - Paris",
+                null
+        );
 
 
 
-        FlightDTO flightDTO3 = new FlightDTO();
+        BaseFlightDTO flightDTO3 = new BaseFlightDTO();
         flightDTO3.setName("Vuelo3");
         flightDTO3.setDepartureTime(LocalDateTime.of(2025, 11, 1, 9, 0));
         flightDTO3.setDuration(140L);
         flightDTO3.setMaxEconomySeats(170);
         flightDTO3.setMaxBusinessSeats(30);
         flightDTO3.setCreatedAt(LocalDateTime.now());
-        flightDTO3.setAirlineNickname("Aerolineas Argentinas");
-        flightDTO3.setFlightRouteName("Paris - Berlin");
-        flightController.createFlight(flightDTO3, "Aerolineas Argentinas", "Paris - Berlin");
+        flightController.createFlight(
+                flightDTO3,
+                "Aerolineas Argentinas",
+                "Paris - Berlin",
+                null
+        );
 
-        FlightDTO flightDTO4 = new FlightDTO();
+        BaseFlightDTO flightDTO4 = new BaseFlightDTO();
         flightDTO4.setName("Vuelo4");
         flightDTO4.setDepartureTime(LocalDateTime.of(2025, 11, 2, 14, 0));
         flightDTO4.setDuration(150L);
         flightDTO4.setMaxEconomySeats(180);
         flightDTO4.setMaxBusinessSeats(20);
         flightDTO4.setCreatedAt(LocalDateTime.now());
-        flightDTO4.setAirlineNickname("Aerolineas Argentinas");
-        flightDTO4.setFlightRouteName("Paris - Berlin");
-        flightController.createFlight(flightDTO4, "Aerolineas Argentinas", "Paris - Berlin");
+        flightController.createFlight(
+                flightDTO4,
+                "Aerolineas Argentinas",
+                "Paris - Berlin",
+                null
+        );
 
 
 
@@ -250,8 +267,8 @@ public class CheckFlightRoutePackageTest {
         assertTrue(flightRouteInPackage.getPriceTouristClass() == 150.0);
         assertTrue(flightRouteInPackage.getPriceBusinessClass() == 300.0);
         assertTrue(flightRouteInPackage.getPriceExtraUnitBaggage() == 50);
-        assertTrue(flightRouteInPackage.getOriginCityName().equals("Madrid"));
-        assertTrue(flightRouteInPackage.getDestinationCityName().equals("Paris"));
+        assertTrue(flightRouteInPackage.getOriginAeroCode().equals("MAD"));
+        assertTrue(flightRouteInPackage.getDestinationAeroCode().equals("PAR"));
         assertTrue(flightRouteInPackage.getAirlineNickname().equals("Aerolineas Argentinas"));
         assertNotNull(flightRouteInPackage.getCategories());
         assertFalse(flightRouteInPackage.getCategories().isEmpty());

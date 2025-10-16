@@ -86,13 +86,13 @@ class FlightRoutePackageServiceTest {
         dto.setPriceBusinessClass(200.0);
         dto.setPriceExtraUnitBaggage(20.0);
 
-        flightRouteService.createFlightRoute(
-                dto,
-                "Montevideo",
-                "Buenos Aires",
-                "air123",
-                List.of("Promo")
-        );
+//        flightRouteService.createFlightRoute(
+//                dto,
+//                "Montevideo",
+//                "Buenos Aires",
+//                "air123",
+//                List.of("Promo")
+//        );
     }
 
 

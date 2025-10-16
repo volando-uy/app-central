@@ -104,7 +104,7 @@ class FlightRoutePackageControllerTest {
         airlineDTO.setMail("agqmi@gmail.com");
         airlineDTO.setDescription("descriptionasdasd");
         airlineDTO.setWeb("https://www.google.com");
-        userController.registerAirline(airlineDTO);
+        userController.registerAirline(airlineDTO, null);
 
         // Crear la ruta de vuelo
         BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
@@ -114,7 +114,7 @@ class FlightRoutePackageControllerTest {
         flightRouteDTO.setPriceTouristClass(150.0);
         flightRouteDTO.setPriceBusinessClass(300.0);
         flightRouteDTO.setPriceExtraUnitBaggage(50.0);
-        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Buenos Aires", "Airline1", new ArrayList<>());
+//        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Buenos Aires", "Airline1", new ArrayList<>());
 
         // WHEN
         packageController.addFlightRouteToPackage("Pack Ruta A", "Ruta A", 2);

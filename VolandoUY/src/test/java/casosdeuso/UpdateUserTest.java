@@ -38,12 +38,28 @@ class UpdateUserTest {
         userController = new UserController(userService);
 
         // Crear datos base una sola vez
-        CustomerDTO customerDTO = new CustomerDTO("gyabisito", "Jose", "gyabisito@mail.com", "Gonzalez", "Uruguay",
-                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI);
-        userController.registerCustomer(customerDTO);
+        BaseCustomerDTO testCustomer = new BaseCustomerDTO();
+        testCustomer.setNickname("testNickname");
+        testCustomer.setName("testName");
+        testCustomer.setSurname("testSurname");
+        testCustomer.setMail("test@mail.com");
+        testCustomer.setPassword("testPassword");
+        testCustomer.setCitizenship("testCitizenship");
+        testCustomer.setDocType(EnumTipoDocumento.CI);
+        testCustomer.setNumDoc("12345678");
+        testCustomer.setBirthDate(LocalDate.of(1990, 1, 1));
+        testCustomer.setImage(null);
+        userController.registerCustomer(testCustomer, null);
 
-        AirlineDTO airlineDTO = new AirlineDTO("flyuy", "FlyUY", "flyuy@mail.com", "Low cost123123123", "www.flyuy.com");
-        userController.registerAirline(airlineDTO);
+        BaseAirlineDTO testAirline = new BaseAirlineDTO();
+        testAirline.setNickname("airlineNickname");
+        testAirline.setName("airlineName");
+        testAirline.setMail("airline@mail.com");
+        testAirline.setDescription("airlineDescription");
+        testAirline.setWeb("testWeb.com");
+        testAirline.setPassword("testPassword");
+        testAirline.setImage(null);
+        userController.registerAirline(testAirline, null);
     }
 
 

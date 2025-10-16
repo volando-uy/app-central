@@ -54,7 +54,7 @@ public class GetUserTest {
         customerDTO.setDocType(EnumTipoDocumento.CI);
         customerDTO.setCitizenship("Uruguayo");
 
-        userController.registerCustomer(customerDTO);
+        userController.registerCustomer(customerDTO, null);
 
         // ---------- WHEN ----------
         UserDTO retrievedUser = userController.getUserSimpleDetailsByNickname("cliente");
@@ -92,7 +92,7 @@ public class GetUserTest {
         airlineDTO.setMail("contacto@aerolíniaxyz.com");
         airlineDTO.setDescription("La mejor aerolínea del mundo");
         airlineDTO.setWeb("https://www.airline.com");
-        userController.registerAirline(airlineDTO);
+        userController.registerAirline(airlineDTO, null);
         // ---------- WHEN ----------
         UserDTO retrievedUser = userController.getUserSimpleDetailsByNickname("aerolinea");
         // ---------- THEN ----------

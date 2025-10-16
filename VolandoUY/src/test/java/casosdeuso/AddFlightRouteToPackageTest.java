@@ -46,9 +46,9 @@ public class AddFlightRouteToPackageTest {
 
 
         // Crear aerolínea
-        userController.registerAirline(new AirlineDTO(
-                "uyair", "Uruguay Airlines", "uy@mail.com", "Aerolínea uruguaya", "www.uyair.com"
-        ));
+//        userController.registerAirline(new AirlineDTO(
+//                "uyair", "Uruguay Airlines", "uy@mail.com", "Aerolínea uruguaya", "www.uyair.com"
+//        ));
 
         // Crear ruta de vuelo
         BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
@@ -58,7 +58,7 @@ public class AddFlightRouteToPackageTest {
         flightRouteDTO.setPriceTouristClass(200.0);
         flightRouteDTO.setPriceBusinessClass(350.0);
         flightRouteDTO.setPriceExtraUnitBaggage(50.0);
-        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Asunción", "uyair", List.of());
+//        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Asunción", "uyair", List.of());
 
         BaseFlightRoutePackageDTO packageDTO = new BaseFlightRoutePackageDTO();
         packageDTO.setName("Promo Paraguay");

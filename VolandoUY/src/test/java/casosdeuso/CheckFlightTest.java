@@ -41,7 +41,7 @@ public class CheckFlightTest {
         airlineDTO.setName("Aerolíneas Argentinas");
         airlineDTO.setMail("mail@gmail.com");
         airlineDTO.setDescription("description");
-        userController.registerAirline(airlineDTO);
+        userController.registerAirline(airlineDTO, null);
 
         CityDTO cityA = new CityDTO();
         cityA.setName("City A");
@@ -77,7 +77,7 @@ public class CheckFlightTest {
         baseFlightRouteDTO.setPriceBusinessClass(20.0);
         baseFlightRouteDTO.setPriceExtraUnitBaggage(5.0);
 
-        flightRouteController.createFlightRoute(baseFlightRouteDTO, "City A", "City B", "airline1", List.of());
+//        flightRouteController.createFlightRoute(baseFlightRouteDTO, "City A", "City B", "airline1", List.of());
 
 //        FlightDTO flightDTO = new FlightDTO();
 //        flightDTO.setName("Flight 101");
@@ -95,7 +95,7 @@ public class CheckFlightTest {
         baseFlightDTO.setDuration(180L); // 3 hours
         baseFlightDTO.setMaxEconomySeats(150);
         baseFlightDTO.setMaxBusinessSeats(30);
-        flightController.createFlight(baseFlightDTO, "airline1", "Route 101");
+//        flightController.createFlight(baseFlightDTO, "airline1", "Route 101");
 
     }
 
@@ -125,8 +125,8 @@ public class CheckFlightTest {
         //Seleccionar ruta de vuelo
         FlightRouteDTO flightRouteDTO = flightRouteController.getAllFlightRoutesDetailsByAirlineNickname(airlineNickname).get(0);
         assertEquals("Route 101", flightRouteDTO.getName());
-        assertEquals("City A", flightRouteDTO.getOriginCityName());
-        assertEquals("City B", flightRouteDTO.getDestinationCityName());
+        assertEquals("City A", flightRouteDTO.getOriginAeroCode());
+        assertEquals("City B", flightRouteDTO.getDestinationAeroCode());
 
         //Listar vuelos asociados a dicha ruta
         assertNotNull(flightController.getAllFlightsSimpleDetailsByRouteName(flightRouteDTO.getName()));

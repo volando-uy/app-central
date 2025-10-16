@@ -57,7 +57,7 @@ public class RegisterUserTest {
         customerDTO.setCitizenship("Uruguay");
 
         // When
-        userController.registerCustomer(customerDTO);
+        userController.registerCustomer(customerDTO, null);
 
         // Then
         UserDTO createdCustomer = userController.getUserSimpleDetailsByNickname("gyabisito");
@@ -78,7 +78,7 @@ public class RegisterUserTest {
         airlineDTO.setWeb("www.flyuy.com");
 
         // When
-        userController.registerAirline(airlineDTO);
+        userController.registerAirline(airlineDTO, null);
 
         // Then
         AirlineDTO createdAirline = userController.getAirlineDetailsByNickname("flyuy");
