@@ -1,6 +1,7 @@
 package domain.services.auth;
 
 import controllers.user.IUserController;
+import domain.dtos.user.LoginResponseDTO;
 import domain.dtos.user.UserDTO;
 import factory.ControllerFactory;
 import shared.utils.JWTUtils;
@@ -10,12 +11,14 @@ public class AuthService implements IAuthService{
     private final IUserController userController = ControllerFactory.getUserController();
 
     @Override
-    public String login(String nickname, String password) {
-        UserDTO user = userController.getUserSimpleDetailsByNickname(nickname);
+    public LoginResponseDTO login(String nickname, String password) {
+        UserDTO user = this.userController.getUserSimpleDetailsByNickname(nickname);
 
         if (user != null && user.getPassword() != null &&
                 PasswordManager.validatePassword(password, user.getPassword())) {
-            return JWTUtils.generateToken(nickname);
+
+            String token = JWTUtils.generateToken(nickname);
+            return new LoginResponseDTO(token, user);
         }
 
         return null;
