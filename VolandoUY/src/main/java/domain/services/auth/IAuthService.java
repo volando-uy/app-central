@@ -1,5 +1,7 @@
 package domain.services.auth;
 
+import domain.dtos.user.LoginResponseDTO;
+
 public interface IAuthService {
     /**
      * Valida las credenciales del usuario y devuelve un token si son correctas.
@@ -8,7 +10,7 @@ public interface IAuthService {
      * @param password contraseña en texto plano
      * @return token JWT si las credenciales son válidas, null en caso contrario
      */
-    String login(String nickname, String password);
+    LoginResponseDTO login(String nickname, String password);
 
     /**
      * Verifica si un token es válido (firma y expiración)

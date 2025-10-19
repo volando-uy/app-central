@@ -1,7 +1,9 @@
 package controllers.auth;
 
+import domain.dtos.user.LoginResponseDTO;
+
 public interface IAuthController {
-    String login(String nickname, String password);
+    LoginResponseDTO login(String nickname, String password);
 
     boolean isAuthenticated(String token);
 
