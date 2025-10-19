@@ -3,6 +3,7 @@ package casosdeuso;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
@@ -44,11 +45,15 @@ public class AddFlightRouteToPackageTest {
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Montevideo", "Uruguay", -34.9011, -56.1645));
         ServiceFactory.getCityService().createCity(new BaseCityDTO("Asunción", "Paraguay", -25.2637, -57.5759));
 
+        // Crear aeropuertos necesarios
+        ServiceFactory.getAirportService().createAirport(new BaseAirportDTO("Aero Montevideo", "MON"), "Montevideo");
+        ServiceFactory.getAirportService().createAirport(new BaseAirportDTO("Aero Asunción", "ASU"), "Asunción");
+
 
         // Crear aerolínea
-//        userController.registerAirline(new AirlineDTO(
-//                "uyair", "Uruguay Airlines", "uy@mail.com", "Aerolínea uruguaya", "www.uyair.com"
-//        ));
+        userController.registerAirline(new BaseAirlineDTO(
+                "uyair", "Uruguay Airlines", "uy@mail.com", "password", null, "Aerolínea uruguaya", "www.uyair.com"
+        ), null);
 
         // Crear ruta de vuelo
         BaseFlightRouteDTO flightRouteDTO = new BaseFlightRouteDTO();
@@ -58,7 +63,7 @@ public class AddFlightRouteToPackageTest {
         flightRouteDTO.setPriceTouristClass(200.0);
         flightRouteDTO.setPriceBusinessClass(350.0);
         flightRouteDTO.setPriceExtraUnitBaggage(50.0);
-//        flightRouteController.createFlightRoute(flightRouteDTO, "Montevideo", "Asunción", "uyair", List.of());
+        flightRouteController.createFlightRoute(flightRouteDTO, "MON", "ASU", "uyair", List.of(), null);
 
         BaseFlightRoutePackageDTO packageDTO = new BaseFlightRoutePackageDTO();
         packageDTO.setName("Promo Paraguay");
@@ -118,7 +123,6 @@ public class AddFlightRouteToPackageTest {
         Exception ex = assertThrows(NoResultException.class, () -> {
             packageController.addFlightRouteToPackage("Promo Paraguay", "NO_EXISTE", 1);
         });
-        //No result found for query [SELECT fr FROM FlightRoute fr WHERE LOWER(fr.name) = LOWER(:name)]
         assertTrue(ex.getMessage().contains("No result found for query"));
     }
 }

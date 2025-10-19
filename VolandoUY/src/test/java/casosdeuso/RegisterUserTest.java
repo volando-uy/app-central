@@ -51,6 +51,7 @@ public class RegisterUserTest {
         customerDTO.setName("Jose");
         customerDTO.setSurname("Ramirez");
         customerDTO.setMail("gyabisito@example.com");
+        customerDTO.setPassword("123456");
         customerDTO.setBirthDate(LocalDate.of(2000, 1, 1));
         customerDTO.setDocType(EnumTipoDocumento.CI);
         customerDTO.setNumDoc("01234567");
@@ -74,6 +75,7 @@ public class RegisterUserTest {
         airlineDTO.setNickname("flyuy");
         airlineDTO.setName("FlyUY");
         airlineDTO.setMail("flyuy@correo.com");
+        airlineDTO.setPassword("password");
         airlineDTO.setDescription("Low cost desde el cielo");
         airlineDTO.setWeb("www.flyuy.com");
 

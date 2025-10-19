@@ -49,6 +49,7 @@ public class GetUserTest {
         customerDTO.setName("Juan");
         customerDTO.setSurname("Pérez");
         customerDTO.setMail("juan@example.com");
+        customerDTO.setPassword("password");
         customerDTO.setNumDoc("123");
         customerDTO.setBirthDate(LocalDate.of(1990, 1, 1));
         customerDTO.setDocType(EnumTipoDocumento.CI);
@@ -90,6 +91,7 @@ public class GetUserTest {
         airlineDTO.setNickname("aerolinea");
         airlineDTO.setName("Aerolínea XYZ");
         airlineDTO.setMail("contacto@aerolíniaxyz.com");
+        airlineDTO.setPassword("password");
         airlineDTO.setDescription("La mejor aerolínea del mundo");
         airlineDTO.setWeb("https://www.airline.com");
         userController.registerAirline(airlineDTO, null);

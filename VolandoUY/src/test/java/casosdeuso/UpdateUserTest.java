@@ -68,9 +68,9 @@ class UpdateUserTest {
     @DisplayName("Actualizar cliente: se deben reflejar los cambios en la entidad persistida")
     void updateCustomer_shouldReflectChanges() {
         // GIVEN
-        String nickname = "gyabisito";
+        String nickname = "testNickname";
         BaseCustomerDTO original = (BaseCustomerDTO) userController.getUserSimpleDetailsByNickname(nickname);
-        assertEquals("Jose", original.getName());
+        assertEquals("testName", original.getName());
 
         // WHEN
         CustomerDTO modificado = new CustomerDTO();
@@ -95,17 +95,17 @@ class UpdateUserTest {
         assertEquals(EnumTipoDocumento.RUT, actualizado.getDocType());
 
         // Campos inmutables
-        assertEquals("gyabisito", actualizado.getNickname());
-        assertEquals("gyabisito@mail.com", actualizado.getMail());
+        assertEquals("testNickname", actualizado.getNickname());
+        assertEquals("test@mail.com", actualizado.getMail());
     }
 
     @Test
     @DisplayName("Actualizar aerolínea: se deben reflejar los cambios correctamente")
     void updateAirline_shouldReflectChanges() {
         // GIVEN
-        String nickname = "flyuy";
+        String nickname = "airlineNickname";
         BaseAirlineDTO original = (BaseAirlineDTO) userController.getUserSimpleDetailsByNickname(nickname);
-        assertEquals("FlyUY", original.getName());
+        assertEquals("airlineName", original.getName());
 
         // WHEN
         AirlineDTO modificado = new AirlineDTO();
@@ -124,8 +124,8 @@ class UpdateUserTest {
         assertEquals("www.flyuy.net", actualizado.getWeb());
 
         // Campos inmutables
-        assertEquals("flyuy", actualizado.getNickname());
-        assertEquals("flyuy@mail.com", actualizado.getMail());
+        assertEquals("airlineNickname", actualizado.getNickname());
+        assertEquals("airline@mail.com", actualizado.getMail());
     }
 
     @AfterAll

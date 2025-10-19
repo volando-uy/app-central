@@ -9,7 +9,9 @@ import controllers.flightRoutePackage.FlightRoutePackageController;
 import controllers.flightRoutePackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.airport.AirportDTO;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.category.CategoryDTO;
+import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
@@ -77,6 +79,7 @@ public class CheckFlightRoutePackageTest {
         airlineDTO.setName("Aerolineas Argentinas");
         airlineDTO.setNickname("Aerolineas Argentinas");
         airlineDTO.setMail("airline@gmail.com");
+        airlineDTO.setPassword("password");
         airlineDTO.setDescription("Línea aérea nacional");
         userController.registerAirline(airlineDTO, null);
 
@@ -88,38 +91,43 @@ public class CheckFlightRoutePackageTest {
 
 
         //Crear ciudad Madrid
-        CityDTO cityDTO = new CityDTO();
+        BaseCityDTO cityDTO = new BaseCityDTO();
         cityDTO.setName("Madrid");
         cityDTO.setCountry("España");
         cityDTO.setLatitude(40.4168);
         cityDTO.setLongitude(-3.7038);
-        cityDTO.setAirportNames(List.of("Aeropuerto Internacional de Ezeiza"));
         cityController.createCity(cityDTO);
 
         //Crear ciudad Paris
-        CityDTO cityDTO2 = new CityDTO();
+        BaseCityDTO cityDTO2 = new BaseCityDTO();
         cityDTO2.setName("Paris");
         cityDTO2.setCountry("Francia");
         cityDTO2.setLatitude(48.8566);
         cityDTO2.setLongitude(2.3522);
-        cityDTO2.setAirportNames(List.of("Aeropuerto Internacional de Ezeiza"));
         cityController.createCity(cityDTO2);
 
         //Crear ciudad Berlin
-        CityDTO cityDTO3 = new CityDTO();
+        BaseCityDTO cityDTO3 = new BaseCityDTO();
         cityDTO3.setName("Berlin");
         cityDTO3.setCountry("Alemania");
         cityDTO3.setLatitude(52.5200);
         cityDTO3.setLongitude(13.4050);
-        cityDTO3.setAirportNames(List.of("Aeropuerto Internacional de Ezeiza"));
         cityController.createCity(cityDTO3);
 
+        airportController.createAirport(
+                new BaseAirportDTO("Aero Madrid", "MAD"),
+                "Madrid"
+        );
 
-        AirportDTO airportDTO = new AirportDTO();
-        airportDTO.setName("Aeropuerto Internacional de Ezeiza");
-        airportDTO.setCityName("Buenos Aires");
-        airportDTO.setCode("EZE");
-        airportController.createAirport(airportDTO, "Madrid");
+        airportController.createAirport(
+                new BaseAirportDTO("Aero Paris", "PAR"),
+                "Paris"
+        );
+
+        airportController.createAirport(
+                new BaseAirportDTO("Aero Berlin", "BER"),
+                "Berlin"
+        );
 
 
 
@@ -160,7 +168,7 @@ public class CheckFlightRoutePackageTest {
 
         BaseFlightDTO flightDTO1 = new BaseFlightDTO();
         flightDTO1.setName("Vuelo1");
-        flightDTO1.setDepartureTime(LocalDateTime.of(2025, 10, 1, 10, 0));
+        flightDTO1.setDepartureTime(LocalDateTime.now().plusHours(24));
         flightDTO1.setDuration(120L);
         flightDTO1.setMaxEconomySeats(150);
         flightDTO1.setMaxBusinessSeats(50);
@@ -174,7 +182,7 @@ public class CheckFlightRoutePackageTest {
 
         BaseFlightDTO flightDTO2 = new BaseFlightDTO();
         flightDTO2.setName("Vuelo2");
-        flightDTO2.setDepartureTime(LocalDateTime.of(2025, 10, 2, 15, 0));
+        flightDTO2.setDepartureTime(LocalDateTime.now().plusHours(24));
         flightDTO2.setDuration(130L);
         flightDTO2.setMaxEconomySeats(160);
         flightDTO2.setMaxBusinessSeats(40);
@@ -190,7 +198,7 @@ public class CheckFlightRoutePackageTest {
 
         BaseFlightDTO flightDTO3 = new BaseFlightDTO();
         flightDTO3.setName("Vuelo3");
-        flightDTO3.setDepartureTime(LocalDateTime.of(2025, 11, 1, 9, 0));
+        flightDTO3.setDepartureTime(LocalDateTime.now().plusHours(24));
         flightDTO3.setDuration(140L);
         flightDTO3.setMaxEconomySeats(170);
         flightDTO3.setMaxBusinessSeats(30);
@@ -204,7 +212,7 @@ public class CheckFlightRoutePackageTest {
 
         BaseFlightDTO flightDTO4 = new BaseFlightDTO();
         flightDTO4.setName("Vuelo4");
-        flightDTO4.setDepartureTime(LocalDateTime.of(2025, 11, 2, 14, 0));
+        flightDTO4.setDepartureTime(LocalDateTime.now().plusHours(24));
         flightDTO4.setDuration(150L);
         flightDTO4.setMaxEconomySeats(180);
         flightDTO4.setMaxBusinessSeats(20);
