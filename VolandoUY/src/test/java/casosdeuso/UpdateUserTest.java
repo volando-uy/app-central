@@ -38,12 +38,28 @@ class UpdateUserTest {
         userController = new UserController(userService);
 
         // Crear datos base una sola vez
-        CustomerDTO customerDTO = new CustomerDTO("gyabisito", "Jose", "gyabisito@mail.com", "Gonzalez", "Uruguay",
-                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI);
-        userController.registerCustomer(customerDTO);
+        BaseCustomerDTO testCustomer = new BaseCustomerDTO();
+        testCustomer.setNickname("testNickname");
+        testCustomer.setName("testName");
+        testCustomer.setSurname("testSurname");
+        testCustomer.setMail("test@mail.com");
+        testCustomer.setPassword("testPassword");
+        testCustomer.setCitizenship("testCitizenship");
+        testCustomer.setDocType(EnumTipoDocumento.CI);
+        testCustomer.setNumDoc("12345678");
+        testCustomer.setBirthDate(LocalDate.of(1990, 1, 1));
+        testCustomer.setImage(null);
+        userController.registerCustomer(testCustomer, null);
 
-        AirlineDTO airlineDTO = new AirlineDTO("flyuy", "FlyUY", "flyuy@mail.com", "Low cost123123123", "www.flyuy.com");
-        userController.registerAirline(airlineDTO);
+        BaseAirlineDTO testAirline = new BaseAirlineDTO();
+        testAirline.setNickname("airlineNickname");
+        testAirline.setName("airlineName");
+        testAirline.setMail("airline@mail.com");
+        testAirline.setDescription("airlineDescription");
+        testAirline.setWeb("testWeb.com");
+        testAirline.setPassword("testPassword");
+        testAirline.setImage(null);
+        userController.registerAirline(testAirline, null);
     }
 
 
@@ -52,9 +68,9 @@ class UpdateUserTest {
     @DisplayName("Actualizar cliente: se deben reflejar los cambios en la entidad persistida")
     void updateCustomer_shouldReflectChanges() {
         // GIVEN
-        String nickname = "gyabisito";
+        String nickname = "testNickname";
         BaseCustomerDTO original = (BaseCustomerDTO) userController.getUserSimpleDetailsByNickname(nickname);
-        assertEquals("Jose", original.getName());
+        assertEquals("testName", original.getName());
 
         // WHEN
         CustomerDTO modificado = new CustomerDTO();
@@ -79,17 +95,17 @@ class UpdateUserTest {
         assertEquals(EnumTipoDocumento.RUT, actualizado.getDocType());
 
         // Campos inmutables
-        assertEquals("gyabisito", actualizado.getNickname());
-        assertEquals("gyabisito@mail.com", actualizado.getMail());
+        assertEquals("testNickname", actualizado.getNickname());
+        assertEquals("test@mail.com", actualizado.getMail());
     }
 
     @Test
     @DisplayName("Actualizar aerolínea: se deben reflejar los cambios correctamente")
     void updateAirline_shouldReflectChanges() {
         // GIVEN
-        String nickname = "flyuy";
+        String nickname = "airlineNickname";
         BaseAirlineDTO original = (BaseAirlineDTO) userController.getUserSimpleDetailsByNickname(nickname);
-        assertEquals("FlyUY", original.getName());
+        assertEquals("airlineName", original.getName());
 
         // WHEN
         AirlineDTO modificado = new AirlineDTO();
@@ -108,8 +124,8 @@ class UpdateUserTest {
         assertEquals("www.flyuy.net", actualizado.getWeb());
 
         // Campos inmutables
-        assertEquals("flyuy", actualizado.getNickname());
-        assertEquals("flyuy@mail.com", actualizado.getMail());
+        assertEquals("airlineNickname", actualizado.getNickname());
+        assertEquals("airline@mail.com", actualizado.getMail());
     }
 
     @AfterAll

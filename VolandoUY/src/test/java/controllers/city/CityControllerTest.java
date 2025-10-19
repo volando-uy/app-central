@@ -64,13 +64,13 @@ class CityControllerTest {
     @Test
     @DisplayName("GIVEN valid CityDTO WHEN createCity is called THEN it should return the created DTO")
     void createCity_shouldReturnDTO() {
-        BaseCityDTO dto = new CityDTO("Lima", "Peru", -12.0464, -77.0428);
+        BaseCityDTO dto = new CityDTO("Lima", "Perú", -12.0464, -77.0428);
 
         BaseCityDTO created = cityController.createCity(dto);
 
         assertNotNull(created);
         assertEquals("Lima", created.getName());
-        assertEquals("Peru", created.getCountry());
+        assertEquals("Perú", created.getCountry());
     }
 
     @Test
@@ -110,7 +110,7 @@ class CityControllerTest {
     @Test
     @DisplayName("GIVEN cities exist WHEN getAllCities is called THEN return list of names")
     void getAllCities_shouldReturnListOfNames() {
-        List<String> cities = cityController.getAllCitiesSimpleDetails();
+        List<String> cities = cityController.getAllCitiesNames();
 
         assertNotNull(cities);
         assertTrue(cities.contains("Montevideo"));

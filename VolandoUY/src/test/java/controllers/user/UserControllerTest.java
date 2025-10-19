@@ -29,19 +29,20 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe registrar un customer correctamente")
     void registerCustomer_shouldPersistCustomer() {
-        CustomerDTO customer = new CustomerDTO();
+        BaseCustomerDTO customer = new BaseCustomerDTO();
         customer.setNickname("gyabisito");
         customer.setName("Jose");
         customer.setSurname("Ramirez");
         customer.setMail("gyabisito@example.com");
+        customer.setPassword("password");
         customer.setBirthDate(LocalDate.of(2000, 1, 1));
         customer.setDocType(EnumTipoDocumento.CI);
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioController.registerCustomer(customer);
+        usuarioController.registerCustomer(customer, null);
 
-        UserDTO result = usuarioController.getCustomerDetailsByNickname("gyabisito");
+        BaseCustomerDTO result = usuarioController.getCustomerSimpleDetailsByNickname("gyabisito");
         assertNotNull(result);
         assertEquals("gyabisito", result.getNickname());
     }
@@ -49,15 +50,16 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe registrar una aerolínea correctamente")
     void registerAirline_shouldPersistAirline() {
-        AirlineDTO airline = new AirlineDTO();
+        BaseAirlineDTO airline = new BaseAirlineDTO();
         airline.setNickname("flyuy");
         airline.setName("FlyUY");
+        airline.setPassword("password");
         airline.setMail("contacto@flyuy.com");
         airline.setDescription("Low cost desde el cielo");
 
-        usuarioController.registerAirline(airline);
+        usuarioController.registerAirline(airline, null);
 
-        AirlineDTO result = usuarioController.getAirlineDetailsByNickname("flyuy");
+        BaseAirlineDTO result = usuarioController.getAirlineSimpleDetailsByNickname("flyuy");
 
         assertNotNull(result);
         assertEquals("flyuy", result.getNickname());
@@ -66,9 +68,10 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe retornar todos los usuarios")
     void getAllUsers_shouldReturnAll() {
-        CustomerDTO customer = new CustomerDTO();
+        BaseCustomerDTO customer = new BaseCustomerDTO();
         customer.setNickname("gyabisito");
         customer.setName("Jose");
+        customer.setPassword("password");
         customer.setSurname("Ramirez");
         customer.setMail("email@gmail.com");
         customer.setBirthDate(LocalDate.of(2000, 1, 1));
@@ -76,15 +79,15 @@ class UserControllerTest {
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
-        AirlineDTO airline = new AirlineDTO();
+        BaseAirlineDTO airline = new BaseAirlineDTO();
         airline.setNickname("flyuy");
         airline.setName("FlyUY");
+        airline.setPassword("password");
         airline.setMail("f@gmail.com");
         airline.setDescription("Low cost desde el cielo");
-
-        usuarioService.registerAirline(airline);
+        usuarioService.registerAirline(airline, null);
 
         List<UserDTO> users = usuarioController.getAllUsersSimpleDetails();
 
@@ -94,24 +97,26 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe retornar los nicknames de todos los usuarios")
     void getAllUsersNicknames_shouldReturnList() {
-        CustomerDTO customer = new CustomerDTO();
+        BaseCustomerDTO customer = new BaseCustomerDTO();
         customer.setNickname("gyabisito");
         customer.setName("Jose");
         customer.setSurname("Ramirez");
+        customer.setPassword("password");
         customer.setMail("email@gmail.com");
         customer.setBirthDate(LocalDate.of(2000, 1, 1));
         customer.setDocType(EnumTipoDocumento.CI);
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
 
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
-        AirlineDTO airline = new AirlineDTO();
+        BaseAirlineDTO airline = new BaseAirlineDTO();
         airline.setNickname("flyuy");
         airline.setName("FlyUY");
+        airline.setPassword("password");
         airline.setMail("f@gmail.com");
         airline.setDescription("Low cost desde el cielo");
-        usuarioService.registerAirline(airline);
+        usuarioService.registerAirline(airline, null);
 
         List<String> nicknames = usuarioController.getAllUsersNicknames();
 
@@ -122,16 +127,17 @@ class UserControllerTest {
     @Test
     @DisplayName("Debe actualizar un usuario")
     void updateUser_shouldWorkCorrectly() {
-        CustomerDTO customer = new CustomerDTO();
+        BaseCustomerDTO customer = new BaseCustomerDTO();
         customer.setNickname("gyabisito");
         customer.setName("Jose");
         customer.setSurname("Ramirez");
+        customer.setPassword("password");
         customer.setMail("email@gmail.com");
         customer.setBirthDate(LocalDate.of(2000, 1, 1));
         customer.setDocType(EnumTipoDocumento.CI);
         customer.setNumDoc("12345678");
         customer.setCitizenship("Uruguay");
-        usuarioService.registerCustomer(customer);
+        usuarioService.registerCustomer(customer, null);
 
         CustomerDTO updated = new CustomerDTO();
         updated.setNickname("gyabisito");

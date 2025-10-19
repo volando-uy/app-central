@@ -1,9 +1,11 @@
 package casosdeuso;
 
+import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flightRoute.IFlightRouteController;
 import controllers.user.IUserController;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
@@ -28,6 +30,7 @@ public class RegisterFlightRouteTest {
     IFlightRouteController flightRouteController = ControllerFactory.getFlightRouteController();
     ICityController cityController = ControllerFactory.getCityController();
     ICategoryController categoryController = ControllerFactory.getCategoryController();
+    IAirportController airportController = ControllerFactory.getAirportController();
 
     @BeforeAll
     void cleanDB() {
@@ -38,10 +41,9 @@ public class RegisterFlightRouteTest {
     @DisplayName("GIVEN valid airline, cities and category WHEN creating a flight route THEN it is saved and retrievable")
     public void testCrearRutaVuelo() {
         // GIVEN
-        AirlineDTO airline = new AirlineDTO("AA", "Aerolineas Argentinas", "arg@gmail.com", "Arg airline", "www.aa.com");
-        userController.registerAirline(airline);
+        AirlineDTO airline = new AirlineDTO("AA", "Aerolineas Argentinas", "arg@gmail.com", "password", null, "Arg airline", "www.aa.com");
+        userController.registerAirline(airline, null);
 
-//        CityDTO originCity = new CityDTO("Buenos Aires", "Argentina", -34.6, -58.4, List.of("ARG"));
         BaseCityDTO  baseCityDTO = new BaseCityDTO();
         baseCityDTO.setName("Buenos Aires");
         baseCityDTO.setCountry("Argentina");
@@ -56,20 +58,17 @@ public class RegisterFlightRouteTest {
         baseCityDTO2.setLongitude(-3.7);
         cityController.createCity(baseCityDTO2);
 
+        airportController.createAirport(
+                new BaseAirportDTO("Aero Buenos Aires", "BAA"),
+                "Buenos Aires"
+        );
+        airportController.createAirport(
+                new BaseAirportDTO("Aero Madrid", "MAD"),
+                "Madrid"
+        );
+
         CategoryDTO category = new CategoryDTO("Nacional");
         categoryController.createCategory(category);
-
-//        FlightRouteDTO flightRouteDTO = new FlightRouteDTO();
-//        flightRouteDTO.setName("TEST");
-//        flightRouteDTO.setDescription("Ruta Buenos Aires - Madrid");
-//        flightRouteDTO.setCreatedAt(LocalDate.now());
-//        flightRouteDTO.setPriceTouristClass(8000.0);
-//        flightRouteDTO.setPriceBusinessClass(15000.0);
-//        flightRouteDTO.setPriceExtraUnitBaggage(5000.0);
-//        flightRouteDTO.setOriginCityName("Buenos Aires");
-//        flightRouteDTO.setDestinationCityName("Madrid");
-//        flightRouteDTO.setAirlineNickname("AA");
-//        flightRouteDTO.setCategories(List.of("Nacional"));
 
         BaseFlightRouteDTO baseFlightRouteDTO = new BaseFlightRouteDTO();
         baseFlightRouteDTO.setName("TEST");
@@ -81,17 +80,16 @@ public class RegisterFlightRouteTest {
         assertFalse(flightRouteController.existFlightRoute("TEST"));
 
         //  WHEN
-//        flightRouteController.createFlightRoute(flightRouteDTO);
-        BaseFlightRouteDTO flightRouteDTO = (BaseFlightRouteDTO) flightRouteController.createFlightRoute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Nacional"));
+        flightRouteController.createFlightRoute(baseFlightRouteDTO, "BAA", "MAD", "AA", List.of("Nacional"), null);
 
         //  THEN
         assertTrue(flightRouteController.existFlightRoute("TEST"));
 
         FlightRouteDTO retrieved = flightRouteController.getFlightRouteDetailsByName("TEST");
         assertEquals("TEST", retrieved.getName());
-        assertEquals("Buenos Aires", retrieved.getOriginCityName());
-        assertEquals("Madrid", retrieved.getDestinationCityName());
+        assertEquals("BAA", retrieved.getOriginAeroCode());
+        assertEquals("MAD", retrieved.getDestinationAeroCode());
         assertEquals("AA", retrieved.getAirlineNickname());
-        assertEquals(List.of("Nacional"), retrieved.getCategories());
+        assertEquals(List.of("Nacional"), retrieved.getCategoriesNames());
     }
 }

@@ -25,15 +25,11 @@ public interface IUserService {
 
     UserDTO getUserDetailsByNickname(String nickname, boolean full);
     UserDTO updateUser(String nickname, UserDTO userDTO, File imgaeFile);
-    void addFlightRouteToAirline(Airline airline, FlightRoute flightRoute);
 
     Airline getAirlineByNickname(String nickname, boolean full);
     Customer getCustomerByNickname(String nickname, boolean full);
 
-    void addFlightRoutePackageToCustomer(String customerNickname, String packageName);
     boolean existsUserByNickname(String nickname);
-
-    void updateAirline(Airline airline);
 
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
 

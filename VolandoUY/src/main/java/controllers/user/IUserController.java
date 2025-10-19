@@ -35,5 +35,4 @@ public interface IUserController {
     CustomerDTO getCustomerDetailsByNickname(String nickname);
     BaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname);
 
-    void addFlightRoutePackageToCustomer(String customerNickname, String packageName);
 }

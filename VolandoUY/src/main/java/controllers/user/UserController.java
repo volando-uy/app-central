@@ -99,10 +99,6 @@ public class UserController implements IUserController {
         return userService.getCustomerDetailsByNickname(nickname, false);
     }
 
-    @Override
-    public void addFlightRoutePackageToCustomer(String customerNickname, String packageName) {
-        userService.addFlightRoutePackageToCustomer(customerNickname, packageName);
-    }
 
 
 }

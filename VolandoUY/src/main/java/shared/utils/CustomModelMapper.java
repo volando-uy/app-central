@@ -60,8 +60,8 @@ public class CustomModelMapper extends ModelMapper {
         return customerDTO;
     }
 
-    public BaseCustomerDTO mapBaseCustomer(Customer customer) {
-        return this.map(customer, BaseCustomerDTO.class);
+    public CustomerDTO mapCustomer(Customer customer) {
+        return this.map(customer, CustomerDTO.class);
     }
 
     public AirlineDTO mapFullAirline(Airline airline) {
@@ -94,7 +94,7 @@ public class CustomModelMapper extends ModelMapper {
         flightRouteDTO.setOriginAeroCode(flightRoute.getOriginAero() != null ? flightRoute.getOriginAero().getCode() : null);
         flightRouteDTO.setDestinationAeroCode(flightRoute.getDestinationAero() != null ? flightRoute.getDestinationAero().getCode() : null);
         flightRouteDTO.setAirlineNickname(flightRoute.getAirline() != null ? flightRoute.getAirline().getNickname() : null);
-        flightRouteDTO.setCategories(
+        flightRouteDTO.setCategoriesNames(
                 new ArrayList<>(flightRoute.getCategories()).stream().map(Category::getName).toList()
         );
         flightRouteDTO.setFlightsNames(
