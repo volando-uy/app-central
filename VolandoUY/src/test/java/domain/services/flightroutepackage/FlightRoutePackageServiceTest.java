@@ -1,10 +1,12 @@
 package domain.services.flightroutepackage;
 
 import app.DBConnection;
+import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.flightRoute.BaseFlightRouteDTO;
 import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
 import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.models.airport.Airport;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.enums.EnumTipoAsiento;
@@ -12,13 +14,16 @@ import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.mapper.UserMapper;
 import domain.services.airport.AirportService;
+import domain.services.airport.IAirportService;
 import domain.services.category.CategoryService;
 import domain.services.city.CityService;
+import domain.services.city.ICityService;
 import domain.services.flightRoute.FlightRouteService;
 import domain.services.flightRoute.IFlightRouteService;
 import domain.services.flightRoutePackage.FlightRoutePackageService;
 import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.user.UserService;
+import factory.ServiceFactory;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,22 +41,14 @@ import static org.mockito.Mockito.*;
 
 class FlightRoutePackageServiceTest {
 
-    private IFlightRoutePackageService packageService;
-    private IFlightRouteService flightRouteService; // Mock
+    private IFlightRoutePackageService packageService = ServiceFactory.getFlightRoutePackageService();
+    private IFlightRouteService flightRouteService = ServiceFactory.getFlightRouteService();
+    private ICityService cityService = ServiceFactory.getCityService();
+    private IAirportService airportService = ServiceFactory.getAirportService();
 
     @BeforeEach
     void setUp() {
         TestUtils.cleanDB();
-
-        // Crear servicios reales
-        flightRouteService = new FlightRouteService();
-        packageService     = new FlightRoutePackageService();
-
-        // Inyectar dependencias reales si hace falta
-        flightRouteService.setAirportService(new AirportService());
-        flightRouteService.setCategoryService(new CategoryService());
-        flightRouteService.setUserService(new UserService());
-        packageService.setFlightRouteService(flightRouteService);
 
         // Semilla mínima
         try (EntityManager em = DBConnection.getEntityManager()) {
@@ -61,6 +58,7 @@ class FlightRoutePackageServiceTest {
             airline.setNickname("air123");
             airline.setName("Test Airline");
             airline.setMail("test@mail.com");
+            airline.setPassword("password");
             airline.setDescription("Aerolínea test");
             airline.setWeb("www.testair.com");
             em.persist(airline);
@@ -77,6 +75,15 @@ class FlightRoutePackageServiceTest {
             em.getTransaction().commit();
         }
 
+        airportService.createAirport(
+                new BaseAirportDTO("Aero Montevideo", "MON"),
+                "Montevideo"
+        );
+        airportService.createAirport(
+                new BaseAirportDTO("Aero Buenos Aires", "BAA"),
+                "Buenos Aires"
+        );
+
         // Crear la ruta correctamente con BaseFlightRouteDTO
         BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
         dto.setName("Ruta A");
@@ -86,13 +93,15 @@ class FlightRoutePackageServiceTest {
         dto.setPriceBusinessClass(200.0);
         dto.setPriceExtraUnitBaggage(20.0);
 
-//        flightRouteService.createFlightRoute(
-//                dto,
-//                "Montevideo",
-//                "Buenos Aires",
-//                "air123",
-//                List.of("Promo")
-//        );
+
+        flightRouteService.createFlightRoute(
+                dto,
+                "MON",
+                "BAA",
+                "air123",
+                List.of("Promo"),
+                null
+        );
     }
 
 
@@ -195,7 +204,7 @@ class FlightRoutePackageServiceTest {
                 "Pack F", "Paquete FF", 10, 15.0,
                 LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
         ));
-    //org.opentest4j.AssertionFailedError: Unexpected exception thrown: jakarta.persistence.EntityNotFoundException: Unable to find domain.models.flightRoute.FlightRoute with id Ruta A
+
         // WHEN se agrega una ruta válida
         assertDoesNotThrow(() -> {
             packageService.addFlightRouteToPackage("Pack F", "Ruta A", 2);

@@ -36,13 +36,13 @@ class UserServiceTest {
     @Test
     void registerCustomer_shouldAddCustomerSuccessfully_withAllFields() {
         // GIVEN
-//        CustomerDTO dto = new CustomerDTO(
-//                "nick1", "Pepe", "pepe@mail.com", "González", "Uruguay",
-//                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI
-//        );
+        BaseCustomerDTO dto = new BaseCustomerDTO(
+                "nick1", "Pepe", "pepe@mail.com", "password", null, "González", "Uruguay",
+                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI
+        );
 
         // WHEN
-        BaseCustomerDTO result = userService.registerCustomer(null, null);
+        BaseCustomerDTO result = userService.registerCustomer(dto, null);
 
         // THEN
         assertNotNull(result);
@@ -84,11 +84,11 @@ class UserServiceTest {
     @Test
     void getUserByNickname_shouldReturnCustomerDTO() {
         // GIVEN
-//        CustomerDTO dto = new CustomerDTO(
-//                "nickCustomer", "Pama", "pama@mail.com", "Sosa", "Uruguay",
-//                LocalDate.of(1995, 3, 15), "45612378", EnumTipoDocumento.CI
-//        );
-//        userService.registerCustomer(dto);
+        BaseCustomerDTO dto = new BaseCustomerDTO(
+                "nickCustomer", "Pama", "pama@mail.com", "password", null, "Sosa", "Uruguay",
+                LocalDate.of(1995, 3, 15), "45612378", EnumTipoDocumento.CI
+        );
+        userService.registerCustomer(dto, null);
 
         // WHEN
         UserDTO result = userService.getUserDetailsByNickname("nickCustomer",false);
@@ -103,11 +103,11 @@ class UserServiceTest {
     @Test
     void getAllUsersNicknames_shouldReturnAllNicknames() {
         // GIVEN
-//        CustomerDTO dto = new CustomerDTO(
-//                "nick1", "Carlos", "carlos@mail.com", "Pérez", "Uruguay",
-//                LocalDate.of(1995, 1, 1), "12345678", EnumTipoDocumento.CI
-//        );
-//        userService.registerCustomer(dto);
+        BaseCustomerDTO dto = new BaseCustomerDTO(
+                "nick1", "Carlos", "carlos@mail.com", "password", null, "Pérez", "Uruguay",
+                LocalDate.of(1995, 1, 1), "12345678", EnumTipoDocumento.CI
+        );
+        userService.registerCustomer(dto, null);
 
         // WHEN
         List<String> nicknames = userService.getAllUsersNicknames();
@@ -120,11 +120,11 @@ class UserServiceTest {
     @Test
     void getAllUsers_shouldReturnAllUsersMapped() {
         // GIVEN
-//        CustomerDTO dto = new CustomerDTO(
-//                "nick1", "Luis", "luis@mail.com", "Gómez", "Paraguay",
-//                LocalDate.of(1990, 5, 15), "99911122", EnumTipoDocumento.CI
-//        );
-//        userService.registerCustomer(dto);
+        BaseCustomerDTO dto = new BaseCustomerDTO(
+                "nick1", "Luis", "luis@mail.com", "password", null, "Gómez", "Paraguay",
+                LocalDate.of(1990, 5, 15), "99911122", EnumTipoDocumento.CI
+        );
+        userService.registerCustomer(dto, null);
 
         // WHEN
         List<UserDTO> allUsers = userService.getAllUsers(false);
