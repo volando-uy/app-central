@@ -167,6 +167,7 @@ public class ServiceFactory {
             buyPackageService = new BuyPackageService();
             buyPackageService.setUserService(getUserService());
             buyPackageService.setFlightRoutePackageService(getFlightRoutePackageService());
+            buyPackageService.setBuyPackageRepository(RepositoryFactory.getBuyPackageRepository());
         }
         return buyPackageService;
     }

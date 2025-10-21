@@ -8,6 +8,7 @@ import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
+import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.flight.Flight;
@@ -65,8 +66,8 @@ public class BookingServiceTest {
         bookingService.setSeatService(seatService);
         bookingService.setFlightService(flightService);
         bookingService.setUserService(userService);
-        bookingService.setBookingRepository(bookingRepository);
         bookingService.setTicketService(ticketService);
+        bookingService.setBookingRepository(bookingRepository);
     }
 
     @BeforeEach
@@ -258,176 +259,246 @@ public class BookingServiceTest {
         assertTrue(created.getTotalPrice() == 400.0); // 100 base + 300 extra luggage
         assertTrue(created.getSeatType() == EnumTipoAsiento.TURISTA);
     }
-//
-//    @Test
-//    void getAllBookingDetails_shouldReturnAllBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getAllBookFlightsDetails(true)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BookFlightDTO> returned = bookingController.getAllBookFlightsDetails();
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//
-//    @Test
-//    void getAllBookingSimpleDetails_shouldReturnAllBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getAllBookFlightsDetails(false)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BaseBookFlightDTO> returned = bookingController.getAllBookFlightsSimpleDetails();
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//    @Test
-//    void getBookingsDetailsByCustomerName_shouldReturnBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getAllBookFlightsDetailsByCustomerNickname("customer", true)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BookFlightDTO> returned = bookingController.getBookFlightsDetailsByCustomerNickname("customer");
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//    @Test
-//    void getBookingsSimpleDetailsByCustomerName_shouldReturnBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getAllBookFlightsDetailsByCustomerNickname("customer", false)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BaseBookFlightDTO> returned = bookingController.getBookFlightsSimpleDetailsByCustomerNickname("customer");
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//    @Test
-//    void getBookingsDetailsByFlightName_shouldReturnBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getBookFlightsDetailsByFlightName("flight", true)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BookFlightDTO> returned = bookingController.getBookFlightsDetailsByFlightName("flight");
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//    @Test
-//    void getBookingsSimpleDetailsByFlightName_shouldReturnBookings() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        BookFlightDTO dto2 = new BookFlightDTO();
-//        dto2.setId(2L);
-//        dto2.setCreatedAt(nowTime);
-//        dto2.setTotalPrice(100.0);
-//        dto2.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//        Mockito.when(bookingService.getBookFlightsDetailsByFlightName("flight", false)).thenReturn(new ArrayList<>() {{ add(dto1); add(dto2); }});
-//
-//        List<BaseBookFlightDTO> returned = bookingController.getBookFlightsSimpleDetailsByFlightName("flight");
-//
-//        assertTrue(returned.size() == 2);
-//        assertTrue(returned.get(0).getId() == 1L);
-//        assertTrue(returned.get(1).getId() == 2L);
-//    }
-//
-//    @Test
-//    void getBookingById_shouldReturnBooking() {
-//        LocalDateTime nowTime = LocalDateTime.now();
-//
-//        BookFlightDTO dto1 = new BookFlightDTO();
-//        dto1.setId(1L);
-//        dto1.setCreatedAt(nowTime);
-//        dto1.setTotalPrice(100.0);
-//        dto1.setSeatType(EnumTipoAsiento.TURISTA);
-//
-//
-//        Mockito.when(bookingService.getBookFlightDetailsById(1L, true)).thenReturn(dto1);
-//
-//        BookFlightDTO created = bookingController.getBookFlightDetailsById(1L);
-//
-//        assertTrue(created.getId() == 1L);
-//        assertTrue(created.getCreatedAt() == nowTime);
-//        assertTrue(created.getTotalPrice() == 100.0);
-//        assertTrue(created.getSeatType() == EnumTipoAsiento.TURISTA);
-//    }
+
+    @Test
+    void getAllBookingDetailsWithFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+        test1.setCustomer(new Customer() {{ setNickname("customer1"); }});
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+        test2.setCustomer(new Customer() {{ setNickname("customer2"); }});
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findFullAll()).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetails(true);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getCustomerNickname().equals("customer1"));
+        assertTrue(bookflights.get(1).getCustomerNickname().equals("customer2"));
+    }
+
+    @Test
+    void getAllBookingDetailsWithoutFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findAll()).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetails(false);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getId() == 1L);
+        assertTrue(bookflights.get(1).getId() == 2L);
+    }
+
+    @Test
+    void getAllBookingDetailsWithoutBookings_shouldReturnEmptyList() {
+
+        // Mock the repository to return 0 bookings
+        Mockito.when(bookingRepository.findAll()).thenReturn(new ArrayList<>());
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetails(false);
+
+        assertTrue(bookflights.isEmpty());
+    }
+
+
+    @Test
+    void getAllBookingDetailsByCustomerNicknameWithoutBookings_shouldReturnEmptyList() {
+
+        // Mock the repository to return 0 bookings
+        Mockito.when(bookingRepository.findByCustomerNickname("customer")).thenReturn(new ArrayList<>());
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetailsByCustomerNickname("customer", false);
+
+        assertTrue(bookflights.isEmpty());
+    }
+
+    @Test
+    void getAllBookingDetailsByCustomerNicknameWithoutFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findByCustomerNickname("customer")).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetailsByCustomerNickname("customer", false);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getId() == 1L);
+        assertTrue(bookflights.get(1).getId() == 2L);
+    }
+
+    @Test
+    void getAllBookingDetailsByCustomerNicknameWithFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+        test1.setCustomer(new Customer() {{setNickname("customer1"); }});
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+        test2.setCustomer(new Customer() {{setNickname("customer2"); }});
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findFullByCustomerNickname("customer")).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getAllBookFlightsDetailsByCustomerNickname("customer", true);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getCustomerNickname().equals("customer1"));
+        assertTrue(bookflights.get(1).getCustomerNickname().equals("customer2"));
+    }
+
+
+    @Test
+    void getAllBookingDetailsByFlightNameWithoutBookings_shouldReturnEmptyList() {
+
+        // Mock the repository to return 0 bookings
+        Mockito.when(bookingRepository.findByFlightName("flight")).thenReturn(new ArrayList<>());
+
+        List<BookFlightDTO> bookflights = bookingService.getBookFlightsDetailsByFlightName("flight", false);
+
+        assertTrue(bookflights.isEmpty());
+    }
+
+    @Test
+    void getAllBookingDetailsByFlightNameWithoutFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findByFlightName("flight")).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getBookFlightsDetailsByFlightName("flight", false);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getId() == 1L);
+        assertTrue(bookflights.get(1).getId() == 2L);
+    }
+
+    @Test
+    void getAllBookingDetailsByFlightNameWithFull_shouldReturnAllBookings() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+        test1.setCustomer(new Customer() {{setNickname("customer1"); }});
+
+        BookFlight test2 = new BookFlight();
+        test2.setId(2L);
+        test2.setTotalPrice(0.0);
+        test2.setCreatedAt(LocalDateTime.now());
+        test2.setSeatType(EnumTipoAsiento.TURISTA);
+        test2.setCustomer(new Customer() {{setNickname("customer2"); }});
+
+        // Mock the repository to return two bookings
+        Mockito.when(bookingRepository.findFullByFlightName("flight")).thenReturn(new ArrayList<>() {{ add(test1); add(test2); }});
+
+
+        List<BookFlightDTO> bookflights = bookingService.getBookFlightsDetailsByFlightName("flight", true);
+
+        assertTrue(bookflights.size() == 2);
+        assertTrue(bookflights.get(0).getCustomerNickname().equals("customer1"));
+        assertTrue(bookflights.get(1).getCustomerNickname().equals("customer2"));
+    }
+
+    @Test
+    void getBookFlightDetailsByIdWithoutExistentBookFlight_shouldReturnEmptyList() {
+
+        // Mock the repository to return 0 bookings
+        Mockito.when(bookingRepository.findByKey(1L)).thenReturn(null);
+
+        BookFlightDTO bookflight = bookingService.getBookFlightDetailsById(1L, false);
+
+        assertTrue(bookflight == null);
+    }
+
+    @Test
+    void getBookFlightDetailsByIdWithoutFull_shouldReturnCorrectBookFlight() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+
+        // Mock the repository to return the bookflight
+        Mockito.when(bookingRepository.findByKey(1L)).thenReturn(test1);
+
+
+        BookFlightDTO bookflight = bookingService.getBookFlightDetailsById(1L, false);
+
+        assertTrue(bookflight.getId() == 1L);
+        assertTrue(bookflight.getTotalPrice() == 0.0);
+        assertTrue(bookflight.getSeatType() == EnumTipoAsiento.TURISTA);
+    }
+
+    @Test
+    void getBookFlightDetailsByIdWithFull_shouldReturnCorrectBookFlight() {
+        BookFlight test1 = new BookFlight();
+        test1.setId(1L);
+        test1.setTotalPrice(0.0);
+        test1.setCreatedAt(LocalDateTime.now());
+        test1.setSeatType(EnumTipoAsiento.TURISTA);
+        test1.setCustomer(new Customer() {{setNickname("customer1"); }});
+
+        // Mock the repository to return the bookflight
+        Mockito.when(bookingRepository.getFullBookingById(1L)).thenReturn(test1);
+
+
+        BookFlightDTO bookflight = bookingService.getBookFlightDetailsById(1L, true);
+
+        assertTrue(bookflight.getId() == 1L);
+        assertTrue(bookflight.getTotalPrice() == 0.0);
+        assertTrue(bookflight.getSeatType() == EnumTipoAsiento.TURISTA);
+        assertTrue(bookflight.getCustomerNickname().equals("customer1"));
+    }
 }

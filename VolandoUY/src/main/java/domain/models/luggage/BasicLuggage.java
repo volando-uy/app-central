@@ -17,5 +17,5 @@ public final class BasicLuggage extends Luggage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EnumEquipajeBasico type;
+    private EnumEquipajeBasico category;
 }

@@ -16,5 +16,5 @@ public final class ExtraLuggage extends Luggage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EnumEquipajeExtra type;
+    private EnumEquipajeExtra category;
 }
