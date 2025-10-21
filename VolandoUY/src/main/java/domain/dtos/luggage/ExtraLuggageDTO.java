@@ -12,8 +12,8 @@ import lombok.Setter;
 public class ExtraLuggageDTO extends BaseExtraLuggageDTO {
     private Long ticketId;
 
-    public ExtraLuggageDTO(Double weight, Long id, EnumEquipajeExtra category) {
+    public ExtraLuggageDTO(Double weight, Long id, EnumEquipajeExtra category, Long ticketId) {
         super(weight, id ,category);
-        this.ticketId = null;
+        this.ticketId = ticketId;
     }
 }

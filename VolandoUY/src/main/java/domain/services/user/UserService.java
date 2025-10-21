@@ -219,6 +219,9 @@ public class UserService implements IUserService {
     public Customer getCustomerByNickname(String nickname, boolean full) {
         //  Comprobamos que el usuario exista
         User user = userRepository.getUserByNickname(nickname, full);
+        if (user == null) {
+            throw new  IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, nickname));
+        }
 
         // Checkeamos que el usuario sea un customer
         if (user instanceof Customer customer) {

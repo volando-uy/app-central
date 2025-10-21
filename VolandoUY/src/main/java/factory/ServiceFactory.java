@@ -155,6 +155,7 @@ public class ServiceFactory {
             bookingService.setSeatService(getSeatService());
             bookingService.setTicketService(getTicketService());
             bookingService.setUserService(getUserService());
+            bookingService.setBookingRepository(RepositoryFactory.getBookingRepository());
         }
 
         return bookingService;
