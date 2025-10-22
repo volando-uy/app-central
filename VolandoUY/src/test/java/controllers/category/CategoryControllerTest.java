@@ -23,7 +23,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid CategoryDTO WHEN createCategory is called THEN it should delegate and return the DTO")
+    @DisplayName("GIVEN valid CategoryDTO WHEN createcategory is called THEN it should delegate and return the DTO")
     void createCategory_shouldReturnCreatedCategory() {
         // GIVEN
         CategoryDTO inputDTO = new CategoryDTO("Turismo");

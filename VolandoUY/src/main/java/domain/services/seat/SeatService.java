@@ -3,15 +3,12 @@ package domain.services.seat;
 import domain.dtos.seat.BaseSeatDTO;
 import domain.dtos.seat.SeatDTO;
 import domain.models.enums.EnumTipoAsiento;
-import domain.models.flight.Flight;
 import domain.models.seat.Seat;
 import domain.services.flight.IFlightService;
 import domain.services.ticket.ITicketService;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
 import infra.repository.seat.ISeatRepository;
-import infra.repository.seat.SeatRepository;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import shared.utils.CustomModelMapper;
 

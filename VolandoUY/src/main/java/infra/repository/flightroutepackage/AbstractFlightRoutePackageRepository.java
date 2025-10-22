@@ -1,6 +1,6 @@
 package infra.repository.flightroutepackage;
 
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import infra.repository.BaseRepository;
 
 public class AbstractFlightRoutePackageRepository extends BaseRepository<FlightRoutePackage> {

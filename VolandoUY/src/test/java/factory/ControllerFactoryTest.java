@@ -4,16 +4,15 @@ import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
-import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.flightroute.IFlightRouteController;
+import controllers.flightroutepackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
-import domain.services.flightRoute.IFlightRouteService;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.flightroute.IFlightRouteService;
+import domain.services.flightroutepackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 

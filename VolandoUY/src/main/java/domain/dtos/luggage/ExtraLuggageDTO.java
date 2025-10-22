@@ -1,7 +1,6 @@
 package domain.dtos.luggage;
 
 import domain.models.luggage.EnumEquipajeExtra;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,7 @@ public class ExtraLuggageDTO extends BaseExtraLuggageDTO {
     private Long ticketId;
 
     public ExtraLuggageDTO(Double weight, Long id, EnumEquipajeExtra category, Long ticketId) {
-        super(weight, id ,category);
+        super(weight, id, category);
         this.ticketId = ticketId;
     }
 }

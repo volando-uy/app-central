@@ -1,10 +1,9 @@
 package domain.services.user;
 
 import domain.dtos.user.*;
-import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.flightroutepackage.IFlightRoutePackageService;
 
 import java.io.File;
 import java.util.List;

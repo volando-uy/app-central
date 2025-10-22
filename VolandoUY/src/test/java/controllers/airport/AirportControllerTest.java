@@ -33,7 +33,7 @@ class AirportControllerTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid AirportDTO and city WHEN createAirport is called THEN it should return created airport")
+    @DisplayName("GIVEN valid AirportDTO and city WHEN createairport is called THEN it should return created airport")
     void createAirport_shouldReturnCreatedAirport() {
         BaseAirportDTO dto = new BaseAirportDTO();
         dto.setName("Carrasco");
@@ -57,7 +57,7 @@ class AirportControllerTest {
         dto.setCode("MVD");
         dto.setCityName("Montevideo");
 
-        // Mock of createAirport
+        // Mock of createairport
         Mockito.when(airportService.createAirport(dto, "Montevideo")).thenReturn(dto);
 
         airportController.createAirport(dto, "Montevideo");
@@ -80,7 +80,7 @@ class AirportControllerTest {
         dto.setName("Carrasco");
         dto.setCode("MVD");
 
-        // Mock of createAirport
+        // Mock of createairport
         Mockito.when(airportService.createAirport(dto, "Montevideo")).thenReturn(dto);
 
         airportController.createAirport(dto, "Montevideo");
@@ -103,7 +103,7 @@ class AirportControllerTest {
         dto.setCode("MVD");
         dto.setCityName("Montevideo");
 
-        // Mock of createAirport
+        // Mock of createairport
         Mockito.when(airportService.createAirport(dto, "Montevideo")).thenReturn(dto);
 
         airportController.createAirport(dto, "Montevideo");
@@ -124,7 +124,7 @@ class AirportControllerTest {
     }
 
     @Test
-    @DisplayName("GIVEN duplicate code WHEN createAirport is called THEN throw exception")
+    @DisplayName("GIVEN duplicate code WHEN createairport is called THEN throw exception")
     void createAirport_shouldFailOnDuplicateCode() {
         BaseAirportDTO dto = new BaseAirportDTO();
         dto.setName("Carrasco");
@@ -135,7 +135,7 @@ class AirportControllerTest {
 
         airportController.createAirport(dto, "Montevideo");
 
-        // Mock of createAirport with throw
+        // Mock of createairport with throw
         Mockito.when(airportService.createAirport(dto, "Montevideo")).thenThrow(new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_CODE_ALREADY_EXISTS, "MVD")));
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {

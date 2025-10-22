@@ -5,9 +5,7 @@ import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import factory.ControllerFactory;
 import factory.ServiceFactory;
@@ -87,7 +85,7 @@ class FlightControllerTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid BaseFlightDTO WHEN createFlight is called THEN it should return created FlightDTO")
+    @DisplayName("GIVEN valid BaseFlightDTO WHEN createflight is called THEN it should return created FlightDTO")
     void createFlight_shouldReturnCreatedFlight() {
         // GIVEN
         BaseFlightDTO dto = new BaseFlightDTO(

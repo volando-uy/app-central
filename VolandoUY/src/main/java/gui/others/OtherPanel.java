@@ -3,20 +3,18 @@ package gui.others;
 import controllers.airport.IAirportController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
-import gui.others.createAirport.CreateAirportPanel;
-import gui.others.getAirports.GetAirportsPanel;
-import gui.others.getCategories.GetCategoriesPanel;
-import gui.others.getCities.GetCitiesPanel;
-import gui.others.createCategory.CreateCategoryPanel;
-import gui.others.createCity.CreateCityPanel;
-import gui.user.registerAirline.RegisterAirlinePanel;
+import gui.others.createairport.CreateAirportPanel;
+import gui.others.getairports.GetAirportsPanel;
+import gui.others.getcategories.GetCategoriesPanel;
+import gui.others.getcities.GetCitiesPanel;
+import gui.others.createcategory.CreateCategoryPanel;
+import gui.others.createcity.CreateCityPanel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class OtherPanel extends JPanel {
 

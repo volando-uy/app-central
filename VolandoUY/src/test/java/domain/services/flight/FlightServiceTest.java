@@ -5,18 +5,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 
-import domain.dtos.city.CityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.models.flight.Flight;
 import domain.services.city.ICityService;
-import domain.services.flightRoute.IFlightRouteService;
+import domain.services.flightroute.IFlightRouteService;
 import domain.services.user.IUserService;
-import domain.services.user.UserService;
 import factory.ServiceFactory;
 import org.junit.jupiter.api.*;
 import shared.constants.ErrorMessages;
@@ -26,8 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FlightServiceTest {
 
@@ -90,7 +84,7 @@ class FlightServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid FlightDTO WHEN createFlight is called THEN flight is added")
+    @DisplayName("GIVEN valid FlightDTO WHEN createflight is called THEN flight is added")
     void createFlight_shouldAddFlightToDb() {
       
         BaseFlightDTO dto = new BaseFlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, LocalDateTime.now(), null);
@@ -102,7 +96,7 @@ class FlightServiceTest {
         assertEquals("Vuelo 1", allFlights.get(0).getName());
     }
     @Test
-    @DisplayName("GIVEN duplicate flight name WHEN createFlight is called THEN throw exception")
+    @DisplayName("GIVEN duplicate flight name WHEN createflight is called THEN throw exception")
     void createFlight_shouldNotAllowDuplicates() {
         BaseFlightDTO base = new BaseFlightDTO("Vuelo 1", LocalDateTime.now().plusDays(1), 120L, 100, 50, LocalDateTime.now(), null);
         flightService.createFlight(base, "air123", "AAA", null);

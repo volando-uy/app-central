@@ -2,22 +2,18 @@ package domain.services.flight;
 
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.seat.BaseSeatDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
-import domain.services.flightRoute.IFlightRouteService;
+import domain.services.flightroute.IFlightRouteService;
 import domain.services.seat.ISeatService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
-import factory.ServiceFactory;
-import infra.repository.flight.FlightRepository;
 import infra.repository.flight.IFlightRepository;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.constants.Images;
@@ -28,7 +24,6 @@ import shared.utils.ValidatorUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FlightService implements IFlightService {
 

@@ -1,14 +1,13 @@
 package shared.utils;
 
 import domain.dtos.airport.AirportDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
-import domain.dtos.buyPackage.BuyPackageDTO;
+import domain.dtos.bookflight.BookFlightDTO;
+import domain.dtos.buypackage.BuyPackageDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroute.FlightRouteDTO;
+import domain.dtos.flightroutepackage.FlightRoutePackageDTO;
 import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.seat.SeatDTO;
@@ -20,8 +19,8 @@ import domain.models.buypackage.BuyPackage;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroute.FlightRoute;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.seat.Seat;
@@ -29,16 +28,11 @@ import domain.models.ticket.Ticket;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
-import org.hibernate.collection.spi.PersistentBag;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.spi.MappingContext;
 import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class CustomModelMapper extends ModelMapper {

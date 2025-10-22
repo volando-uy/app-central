@@ -1,8 +1,7 @@
 package domain.models.flight;
 
 import domain.models.airport.Airport;
-import domain.models.enums.EnumTipoAsiento;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
 import jakarta.persistence.*;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
-import shared.utils.ValidatorUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;

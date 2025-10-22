@@ -1,7 +1,5 @@
 package domain.dtos.city;
 
-import domain.dtos.airport.AirportDTO;
-import domain.models.airport.Airport;
 import lombok.*;
 
 import java.util.List;

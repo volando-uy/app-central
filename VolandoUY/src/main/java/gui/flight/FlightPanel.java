@@ -6,15 +6,14 @@ package gui.flight;
 
 import controllers.booking.IBookingController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
+import controllers.flightroute.IFlightRouteController;
 import controllers.user.IUserController;
-import gui.flight.createFlight.createFlightPanel;
-import gui.flight.getFlight.GetFlightsPanel;
+import gui.flight.createflight.createFlightPanel;
+import gui.flight.getflight.GetFlightsPanel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.border.*;
 

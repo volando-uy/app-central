@@ -2,12 +2,11 @@ package infra.repository.flight;
 
 import app.DBConnection;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
 import jakarta.persistence.EntityManager;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class FlightRepository extends AbstractFlightRepository implements IFlightRepository {
@@ -18,7 +17,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
 
     @Override
     public Flight getFlightByName(String flightName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.name)=:name", Flight.class)
                     .setParameter("name", flightName.toLowerCase())
                     .getResultStream()
@@ -29,17 +28,17 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
 
     @Override
     public Flight getFullFlightByName(String flightName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             Flight flight = em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.name)=:name", Flight.class)
                     .setParameter("name", flightName.toLowerCase())
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
 
-            if(flight != null){
-                if(flight.getAirline() != null) {flight.getAirline().getName();}
-                if(flight.getFlightRoute() != null) {flight.getFlightRoute().getName();}
-                if(flight.getSeats() != null) {flight.getSeats().size();}
+            if (flight != null) {
+                if (flight.getAirline() != null) { flight.getAirline().getName(); }
+                if (flight.getFlightRoute() != null) { flight.getFlightRoute().getName(); }
+                if (flight.getSeats() != null) { flight.getSeats().size(); }
             }
             return flight;
         }
@@ -47,7 +46,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
 
     @Override
     public List<Flight> getAllByAirlineNickname(String airlineNickname) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.airline.nickname)=:nickname", Flight.class)
                     .setParameter("nickname", airlineNickname.toLowerCase())
                     .getResultList();
@@ -56,7 +55,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
 
     @Override
     public boolean existsByName(String name) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             Long count = em.createQuery("SELECT COUNT(f) FROM Flight f WHERE LOWER(f.name)=:name", Long.class)
                     .setParameter("name", name.toLowerCase())
                     .getSingleResult();
@@ -66,7 +65,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
 
     @Override
     public List<Flight> getFlightsByRouteName(String routeName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             return em.createQuery("SELECT f FROM Flight f WHERE LOWER(f.flightRoute.name)=:name", Flight.class)
                     .setParameter("name", routeName.toLowerCase())
                     .getResultList();
@@ -85,7 +84,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
             }
 
             Airline managedAirline = em.merge(airline); // Attach airline to session
-            FlightRoute managedFlightRoute = em.merge(flightRoute); // Attach flightRoute to session
+            FlightRoute managedFlightRoute = em.merge(flightRoute); // Attach flightroute to session
             flight.setAirline(managedAirline); // Set the relationship
             flight.setFlightRoute(managedFlightRoute); // Set the relationship
             flight.setSeats(seats);
@@ -95,7 +94,7 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
             managedAirline.getFlights().add(flight); // Update the airline's collection
             em.merge(managedAirline);
 
-            managedFlightRoute.getFlights().add(flight); // Update the flightRoute's collection
+            managedFlightRoute.getFlights().add(flight); // Update the flightroute's collection
             em.merge(managedFlightRoute);
 
             seats.forEach(seat -> {

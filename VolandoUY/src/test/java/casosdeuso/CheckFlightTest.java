@@ -3,16 +3,14 @@ package casosdeuso;
 import controllers.airport.IAirportController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
+import controllers.flightroute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.city.CityDTO;
 import domain.dtos.flight.BaseFlightDTO;
-import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroute.FlightRouteDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,6 @@ import utils.TestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.jupiter.api.Assertions.*;

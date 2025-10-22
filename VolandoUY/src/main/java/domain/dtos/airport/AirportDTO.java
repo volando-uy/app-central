@@ -1,7 +1,5 @@
     package domain.dtos.airport;
 
-    import domain.dtos.city.CityDTO;
-    import domain.models.city.City;
     import lombok.*;
 
     @Getter

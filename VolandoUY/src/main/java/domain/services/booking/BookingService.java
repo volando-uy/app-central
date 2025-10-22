@@ -1,14 +1,13 @@
 package domain.services.booking;
 
-import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
-import domain.dtos.flight.FlightDTO;
+import domain.dtos.bookflight.BaseBookFlightDTO;
+import domain.dtos.bookflight.BookFlightDTO;
 import domain.dtos.luggage.*;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
 import domain.models.luggage.Luggage;
@@ -18,11 +17,8 @@ import domain.models.user.Customer;
 import domain.services.flight.IFlightService;
 import domain.services.seat.ISeatService;
 import domain.services.ticket.ITicketService;
-import domain.services.ticket.TicketService;
 import domain.services.user.IUserService;
 import factory.ControllerFactory;
-import factory.RepositoryFactory;
-import infra.repository.booking.BookingRepository;
 import infra.repository.booking.IBookingRepository;
 import lombok.Setter;
 import shared.utils.CustomModelMapper;
@@ -66,7 +62,7 @@ public class BookingService implements IBookingService {
         Flight flight = flightService.getFlightByName(flightName, true);
 
         // Tira throw si no existe
-        Customer customer = userService.getCustomerByNickname(userNickname,true);
+        Customer customer = userService.getCustomerByNickname(userNickname, true);
 
         FlightRoute flightRoute = flight.getFlightRoute();
 
@@ -103,7 +99,7 @@ public class BookingService implements IBookingService {
         }
         // Asignamos el vuelo y el usuario (cliente) al BookFlight
         // Pasamos seats (detached) + tickets (transient). El repo los reatacha/persiste correctamente.
-        bookingRepository.saveBookflightWithTicketsAndAddToSeats(bookFlight, savedTickets, availableSeats,customer);
+        bookingRepository.saveBookflightWithTicketsAndAddToSeats(bookFlight, savedTickets, availableSeats, customer);
 
         return customModelMapper.map(bookFlight, BaseBookFlightDTO.class);
     }

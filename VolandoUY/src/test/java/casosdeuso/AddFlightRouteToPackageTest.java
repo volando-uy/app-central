@@ -1,16 +1,12 @@
 package casosdeuso;
 
-import controllers.flightRoute.IFlightRouteController;
-import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.flightroute.IFlightRouteController;
+import controllers.flightroutepackage.IFlightRoutePackageController;
 import controllers.user.IUserController;
 import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.city.BaseCityDTO;
-import domain.dtos.city.CityDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
-import domain.dtos.user.AirlineDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.models.enums.EnumTipoAsiento;
 import factory.ControllerFactory;

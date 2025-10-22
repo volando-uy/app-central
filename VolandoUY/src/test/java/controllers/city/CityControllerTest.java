@@ -62,7 +62,7 @@ class CityControllerTest {
 
 
     @Test
-    @DisplayName("GIVEN valid CityDTO WHEN createCity is called THEN it should return the created DTO")
+    @DisplayName("GIVEN valid CityDTO WHEN createcity is called THEN it should return the created DTO")
     void createCity_shouldReturnDTO() {
         BaseCityDTO dto = new CityDTO("Lima", "Perú", -12.0464, -77.0428);
 

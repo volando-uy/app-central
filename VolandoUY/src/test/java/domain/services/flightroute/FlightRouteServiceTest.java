@@ -1,37 +1,22 @@
 package domain.services.flightroute;
 
-import app.DBConnection;
 import domain.dtos.airport.BaseAirportDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.CityDTO;
-import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroute.FlightRouteDTO;
 import domain.dtos.user.BaseAirlineDTO;
-import domain.models.category.Category;
-import domain.models.city.City;
 import domain.models.enums.EnumEstatusRuta;
-import domain.models.user.mapper.UserMapper;
 import domain.services.airport.IAirportService;
-import domain.services.category.CategoryService;
 import domain.services.category.ICategoryService;
-import domain.services.city.CityService;
 import domain.services.city.ICityService;
-import domain.services.flightRoute.FlightRouteService;
-import domain.services.flightRoute.IFlightRouteService;
 import domain.services.user.IUserService;
-import domain.services.user.UserService;
 import factory.ServiceFactory;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.*;
-import org.modelmapper.ModelMapper;
 import utils.TestUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +67,7 @@ class FlightRouteServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid DTO WHEN createFlightRoute THEN it's stored properly")
+    @DisplayName("GIVEN valid DTO WHEN createflightroute THEN it's stored properly")
     void createFlightRoute_shouldStoreSuccessfully() {
         // GIVEN
         BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
@@ -112,7 +97,7 @@ class FlightRouteServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN duplicated route name WHEN createFlightRoute THEN throw exception")
+    @DisplayName("GIVEN duplicated route name WHEN createflightroute THEN throw exception")
     void createFlightRoute_shouldRejectDuplicates() {
         BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
         dto.setName("Duplicada");

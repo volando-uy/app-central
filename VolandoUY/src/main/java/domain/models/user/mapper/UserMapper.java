@@ -1,6 +1,5 @@
 package domain.models.user.mapper;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
@@ -9,11 +8,6 @@ import domain.models.user.Customer;
 import domain.models.user.User;
 import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UserMapper {
     private final ModelMapper modelMapper;

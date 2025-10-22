@@ -1,9 +1,7 @@
 package domain.services.booking;
 
-import controllers.booking.BookingController;
-import controllers.booking.IBookingController;
-import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.bookflight.BaseBookFlightDTO;
+import domain.dtos.bookflight.BookFlightDTO;
 import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.luggage.LuggageDTO;
@@ -12,7 +10,7 @@ import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.luggage.EnumEquipajeBasico;
 import domain.models.luggage.EnumEquipajeExtra;
 import domain.models.seat.Seat;
@@ -20,16 +18,13 @@ import domain.models.ticket.Ticket;
 import domain.models.user.Customer;
 import domain.services.flight.IFlightService;
 import domain.services.seat.ISeatService;
-import domain.services.seat.SeatService;
 import domain.services.ticket.ITicketService;
 import domain.services.user.IUserService;
 import infra.repository.booking.IBookingRepository;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import shared.constants.ErrorMessages;
-import shared.utils.CustomModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,10 +1,8 @@
 package infra.repository.flightroutepackage;
 
 import app.DBConnection;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
-import domain.models.buypackage.BuyPackage;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroute.FlightRoute;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -16,7 +14,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
     @Override
     public FlightRoutePackage getFlightRoutePackageByName(String flightRoutePackageName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             return em.createQuery("SELECT frp FROM FlightRoutePackage frp WHERE LOWER(frp.name)=:name", FlightRoutePackage.class)
                     .setParameter("name", flightRoutePackageName.toLowerCase())
                     .getResultStream()
@@ -27,7 +25,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
     @Override
     public FlightRoutePackage getFullFlightRoutePackageByName(String flightRoutePackageName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             FlightRoutePackage frp = em.createQuery("SELECT frp FROM FlightRoutePackage frp LEFT JOIN FETCH frp.flightRoutes WHERE LOWER(frp.name)=:name", FlightRoutePackage.class)
                     .setParameter("name", flightRoutePackageName.toLowerCase())
                     .getResultStream()
@@ -48,7 +46,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
     @Override
     public boolean existsByName(String packageName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             Long count = em.createQuery("SELECT COUNT(frp) FROM FlightRoutePackage frp WHERE LOWER(frp.name)=:name", Long.class)
                     .setParameter("name", packageName.toLowerCase())
                     .getSingleResult();
@@ -62,7 +60,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 //                            "SELECT DISTINCT bp FROM BuyPackage bp " +
 //                                    "LEFT JOIN FETCH bp.customer c " +
 //                                    "LEFT JOIN FETCH bp.bookFlights bf " +
-//                                    "LEFT JOIN FETCH bp.flightRoutePackage frp " +
+//                                    "LEFT JOIN FETCH bp.flightroutepackage frp " +
 //                                    "WHERE c.nickname = :nickname", BuyPackage.class)
 //                    .setParameter("nickname", nickname)
 //                    .getResultList();
@@ -101,7 +99,7 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
 
     @Override
     public FlightRoutePackage getFlightRoutePackageFullByName(String flightRoutePackageName) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             FlightRoutePackage frp = em.createQuery("SELECT frp FROM FlightRoutePackage frp WHERE LOWER(frp.name)=:name", FlightRoutePackage.class)
                     .setParameter("name", flightRoutePackageName.toLowerCase())
                     .getResultStream()

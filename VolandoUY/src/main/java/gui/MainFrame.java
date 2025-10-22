@@ -7,18 +7,18 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import controllers.airport.IAirportController;
 import controllers.booking.IBookingController;
-import controllers.buyPackage.IBuyPackageController;
+import controllers.buypackage.IBuyPackageController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
-import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.flightroute.IFlightRouteController;
+import controllers.flightroutepackage.IFlightRoutePackageController;
 import controllers.seat.ISeatController;
 import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import gui.flight.FlightPanel;
-import gui.flightRoute.FlightRoutePanel;
-import gui.flightRoutePackage.FlightRoutePackagePanel;
+import gui.flightroute.FlightRoutePanel;
+import gui.flightroutepackage.FlightRoutePackagePanel;
 import gui.others.OtherPanel;
 import gui.reservations.ReservationPanel;
 import gui.user.UserPanel;
@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
         setSize(800, 600);
         setResizable(false);
         setLocationRelativeTo(null);
-        setBackground(new Color(43,45,48));
+        setBackground(new Color(43, 45, 48));
 
         mainPanel = new JPanel(); // Default panel to initialize
         mainPanelType = 0;
@@ -128,7 +128,7 @@ public class MainFrame extends JFrame {
 
 
     private SideBar createSideBar() {
-        userPanel = new UserPanel(userController, flightRouteController, flightController,flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
+        userPanel = new UserPanel(userController, flightRouteController, flightController, flightRoutePackageController, bookingController, buyPackageController, ticketController, seatController);
         flightRoutePanel = new FlightRoutePanel(flightRouteController, userController, categoryController, flightController, airportController);
         flightRoutePackagePanel = new FlightRoutePackagePanel(flightRoutePackageController, flightRouteController, userController, buyPackageController);
         flightPanel = new FlightPanel(flightController, flightRouteController, userController, bookingController);

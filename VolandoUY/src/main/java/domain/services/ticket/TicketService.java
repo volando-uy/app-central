@@ -1,18 +1,14 @@
 package domain.services.ticket;
 
-import domain.dtos.luggage.BasicLuggageDTO;
-import domain.dtos.luggage.ExtraLuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.ticket.TicketDTO;
 import domain.models.ticket.Ticket;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
 import infra.repository.ticket.ITicketRepository;
-import infra.repository.ticket.TicketRepository;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 
-import java.util.ArrayList;
 
 public class TicketService implements ITicketService {
     private final ITicketRepository ticketRepository;

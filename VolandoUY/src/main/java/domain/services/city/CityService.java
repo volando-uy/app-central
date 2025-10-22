@@ -6,7 +6,6 @@ import domain.dtos.city.CityDTO;
 import domain.models.city.City;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
-import infra.repository.city.CityRepository;
 import infra.repository.city.ICityRepository;
 import shared.constants.ErrorMessages;
 import shared.utils.CountryUtil;

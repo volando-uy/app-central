@@ -3,7 +3,7 @@ package domain.services.flight;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import domain.models.flight.Flight;
-import domain.services.flightRoute.IFlightRouteService;
+import domain.services.flightroute.IFlightRouteService;
 import domain.services.seat.ISeatService;
 import domain.services.user.IUserService;
 

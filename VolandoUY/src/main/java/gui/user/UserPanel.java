@@ -3,25 +3,23 @@ package gui.user;
 import javax.swing.border.*;
 
 import controllers.booking.IBookingController;
-import controllers.buyPackage.IBuyPackageController;
+import controllers.buypackage.IBuyPackageController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
-import controllers.flightRoutePackage.IFlightRoutePackageController;
+import controllers.flightroute.IFlightRouteController;
+import controllers.flightroutepackage.IFlightRoutePackageController;
 import controllers.seat.ISeatController;
 import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
-import gui.user.getUser.GetUserPanel;
-import gui.user.registerAirline.RegisterAirlinePanel;
-import gui.user.registerCustomer.RegisterCustomerPanel;
-import gui.user.updateUser.UpdateUserPanel;
+import gui.user.getuser.GetUserPanel;
+import gui.user.registerairline.RegisterAirlinePanel;
+import gui.user.registercustomer.RegisterCustomerPanel;
+import gui.user.updateuser.UpdateUserPanel;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.lang.reflect.InvocationTargetException;
 
 public class UserPanel extends JPanel {
 

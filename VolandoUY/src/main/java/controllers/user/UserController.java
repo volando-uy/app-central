@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public class UserController implements IUserController {
-    IUserService userService;
+    private IUserService userService;
 
     @Override
     public BaseCustomerDTO registerCustomer(BaseCustomerDTO customerDTO, File imageFile) {

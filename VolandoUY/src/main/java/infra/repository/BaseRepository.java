@@ -28,7 +28,7 @@ public abstract class BaseRepository<T> implements IBaseRepository<T> {
         EntityTransaction tx = em.getTransaction();
         try (em) {
             tx.begin();
-            T managed = em.merge(entity);  // 👈 clave: merge, no persist
+            T managed = em.merge(entity);
             tx.commit();
             return managed;
         } catch (RuntimeException e) {

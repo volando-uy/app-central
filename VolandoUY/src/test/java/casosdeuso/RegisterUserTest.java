@@ -68,7 +68,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    @DisplayName("Debe llamar a createCategory y mapear correctamente el DTO")
+    @DisplayName("Debe llamar a createcategory y mapear correctamente el DTO")
     void registerAirline_shouldCreateTheAirline() {
         // Given
         AirlineDTO airlineDTO = new AirlineDTO();
