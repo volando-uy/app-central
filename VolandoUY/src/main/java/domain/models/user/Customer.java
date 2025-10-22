@@ -2,13 +2,10 @@ package domain.models.user;
 
 
 import domain.dtos.user.BaseCustomerDTO;
-import domain.dtos.user.CustomerDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.buypackage.BuyPackage;
 import domain.models.enums.EnumTipoDocumento;
-import domain.models.flight.Flight;
-import domain.models.flightRoutePackage.FlightRoutePackage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
-import shared.constants.Images;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -62,15 +58,15 @@ public class Customer extends User {
     @Override
     public void updateDataFrom(UserDTO newData) {
         if (!(newData instanceof BaseCustomerDTO newDataCasted)) return;
-        if(newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
+        if (newDataCasted.getName() != null && !newDataCasted.getName().isBlank())
             this.setName(newDataCasted.getName());
-        if(newDataCasted.getSurname() != null && !newDataCasted.getSurname().isBlank())
+        if (newDataCasted.getSurname() != null && !newDataCasted.getSurname().isBlank())
             this.setSurname(newDataCasted.getSurname());
-        if(newDataCasted.getBirthDate() != null )
+        if (newDataCasted.getBirthDate() != null )
             this.setBirthDate(newDataCasted.getBirthDate());
-        if(newDataCasted.getDocType() != null )
+        if (newDataCasted.getDocType() != null )
             this.setDocType(newDataCasted.getDocType());
-        if(newDataCasted.getNumDoc() != null && !newDataCasted.getNumDoc().isBlank())
+        if (newDataCasted.getNumDoc() != null && !newDataCasted.getNumDoc().isBlank())
             this.setNumDoc(newDataCasted.getNumDoc());
         if(newDataCasted.getCitizenship() != null && !newDataCasted.getCitizenship().isBlank())
             this.setCitizenship(newDataCasted.getCitizenship());

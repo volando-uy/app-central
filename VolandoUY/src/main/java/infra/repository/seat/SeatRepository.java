@@ -2,7 +2,6 @@ package infra.repository.seat;
 
 import app.DBConnection;
 import domain.models.enums.EnumTipoAsiento;
-import domain.models.flight.Flight;
 import domain.models.seat.Seat;
 import jakarta.persistence.EntityManager;
 

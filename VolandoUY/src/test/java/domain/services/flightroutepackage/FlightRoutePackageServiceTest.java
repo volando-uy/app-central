@@ -2,42 +2,28 @@ package domain.services.flightroutepackage;
 
 import app.DBConnection;
 import domain.dtos.airport.BaseAirportDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
-import domain.models.airport.Airport;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
+import domain.dtos.flightroutepackage.FlightRoutePackageDTO;
 import domain.models.category.Category;
 import domain.models.city.City;
 import domain.models.enums.EnumTipoAsiento;
-import domain.models.flightRoute.FlightRoute;
 import domain.models.user.Airline;
-import domain.models.user.mapper.UserMapper;
-import domain.services.airport.AirportService;
 import domain.services.airport.IAirportService;
-import domain.services.category.CategoryService;
-import domain.services.city.CityService;
 import domain.services.city.ICityService;
-import domain.services.flightRoute.FlightRouteService;
-import domain.services.flightRoute.IFlightRouteService;
-import domain.services.flightRoutePackage.FlightRoutePackageService;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
-import domain.services.user.UserService;
+import domain.services.flightroute.IFlightRouteService;
 import factory.ServiceFactory;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import shared.constants.ErrorMessages;
 import utils.TestUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class FlightRoutePackageServiceTest {
 
@@ -106,7 +92,7 @@ class FlightRoutePackageServiceTest {
 
 
     @Test
-    @DisplayName("GIVEN valid DTO WHEN createFlightRoutePackage THEN package is created")
+    @DisplayName("GIVEN valid DTO WHEN createflightroutepackage THEN package is created")
     void createFlightRoutePackage_shouldCreatePackage() {
         // GIVEN
         FlightRoutePackageDTO dto = new FlightRoutePackageDTO(
@@ -123,7 +109,7 @@ class FlightRoutePackageServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN duplicate name WHEN createFlightRoutePackage THEN throw exception")
+    @DisplayName("GIVEN duplicate name WHEN createflightroutepackage THEN throw exception")
     void createFlightRoutePackage_shouldNotAllowDuplicates() {
         // GIVEN un paquete ya creado
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
@@ -196,7 +182,7 @@ class FlightRoutePackageServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN package and valid route WHEN addFlightRouteToPackage THEN route is added")
+    @DisplayName("GIVEN package and valid route WHEN addflightroutetopackage THEN route is added")
     void addFlightRouteToPackage_shouldAddRoute() {
         // GIVEN un paquete creado
 
@@ -212,7 +198,7 @@ class FlightRoutePackageServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN invalid quantity WHEN addFlightRouteToPackage THEN throw exception")
+    @DisplayName("GIVEN invalid quantity WHEN addflightroutetopackage THEN throw exception")
     void addFlightRouteToPackage_shouldFailIfQuantityInvalid() {
         // GIVEN paquete válido
         packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
@@ -230,7 +216,7 @@ class FlightRoutePackageServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN non-existing package WHEN addFlightRouteToPackage THEN throw exception")
+    @DisplayName("GIVEN non-existing package WHEN addflightroutetopackage THEN throw exception")
     void addFlightRouteToPackage_shouldFailIfPackageNotFound() {
         // WHEN se intenta agregar a un paquete inexistente
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {

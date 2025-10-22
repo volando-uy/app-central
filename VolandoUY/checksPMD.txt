@@ -1,0 +1,5 @@
+category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod
+category/java/bestpractices.xml/LooseCoupling
+category/java/codestyle.xml/PackageCase
+category/java/codestyle.xml/ShortMethodName
+category/java/bestpractices.xml/UnusedLocalVariable

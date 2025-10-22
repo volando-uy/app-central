@@ -3,7 +3,6 @@ package controllers.category;
 
 import domain.dtos.category.CategoryDTO;
 import domain.services.category.ICategoryService;
-import domain.services.flightRoute.IFlightRouteService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

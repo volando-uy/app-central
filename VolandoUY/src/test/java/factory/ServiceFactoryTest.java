@@ -4,8 +4,8 @@ import domain.services.airport.IAirportService;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.flight.IFlightService;
-import domain.services.flightRoute.IFlightRouteService;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.flightroute.IFlightRouteService;
+import domain.services.flightroutepackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import org.junit.jupiter.api.Test;
 

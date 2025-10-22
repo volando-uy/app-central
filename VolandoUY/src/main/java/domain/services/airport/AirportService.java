@@ -7,8 +7,6 @@ import domain.models.city.City;
 import domain.services.city.ICityService;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
-import factory.ServiceFactory;
-import infra.repository.airport.AirportRepository;
 import infra.repository.airport.IAirportRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
@@ -60,7 +58,7 @@ public class AirportService implements IAirportService {
     @Override
     public Airport getAirportByCode(String code, boolean full) {
         Airport airport = full ? airportRepository.getFullAirportByCode(code) : airportRepository.getAirportByCode(code);
-        if(airport == null) {
+        if (airport == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_AIRPORT_NOT_FOUND, code));
         }
         return airport;

@@ -1,19 +1,14 @@
 package domain.services.user;
 
 import domain.dtos.user.*;
-import domain.models.buypackage.BuyPackage;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
-import domain.services.buyPackage.IBuyPackageService;
-import domain.services.flightRoutePackage.FlightRoutePackageService;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.buypackage.IBuyPackageService;
+import domain.services.flightroutepackage.IFlightRoutePackageService;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
 import infra.repository.user.IUserRepository;
-import infra.repository.user.UserRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.constants.Images;
@@ -23,7 +18,6 @@ import shared.utils.PasswordManager;
 import shared.utils.ValidatorUtil;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;

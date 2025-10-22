@@ -2,13 +2,13 @@
 //
 //import controllers.category.ICategoryController;
 //import controllers.flight.IFlightController;
-//import controllers.flightRoute.IFlightRouteController;
+//import controllers.flightroute.IFlightRouteController;
 //import controllers.user.IUserController;
 //import domain.dtos.category.CategoryDTO;
 //import domain.dtos.flight.BaseFlightDTO;
 //import domain.dtos.flight.FlightDTO;
-//import domain.dtos.flightRoute.BaseFlightRouteDTO;
-//import domain.dtos.flightRoute.FlightRouteDTO;
+//import domain.dtos.flightroute.BaseFlightRouteDTO;
+//import domain.dtos.flightroute.FlightRouteDTO;
 //import domain.dtos.user.AirlineDTO;
 //import domain.models.category.Category;
 //import domain.models.city.City;
@@ -52,7 +52,7 @@
 //        airlineDTO.setMail("aa@gmail.com");
 //        airlineDTO.setDescription("Línea aérea nacional");
 //
-//        userController.registerAirline(airlineDTO);
+//        userController.registerairline(airlineDTO);
 //
 //        // Crear ciudades
 //        City origen = new City();
@@ -76,7 +76,7 @@
 //        // Crear categoría
 //        Category categoria = new Category();
 //        categoria.setName("Internacional");
-//        CategoryDTO categoriaDTO = categoryController.createCategory(new CategoryDTO(categoria.getName()));
+//        CategoryDTO categoriaDTO = categoryController.createcategory(new CategoryDTO(categoria.getName()));
 //
 //        // Crear ruta de vuelo
 ////        FlightRouteDTO rutaDTO = new FlightRouteDTO();
@@ -100,7 +100,7 @@
 //        baseFlightRouteDTO.setPriceExtraUnitBaggage(3500.0);
 //
 //        assertFalse(flightRouteController.existFlightRoute("AA-MAD"));
-//        flightRouteController.createFlightRoute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Internacional"));
+//        flightRouteController.createflightroute(baseFlightRouteDTO, "Buenos Aires", "Madrid", "AA", List.of("Internacional"));
 //        assertTrue(flightRouteController.existFlightRoute("AA-MAD"));
 //
 //        // Crear vuelo asociado (indirectamente relacionado con la ruta)
@@ -122,7 +122,7 @@
 //        baseFlightDTO.setMaxEconomySeats(250);
 //        baseFlightDTO.setMaxBusinessSeats(50);
 //
-//        flightController.createFlight(baseFlightDTO, "AA", "AA-MAD");
+//        flightController.createflight(baseFlightDTO, "AA", "AA-MAD");
 //
 //    }
 //
@@ -152,10 +152,10 @@
 //        assertEquals("Buenos Aires", ruta.getOriginCityName());
 //        assertEquals("Madrid", ruta.getDestinationCityName());
 //        assertEquals("AA", ruta.getAirlineNickname());
-//        System.out.println("Categorias asignadas: " + ruta.getCategories());
+//        System.out.println("Categorias asignadas: " + ruta.getcategories());
 //
 //        //Categorias asignadas: [Category(name=Internacional)]
-//        assertTrue(ruta.getCategories().get(0).contains("Internacional"));
+//        assertTrue(ruta.getcategories().get(0).contains("Internacional"));
 //
 //        // Paso 5: Ver vuelos asociados a esa ruta
 //        //Vuelos:

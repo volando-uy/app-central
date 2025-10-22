@@ -2,7 +2,6 @@ package controllers.airport;
 
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.airport.BaseAirportDTO;
-import domain.dtos.city.CityDTO;
 import domain.services.airport.IAirportService;
 import lombok.AllArgsConstructor;
 

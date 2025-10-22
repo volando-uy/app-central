@@ -2,13 +2,7 @@ package domain.dtos.ticket;
 
 import domain.dtos.luggage.BasicLuggageDTO;
 import domain.dtos.luggage.ExtraLuggageDTO;
-import domain.dtos.seat.SeatDTO;
-import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoDocumento;
-import domain.models.luggage.BasicLuggage;
-import domain.models.luggage.ExtraLuggage;
-import domain.models.seat.Seat;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;

@@ -4,8 +4,8 @@ import infra.repository.airport.AirportRepository;
 import infra.repository.airport.IAirportRepository;
 import infra.repository.booking.BookingRepository;
 import infra.repository.booking.IBookingRepository;
-import infra.repository.buyPackage.BuyPackageRepository;
-import infra.repository.buyPackage.IBuyPackageRepository;
+import infra.repository.buypackage.BuyPackageRepository;
+import infra.repository.buypackage.IBuyPackageRepository;
 import infra.repository.category.CategoryRepository;
 import infra.repository.category.ICategoryRepository;
 import infra.repository.city.CityRepository;
@@ -98,14 +98,14 @@ public class RepositoryFactory {
         return buyPackageRepository;
     }
     public static IBookingRepository getBookingRepository(){
-        if(bookingRepository == null){
+        if (bookingRepository == null) {
             bookingRepository = new BookingRepository();
         }
         return bookingRepository;
     }
 
     public static IAirportRepository getAirportRepository(){
-        if(airportRepository == null){
+        if (airportRepository == null) {
             airportRepository = new AirportRepository();
         }
         return airportRepository;

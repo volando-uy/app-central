@@ -1,14 +1,8 @@
 package domain.services.user;
 
-import app.DBConnection;
-import domain.dtos.flightRoute.FlightRouteDTO;
 import domain.dtos.user.*;
 import domain.models.enums.EnumTipoDocumento;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.user.Airline;
-import domain.models.user.Customer;
 import domain.models.user.mapper.UserMapper;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -58,11 +52,11 @@ class UserServiceTest {
 //                "nick2", "Pama", "pama@mail.com", "Pérez", "Argentina",
 //                LocalDate.of(1985, 5, 5), "87654321", EnumTipoDocumento.PASAPORTE
 //        );
-//        userService.registerCustomer(dto);
+//        userService.registercustomer(dto);
 //
 //        // WHEN + THEN
 //        UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
-//            userService.registerCustomer(dto);
+//            userService.registercustomer(dto);
 //        });
 //        assertEquals(String.format(ErrorMessages.ERR_USER_EXISTS, dto.getNickname()), ex.getMessage());
     }
@@ -73,7 +67,7 @@ class UserServiceTest {
 //        AirlineDTO dto = new AirlineDTO("air123", "FlyHigh", "fly@mail.com", "Líder regional", "www.flyhigh.com");
 
         // WHEN
-//        BaseAirlineDTO result = userService.registerAirline(dto);
+//        BaseAirlineDTO result = userService.registerairline(dto);
 //
 //        // THEN
 //        assertNotNull(result);
@@ -155,10 +149,10 @@ class UserServiceTest {
 //                "cliente1", "Pedro Actualizado", "pedro@mail.com", "García", "Argentina",
 //                LocalDate.of(1982, 2, 2), "99887766", EnumTipoDocumento.PASAPORTE
 //        );
-//        userService.registerCustomer(original);
+//        userService.registercustomer(original);
 
 //        // WHEN
-//        BaseCustomerDTO customerResult = (BaseCustomerDTO) userService.updateUser("cliente1", updated, null);
+//        BaseCustomerDTO customerResult = (BaseCustomerDTO) userService.updateuser("cliente1", updated, null);
 //
 //        // THEN
 //        assertEquals("Pedro Actualizado", customerResult.getName());
@@ -171,10 +165,10 @@ class UserServiceTest {
         // GIVEN
 //        AirlineDTO original = new AirlineDTO("airline1", "Airline One", "air@gmail.com", "Desc123456789", "www.original.com");
 //        AirlineDTO updated = new AirlineDTO("airline1", "Airline One Updated", "air@gmail.com", "New Desc123456789", "www.updated.com");
-//        userService.registerAirline(original);
+//        userService.registerairline(original);
 
         // WHEN
-//        UserDTO result = userService.updateUser("airline1", updated, null);
+//        UserDTO result = userService.updateuser("airline1", updated, null);
 //
 //        // THEN
 //        assertNotNull(result);
@@ -191,7 +185,7 @@ class UserServiceTest {
 //
 //        // WHEN + THEN
 //        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-//            userService.updateUser("notFound", updatedDTO, null);
+//            userService.updateuser("notFound", updatedDTO, null);
 //        });
 //
 //        assertTrue(String.format(ErrorMessages.ERR_USER_NOT_FOUND, "notFound").contains("notFound"));
@@ -200,8 +194,8 @@ class UserServiceTest {
     @Test
     void getAllAirlines_shouldReturnOnlyAirlines() {
         // GIVEN
-//        userService.registerAirline(new AirlineDTO("air1", "Air1", "a1@mail.com", "desc123456", "www.air1.com"));
-//        userService.registerAirline(new AirlineDTO("air2", "Air2", "a2@mail.com", "desc234567", "www.air2.com"));
+//        userService.registerairline(new AirlineDTO("air1", "Air1", "a1@mail.com", "desc123456", "www.air1.com"));
+//        userService.registerairline(new AirlineDTO("air2", "Air2", "a2@mail.com", "desc234567", "www.air2.com"));
 //
 //        // WHEN
 //        List<AirlineDTO> result = userService.getAllAirlinesDetails(false);
@@ -215,7 +209,7 @@ class UserServiceTest {
     void getAirlineByNickname_shouldReturnEntity() {
         // GIVEN
 //        AirlineDTO dto = new AirlineDTO("vuela", "Vuela", "vuela@mail.com", "Super Airline", "web.com");
-//        userService.registerAirline(dto);
+//        userService.registerairline(dto);
 //
 //        // WHEN
 //        Airline result = userService.getAirlineByNickname("vuela",false);
@@ -229,7 +223,7 @@ class UserServiceTest {
     void getAirlineDetailsByNickname_shouldReturnDTO() {
         // GIVEN
 //        AirlineDTO dto = new AirlineDTO("express", "Express", "express@mail.com", "Compañía aérea rápida", "express.com");
-//        userService.registerAirline(dto);
+//        userService.registerairline(dto);
 //
 //        // WHEN
 //        AirlineDTO result = userService.getAirlineDetailsByNickname("express",false);
@@ -245,7 +239,7 @@ class UserServiceTest {
     @Test
     void getUserByNickname_shouldBeCaseInsensitive() {
         // GIVEN
-//        userService.registerCustomer(new CustomerDTO(
+//        userService.registercustomer(new CustomerDTO(
 //                "TeStNiCk", "Nombre", "mail@test.com", "Apellido", "Pais",
 //                LocalDate.of(1990, 1, 1), "12345678", EnumTipoDocumento.CI));
 //
@@ -269,11 +263,11 @@ class UserServiceTest {
 //                LocalDate.of(1990, 1, 1), "87654321", EnumTipoDocumento.CI
 //        );
 //
-//        userService.registerCustomer(first);
+//        userService.registercustomer(first);
 //
 //        // WHEN + THEN
 //        UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
-//            userService.registerCustomer(second);
+//            userService.registercustomer(second);
 //        });
 //
 //        assertEquals(String.format(ErrorMessages.ERR_USER_EXISTS, second.getNickname()), ex.getMessage());
@@ -289,7 +283,7 @@ class UserServiceTest {
 //
 //        // WHEN + THEN
 //        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-//            userService.registerCustomer(invalid);
+//            userService.registercustomer(invalid);
 //        });
 //
 //        assertTrue(ex.getMessage().contains("nickname"));

@@ -5,13 +5,11 @@ import domain.dtos.category.CategoryDTO;
 import domain.models.category.Category;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
-import infra.repository.category.CategoryRepository;
 import infra.repository.category.ICategoryRepository;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 import shared.utils.ValidatorUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +43,7 @@ public class CategoryService implements ICategoryService {
     public CategoryDTO getCategoryDetailsByName(String categoryName) {
         // Checkeamos que la ciudad exista
         Category category = categoryRepository.getCategoryByName(categoryName);
-        if(category == null) {
+        if (category == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_CATEGORY_NOT_FOUND, categoryName));
         }
 

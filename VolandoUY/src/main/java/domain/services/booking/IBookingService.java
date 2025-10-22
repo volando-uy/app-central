@@ -1,12 +1,10 @@
 package domain.services.booking;
 
-import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.bookflight.BaseBookFlightDTO;
+import domain.dtos.bookflight.BookFlightDTO;
 import domain.dtos.luggage.LuggageDTO;
 import domain.dtos.ticket.BaseTicketDTO;
-import domain.models.bookflight.BookFlight;
 import domain.services.flight.IFlightService;
-import domain.services.flightRoute.IFlightRouteService;
 import domain.services.seat.ISeatService;
 import domain.services.ticket.ITicketService;
 import domain.services.user.IUserService;

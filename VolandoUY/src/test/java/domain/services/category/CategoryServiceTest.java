@@ -22,7 +22,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN valid CategoryDTO WHEN createCategory is called THEN category is created")
+    @DisplayName("GIVEN valid CategoryDTO WHEN createcategory is called THEN category is created")
     void createCategory_shouldAddCategory() {
         // GIVEN una categoría válida
         CategoryDTO dto = new CategoryDTO("Turismo");
@@ -36,7 +36,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("GIVEN duplicate category name WHEN createCategory is called THEN throw exception")
+    @DisplayName("GIVEN duplicate category name WHEN createcategory is called THEN throw exception")
     void createCategory_shouldNotAllowDuplicates() {
         // GIVEN una categoría ya creada
         categoryService.createCategory(new CategoryDTO("Negocios"));

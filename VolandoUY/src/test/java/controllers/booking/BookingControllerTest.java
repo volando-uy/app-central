@@ -1,9 +1,7 @@
 package controllers.booking;
 
-import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
-import domain.dtos.luggage.LuggageDTO;
-import domain.dtos.ticket.BaseTicketDTO;
+import domain.dtos.bookflight.BaseBookFlightDTO;
+import domain.dtos.bookflight.BookFlightDTO;
 import domain.models.enums.EnumTipoAsiento;
 import domain.services.booking.BookingService;
 import domain.services.booking.IBookingService;
@@ -14,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

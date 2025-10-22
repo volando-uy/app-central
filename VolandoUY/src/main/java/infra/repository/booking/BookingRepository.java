@@ -1,7 +1,6 @@
 package infra.repository.booking;
 
 import app.DBConnection;
-import domain.dtos.bookFlight.BookFlightDTO;
 import domain.models.bookflight.BookFlight;
 import domain.models.luggage.BasicLuggage;
 import domain.models.luggage.ExtraLuggage;
@@ -10,7 +9,6 @@ import domain.models.ticket.Ticket;
 import domain.models.user.Customer;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookingRepository extends AbstractBookingRepository implements IBookingRepository {
@@ -124,7 +122,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
 //            // descomenta esta versión:
 //        /*
 //        return em.createQuery(
-//                "SELECT new domain.dtos.bookFlight.BookFlightDTO(" +
+//                "SELECT new domain.dtos.bookflight.BookFlightDTO(" +
 //                "  bf.id, bf.totalPrice, bf.created_at" +
 //                ") " +
 //                "FROM BookFlight bf " +

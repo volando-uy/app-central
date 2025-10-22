@@ -1,6 +1,5 @@
 package domain.dtos.ticket;
 
-import domain.models.enums.EnumTipoAsiento;
 import domain.models.enums.EnumTipoDocumento;
 import lombok.*;
 

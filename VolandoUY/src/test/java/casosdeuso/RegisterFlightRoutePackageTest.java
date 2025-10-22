@@ -1,8 +1,7 @@
 package casosdeuso;
 
-import controllers.flightRoutePackage.IFlightRoutePackageController;
-import domain.dtos.flightRoutePackage.BaseFlightRoutePackageDTO;
-import domain.dtos.flightRoutePackage.FlightRoutePackageDTO;
+import controllers.flightroutepackage.IFlightRoutePackageController;
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
 import domain.models.enums.EnumTipoAsiento;
 import factory.ControllerFactory;
 import org.junit.jupiter.api.BeforeEach;

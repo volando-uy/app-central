@@ -1,7 +1,7 @@
 package domain.models.buypackage;
 
 import domain.models.bookflight.BookFlight;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import domain.models.user.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

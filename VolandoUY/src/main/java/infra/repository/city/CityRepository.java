@@ -1,7 +1,6 @@
 package infra.repository.city;
 
 import app.DBConnection;
-import domain.dtos.city.BaseCityDTO;
 import domain.models.city.City;
 import jakarta.persistence.EntityManager;
 

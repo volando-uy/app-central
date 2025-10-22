@@ -1,6 +1,5 @@
 package domain.models.seat;
 
-import domain.models.bookflight.BookFlight;
 import domain.models.enums.EnumTipoAsiento;
 import domain.models.flight.Flight;
 import domain.models.ticket.Ticket;

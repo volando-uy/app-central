@@ -6,7 +6,6 @@ import domain.models.city.City;
 import jakarta.persistence.EntityManager;
 import shared.constants.ErrorMessages;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AirportRepository extends AirportAbstractRepository implements IAirportRepository {
@@ -16,7 +15,7 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
 
     @Override
     public Airport getAirportByCode(String code) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             return em.createQuery("SELECT a FROM Airport a WHERE LOWER(a.code)=:code", Airport.class)
                     .setParameter("code", code.toLowerCase())
                     .getResultStream()
@@ -44,7 +43,7 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
 
     @Override
     public boolean existsAirportByCode(String code) {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             Long count = em.createQuery("SELECT COUNT(a) FROM Airport a WHERE LOWER(a.code)=:code", Long.class)
                     .setParameter("code", code.toLowerCase())
                     .getSingleResult();
@@ -75,7 +74,7 @@ public class AirportRepository extends AirportAbstractRepository implements IAir
 
     @Override
     public List<Airport> getAllFullAirports() {
-        try(EntityManager em= DBConnection.getEntityManager()){
+        try (EntityManager em= DBConnection.getEntityManager()) {
             List<Airport> airports = em.createQuery("SELECT a FROM Airport a", Airport.class)
                     .getResultList();
 

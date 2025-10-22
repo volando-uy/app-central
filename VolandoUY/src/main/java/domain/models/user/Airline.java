@@ -1,10 +1,9 @@
 package domain.models.user;
 
-import domain.dtos.user.AirlineDTO;
 import domain.dtos.user.BaseAirlineDTO;
 import domain.dtos.user.UserDTO;
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -14,7 +13,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import shared.constants.ErrorMessages;
-import shared.constants.Images;
 import shared.constants.RegexPatterns;
 
 import java.util.ArrayList;
