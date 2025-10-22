@@ -31,7 +31,7 @@ public class TestUtils {
             tx.commit(); // ✅ solo si todo fue bien
         } catch (Exception e) {
             if (tx.isActive()) {
-                tx.rollback(); // ❌ si falló, deshacemos
+                tx.rollback(); // si falló, deshacemos
             }
             throw new RuntimeException("Error al limpiar la base de datos", e);
         } finally {

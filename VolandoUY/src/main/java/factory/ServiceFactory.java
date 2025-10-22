@@ -26,6 +26,9 @@ import domain.services.ticket.ITicketService;
 import domain.services.ticket.TicketService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import shared.utils.CustomModelMapper;
+
+import javax.naming.ldap.Control;
 
 public class ServiceFactory {
     private static IUserService userService;
@@ -142,7 +145,8 @@ public class ServiceFactory {
     // ############ TICKET SERVICE ############
     public static ITicketService getTicketService() {
         if (ticketService == null) {
-            ticketService = new TicketService();
+            ticketService = new TicketService(ControllerFactory.getCustomModelMapper());
+            ticketService.setTicketRepository(RepositoryFactory.getTicketRepository());
         }
         return ticketService;
     }

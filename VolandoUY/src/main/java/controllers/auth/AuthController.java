@@ -1,17 +1,15 @@
 package controllers.auth;
 
-import controllers.user.IUserController;
 import domain.dtos.user.LoginResponseDTO;
-import domain.dtos.user.UserDTO;
 import domain.services.auth.IAuthService;
-import factory.ControllerFactory;
-import factory.ServiceFactory;
-import shared.utils.JWTUtils;
-import shared.utils.PasswordManager;
 
 public class AuthController implements IAuthController {
 
-    private IAuthService authService= ServiceFactory.getAuthService();
+    private final IAuthService authService;
+
+    public AuthController(IAuthService authService) {
+        this.authService = authService;
+    }
 
     @Override
     public LoginResponseDTO login(String nickname, String password) {
