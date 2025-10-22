@@ -27,4 +27,7 @@ public interface IAuthService {
      * @return nickname del usuario
      */
     String getNicknameFromToken(String token);
+
+    boolean isAirline(String token);
+    boolean isCustomer(String token);
 }
