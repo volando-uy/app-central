@@ -1,7 +1,3 @@
-/*
- * Created by JFormDesigner on Mon Aug 18 23:06:29 UYT 2025
- */
-
 package gui;
 
 import java.awt.*;

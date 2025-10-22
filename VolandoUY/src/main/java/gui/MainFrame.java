@@ -48,7 +48,6 @@ public class MainFrame extends JFrame {
     private JPanel otherPanel;
     private JPanel reservationPanel;
 
-    private SideBar sideBar;
     private JPanel mainPanel;
 
     // 0: Default, 1: OtherPanel, 2: FlightPanel, 3: FlightRoutePanel, 4: FlightRoutePackagePanel, 5: ReservationsPanel, 6: OtherPanel
@@ -102,7 +101,7 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(); // Default panel to initialize
         mainPanelType = 0;
 
-        sideBar = createSideBar();
+        SideBar sideBar = createSideBar();
 
         // I want to use a BorderLayout to place the sidebar on the left and the main content on the right
         setLayout(new BorderLayout());
