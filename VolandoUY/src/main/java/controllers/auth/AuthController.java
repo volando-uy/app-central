@@ -22,4 +22,14 @@ public class AuthController implements IAuthController {
     public String getNicknameFromToken(String token) {
         return authService.getNicknameFromToken(token);
     }
+
+    @Override
+    public boolean isAirline(String token) {
+        return authService.isAirline(token);
+    }
+
+    @Override
+    public boolean isCustomer(String token) {
+        return authService.isCustomer(token);
+    }
 }
