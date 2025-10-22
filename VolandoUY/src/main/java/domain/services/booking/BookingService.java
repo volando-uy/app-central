@@ -41,13 +41,12 @@ public class BookingService implements IBookingService {
     private ITicketService ticketService;
     @Setter
     private IUserService userService;
-
-    private final IBookingRepository bookingRepository;
+    @Setter
+    private IBookingRepository bookingRepository;
 
     private CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     public BookingService() {
-        this.bookingRepository = RepositoryFactory.getBookingRepository();
     }
 
     @Override
@@ -56,13 +55,17 @@ public class BookingService implements IBookingService {
                                            String userNickname,
                                            String flightName) {
         BookFlight bookFlight = customModelMapper.map(bookingDTO, BookFlight.class);
+        bookFlight.setTotalPrice(0.0);
         bookFlight.setTickets(new ArrayList<>());
         ValidatorUtil.validate(bookFlight);
 
         if (tickets == null || tickets.isEmpty())
             throw new UnsupportedOperationException("No se pueden crear reservas sin tickets");
 
+        // Tira throw si no existe
         Flight flight = flightService.getFlightByName(flightName, true);
+
+        // Tira throw si no existe
         Customer customer = userService.getCustomerByNickname(userNickname,true);
 
         FlightRoute flightRoute = flight.getFlightRoute();
@@ -78,15 +81,12 @@ public class BookingService implements IBookingService {
             Ticket t = ticketService.createTicketWithoutPersistence(ticketDTO);
 
             List<LuggageDTO> lugDTOs = tickets.get(ticketDTO);
-            boolean alreadyPassedBasic = false;
             if (lugDTOs != null) {
                 for (LuggageDTO ldto : lugDTOs) {
                     t.addLuggage(mapToLuggageEntity(ldto));
 
-                    // Si hay más de un equipaje, significa que hay extra
-                    if (!alreadyPassedBasic)
+                    if (ldto instanceof ExtraLuggageDTO)
                         bookFlight.setTotalPrice(bookingDTO.getTotalPrice() + flightRoute.getPriceExtraUnitBaggage());
-                    alreadyPassedBasic = true;
                 }
             }
 

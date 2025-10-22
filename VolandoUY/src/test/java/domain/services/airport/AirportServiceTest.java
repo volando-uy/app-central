@@ -99,4 +99,39 @@ class AirportServiceTest {
 
         assertTrue(airportService.airportExists("MVD"));
     }
+
+    @Test
+    @DisplayName("getAllAirportsDetails debería retornar lista correcta")
+    void getAllAirportsDetails_shouldReturnCorrectList() {
+        BaseAirportDTO dto1 = new BaseAirportDTO("Carrasco", "MVD");
+        BaseAirportDTO dto2 = new BaseAirportDTO("Laguna del Sauce", "MVN");
+
+        airportService.createAirport(dto1, "Montevideo");
+        airportService.createAirport(dto2, "Montevideo");
+
+        // Without full
+        var airports = airportService.getAllAirportsDetails(false);
+
+        assertEquals(2, airports.size());
+        ArrayList<String> codes = new ArrayList<>();
+        for (var a : airports) {
+            codes.add(a.getCode());
+        }
+        assertTrue(codes.contains("MVD"));
+        assertTrue(codes.contains("MVN"));
+
+        // With full
+        airports = airportService.getAllAirportsDetails(true);
+
+        assertEquals(2, airports.size());
+        codes = new ArrayList<>();
+        for (var a : airports) {
+            codes.add(a.getCode());
+        }
+        assertTrue(codes.contains("MVD"));
+        assertTrue(codes.contains("MVN"));
+
+    }
+
+
 }

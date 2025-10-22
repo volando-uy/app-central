@@ -12,6 +12,7 @@ import domain.services.flightRoutePackage.IFlightRoutePackageService;
 import domain.services.seat.ISeatService;
 import domain.services.ticket.ITicketService;
 import domain.services.user.IUserService;
+import infra.repository.buyPackage.IBuyPackageRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ public interface IBuyPackageService {
 
     void setUserService(IUserService userService);
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
+
+    void setBuyPackageRepository(IBuyPackageRepository buyPackageRepository);
 
     BuyPackageDTO getBuyPackageDetailsById(Long id, boolean full);
 }

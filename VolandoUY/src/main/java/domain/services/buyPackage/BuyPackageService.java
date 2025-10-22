@@ -43,7 +43,8 @@ public class BuyPackageService implements IBuyPackageService {
     @Setter
     private IFlightRoutePackageService flightRoutePackageService;
 
-    private final IBuyPackageRepository buyPackageRepository;
+    @Setter
+    private IBuyPackageRepository buyPackageRepository;
 
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 

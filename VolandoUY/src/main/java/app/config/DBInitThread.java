@@ -52,7 +52,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-            seed();
+            //seed();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -101,7 +101,6 @@ public class DBInitThread extends Thread {
         List<BaseFlightRoutePackageDTO> flightRoutePackages = seed_generateFlightRoutePackages(flightRoutes);
         System.out.println("Flight Route Packages: " + flightRoutePackages);
 
-        // TODO: Agregar seed para reservas de vuelos y compras de paquetes
         List<BaseBookFlightDTO> bookFlights = seed_generateBookFlights(customers, flights);
         System.out.println("Book Flights: " + bookFlights);
 
