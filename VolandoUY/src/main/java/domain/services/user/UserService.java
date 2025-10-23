@@ -115,7 +115,7 @@ public class UserService implements IUserService {
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             airline.setImage(uploadedImagePath);
         } else {
-            airline.setImage(Images.USER_DEFAULT);
+            airline.setImage(Images.IMAGES_PATH + Images.USER_DEFAULT);
         }
 
         // Hash the password

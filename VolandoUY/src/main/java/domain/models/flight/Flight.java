@@ -1,6 +1,5 @@
 package domain.models.flight;
 
-import domain.models.airport.Airport;
 import domain.models.flightroute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
