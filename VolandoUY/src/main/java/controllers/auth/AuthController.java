@@ -6,7 +6,14 @@ import factory.ServiceFactory;
 
 public class AuthController implements IAuthController {
 
-    private IAuthService authService= ServiceFactory.getAuthService();
+    private IAuthService authService;
+    public AuthController() {
+        this.authService = ServiceFactory.getAuthService();
+    }
+
+    public AuthController(IAuthService authService) {
+        this.authService = authService;
+    }
 
     @Override
     public LoginResponseDTO login(String nickname, String password) {

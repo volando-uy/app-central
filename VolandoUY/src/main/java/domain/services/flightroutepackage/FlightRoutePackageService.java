@@ -24,11 +24,19 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
     @Setter
     private IFlightRouteService flightRouteService;
 
-    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+    private final CustomModelMapper customModelMapper;
 
     public FlightRoutePackageService() {
         flightRoutePackageRepository = RepositoryFactory.getFlightRoutePackageRepository();
+        customModelMapper = ControllerFactory.getCustomModelMapper();
     }
+
+    // Constructor solo para testing
+    public FlightRoutePackageService(IFlightRoutePackageRepository repo, CustomModelMapper mapper) {
+        this.flightRoutePackageRepository = repo;
+        this.customModelMapper = mapper;
+    }
+
 
     @Override
     public BaseFlightRoutePackageDTO createFlightRoutePackage(BaseFlightRoutePackageDTO baseFlightRoutePackageDTO) {

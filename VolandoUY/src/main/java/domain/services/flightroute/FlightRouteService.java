@@ -26,7 +26,7 @@ import java.util.List;
 
 public class FlightRouteService implements IFlightRouteService {
 
-    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+    private final CustomModelMapper customModelMapper;
 
     private final IFlightRouteRepository flightRouteRepository;
 
@@ -41,6 +41,15 @@ public class FlightRouteService implements IFlightRouteService {
 
     public FlightRouteService() {
         this.flightRouteRepository = RepositoryFactory.getFlightRouteRepository();
+        this.customModelMapper = ControllerFactory.getCustomModelMapper();
+    }
+
+    public FlightRouteService(
+            IFlightRouteRepository flightRouteRepository,
+            CustomModelMapper customModelMapper
+    ) {
+        this.flightRouteRepository = flightRouteRepository;
+        this.customModelMapper = customModelMapper;
     }
 
 

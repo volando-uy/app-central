@@ -11,12 +11,18 @@ import shared.utils.CustomModelMapper;
 
 
 public class TicketService implements ITicketService {
-    private final ITicketRepository ticketRepository;
+    private ITicketRepository ticketRepository;
 
-    private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+    private CustomModelMapper customModelMapper;
 
     public TicketService() {
+        this.customModelMapper = ControllerFactory.getCustomModelMapper();
         this.ticketRepository = RepositoryFactory.getTicketRepository();
+    }
+
+    TicketService(CustomModelMapper customModelMapper, ITicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+        this.customModelMapper = customModelMapper;
     }
 
     @Override
@@ -39,5 +45,6 @@ public class TicketService implements ITicketService {
 
         return full ? customModelMapper.mapFullTicket(ticket) : customModelMapper.map(ticket, TicketDTO.class);
     }
+
 
 }

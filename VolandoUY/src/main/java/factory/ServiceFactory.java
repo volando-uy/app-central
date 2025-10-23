@@ -24,6 +24,7 @@ import domain.services.ticket.ITicketService;
 import domain.services.ticket.TicketService;
 import domain.services.user.IUserService;
 import domain.services.user.UserService;
+import shared.utils.CustomModelMapper;
 
 public class ServiceFactory {
     private static IUserService userService;
@@ -131,7 +132,7 @@ public class ServiceFactory {
     // ############ SEAT SERVICE ############
     public static ISeatService getSeatService() {
         if (seatService == null) {
-            seatService = new SeatService();
+            seatService = new SeatService(RepositoryFactory.getSeatRepository(), ControllerFactory.getCustomModelMapper());
             seatService.setTicketService(getTicketService());
         }
         return seatService;

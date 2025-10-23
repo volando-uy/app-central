@@ -1,229 +1,257 @@
 package domain.services.flightroutepackage;
 
-import app.DBConnection;
-import domain.dtos.airport.BaseAirportDTO;
-import domain.dtos.flightroute.BaseFlightRouteDTO;
-import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
+import org.mockito.MockedStatic;
 import domain.dtos.flightroutepackage.FlightRoutePackageDTO;
-import domain.models.category.Category;
-import domain.models.city.City;
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
 import domain.models.enums.EnumTipoAsiento;
-import domain.models.user.Airline;
-import domain.services.airport.IAirportService;
-import domain.services.city.ICityService;
+import domain.models.flightroute.FlightRoute;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import domain.services.flightroute.IFlightRouteService;
-import factory.ServiceFactory;
-import jakarta.persistence.EntityManager;
+import infra.repository.flightroutepackage.IFlightRoutePackageRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import shared.constants.ErrorMessages;
-import utils.TestUtils;
+import shared.utils.CustomModelMapper;
+import shared.utils.ValidatorUtil;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class FlightRoutePackageServiceTest {
 
-    private IFlightRoutePackageService packageService = ServiceFactory.getFlightRoutePackageService();
-    private IFlightRouteService flightRouteService = ServiceFactory.getFlightRouteService();
-    private ICityService cityService = ServiceFactory.getCityService();
-    private IAirportService airportService = ServiceFactory.getAirportService();
+    private IFlightRoutePackageRepository mockRepo;
+    private IFlightRouteService mockFlightRouteService;
+    private CustomModelMapper mockMapper;
+    private FlightRoutePackageService service;
 
     @BeforeEach
     void setUp() {
-        TestUtils.cleanDB();
+        mockRepo = mock(IFlightRoutePackageRepository.class);
+        mockFlightRouteService = mock(IFlightRouteService.class);
+        mockMapper = mock(CustomModelMapper.class);
 
-        // Semilla mínima
-        try (EntityManager em = DBConnection.getEntityManager()) {
-            em.getTransaction().begin();
+        service = new FlightRoutePackageService(mockRepo, mockMapper);
+        service.setFlightRouteService(mockFlightRouteService);
+    }
 
-            Airline airline = new Airline();
-            airline.setNickname("air123");
-            airline.setName("Test Airline");
-            airline.setMail("test@mail.com");
-            airline.setPassword("password");
-            airline.setDescription("Aerolínea test");
-            airline.setWeb("www.testair.com");
-            em.persist(airline);
 
-            City mvd = new City("Montevideo", "UY", -34.9011, -56.1645);
-            City bue = new City("Buenos Aires", "AR", -34.6037, -58.3816);
-            em.persist(mvd);
-            em.persist(bue);
+    @Test
+    void createFlightRoutePackage_shouldCreateAndReturnDTO() {
+        BaseFlightRoutePackageDTO inputDTO = new BaseFlightRoutePackageDTO(
+                "PackX", "descripcion123", 10, 5.0, LocalDate.now(), EnumTipoAsiento.TURISTA, 100.0
+        );
 
-            Category promo = new Category();
-            promo.setName("Promo");
-            em.persist(promo);
+        FlightRoutePackage domain = new FlightRoutePackage();
+        domain.setName("PackX");
+        domain.setDescription("descripcion123");
+        domain.setSeatType(EnumTipoAsiento.TURISTA);
+        domain.setCreationDate(LocalDate.now());
+        domain.setTotalPrice(100.0);
+        domain.setDiscount(5.0);
+        domain.setValidityPeriodDays(10);
 
-            em.getTransaction().commit();
+        when(mockMapper.map(inputDTO, FlightRoutePackage.class)).thenReturn(domain);
+        when(mockRepo.existsByName("PackX")).thenReturn(false);
+        when(mockMapper.map(domain, BaseFlightRoutePackageDTO.class)).thenReturn(inputDTO);
+
+        try (MockedStatic<ValidatorUtil> validatorStatic = mockStatic(ValidatorUtil.class)) {
+            // No hace nada (salta validación real)
+            validatorStatic.when(() -> ValidatorUtil.validate(any())).thenAnswer(inv -> null);
+
+            BaseFlightRoutePackageDTO result = service.createFlightRoutePackage(inputDTO);
+
+            assertNotNull(result);
+            assertEquals("PackX", result.getName());
+            verify(mockRepo).save(domain);
+            validatorStatic.verify(() -> ValidatorUtil.validate(domain));
         }
-
-        airportService.createAirport(
-                new BaseAirportDTO("Aero Montevideo", "MON"),
-                "Montevideo"
-        );
-        airportService.createAirport(
-                new BaseAirportDTO("Aero Buenos Aires", "BAA"),
-                "Buenos Aires"
-        );
-
-        // Crear la ruta correctamente con BaseFlightRouteDTO
-        BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
-        dto.setName("Ruta A");
-        dto.setDescription("Ruta directa");
-        dto.setCreatedAt(LocalDate.now());
-        dto.setPriceTouristClass(100.0);
-        dto.setPriceBusinessClass(200.0);
-        dto.setPriceExtraUnitBaggage(20.0);
-
-
-        flightRouteService.createFlightRoute(
-                dto,
-                "MON",
-                "BAA",
-                "air123",
-                List.of("Promo"),
-                null
-        );
-    }
-
-
-    @Test
-    @DisplayName("GIVEN valid DTO WHEN createflightroutepackage THEN package is created")
-    void createFlightRoutePackage_shouldCreatePackage() {
-        // GIVEN
-        FlightRoutePackageDTO dto = new FlightRoutePackageDTO(
-                "Pack A", "Descripción del paquete", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        );
-
-        // WHEN
-        BaseFlightRoutePackageDTO created = packageService.createFlightRoutePackage(dto);
-
-        // THEN
-        assertEquals("Pack A", created.getName());
-        assertTrue(packageService.flightRoutePackageExists("Pack A"));
     }
 
     @Test
-    @DisplayName("GIVEN duplicate name WHEN createflightroutepackage THEN throw exception")
-    void createFlightRoutePackage_shouldNotAllowDuplicates() {
-        // GIVEN un paquete ya creado
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack B", "Otro paquete", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
+    void createFlightRoutePackage_shouldFailIfAlreadyExists() {
+        BaseFlightRoutePackageDTO dto = new BaseFlightRoutePackageDTO();
+        dto.setName("Duplicado");
 
-        // WHEN se intenta crear otro con el mismo nombre
+        FlightRoutePackage domain = new FlightRoutePackage();
+        domain.setName("Duplicado");
+
+        when(mockMapper.map(dto, FlightRoutePackage.class)).thenReturn(domain);
+        when(mockRepo.existsByName("Duplicado")).thenReturn(true);
+
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                    "Pack B", "Duplicado", 5, 10.0,
-                    LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-            ));
+            service.createFlightRoutePackage(dto);
         });
 
-        // THEN
-        assertEquals(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, "Pack B"), ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_PACKAGE_ALREADY_EXISTS, "Duplicado"), ex.getMessage());
     }
 
     @Test
-    @DisplayName("GIVEN existing package WHEN getFlightRoutePackageByName THEN return correct DTO")
-    void getFlightRoutePackageByName_shouldReturnCorrectDTO() {
-        // GIVEN un paquete creado
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack C", "Descripción C", 7, 5.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
+    void getFlightRoutePackageDetailsByName_shouldReturnDTO() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("Pack1");
+        FlightRoutePackageDTO dto = new FlightRoutePackageDTO();
+        dto.setName("Pack1");
 
-        // WHEN se busca por nombre
-        var result = packageService.getFlightRoutePackageByName("Pack C", false);
+        when(mockRepo.findAll()).thenReturn(List.of(pack));
+        when(mockRepo.getFullFlightRoutePackageByName("Pack1")).thenReturn(pack);
+        when(mockMapper.mapFullFlightRoutePackage(pack)).thenReturn(dto);
 
-        // THEN
+        FlightRoutePackageDTO result = service.getFlightRoutePackageDetailsByName("Pack1", true);
+
         assertNotNull(result);
-        assertEquals("Pack C", result.getName());
+        assertEquals("Pack1", result.getName());
     }
 
     @Test
-    @DisplayName("GIVEN non-existing package WHEN getFlightRoutePackageByName THEN throw exception")
-    void getFlightRoutePackageByName_shouldThrowIfNotFound() {
-        // WHEN se busca uno inexistente
+    void getFlightRoutePackageDetailsByName_shouldThrowIfNotFound() {
+        when(mockRepo.getFlightRoutePackageByName("Unknown")).thenReturn(null);
+
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            packageService.getFlightRoutePackageByName("Inexistente", false);
+            service.getFlightRoutePackageDetailsByName("Unknown", false);
         });
 
-        // THEN
-        assertEquals("El paquete de ruta del vuelo con nombre Inexistente no fue encontrado", ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, "Unknown"), ex.getMessage());
     }
 
     @Test
-    @DisplayName("GIVEN packages exist WHEN getAllNotBoughtFlightRoutePackagesNames THEN return names")
-    void getAllNotBoughtFlightRoutePackagesNames_shouldReturnAllNames() {
-        // GIVEN varios paquetes creados
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack D", "DD", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
-
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack E", "EE", 5, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
-
-        // WHEN se piden los nombres
-        List<String> names = packageService.getAllNotBoughtFlightRoutePackagesNames();
-
-        // THEN
-        assertEquals(2, names.size());
-        assertTrue(names.contains("Pack D"));
-        assertTrue(names.contains("Pack E"));
+    void flightRoutePackageExists_shouldReturnCorrectValue() {
+        when(mockRepo.existsByName("PackX")).thenReturn(true);
+        assertTrue(service.flightRoutePackageExists("PackX"));
     }
 
     @Test
-    @DisplayName("GIVEN package and valid route WHEN addflightroutetopackage THEN route is added")
-    void addFlightRouteToPackage_shouldAddRoute() {
-        // GIVEN un paquete creado
+    void getAllNotBoughtFlightRoutePackagesNames_shouldReturnNames() {
+        FlightRoutePackage p1 = new FlightRoutePackage();
+        p1.setName("Uno");
+        FlightRoutePackage p2 = new FlightRoutePackage();
+        p2.setName("Dos");
 
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack F", "Paquete FF", 10, 15.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
+        when(mockRepo.findAll()).thenReturn(List.of(p1, p2));
 
-        // WHEN se agrega una ruta válida
-        assertDoesNotThrow(() -> {
-            packageService.addFlightRouteToPackage("Pack F", "Ruta A", 2);
-        });
+        List<String> result = service.getAllNotBoughtFlightRoutePackagesNames();
+
+        assertEquals(List.of("Uno", "Dos"), result);
     }
 
     @Test
-    @DisplayName("GIVEN invalid quantity WHEN addflightroutetopackage THEN throw exception")
-    void addFlightRouteToPackage_shouldFailIfQuantityInvalid() {
-        // GIVEN paquete válido
-        packageService.createFlightRoutePackage(new FlightRoutePackageDTO(
-                "Pack G", "GG", 10, 10.0,
-                LocalDate.now(), EnumTipoAsiento.TURISTA, 500.0
-        ));
+    void addFlightRouteToPackage_shouldUpdatePriceAndSave() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("PackZ");
+        pack.setSeatType(EnumTipoAsiento.TURISTA);
+        pack.setDiscount(10.0);
+        pack.setTotalPrice(100.0);
 
-        // WHEN se pasa cantidad inválida
+        FlightRoute route = new FlightRoute();
+        route.setName("RutaZ");
+        route.setPriceTouristClass(200.0);
+        route.setPriceBusinessClass(300.0);
+
+        when(mockRepo.getFullFlightRoutePackageByName("PackZ")).thenReturn(pack);
+        when(mockFlightRouteService.getFlightRouteByName("RutaZ", false)).thenReturn(route);
+
+        service.addFlightRouteToPackage("PackZ", "RutaZ", 2);
+
+        // Espera que se actualice el precio dos veces
+        double expectedPrice = 100.0 + (200.0 * 0.9) * 2;
+        assertEquals(expectedPrice, pack.getTotalPrice());
+
+        verify(mockRepo, times(1)).addFlightRouteToPackage(route, pack);
+    }
+
+    @Test
+    void addFlightRouteToPackage_shouldFailIfInvalidQuantity() {
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            packageService.addFlightRouteToPackage("Pack G", "Ruta A", 0);
+            service.addFlightRouteToPackage("Pack", "Ruta", 0);
         });
 
-        // THEN
-        assertEquals(String.format(ErrorMessages.ERR_QUANTITY_MUST_BE_GREATER_THAN_ZERO), ex.getMessage());
+        assertEquals(ErrorMessages.ERR_QUANTITY_MUST_BE_GREATER_THAN_ZERO, ex.getMessage());
     }
 
     @Test
-    @DisplayName("GIVEN non-existing package WHEN addflightroutetopackage THEN throw exception")
     void addFlightRouteToPackage_shouldFailIfPackageNotFound() {
-        // WHEN se intenta agregar a un paquete inexistente
+        when(mockRepo.getFullFlightRoutePackageByName("PackX")).thenReturn(null);
+
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            packageService.addFlightRouteToPackage("Inexistente", "Ruta A", 1);
+            service.addFlightRouteToPackage("PackX", "RutaA", 1);
         });
 
-        // THEN
-        assertEquals("El paquete de ruta del vuelo con nombre Inexistente no fue encontrado", ex.getMessage());
+        assertEquals(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND, "PackX"), ex.getMessage());
+    }
+
+    @Test
+    void getAllFlightRoutePackages_shouldReturnAll() {
+        FlightRoutePackage p = new FlightRoutePackage();
+        when(mockRepo.findAll()).thenReturn(List.of(p));
+        List<FlightRoutePackage> result = service.getAllFlightRoutePackages();
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void getAllFlightRoutePackagesDetails_shouldMapAll() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("PackMapped");
+        FlightRoutePackageDTO dto = new FlightRoutePackageDTO();
+        dto.setName("PackMapped");
+
+        when(mockRepo.findAll()).thenReturn(List.of(pack));
+        when(mockMapper.mapFullFlightRoutePackage(pack)).thenReturn(dto);
+
+        List<FlightRoutePackageDTO> result = service.getAllFlightRoutePackagesDetails(true);
+
+        assertEquals(1, result.size());
+        assertEquals("PackMapped", result.get(0).getName());
+    }
+
+    @Test
+    void getFlightRoutePackageByName_shouldReturnCorrectly() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("PackX");
+
+        when(mockRepo.getFlightRoutePackageByName("PackX")).thenReturn(pack);
+
+        FlightRoutePackage result = service.getFlightRoutePackageByName("PackX", false);
+
+        assertNotNull(result);
+        assertEquals("PackX", result.getName());
+    }
+
+    @Test
+    void getFlightRoutePackageByName_fullTrue_shouldReturnCorrectly() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("PackFull");
+
+        when(mockRepo.getFlightRoutePackageFullByName("PackFull")).thenReturn(pack);
+
+        FlightRoutePackage result = service.getFlightRoutePackageByName("PackFull", true);
+
+        assertNotNull(result);
+        assertEquals("PackFull", result.getName());
+    }
+
+    @Test
+    void getAllFlightRoutePackagesDetailsWithFlightRoutes_shouldReturnMappedList() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        pack.setName("Paquete");
+
+        FlightRoutePackageDTO dto = new FlightRoutePackageDTO();
+        dto.setName("Paquete");
+
+        when(mockRepo.findAllFullWithFlightRoutes()).thenReturn(List.of(pack));
+        when(mockMapper.mapFullFlightRoutePackage(pack)).thenReturn(dto);
+
+        List<FlightRoutePackageDTO> result = service.getAllFlightRoutePackagesDetailsWithFlightRoutes(true);
+
+        assertEquals(1, result.size());
+        assertEquals("Paquete", result.get(0).getName());
+    }
+
+    @Test
+    void updateFlightRoutePackage_shouldDelegateToRepository() {
+        FlightRoutePackage pack = new FlightRoutePackage();
+        service._updateFlightRoutePackage(pack);
+        verify(mockRepo).update(pack);
     }
 }

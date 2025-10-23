@@ -1,11 +1,16 @@
 package factory;
 
 import controllers.airport.IAirportController;
+import controllers.auth.IAuthController;
+import controllers.booking.IBookingController;
+import controllers.buypackage.IBuyPackageController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
 import controllers.flightroute.IFlightRouteController;
 import controllers.flightroutepackage.IFlightRoutePackageController;
+import controllers.seat.ISeatController;
+import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
@@ -13,6 +18,7 @@ import domain.services.flightroute.IFlightRouteService;
 import domain.services.flightroutepackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -150,15 +156,61 @@ class ControllerFactoryTest {
         assertSame(controller1, controller2);
     }
 
-//    @Test
-//    void sharedModelMapper_shouldBeSameAcrossAllServices() {
-//        // GIVEN
-//        ModelMapper mapperFromUser = ControllerFactory.getUserService().getModelMapper();
-//        ModelMapper mapperFromFlight = ControllerFactory.getFlightController().getFlightService().getModelMapper();
-//        ModelMapper mapperFromCity = ControllerFactory.getCityService().getModelMapper();
-//
-//        // THEN
-//        assertSame(mapperFromUser, mapperFromFlight);
-//        assertSame(mapperFromUser, mapperFromCity);
-//    }
+
+    @Test
+    void getBookingController_shouldReturnSingletonInstance() {
+        IBookingController controller1 = ControllerFactory.getBookingController();
+        IBookingController controller2 = ControllerFactory.getBookingController();
+
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+
+    @Test
+    void getBuyPackageController_shouldReturnSingletonInstance() {
+        IBuyPackageController controller1 = ControllerFactory.getBuyPackageController();
+        IBuyPackageController controller2 = ControllerFactory.getBuyPackageController();
+
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+
+    @Test
+    void getTicketController_shouldReturnSingletonInstance() {
+        ITicketController controller1 = ControllerFactory.getTicketController();
+        ITicketController controller2 = ControllerFactory.getTicketController();
+
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+
+    @Test
+    void getSeatController_shouldReturnSingletonInstance() {
+        ISeatController controller1 = ControllerFactory.getSeatController();
+        ISeatController controller2 = ControllerFactory.getSeatController();
+
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+
+    @Test
+    void getAuthController_shouldReturnSingletonInstance() {
+        IAuthController controller1 = ControllerFactory.getAuthController();
+        IAuthController controller2 = ControllerFactory.getAuthController();
+
+        assertNotNull(controller1);
+        assertSame(controller1, controller2);
+    }
+    @Test
+    void sharedModelMapper_shouldBeSameAcrossAllServices() {
+        // GIVEN
+        ModelMapper mapperFromUser = ControllerFactory.getCustomModelMapper();
+        ModelMapper mapperFromFlight = ControllerFactory.getCustomModelMapper();
+        ModelMapper mapperFromCity = ControllerFactory.getCustomModelMapper();
+
+        // THEN
+        assertSame(mapperFromUser, mapperFromFlight);
+        assertSame(mapperFromUser, mapperFromCity);
+        assertSame(mapperFromFlight, mapperFromCity);
+    }
 }

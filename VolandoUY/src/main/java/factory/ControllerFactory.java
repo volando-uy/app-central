@@ -2,6 +2,7 @@ package factory;
 
 import controllers.airport.AirportController;
 import controllers.airport.IAirportController;
+import controllers.auth.AuthController;
 import controllers.auth.IAuthController;
 import controllers.booking.BookingController;
 import controllers.booking.IBookingController;
@@ -174,7 +175,7 @@ public class ControllerFactory {
 
     public static IAuthController getAuthController() {
         if (authController == null) {
-            authController = new controllers.auth.AuthController();
+            authController = new AuthController(ServiceFactory.getAuthService());
         }
         return authController;
     }

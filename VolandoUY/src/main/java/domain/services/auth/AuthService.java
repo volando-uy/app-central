@@ -8,7 +8,17 @@ import shared.utils.JWTUtils;
 import shared.utils.PasswordManager;
 
 public class AuthService implements IAuthService{
-    private final IUserController userController = ControllerFactory.getUserController();
+    private final IUserController userController;
+
+    // Constructor original
+    public AuthService() {
+        this.userController = ControllerFactory.getUserController();
+    }
+
+    // Constructor para test
+    public AuthService(IUserController userController) {
+        this.userController = userController;
+    }
 
     @Override
     public LoginResponseDTO login(String nickname, String password) {

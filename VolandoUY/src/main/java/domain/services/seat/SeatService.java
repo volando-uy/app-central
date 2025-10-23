@@ -24,10 +24,11 @@ public class SeatService implements ISeatService {
     @Setter
     private IFlightService flightService;
 
-    private CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
+    private CustomModelMapper customModelMapper;
 
-    public SeatService() {
-        this.seatRepository = RepositoryFactory.getSeatRepository();
+    public SeatService(ISeatRepository seatRepository, CustomModelMapper mapper) {
+        this.seatRepository = seatRepository;
+        this.customModelMapper = mapper;
     }
 
     @Override

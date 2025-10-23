@@ -31,6 +31,18 @@ public class JWTUtils {
                 .signWith(key)  // No se necesita especificar algoritmo con `jjwt` 0.13+
                 .compact();
     }
+    // Sobrecarga para tests
+    public static String generateToken(String subject, long customExpirationMillis) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + customExpirationMillis);
+
+        return Jwts.builder()
+                .subject(subject)
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(key)
+                .compact();
+    }
 
     // Extraer subject (por ejemplo, el userId o email)
     public static String getSubjectFromToken(String token) {
