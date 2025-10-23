@@ -76,11 +76,11 @@ public class UserService implements IUserService {
         ValidatorUtil.validate(customer);
 
         if (imageFile != null) {
-            String imagePath = Images.CUSTOMERS_PATH + customer.getNickname() + Images.FORMAT_DEFAULT;
+            String imagePath = ImageProcessor.getCreationPath("customer", customer.getNickname());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             customer.setImage(uploadedImagePath);
         } else {
-            customer.setImage(Images.USER_DEFAULT);
+            customer.setImage(Images.IMAGES_PATH + Images.USER_DEFAULT);
         }
 
         // Hash the password
@@ -111,7 +111,7 @@ public class UserService implements IUserService {
 
         // Subir la imagen si tiene
         if (imageFile != null) {
-            String imagePath = Images.AIRLINES_PATH + airline.getNickname() + Images.FORMAT_DEFAULT;
+            String imagePath = ImageProcessor.getCreationPath("airline", airline.getNickname());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             airline.setImage(uploadedImagePath);
         } else {

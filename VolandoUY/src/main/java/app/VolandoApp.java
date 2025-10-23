@@ -13,6 +13,7 @@ public class VolandoApp {
 
         new DBInitThread().start();
 
+
         SwingUtilities.invokeLater(() -> {
             new MainFrame(
                 ControllerFactory.getUserController(),

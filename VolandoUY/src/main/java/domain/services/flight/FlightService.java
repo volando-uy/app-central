@@ -105,11 +105,11 @@ public class FlightService implements IFlightService {
 
         // Subir la imagen si tiene
         if (imageFile != null) {
-            String imagePath = Images.FLIGHTS_PATH + flight.getName() + Images.FORMAT_DEFAULT;
+            String imagePath = ImageProcessor.getCreationPath("flight", flight.getName());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             flight.setImage(uploadedImagePath);
         } else {
-            flight.setImage(Images.FLIGHT_DEFAULT);
+            flight.setImage(Images.IMAGES_PATH + Images.FLIGHT_DEFAULT);
         }
 
         // Guardamos el vuelo y actualizamos la aerolínea y la ruta de vuelo

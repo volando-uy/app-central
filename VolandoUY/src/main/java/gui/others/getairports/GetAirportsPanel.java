@@ -32,7 +32,6 @@ public class GetAirportsPanel extends JPanel {
     private void loadAirportsTable() {
         // 1) Traer datos del controller
         List<AirportDTO> allAirports = airportController.getAllAirportsDetails();
-        System.out.println(allAirports);
 
         // 2) Crear modelo y columnas
         String[] columnNames = {"Codigo", "Nombre", "Ciudad"};

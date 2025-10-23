@@ -56,14 +56,6 @@ public class Flight {
     @ManyToOne
     private Airline airline;
 
-
-    //Muchos Aereopuetos tienen 1 vuelo
-    @ManyToOne()
-    private Airport originAirport;
-
-    @ManyToOne()
-    private Airport destinationAirport;
-
     //1 vuelo tiene muchos asientos
     @OneToMany(mappedBy = "flight")
     private List<Seat> seats;
