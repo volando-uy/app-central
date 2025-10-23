@@ -105,7 +105,7 @@ public class FlightService implements IFlightService {
 
         // Subir la imagen si tiene
         if (imageFile != null) {
-            String imagePath = Images.FLIGHTS_PATH + flight.getName() + Images.FORMAT_DEFAULT;
+            String imagePath = ImageProcessor.getCreationPath("flight", flight.getName());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             flight.setImage(uploadedImagePath);
         } else {

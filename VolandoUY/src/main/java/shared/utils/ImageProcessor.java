@@ -1,5 +1,8 @@
 package shared.utils;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import shared.constants.Images;
 
 import javax.imageio.ImageIO;
@@ -99,18 +102,22 @@ public class ImageProcessor {
     public static String getImageAbsolutePath(String resourceName, String key) {
         String relativePath = getImageRelativePath(resourceName, key);
         if (relativePath == null) {
-            relativePath = getDefaultImageRelativePath(resourceName);
+            return null;
         }
 
         // Get the file that is on IMAGES_PATH + relativePath
         File imageFile = new File(Images.IMAGES_PATH, relativePath);
         if (!imageFile.exists()) {
-            return null;
+            imageFile = new File(Images.IMAGES_PATH, getDefaultImageRelativePath(resourceName));
+            if (!imageFile.exists()) {
+                return null;
+            }
         }
 
         return imageFile.getAbsolutePath();
     }
 
+    @SuppressWarnings("checkstyle:RightCurly")
     private static String getImageRelativePath(String resourceName, String key) {
 
         if (resourceName == null || key == null) {
@@ -132,9 +139,10 @@ public class ImageProcessor {
         }
     }
 
+    @SuppressWarnings("checkstyle:RightCurly")
     private static String getDefaultImageRelativePath(String resourceName) {
         if (resourceName == null) {
-            return Images.ERROR_IMAGE_PATH;
+            return Images.ERROR_DEFAULT;
         }
 
         if (resourceName.toLowerCase().contains("customer")) {
@@ -148,7 +156,30 @@ public class ImageProcessor {
         } else if (resourceName.toLowerCase().contains("flight")) {
             return Images.FLIGHT_DEFAULT;
         } else {
-            return Images.ERROR_IMAGE_PATH;
+            return Images.ERROR_DEFAULT;
+        }
+    }
+
+    public static String getCreationPath(String resource, String key) {
+        switch (resource) {
+            case "customer" -> {
+                return Images.CUSTOMERS_PATH + key + Images.FORMAT_DEFAULT;
+            }
+            case "airline" -> {
+                return Images.AIRLINES_PATH + key + Images.FORMAT_DEFAULT;
+            }
+            case "flightroutepackage" -> {
+                return Images.FLIGHT_ROUTES_PACKAGES_PATH + key + Images.FORMAT_DEFAULT;
+            }
+            case "flightroute" -> {
+                return Images.FLIGHT_ROUTES_PATH + key + Images.FORMAT_DEFAULT;
+            }
+            case "flight" -> {
+                return Images.FLIGHTS_PATH + key + Images.FORMAT_DEFAULT;
+            }
+            default -> {
+                return null;
+            }
         }
     }
 }

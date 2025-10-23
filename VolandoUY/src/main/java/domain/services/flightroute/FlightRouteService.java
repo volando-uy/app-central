@@ -102,7 +102,7 @@ public class FlightRouteService implements IFlightRouteService {
 
         // Cargar la imagen al servidor si tiene
         if (imageFile != null) {
-            String imagePath = Images.AIRLINES_PATH + airline.getNickname() + Images.FORMAT_DEFAULT;
+            String imagePath = ImageProcessor.getCreationPath("flightroute", flightRoute.getName());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             flightRoute.setImage(uploadedImagePath);
         } else {

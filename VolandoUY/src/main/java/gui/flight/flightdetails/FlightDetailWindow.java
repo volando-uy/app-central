@@ -65,7 +65,7 @@ public class FlightDetailWindow extends JFrame {
         flightAirlineNameLabel.setText( "Aero. " + safe(flight.getAirlineNickname()));
         departureLabel.setText("Sal. " + (flight.getDepartureTime() != null ? flight.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "N/A"));
         durationLabel.setText("Dur. " + formatDuration(flight.getDuration()));
-        ImageIcon image = ImageProcessor.makeRoundedIcon(!flight.getImage().equals(Images.FLIGHT_DEFAULT) ? flight.getImage() : Images.FLIGHT_DEFAULT, 50);
+        ImageIcon image = ImageProcessor.makeRoundedIcon(flight.getImage(), 50);
         imageLabel.setIcon(image);
 
     }
