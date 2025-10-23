@@ -106,7 +106,7 @@ public class FlightRouteService implements IFlightRouteService {
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             flightRoute.setImage(uploadedImagePath);
         } else {
-            flightRoute.setImage(Images.FLIGHT_ROUTE_DEFAULT);
+            flightRoute.setImage(Images.IMAGES_PATH + Images.FLIGHT_ROUTE_DEFAULT);
         }
 
         // Guardar la ruta de vuelo

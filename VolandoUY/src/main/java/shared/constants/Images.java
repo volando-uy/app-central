@@ -5,11 +5,11 @@ import java.io.File;
 public class Images {
 
     public static final String IMAGES_PATH = System.getProperty("user.home") + File.separator + "volando-app" + File.separator + "images" + File.separator;
-    public static final String USER_DEFAULT = IMAGES_PATH + "default" + File.separator + "user.png";
-    public static final String FLIGHT_DEFAULT = IMAGES_PATH + "default" + File.separator + "flight.jpg";
-    public static final String FLIGHT_ROUTE_DEFAULT = IMAGES_PATH + "default" + File.separator + "flight_route.jpg";
-    public static final String FLIGHT_ROUTE_PACKAGE_DEFAULT = IMAGES_PATH + "default" + File.separator + "flight_route_package.gif";
-    public static final String ERROR_DEFAULT = IMAGES_PATH + "default" + File.separator + "flight_route_package.gif";
+    public static final String USER_DEFAULT = "default" + File.separator + "user.png";
+    public static final String FLIGHT_DEFAULT = "default" + File.separator + "flight.jpg";
+    public static final String FLIGHT_ROUTE_DEFAULT = "default" + File.separator + "flight_route.jpg";
+    public static final String FLIGHT_ROUTE_PACKAGE_DEFAULT = "default" + File.separator + "flight_route_package.gif";
+    public static final String ERROR_DEFAULT = "default" + File.separator + "flight_route_package.gif";
 
     public static final String AIRLINES_PATH = "users" + File.separator + "airlines" + File.separator;
     public static final String CUSTOMERS_PATH = "users" + File.separator + "customers" + File.separator;

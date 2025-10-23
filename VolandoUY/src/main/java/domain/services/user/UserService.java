@@ -80,7 +80,7 @@ public class UserService implements IUserService {
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             customer.setImage(uploadedImagePath);
         } else {
-            customer.setImage(Images.USER_DEFAULT);
+            customer.setImage(Images.IMAGES_PATH + Images.USER_DEFAULT);
         }
 
         // Hash the password
