@@ -1,7 +1,5 @@
 package infra.repository.user;
 
-import domain.models.buypackage.BuyPackage;
-import domain.models.flightRoutePackage.FlightRoutePackage;
 import domain.models.user.User;
 import domain.models.user.Customer;
 import domain.models.user.Airline;
@@ -9,7 +7,6 @@ import infra.repository.BaseRepository;
 import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UserRepository extends BaseRepository<User> implements IUserRepository {

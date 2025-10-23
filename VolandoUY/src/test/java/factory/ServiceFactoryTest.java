@@ -4,9 +4,16 @@ import domain.services.airport.IAirportService;
 import domain.services.category.ICategoryService;
 import domain.services.city.ICityService;
 import domain.services.flight.IFlightService;
-import domain.services.flightRoute.IFlightRouteService;
-import domain.services.flightRoutePackage.IFlightRoutePackageService;
+import domain.services.flightroute.IFlightRouteService;
+import domain.services.flightroutepackage.IFlightRoutePackageService;
 import domain.services.user.IUserService;
+import domain.services.seat.ISeatService;
+import domain.services.ticket.ITicketService;
+import domain.services.booking.IBookingService;
+import domain.services.buypackage.IBuyPackageService;
+import domain.services.auth.IAuthService;
+
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,6 +93,51 @@ class ServiceFactoryTest {
         IAirportService service2 = ServiceFactory.getAirportService();
 
         // THEN
+        assertNotNull(service1);
+        assertSame(service1, service2);
+    }
+
+    @Test
+    void getSeatService_shouldReturnSingletonInstance() {
+        ISeatService service1 = ServiceFactory.getSeatService();
+        ISeatService service2 = ServiceFactory.getSeatService();
+
+        assertNotNull(service1);
+        assertSame(service1, service2);
+    }
+
+    @Test
+    void getTicketService_shouldReturnSingletonInstance() {
+        ITicketService service1 = ServiceFactory.getTicketService();
+        ITicketService service2 = ServiceFactory.getTicketService();
+
+        assertNotNull(service1);
+        assertSame(service1, service2);
+    }
+
+    @Test
+    void getBookingService_shouldReturnSingletonInstance() {
+        IBookingService service1 = ServiceFactory.getBookingService();
+        IBookingService service2 = ServiceFactory.getBookingService();
+
+        assertNotNull(service1);
+        assertSame(service1, service2);
+    }
+
+    @Test
+    void getBuyPackageService_shouldReturnSingletonInstance() {
+        IBuyPackageService service1 = ServiceFactory.getBuyPackageService();
+        IBuyPackageService service2 = ServiceFactory.getBuyPackageService();
+
+        assertNotNull(service1);
+        assertSame(service1, service2);
+    }
+
+    @Test
+    void getAuthService_shouldReturnSingletonInstance() {
+        IAuthService service1 = ServiceFactory.getAuthService();
+        IAuthService service2 = ServiceFactory.getAuthService();
+
         assertNotNull(service1);
         assertSame(service1, service2);
     }

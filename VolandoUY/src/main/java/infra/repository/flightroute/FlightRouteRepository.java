@@ -1,10 +1,7 @@
 package infra.repository.flightroute;
 
 import app.DBConnection;
-import domain.models.category.Category;
-import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroute.FlightRoute;
 import domain.models.user.Airline;
 import jakarta.persistence.EntityManager;
 

@@ -1,12 +1,9 @@
 package infra.repository.flightroute;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroute.FlightRoute;
 import domain.models.user.Airline;
 import infra.repository.IBaseRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface IFlightRouteRepository extends IBaseRepository<FlightRoute> {

@@ -1,0 +1,66 @@
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <!-- default severity (can be overridden per-module) -->
+    <property name="severity" value="error"/>
+
+    <module name="SuppressionFilter">
+        <property name="file" value="suppressions.xml"/>
+    </module>
+
+    <!-- AST-based checks go under TreeWalker -->
+    <module name="TreeWalker">
+
+        <!-- 1. AvoidStarImport -->
+        <module name="AvoidStarImport">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 2. EmptyCatchBlock -->
+        <module name="EmptyCatchBlock">
+            <!-- Option examples: "allowEmpty" or "text" can be configured if needed -->
+        </module>
+
+        <!-- 3. GenericWhitespace -->
+        <module name="GenericWhitespace"/>
+
+        <!-- 4. IllegalCatch -->
+        <module name="IllegalCatch">
+            <!-- You can add illegalClassNames properties if needed, e.g. java.lang.Exception -->
+        </module>
+
+        <!-- 5. RightCurly -->
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+        </module>
+
+        <!-- 6. MemberName -->
+        <module name="MemberName">
+            <!-- add regex property to enforce style if desired -->
+        </module>
+
+        <!-- 7. MethodName -->
+        <module name="MethodName"/>
+
+        <!-- 8. MethodParamPad -->
+        <module name="MethodParamPad"/>
+
+        <!-- 9. UnnecessaryParentheses -->
+        <module name="UnnecessaryParentheses"/>
+
+        <!-- 10. UnusedImports -->
+        <module name="UnusedImports"/>
+
+        <!-- 11. VisibilityModifier -->
+        <module name="VisibilityModifier">
+            <!-- configure scope to control required modifiers if desired -->
+        </module>
+
+        <!-- 12. WhitespaceAfter -->
+        <module name="WhitespaceAfter"/>
+    </module>
+
+    <!-- file-level checks (examples; can add more if required) -->
+    <!-- keep these if you want file-level enforcement -->
+</module>

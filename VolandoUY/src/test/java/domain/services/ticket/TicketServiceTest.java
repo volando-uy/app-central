@@ -35,8 +35,7 @@ public class TicketServiceTest {
     @BeforeEach
     void setUp() {
         //  Inyectamos el mock del mapper
-        ticketService = new TicketService(customModelMapper);
-        ticketService.setTicketRepository(ticketRepository);
+        ticketService = new TicketService(customModelMapper, ticketRepository);
     }
 
     @Test

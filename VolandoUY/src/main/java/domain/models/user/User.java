@@ -2,16 +2,12 @@ package domain.models.user;
 
 import domain.dtos.user.UserDTO;
 import jakarta.persistence.*;
-import jakarta.validation.Validator;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import shared.utils.ValidatorUtil;
-
 
 @Data
 @NoArgsConstructor

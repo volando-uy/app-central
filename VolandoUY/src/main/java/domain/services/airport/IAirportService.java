@@ -2,7 +2,6 @@ package domain.services.airport;
 
 import domain.dtos.airport.AirportDTO;
 import domain.dtos.airport.BaseAirportDTO;
-import domain.dtos.city.CityDTO;
 import domain.models.airport.Airport;
 import domain.services.city.ICityService;
 

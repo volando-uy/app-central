@@ -46,4 +46,16 @@ public class AuthService implements IAuthService{
         }
         return null;
     }
+
+    @Override
+    public boolean isAirline(String token) {
+        String nickname = getNicknameFromToken(token);
+        UserDTO user = this.userController.getUserSimpleDetailsByNickname(nickname);
+        return user != null && user.getClass().getSimpleName().equals("BaseAirlineDTO");
+    }
+
+    @Override
+    public boolean isCustomer(String token) {
+        return !isAirline(token);
+    }
 }

@@ -1,9 +1,7 @@
 package infra.repository.flightroutepackage;
 
-import domain.models.bookflight.BookFlight;
-import domain.models.buypackage.BuyPackage;
-import domain.models.flightRoute.FlightRoute;
-import domain.models.flightRoutePackage.FlightRoutePackage;
+import domain.models.flightroute.FlightRoute;
+import domain.models.flightroutepackage.FlightRoutePackage;
 import infra.repository.IBaseRepository;
 
 import java.util.List;

@@ -3,20 +3,25 @@ package domain.services.ticket;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.ticket.TicketDTO;
 import domain.models.ticket.Ticket;
+import factory.ControllerFactory;
+import factory.RepositoryFactory;
 import infra.repository.ticket.ITicketRepository;
-import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.utils.CustomModelMapper;
 
-public class TicketService implements ITicketService {
 
-    @Setter
+public class TicketService implements ITicketService {
     private ITicketRepository ticketRepository;
 
-    private final CustomModelMapper customModelMapper;
+    private CustomModelMapper customModelMapper;
 
-    // ✅ Inyectamos el mapper por constructor
-    public TicketService(CustomModelMapper customModelMapper) {
+    public TicketService() {
+        this.customModelMapper = ControllerFactory.getCustomModelMapper();
+        this.ticketRepository = RepositoryFactory.getTicketRepository();
+    }
+
+    TicketService(CustomModelMapper customModelMapper, ITicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
         this.customModelMapper = customModelMapper;
     }
 
@@ -32,14 +37,14 @@ public class TicketService implements ITicketService {
 
     @Override
     public TicketDTO getTicketDetailsById(Long ticketId, boolean full) {
-        Ticket ticket = full ? ticketRepository.getFullTicketById(ticketId) : ticketRepository.findByKey(ticketId);
 
+        Ticket ticket = full ? ticketRepository.getFullTicketById(ticketId) : ticketRepository.findByKey(ticketId);
         if (ticket == null) {
             throw new IllegalArgumentException(ErrorMessages.ERROR_TICKET_NOT_FOUND);
         }
 
-        return full
-                ? customModelMapper.mapFullTicket(ticket)
-                : customModelMapper.map(ticket, TicketDTO.class);
+        return full ? customModelMapper.mapFullTicket(ticket) : customModelMapper.map(ticket, TicketDTO.class);
     }
+
+
 }

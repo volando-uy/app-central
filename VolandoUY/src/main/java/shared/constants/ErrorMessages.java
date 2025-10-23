@@ -1,6 +1,5 @@
 package shared.constants;
 
-import java.util.Locale;
 
 public class ErrorMessages {
     // ================================General errors==============================

@@ -3,6 +3,7 @@ package utils;
 import domain.dtos.user.*;
 import domain.models.bookflight.BookFlight;
 import domain.models.buypackage.BuyPackage;
+import domain.models.flightroute.FlightRoute;
 import domain.models.user.Airline;
 import domain.models.user.Customer;
 import domain.models.user.User;
@@ -86,7 +87,7 @@ public class CustomModelMapperTest {
         var f2 = new domain.models.flight.Flight();
         f2.setName("Flight 102");
 
-        var r1 = new domain.models.flightRoute.FlightRoute();
+        var r1 = new FlightRoute();
         r1.setName("Route A");
 
         airline.setFlights(List.of(f1, f2));

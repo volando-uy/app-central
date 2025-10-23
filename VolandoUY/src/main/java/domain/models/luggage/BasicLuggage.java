@@ -1,7 +1,5 @@
 package domain.models.luggage;
 
-import domain.models.bookflight.BookFlight;
-import domain.models.ticket.Ticket;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

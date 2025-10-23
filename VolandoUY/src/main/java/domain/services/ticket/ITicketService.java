@@ -11,5 +11,4 @@ public interface ITicketService {
 
     TicketDTO getTicketDetailsById(Long ticketId, boolean b);
 
-    void setTicketRepository(ITicketRepository ticketRepository);
 }

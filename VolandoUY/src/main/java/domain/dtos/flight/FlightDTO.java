@@ -1,8 +1,5 @@
 package domain.dtos.flight;
 
-import domain.dtos.flightRoute.FlightRouteDTO;
-import domain.dtos.user.AirlineDTO;
-import domain.models.flightRoute.FlightRoute;
 import lombok.*;
 
 import java.time.LocalDateTime;

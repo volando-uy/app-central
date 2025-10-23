@@ -6,9 +6,9 @@ package gui.reservations;
 
 import controllers.booking.IBookingController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
+import controllers.flightroute.IFlightRouteController;
 import controllers.user.IUserController;
-import gui.reservations.bookFlight.BookFlightPanel;
+import gui.reservations.bookflight.BookFlightPanel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;

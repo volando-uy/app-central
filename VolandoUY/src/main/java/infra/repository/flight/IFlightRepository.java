@@ -1,14 +1,13 @@
 package infra.repository.flight;
 
 import domain.models.flight.Flight;
-import domain.models.flightRoute.FlightRoute;
+import domain.models.flightroute.FlightRoute;
 import domain.models.seat.Seat;
 import domain.models.user.Airline;
 import infra.repository.IBaseRepository;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface IFlightRepository extends IBaseRepository<Flight> {

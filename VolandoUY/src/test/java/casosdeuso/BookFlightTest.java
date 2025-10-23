@@ -5,18 +5,18 @@ import controllers.booking.IBookingController;
 import controllers.category.ICategoryController;
 import controllers.city.ICityController;
 import controllers.flight.IFlightController;
-import controllers.flightRoute.IFlightRouteController;
+import controllers.flightroute.IFlightRouteController;
 import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import domain.dtos.airport.BaseAirportDTO;
-import domain.dtos.bookFlight.BaseBookFlightDTO;
-import domain.dtos.bookFlight.BookFlightDTO;
+import domain.dtos.bookflight.BaseBookFlightDTO;
+import domain.dtos.bookflight.BookFlightDTO;
 import domain.dtos.category.CategoryDTO;
 import domain.dtos.city.BaseCityDTO;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
-import domain.dtos.flightRoute.BaseFlightRouteDTO;
-import domain.dtos.flightRoute.FlightRouteDTO;
+import domain.dtos.flightroute.BaseFlightRouteDTO;
+import domain.dtos.flightroute.FlightRouteDTO;
 import domain.dtos.luggage.*;
 import domain.dtos.ticket.BaseTicketDTO;
 import domain.dtos.ticket.TicketDTO;
@@ -354,7 +354,7 @@ public class BookFlightTest {
 // 7) (Opcional) Intento negativo: crear reserva sin tickets -> debe tirar
         assertThrows(UnsupportedOperationException.class, () ->
                         bookingController.createBooking(
-                                new domain.dtos.bookFlight.BaseBookFlightDTO(), // sin precio ni nada
+                                new domain.dtos.bookflight.BaseBookFlightDTO(), // sin precio ni nada
                                 new java.util.LinkedHashMap<>(),               // sin tickets
                                 "customer3",
                                 "LAT2-2 001"

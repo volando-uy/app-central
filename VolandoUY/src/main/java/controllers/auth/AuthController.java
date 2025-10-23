@@ -2,10 +2,14 @@ package controllers.auth;
 
 import domain.dtos.user.LoginResponseDTO;
 import domain.services.auth.IAuthService;
+import factory.ServiceFactory;
 
 public class AuthController implements IAuthController {
 
-    private final IAuthService authService;
+    private IAuthService authService;
+    public AuthController() {
+        this.authService = ServiceFactory.getAuthService();
+    }
 
     public AuthController(IAuthService authService) {
         this.authService = authService;
@@ -24,5 +28,15 @@ public class AuthController implements IAuthController {
     @Override
     public String getNicknameFromToken(String token) {
         return authService.getNicknameFromToken(token);
+    }
+
+    @Override
+    public boolean isAirline(String token) {
+        return authService.isAirline(token);
+    }
+
+    @Override
+    public boolean isCustomer(String token) {
+        return authService.isCustomer(token);
     }
 }
