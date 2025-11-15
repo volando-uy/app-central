@@ -38,8 +38,8 @@ public class FlightRouteController implements IFlightRouteController{
     }
 
     @Override
-    public void setStatusFlightRouteByName(String routeName, boolean confirmed) {
-        flightRouteService.setStatusFlightRouteByName(routeName, confirmed);
+    public void setFlightRouteStatusByName(String routeName, String status) {
+        flightRouteService.setFlightRouteStatusByName(routeName, status);
     }
 
     @Override

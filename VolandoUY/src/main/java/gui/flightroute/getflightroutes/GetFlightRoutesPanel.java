@@ -85,7 +85,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
         flightRouteLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 // Recarga las aerolíneas y la tabla
                 loadAirlinesIntoCombo();
                 String nickname = getSelectedAirlineNickname();
@@ -128,7 +128,7 @@ public class GetFlightRoutesPanel extends JPanel {
             int row = FlightRouteTable.getSelectedRow();
             if (row >= 0) {
                 FlightRouteDTO route = flightRoutes.get(row);
-                flightRouteController.setStatusFlightRouteByName(route.getName(), true);
+                flightRouteController.setFlightRouteStatusByName(route.getName(), "Confirmada");
                 loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
@@ -136,7 +136,7 @@ public class GetFlightRoutesPanel extends JPanel {
             int row = FlightRouteTable.getSelectedRow();
             if (row >= 0) {
                 FlightRouteDTO route = flightRoutes.get(row);
-                flightRouteController.setStatusFlightRouteByName(route.getName(), false);
+                flightRouteController.setFlightRouteStatusByName(route.getName(), "Confirmada");
                 loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
