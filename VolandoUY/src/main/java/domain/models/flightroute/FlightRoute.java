@@ -75,17 +75,20 @@ public class FlightRoute {
 
     private String image;
 
+    private String videoURL;
 
 
     public FlightRoute(String name, String description, LocalDate createdAt,
                        Double priceTouristClass, Double priceBusinessClass,
-                       Double priceExtraUnitBaggage) {
+                       Double priceExtraUnitBaggage, String image, String videoURL) {
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
         this.priceTouristClass = priceTouristClass;
         this.priceBusinessClass = priceBusinessClass;
         this.priceExtraUnitBaggage = priceExtraUnitBaggage;
+        this.image = image;
+        this.videoURL = videoURL;
     }
 
     @Override

@@ -4,7 +4,13 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 
 public class GUIUtils {
     public static JFileChooser getImagesFileChooser() {
@@ -58,5 +64,19 @@ public class GUIUtils {
                 tableWidth,
                 visibleRows * table.getRowHeight()
         ));
+    }
+
+    public static void goWebsite(JLabel webLabel, final String url) {
+        webLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        webLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(url));
+                } catch (URISyntaxException | IOException ex) {
+                    System.out.println("Error al abrir la URL: " + ex.getMessage());
+                }
+            }
+        });
     }
 }
