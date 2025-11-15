@@ -35,4 +35,8 @@ public interface IUserController {
     CustomerDTO getCustomerDetailsByNickname(String nickname);
     BaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname);
 
+    // Follow section
+    void followUser(String followerNickname, String followedNickname);
+    void unfollowUser(String followerNickname, String followedNickname);
+    Boolean isFollowing(String followerNickname, String followedNickname);
 }

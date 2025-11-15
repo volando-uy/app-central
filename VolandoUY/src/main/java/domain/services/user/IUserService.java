@@ -32,5 +32,8 @@ public interface IUserService {
 
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
 
-
+    // Follow section
+    void followUser(String followerNickname, String followedNickname);
+    void unfollowUser(String followerNickname, String followedNickname);
+    Boolean isFollowing(String followerNickname, String followedNickname);
 }

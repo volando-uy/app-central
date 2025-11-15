@@ -100,5 +100,19 @@ public class UserController implements IUserController {
     }
 
 
+    // Follow section
+    @Override
+    public void followUser(String followerNickname, String followedNickname) {
+        userService.followUser(followerNickname, followedNickname);
+    }
 
+    @Override
+    public void unfollowUser(String followerNickname, String followedNickname) {
+        userService.unfollowUser(followerNickname, followedNickname);
+    }
+
+    @Override
+    public Boolean isFollowing(String followerNickname, String followedNickname) {
+        return userService.isFollowing(followerNickname, followedNickname);
+    }
 }
