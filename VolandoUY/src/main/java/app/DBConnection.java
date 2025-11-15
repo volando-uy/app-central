@@ -78,6 +78,7 @@ public class DBConnection {
             em.createNativeQuery("TRUNCATE TABLE flight_route_package_join CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE seat CASCADE").executeUpdate();
             em.createNativeQuery("TRUNCATE TABLE ticket CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE follow CASCADE").executeUpdate();
 
             tx.commit(); // ✅ solo si todo fue bien
         } catch (Exception e) {

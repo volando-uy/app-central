@@ -9,6 +9,7 @@ import domain.services.flightroutepackage.IFlightRoutePackageService;
 import factory.ControllerFactory;
 import factory.RepositoryFactory;
 import infra.repository.user.IUserRepository;
+import infra.repository.user.follow.IFollowRepository;
 import lombok.Setter;
 import shared.constants.ErrorMessages;
 import shared.constants.Images;
@@ -27,6 +28,7 @@ public class UserService implements IUserService {
     private final CustomModelMapper customModelMapper = ControllerFactory.getCustomModelMapper();
 
     private final IUserRepository userRepository;
+    private final IFollowRepository followRepository;
 
     @Setter
     private IFlightRoutePackageService flightRoutePackageService;
@@ -36,8 +38,8 @@ public class UserService implements IUserService {
 
     public UserService() {
         this.userRepository = RepositoryFactory.getUserRepository();
+        this.followRepository = RepositoryFactory.getFollowRepository();
     }
-
 
 
     @Override
@@ -261,5 +263,47 @@ public class UserService implements IUserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    // Follow section
+    @Override
+    public void followUser(String followerNickname, String followedNickname) {
+        User follower = userRepository.getUserByNickname(followerNickname, false);
+        User followed = userRepository.getUserByNickname(followedNickname, false);
+        if (follower == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followerNickname));
+        }
+        if (followed == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followedNickname));
+        }
+
+        followRepository.followUser(follower, followed);
+    }
+
+    @Override
+    public void unfollowUser(String followerNickname, String followedNickname) {
+        User follower = userRepository.getUserByNickname(followerNickname, false);
+        User followed = userRepository.getUserByNickname(followedNickname, false);
+        if (follower == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followerNickname));
+        }
+        if (followed == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followedNickname));
+        }
+
+        followRepository.unfollowUser(follower, followed);
+    }
+
+    @Override
+    public Boolean isFollowing(String followerNickname, String followedNickname) {
+        User follower = userRepository.getUserByNickname(followerNickname, false);
+        User followed = userRepository.getUserByNickname(followedNickname, false);
+        if (follower == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followerNickname));
+        }
+        if (followed == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_USER_NOT_FOUND, followedNickname));
+        }
+
+        return followRepository.isFollowing(follower, followed);
+    }
 }
 

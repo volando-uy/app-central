@@ -22,6 +22,8 @@ import infra.repository.ticket.ITicketRepository;
 import infra.repository.ticket.TicketRepository;
 import infra.repository.user.IUserRepository;
 import infra.repository.user.UserRepository;
+import infra.repository.user.follow.FollowRepository;
+import infra.repository.user.follow.IFollowRepository;
 
 public class RepositoryFactory {
     private static IUserRepository userRepository;
@@ -35,6 +37,7 @@ public class RepositoryFactory {
     private static IBuyPackageRepository buyPackageRepository;
     private static IBookingRepository bookingRepository;
     private static IAirportRepository airportRepository;
+    private static IFollowRepository followRepository;
 
     public static IUserRepository getUserRepository() {
         if (userRepository == null) {
@@ -109,5 +112,12 @@ public class RepositoryFactory {
             airportRepository = new AirportRepository();
         }
         return airportRepository;
+    }
+
+    public static IFollowRepository getFollowRepository() {
+        if (followRepository == null) {
+            followRepository = new FollowRepository();
+        }
+        return followRepository;
     }
 }

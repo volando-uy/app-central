@@ -3,7 +3,11 @@ package infra.repository.user;
 import domain.models.user.User;
 import domain.models.user.Customer;
 import domain.models.user.Airline;
+import domain.models.user.follow.Follow;
+import domain.models.user.follow.FollowKey;
 import infra.repository.BaseRepository;
+import infra.repository.user.follow.FollowRepository;
+import infra.repository.user.follow.IFollowRepository;
 import shared.constants.ErrorMessages;
 
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import java.util.List;
 public class UserRepository extends BaseRepository<User> implements IUserRepository {
     private final ICustomerRepository customerRepo = new CustomerRepository();
     private final IAirlineRepository airlineRepo = new AirlineRepository();
+    private final IFollowRepository followRepo = new FollowRepository();
 
     public UserRepository() {
         super(User.class);
@@ -76,5 +81,4 @@ public class UserRepository extends BaseRepository<User> implements IUserReposit
     public List<Customer> getFullAllCustomers() {
         return customerRepo.findFullAll();
     }
-
 }
