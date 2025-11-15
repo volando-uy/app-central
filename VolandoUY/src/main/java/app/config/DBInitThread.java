@@ -289,11 +289,12 @@ public class DBInitThread extends Thread {
                 // Agarrar la ruta de vuelo con todas las relaciones
                 FlightRouteDTO createdFlightRoute = flightRouteController.getFlightRouteDetailsByName(baseFlightRouteDTO.getName());
 
-                // 80% de probabilidad de cambiar el estado de la ruta: 60% de confirmarla, 40% de rechazarla
+                // 80% de probabilidad de cambiar el estado de la ruta: 50% de confirmarla, 30% de rechazarla, 20% de finalizarla
                 if (Math.random() < 0.8) {
-                    boolean confirm = Math.random() < 0.6;
-                    flightRouteController.setStatusFlightRouteByName(createdFlightRoute.getName(), confirm);
-                    if (confirm) {
+                    String status = Math.random() < 0.5 ? EnumEstatusRuta.CONFIRMADA.toString() :
+                            (Math.random() < 0.6 ? EnumEstatusRuta.RECHAZADA.toString() : EnumEstatusRuta.FINALIZADA.toString());
+                    flightRouteController.setFlightRouteStatusByName(createdFlightRoute.getName(), status);
+                    if (status.equals(EnumEstatusRuta.CONFIRMADA.toString())) {
                         createdFlightRoute.setStatus(EnumEstatusRuta.CONFIRMADA);
                         flightRoutesDTOs.add(createdFlightRoute);
                     }

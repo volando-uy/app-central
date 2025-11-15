@@ -27,5 +27,5 @@ public interface IFlightRouteService {
 
     List<FlightRouteDTO> getFlightRoutesDetailsByPackageName(String packageName, boolean full);
 
-    void setStatusFlightRouteByName(String routeName, boolean confirmed);
+    void setFlightRouteStatusByName(String routeName, String status);
 }

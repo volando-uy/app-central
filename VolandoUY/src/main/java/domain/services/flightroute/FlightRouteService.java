@@ -175,15 +175,15 @@ public class FlightRouteService implements IFlightRouteService {
     }
 
     @Override
-    public void setStatusFlightRouteByName(String routeName, boolean confirmed) {
+    public void setFlightRouteStatusByName(String routeName, String status) {
         FlightRoute flightRoute = this.getFlightRouteByName(routeName, false);
         if (flightRoute == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
         }
 
-        EnumEstatusRuta status = confirmed ? EnumEstatusRuta.CONFIRMADA : EnumEstatusRuta.RECHAZADA;
+        EnumEstatusRuta finalStatus = EnumEstatusRuta.valueOf(status.toUpperCase());
 
-        flightRoute.setStatus(status);
+        flightRoute.setStatus(finalStatus);
         flightRouteRepository.update(flightRoute);
     }
 }

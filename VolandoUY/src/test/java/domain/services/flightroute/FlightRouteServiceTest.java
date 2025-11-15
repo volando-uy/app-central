@@ -242,35 +242,47 @@ class FlightRouteServiceTest {
     }
 
     @Test
-    void setStatusFlightRouteByName_shouldSetConfirmed() {
+    void setFlightRouteStatusByName_shouldSetConfirmed() {
         FlightRoute route = new FlightRoute();
         route.setName("R1");
 
         when(mockRepo.getByName("R1")).thenReturn(route);
 
-        service.setStatusFlightRouteByName("R1", true);
+        service.setFlightRouteStatusByName("R1", "Confirmada");
         assertEquals(EnumEstatusRuta.CONFIRMADA, route.getStatus());
         verify(mockRepo).update(route);
     }
 
     @Test
-    void setStatusFlightRouteByName_shouldSetRejected() {
+    void setFlightRouteStatusByName_shouldSetRejected() {
         FlightRoute route = new FlightRoute();
         route.setName("R2");
 
         when(mockRepo.getByName("R2")).thenReturn(route);
 
-        service.setStatusFlightRouteByName("R2", false);
+        service.setFlightRouteStatusByName("R2", "Rechazada");
         assertEquals(EnumEstatusRuta.RECHAZADA, route.getStatus());
         verify(mockRepo).update(route);
     }
 
     @Test
-    void setStatusFlightRouteByName_shouldThrowIfNotFound() {
+    void setFlightRouteStatusByName_shouldSetFinished() {
+        FlightRoute route = new FlightRoute();
+        route.setName("R3");
+
+        when(mockRepo.getByName("R3")).thenReturn(route);
+
+        service.setFlightRouteStatusByName("R3", "Finalizada");
+        assertEquals(EnumEstatusRuta.FINALIZADA, route.getStatus());
+        verify(mockRepo).update(route);
+    }
+
+    @Test
+    void setFlightRouteStatusByName_shouldThrowIfNotFound() {
         when(mockRepo.getByName("404")).thenReturn(null);
 
         var ex = assertThrows(IllegalArgumentException.class, () -> {
-            service.setStatusFlightRouteByName("404", true);
+            service.setFlightRouteStatusByName("404", "Confirmada");
         });
 
         assertTrue(ex.getMessage().contains("no fue encontrada"));
