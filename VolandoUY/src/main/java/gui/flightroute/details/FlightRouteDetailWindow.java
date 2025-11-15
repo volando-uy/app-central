@@ -12,6 +12,7 @@ import controllers.flight.IFlightController;
 import domain.dtos.flight.FlightDTO;
 import domain.dtos.flightroute.FlightRouteDTO;
 import shared.constants.Images;
+import shared.utils.GUIUtils;
 import shared.utils.ImageProcessor;
 import shared.utils.NonEditableTableModel;
 
@@ -46,7 +47,11 @@ public class FlightRouteDetailWindow extends JFrame {
         statusLabel.setText("Estado. " + route.getStatus().toString());
         originAeroLabel.setText("Desde. " + route.getOriginAeroCode());
         destinationAeroLabel.setText("Hasta. " + route.getDestinationAeroCode());
-        
+
+        videoURLLabel.setText("Video URL. " + route.getVideoURL());
+        videoURLLabel.setToolTipText(safe(route.getVideoURL()));
+        GUIUtils.goWebsite(videoURLLabel, route.getVideoURL()); // Set URL clickable
+
         ImageIcon image = ImageProcessor.makeRoundedIcon(!route.getImage().equals(Images.FLIGHT_ROUTE_DEFAULT) ? route.getImage() : Images.FLIGHT_ROUTE_DEFAULT, 50);
         imageLabel.setIcon(image);
 
@@ -99,6 +104,7 @@ public class FlightRouteDetailWindow extends JFrame {
         destinationAeroLabel = new JLabel();
         createdAtLabel = new JLabel();
         statusLabel = new JLabel();
+        videoURLLabel = new JLabel();
         scrollPane1 = new JScrollPane();
         tablaVuelos = new JTable();
 
@@ -106,23 +112,25 @@ public class FlightRouteDetailWindow extends JFrame {
         var contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {0, 0};
-        ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+        ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {69, 0, 0};
         ((GridBagLayout)contentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-        ((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)contentPane.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0E-4};
 
         //======== infoPanel ========
         {
             infoPanel.setMaximumSize(new Dimension(480, 61));
-            infoPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-            0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-            . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-            red) ,infoPanel. getBorder( )) ); infoPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-            beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            infoPanel.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+            swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border
+            . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog"
+            , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,infoPanel. getBorder
+            () ) ); infoPanel. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+            . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException
+            ( ) ;} } );
             infoPanel.setLayout(new GridBagLayout());
             ((GridBagLayout)infoPanel.getLayout()).columnWidths = new int[] {200, 200, 72, 0};
-            ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)infoPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0, 0};
             ((GridBagLayout)infoPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-            ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)infoPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
             //---- flightRouteNameLabel ----
             flightRouteNameLabel.setText("Nombre. ");
@@ -141,7 +149,7 @@ public class FlightRouteDetailWindow extends JFrame {
                 new Insets(0, 0, 5, 0), 0, 0));
             infoPanel.add(imageLabel, new GridBagConstraints(2, 0, 1, 3, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //---- descriptionLabel ----
             descriptionLabel.setText("Desc.");
@@ -166,7 +174,7 @@ public class FlightRouteDetailWindow extends JFrame {
             createdAtLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(createdAtLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //---- statusLabel ----
             statusLabel.setText("Estado:");
@@ -174,6 +182,14 @@ public class FlightRouteDetailWindow extends JFrame {
             statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
             infoPanel.add(statusLabel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //---- videoURLLabel ----
+            videoURLLabel.setText("Video URL.");
+            videoURLLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+            videoURLLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            infoPanel.add(videoURLLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
         contentPane.add(infoPanel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -211,6 +227,7 @@ public class FlightRouteDetailWindow extends JFrame {
     private JLabel destinationAeroLabel;
     private JLabel createdAtLabel;
     private JLabel statusLabel;
+    private JLabel videoURLLabel;
     private JScrollPane scrollPane1;
     private JTable tablaVuelos;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

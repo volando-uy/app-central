@@ -32,7 +32,7 @@ class FlightRouteServiceTest {
 
     private FlightRouteService service;
     private IFlightRouteRepository mockRepo;
-    private CustomModelMapper mockMapper;
+    private CustomModelMapper modelMapper;
     private ICategoryService mockCategoryService;
     private IAirportService mockAirportService;
     private IUserService mockUserService;
@@ -40,12 +40,12 @@ class FlightRouteServiceTest {
     @BeforeEach
     void setUp() {
         mockRepo = mock(IFlightRouteRepository.class);
-        mockMapper = mock(CustomModelMapper.class);
+        modelMapper = new CustomModelMapper();
         mockCategoryService = mock(ICategoryService.class);
         mockAirportService = mock(IAirportService.class);
         mockUserService = mock(IUserService.class);
 
-        service = new FlightRouteService(mockRepo, mockMapper);
+        service = new FlightRouteService(mockRepo, modelMapper);
         service.setCategoryService(mockCategoryService);
         service.setAirportService(mockAirportService);
         service.setUserService(mockUserService);
@@ -53,16 +53,14 @@ class FlightRouteServiceTest {
 
     @Test
     void createFlightRoute_shouldCreateSuccessfullyWithoutImage() {
-        BaseFlightRouteDTO dto = new BaseFlightRouteDTO(
-                        "Ruta A",
-                        "desc",
-                        LocalDate.now(),
-                        100.0,
-                        200.0,
-                        30.0,
-                        EnumEstatusRuta.SIN_ESTADO,
-                        "default-image.png"
-                );
+        BaseFlightRouteDTO dto = new BaseFlightRouteDTO() {{
+            setName("Ruta A");
+            setDescription("desc");
+            setCreatedAt(LocalDate.now());
+            setPriceTouristClass(100.0);
+            setPriceBusinessClass(200.0);
+            setPriceExtraUnitBaggage(20.0);
+        }};
 
         FlightRoute route = new FlightRoute();
         route.setName("Ruta A");
@@ -78,37 +76,33 @@ class FlightRouteServiceTest {
         when(mockAirportService.getAirportByCode("ORI", false)).thenReturn(origin);
         when(mockAirportService.getAirportByCode("DEST", false)).thenReturn(destination);
         when(mockCategoryService.getCategoryByName("Promo")).thenReturn(new Category());
-        when(mockMapper.map(dto, FlightRoute.class)).thenReturn(route);
-        when(mockMapper.map(route, BaseFlightRouteDTO.class)).thenReturn(dto);
 
-        try (var validatorMock = mockStatic(ValidatorUtil.class)) {
-            BaseFlightRouteDTO result = service.createFlightRoute(
-                    dto,
-                    "ORI", "DEST",
-                    "air1",
-                    List.of("Promo"),
-                    null
-            );
+        BaseFlightRouteDTO result = service.createFlightRoute(
+                dto,
+                "ORI", "DEST",
+                "air1",
+                List.of("Promo"),
+                null
+        );
 
-            assertEquals("Ruta A", result.getName());
-            verify(mockRepo).createFlightRoute(route, airline);
-            assertEquals(Images.IMAGES_PATH + Images.FLIGHT_ROUTE_DEFAULT, route.getImage());
-        }
+        assertEquals("Ruta A", result.getName());
+        assertEquals(Images.IMAGES_PATH + Images.FLIGHT_ROUTE_DEFAULT, result.getImage());
     }
 
     @Test
     void createFlightRoute_shouldCreateSuccessfullyWithImage() {
         /*
-        //BaseFlightRouteDTO dto = new BaseFlightRouteDTO("Ruta Img", "desc", LocalDate.now(), 100.0, 200.0, 20.0);
-        BaseFlightRouteDTO dto = new BaseFlightRouteDTO();
-        dto.setName("Ruta A");
-        dto.setDescription("desc");
-        dto.setCreatedAt(LocalDate.now());
-        dto.setPriceTouristClass(100.0);
-        dto.setPriceBusinessClass(200.0);
-        dto.setPriceExtraUnitBaggage(20.0);
-        dto.setStatus(EnumEstatusRuta.SIN_ESTADO);
-        dto.setImage("default-image.png");
+        BaseFlightRouteDTO dto = new BaseFlightRouteDTO(
+                "Ruta Img",
+                "desc",
+                LocalDate.now(),
+                100.0,
+                200.0,
+                20.0,
+                EnumEstatusRuta.CONFIRMADA,
+                "default-image.png",
+                null
+        );
 
         FlightRoute route = new FlightRoute();
         route.setName("Ruta Img");
@@ -144,6 +138,44 @@ class FlightRouteServiceTest {
             verify(mockRepo).createFlightRoute(route, airline);
         }
         */
+    }
+
+    @Test
+    void createFlightRoute_shouldCreateSuccessfullyWithVideoURL() {
+        BaseFlightRouteDTO dto = new BaseFlightRouteDTO() {{
+            setName("Ruta Video");
+            setDescription("desc");
+            setCreatedAt(LocalDate.now());
+            setPriceTouristClass(150.0);
+            setPriceBusinessClass(250.0);
+            setPriceExtraUnitBaggage(25.0);
+            setVideoURL("http://video.url/sample");
+        }};
+
+        FlightRoute route = new FlightRoute();
+        route.setName("Ruta Video");
+
+        Airline airline = new Airline();
+        airline.setNickname("air2");
+
+        Airport origin = new Airport();
+        Airport destination = new Airport();
+
+        when(mockRepo.existsByName("Ruta Video")).thenReturn(false);
+        when(mockUserService.getAirlineByNickname("air2", true)).thenReturn(airline);
+        when(mockAirportService.getAirportByCode("ORI", false)).thenReturn(origin);
+        when(mockAirportService.getAirportByCode("DEST", false)).thenReturn(destination);
+
+        BaseFlightRouteDTO result = service.createFlightRoute(
+                dto,
+                "ORI", "DEST",
+                "air2",
+                null,
+                null
+        );
+
+        assertEquals("Ruta Video", result.getName());
+        assertEquals("http://video.url/sample", result.getVideoURL());
     }
 
     @Test
@@ -188,7 +220,6 @@ class FlightRouteServiceTest {
         dto.setName("R1");
 
         when(mockRepo.getAllByAirlineNickname("air")).thenReturn(List.of(fr));
-        when(mockMapper.map(fr, FlightRouteDTO.class)).thenReturn(dto);
 
         List<FlightRouteDTO> result = service.getFlightRoutesDetailsByAirlineNickname("air", false);
         assertEquals(1, result.size());
@@ -203,7 +234,6 @@ class FlightRouteServiceTest {
         dto.setName("R1");
 
         when(mockRepo.getAllByPackageName("pack")).thenReturn(List.of(fr));
-        when(mockMapper.map(fr, FlightRouteDTO.class)).thenReturn(dto);
 
         List<FlightRouteDTO> result = service.getFlightRoutesDetailsByPackageName("pack", false);
         assertEquals(1, result.size());
@@ -236,7 +266,6 @@ class FlightRouteServiceTest {
         dto.setName("R1");
 
         when(mockRepo.getFullByName("R1")).thenReturn(route);
-        when(mockMapper.mapFullFlightRoute(route)).thenReturn(dto);
 
         assertEquals("R1", service.getFlightRouteDetailsByName("R1", true).getName());
     }

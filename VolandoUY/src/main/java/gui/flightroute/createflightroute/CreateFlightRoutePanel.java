@@ -151,7 +151,8 @@ public class CreateFlightRoutePanel extends JPanel {
                     Double.parseDouble(businessCostTextField.getText()),
                     Double.parseDouble(additionalLuggageCostTextField.getText()),
                     EnumEstatusRuta.SIN_ESTADO,
-                    null
+                    null,
+                    "https://www.videoTest.com"
                 );
 
                 String originAirportCode = (String) originAeroComboBox.getSelectedItem();
