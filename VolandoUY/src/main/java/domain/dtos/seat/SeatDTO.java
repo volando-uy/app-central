@@ -1,11 +1,18 @@
 package domain.dtos.seat;
 
 import domain.models.enums.EnumTipoAsiento;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "SeatDTO")
+@XmlRootElement
 public class SeatDTO extends BaseSeatDTO {
     private String flightName;
     private Long ticketId;
