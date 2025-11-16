@@ -43,12 +43,6 @@ public class FlightRouteSoapAdapter extends BaseSoapAdapter implements IFlightRo
 
     @Override
     @WebMethod
-    public void setStatusFlightRouteByName(String routeName, boolean confirmed) {
-        controller.setStatusFlightRouteByName(routeName, confirmed);
-    }
-
-    @Override
-    @WebMethod
     public FlightRouteDTO getFlightRouteDetailsByName(String routeName) {
         return controller.getFlightRouteDetailsByName(routeName);
     }
@@ -81,5 +75,10 @@ public class FlightRouteSoapAdapter extends BaseSoapAdapter implements IFlightRo
     @WebMethod
     public List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByPackageName(String packageName) {
         return controller.getAllFlightRoutesSimpleDetailsByPackageName(packageName);
+    }
+
+    @Override
+    public void setFlightRouteStatusByName(String routeName, String status) {
+        controller.setFlightRouteStatusByName(routeName, status);
     }
 }
