@@ -122,4 +122,22 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserController 
     public BaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname) {
         return controller.getCustomerSimpleDetailsByNickname(nickname);
     }
+
+    @Override
+    @WebMethod
+    public void followUser(String followerNickname, String followedNickname) {
+        controller.followUser(followerNickname, followedNickname);
+    }
+
+    @Override
+    @WebMethod
+    public void unfollowUser(String followerNickname, String followedNickname) {
+        controller.unfollowUser(followerNickname, followedNickname);
+    }
+
+    @Override
+    @WebMethod
+    public Boolean isFollowing(String followerNickname, String followedNickname) {
+        return controller.isFollowing(followerNickname, followedNickname);
+    }
 }
