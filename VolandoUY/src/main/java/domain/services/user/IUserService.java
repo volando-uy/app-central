@@ -29,6 +29,7 @@ public interface IUserService {
     Customer getCustomerByNickname(String nickname, boolean full);
 
     boolean existsUserByNickname(String nickname);
+    boolean existsUserByEmail(String email);
 
     void setFlightRoutePackageService(IFlightRoutePackageService flightRoutePackageService);
 

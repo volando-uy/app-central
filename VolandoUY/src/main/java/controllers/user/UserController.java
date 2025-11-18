@@ -99,6 +99,15 @@ public class UserController implements IUserController {
         return userService.getCustomerDetailsByNickname(nickname, false);
     }
 
+    @Override
+    public boolean existsUserByNickname(String nickname) {
+        return userService.existsUserByNickname(nickname);
+    }
+
+    @Override
+    public boolean existsUserByEmail(String email) {
+        return userService.existsUserByEmail(email);
+    }
 
     // Follow section
     @Override

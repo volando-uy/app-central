@@ -16,7 +16,7 @@ public abstract class BaseSoapAdapter {
         Endpoint.publish(endpointUrl, this);
 
 
-        System.out.printf("🟢 Servicio SOAP %s publicado en: %s?wsdl%n", getServiceName(), endpointUrl);
+        System.out.printf("Servicio SOAP %s publicado en: %s?wsdl%n", getServiceName(), endpointUrl);
 
     }
 
@@ -26,3 +26,4 @@ public abstract class BaseSoapAdapter {
 
     protected abstract String getServiceName();
 }
+
