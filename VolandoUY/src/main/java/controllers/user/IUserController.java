@@ -28,6 +28,9 @@ public interface IUserController {
     List<BaseAirlineDTO> getAllAirlinesSimpleDetails();
 
     // Getters by nickname
+    boolean existsUserByNickname(String nickname);
+    boolean existsUserByEmail(String email);
+
     // Simple and full versions
     UserDTO getUserSimpleDetailsByNickname(String nickname); // Devuelve BaseAirlineDTO o BaseCustomerDTO
     AirlineDTO getAirlineDetailsByNickname(String nickname);

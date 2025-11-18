@@ -140,4 +140,16 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserController 
     public Boolean isFollowing(String followerNickname, String followedNickname) {
         return controller.isFollowing(followerNickname, followedNickname);
     }
+
+    @Override
+    @WebMethod
+    public boolean existsUserByNickname(String nickname) {
+        return controller.existsUserByNickname(nickname);
+    }
+
+    @Override
+    @WebMethod
+    public boolean existsUserByEmail(String email) {
+        return controller.existsUserByEmail(email);
+    }
 }

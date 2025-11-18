@@ -262,6 +262,10 @@ public class UserService implements IUserService {
     public boolean existsUserByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
+    @Override
+    public boolean existsUserByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     // Follow section
     @Override
