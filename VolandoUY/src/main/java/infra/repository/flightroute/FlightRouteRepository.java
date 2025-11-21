@@ -148,9 +148,58 @@ public class FlightRouteRepository extends AbstractFlightRouteRepository impleme
     @Override
     public List<FlightRoute> getAllByPackageName(String packageName) {
         try (EntityManager entityManager = DBConnection.getEntityManager()) {
-            return entityManager.createQuery("SELECT fr FROM FlightRoute fr JOIN fr.inPackages frp WHERE LOWER(frp.name) = LOWER(:packageName)", FlightRoute.class)
-                    .setParameter("packageName", packageName)
-                    .getResultList();
+            return entityManager.createQuery(
+                "SELECT fr FROM FlightRoute fr JOIN fr.inPackages frp WHERE LOWER(frp.name) = LOWER(:packageName)", FlightRoute.class)
+                .setParameter("packageName", packageName)
+                .getResultList();
+        }
+    }
+
+    @Override
+    public void incrementVisitCount(String routeName) {
+        EntityManager em = DBConnection.getEntityManager();
+        try (em) {
+            em.getTransaction().begin();
+            em.createQuery(
+            "UPDATE FlightRoute f SET f.visitCount = f.visitCount + 1 WHERE f.name = :name"
+            )
+                .setParameter("name", routeName)
+                .executeUpdate();
+            em.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<FlightRoute> getTopByVisitCount() {
+        try (EntityManager entityManager = DBConnection.getEntityManager()) {
+            List<FlightRoute> flightRoutes = entityManager.createQuery(
+                "SELECT fr FROM FlightRoute fr ORDER BY fr.visitCount DESC", FlightRoute.class)
+                .setMaxResults(10)
+                .getResultList();
+
+            for (FlightRoute fr : flightRoutes) {
+                if (fr != null) {
+                    if (fr.getFlights() != null)
+                        fr.getFlights().size(); // Initialize flights collection
+                    if (fr.getCategories() != null)
+                        fr.getCategories().size(); // Initialize categories collection
+                    if (fr.getInPackages() != null)
+                        fr.getInPackages().size(); // Initialize packages collection
+                    if (fr.getOriginAero() != null)
+                        fr.getOriginAero().getCode(); // Initialize origin aero
+                    if (fr.getDestinationAero() != null)
+                        fr.getDestinationAero().getCode(); // Initialize destination aero
+                    if (fr.getAirline() != null)
+                        fr.getAirline().getName(); // Initialize airline
+                }
+            }
+            return flightRoutes;
         }
     }
 }

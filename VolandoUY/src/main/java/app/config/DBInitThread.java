@@ -41,7 +41,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-            seed();
+            //seed();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -298,8 +298,15 @@ public class DBInitThread extends Thread {
                     if (status.equals(EnumEstatusRuta.CONFIRMADA.toString())) {
                         createdFlightRoute.setStatus(EnumEstatusRuta.CONFIRMADA);
                         flightRoutesDTOs.add(createdFlightRoute);
+
+                        // Le agregamos entre 1 y 5 visitas
+                        for (int i = 0; i < (int) (Math.random() * 5) + 1; i++) {
+                            flightRouteController.incrementFlightRouteVisitCountByName(createdFlightRoute.getName());
+                        }
                     }
                 }
+
+
 
             }
         }

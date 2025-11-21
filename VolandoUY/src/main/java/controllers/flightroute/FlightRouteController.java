@@ -78,4 +78,14 @@ public class FlightRouteController implements IFlightRouteController{
                 .map(route -> (BaseFlightRouteDTO) route)
                 .toList();
     }
+
+    @Override
+    public void incrementFlightRouteVisitCountByName(String routeName) {
+        flightRouteService.incrementFlightRouteVisitCountByName(routeName);
+    }
+
+    @Override
+    public List<FlightRouteDTO> getTopFlightRoutesDetailsByVisitCount() {
+        return flightRouteService.getTopFlightRoutesDetailsByVisitCount();
+    }
 }

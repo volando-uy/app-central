@@ -24,4 +24,8 @@ public interface IFlightRouteController {
 
     List<FlightRouteDTO> getAllFlightRoutesDetailsByPackageName(String packageName);
     List<BaseFlightRouteDTO> getAllFlightRoutesSimpleDetailsByPackageName(String packageName);
+
+    void incrementFlightRouteVisitCountByName(String routeName);
+
+    List<FlightRouteDTO> getTopFlightRoutesDetailsByVisitCount();
 }
