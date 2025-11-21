@@ -104,6 +104,7 @@ public class FlightRouteService implements IFlightRouteService {
         flightRoute.setCategories(categories);
         flightRoute.setFlights(new ArrayList<>());
         flightRoute.setStatus(EnumEstatusRuta.SIN_ESTADO);
+        flightRoute.setVisitCount(0.0);
 
 
         // Validar antes del primer save
@@ -185,6 +186,25 @@ public class FlightRouteService implements IFlightRouteService {
 
         flightRoute.setStatus(finalStatus);
         flightRouteRepository.update(flightRoute);
+    }
+
+    @Override
+    public void incrementFlightRouteVisitCountByName(String routeName) {
+        FlightRoute flightRoute = this.getFlightRouteByName(routeName, false);
+        if (flightRoute == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_NOT_FOUND, routeName));
+        }
+
+        // No se usa el update por posibles race-conditions
+        flightRouteRepository.incrementVisitCount(routeName);
+    }
+
+    @Override
+    public List<FlightRouteDTO> getTopFlightRoutesDetailsByVisitCount() {
+        List<FlightRoute> flightRoutes = flightRouteRepository.getTopByVisitCount();
+        return flightRoutes.stream()
+                .map(route -> customModelMapper.mapFullFlightRoute(route))
+                .toList();
     }
 }
 

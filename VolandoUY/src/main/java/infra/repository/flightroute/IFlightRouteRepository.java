@@ -20,4 +20,8 @@ public interface IFlightRouteRepository extends IBaseRepository<FlightRoute> {
     List<FlightRoute> getFullAllByPackageName(String packageName);
 
     List<FlightRoute> getAllByPackageName(String packageName);
+
+    void incrementVisitCount(String routeName);
+
+    List<FlightRoute> getTopByVisitCount();
 }

@@ -18,8 +18,8 @@ public class FlightRouteDTO extends BaseFlightRouteDTO {
     private List<String> flightsNames;
     private List<String> inPackagesNames;
 
-    public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage, EnumEstatusRuta status, String image, String videoURL) {
-        super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage, status, image, videoURL);
+    public FlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage, EnumEstatusRuta status, String image, String videoURL, Double visitCount) {
+        super(name, description, createdAt, priceTouristClass, priceBusinessClass, priceExtraUnitBaggage, status, image, videoURL, visitCount);
         this.originAeroCode = null;
         this.destinationAeroCode = null;
         this.airlineNickname = null;

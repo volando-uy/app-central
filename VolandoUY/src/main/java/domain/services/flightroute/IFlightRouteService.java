@@ -28,4 +28,8 @@ public interface IFlightRouteService {
     List<FlightRouteDTO> getFlightRoutesDetailsByPackageName(String packageName, boolean full);
 
     void setFlightRouteStatusByName(String routeName, String status);
+
+    void incrementFlightRouteVisitCountByName(String routeName);
+
+    List<FlightRouteDTO> getTopFlightRoutesDetailsByVisitCount();
 }
