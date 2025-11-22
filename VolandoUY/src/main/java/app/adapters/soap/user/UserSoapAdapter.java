@@ -68,6 +68,7 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserSoapControl
         try {
             imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
             BaseCustomerDTO domainDto = CustomerSoapMapper.fromSoap(updatedUserDTO);
+            System.out.println("Imagen procesada para updateUserC: " + (imageFile != null ? imageFile.getAbsolutePath() : "null"));
             return controller.updateUser(nickname, domainDto, imageFile);
         } catch (IOException e) {
             throw new RuntimeException("Error al procesar la imagen base64", e);

@@ -47,20 +47,29 @@ public class ImagesSoapAdapter extends BaseSoapAdapter {
     }
 
 
-
     @WebMethod
     public String getImageAbsolutePath(String resource, String key) {
-        return ImageProcessor.getImageAbsolutePath(resource, key);
+
+        String image= ImageProcessor.getImageAbsolutePath(resource, key);
+        if(image==null || image.isEmpty()){
+            return Images.ERROR_DEFAULT;
+        }
+        return image;
     }
 
     @WebMethod
     public String getCreationPath(String resource, String key) {
         return ImageProcessor.getCreationPath(resource, key);
     }
+
     @WebMethod
-    public String uploadImage(String base64Image, String creationPath) throws IOException {
-        File imageFile = null;
-        imageFile = ImageMapper.fromBase64(base64Image, ".tmp");
-        return ImageProcessor.uploadImage(imageFile, creationPath);
+    public String uploadImage(String base64Image, String creationPath) {
+        try {
+            File imageFile = null;
+            imageFile = ImageMapper.fromBase64(base64Image, ".tmp");
+            return ImageProcessor.uploadImage(imageFile, creationPath);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen base64", e);
+        }
     }
 }
