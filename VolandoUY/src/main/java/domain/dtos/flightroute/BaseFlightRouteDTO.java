@@ -22,4 +22,18 @@ public class BaseFlightRouteDTO {
     private EnumEstatusRuta status;
     private String image;
     private String videoURL;
+    private Double visitCount;
+
+    public BaseFlightRouteDTO(String name, String description, LocalDate createdAt, Double priceTouristClass, Double priceBusinessClass, Double priceExtraUnitBaggage, EnumEstatusRuta status, String image, String videoURL) {
+        this.name = name;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.priceTouristClass = priceTouristClass;
+        this.priceBusinessClass = priceBusinessClass;
+        this.priceExtraUnitBaggage = priceExtraUnitBaggage;
+        this.status = status;
+        this.image = image;
+        this.videoURL = videoURL;
+        this.visitCount = 0.0;
+    }
 }

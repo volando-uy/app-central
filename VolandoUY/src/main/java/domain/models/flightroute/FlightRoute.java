@@ -77,6 +77,8 @@ public class FlightRoute {
 
     private String videoURL;
 
+    private Double visitCount = 0.0;
+
 
     public FlightRoute(String name, String description, LocalDate createdAt,
                        Double priceTouristClass, Double priceBusinessClass,
@@ -96,10 +98,13 @@ public class FlightRoute {
         return "FlightRoute{" +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", priceTouristClass=" + priceTouristClass +
-                ", priceBusinessClass=" + priceBusinessClass +
-                ", priceExtraUnitBaggage=" + priceExtraUnitBaggage +
+                ", createdAt=" + createdAt + '\'' +
+                ", priceTouristClass=" + priceTouristClass + '\'' +
+                ", priceBusinessClass=" + priceBusinessClass + '\'' +
+                ", priceExtraUnitBaggage=" + priceExtraUnitBaggage + '\'' +
+                ", image='" + image + '\'' +
+                ", videoURL='" + videoURL + '\'' +
+                ", visitCount=" + visitCount + '\'' +
                 '}';
     }
 }
