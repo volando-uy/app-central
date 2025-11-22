@@ -1,6 +1,12 @@
 package shared.constants;
 
+import app.adapters.soap.BaseSoapAdapter;
+import jakarta.jws.WebService;
+import jakarta.jws.soap.SOAPBinding;
+import lombok.Getter;
+
 import java.io.File;
+
 
 public class Images {
 

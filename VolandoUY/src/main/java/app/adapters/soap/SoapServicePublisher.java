@@ -9,10 +9,12 @@ import app.adapters.soap.city.CitySoapAdapter;
 import app.adapters.soap.flight.FlightSoapAdapter;
 import app.adapters.soap.flightroute.FlightRouteSoapAdapter;
 import app.adapters.soap.flightroutepackage.FlightRoutePackageSoapAdapter;
+import app.adapters.soap.images.ImagesSoapAdapter;
 import app.adapters.soap.seat.SeatSoapAdapter;
 import app.adapters.soap.ticket.TicketSoapAdapter;
 import app.adapters.soap.user.UserSoapAdapter;
 import factory.ControllerFactory;
+import shared.constants.Images;
 
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class SoapServicePublisher {
                 new FlightRoutePackageSoapAdapter(ControllerFactory.getFlightRoutePackageController()),
                 new SeatSoapAdapter(ControllerFactory.getSeatController()),
                 new TicketSoapAdapter(ControllerFactory.getTicketController()),
-                new UserSoapAdapter(ControllerFactory.getUserController())
+                new UserSoapAdapter(ControllerFactory.getUserController()),
+                new ImagesSoapAdapter()
         );
 
         adapters.forEach(BaseSoapAdapter::publish);

@@ -1,8 +1,12 @@
 package app.adapters.soap.user;
 
+import app.adapters.dto.customer.SoapBaseCustomerDTO;
+import app.adapters.mappers.CustomerSoapMapper;
+import app.adapters.mappers.ImageMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
+import controllers.user.IUserSoapController;
 import domain.dtos.ticket.TicketDTO;
 import domain.dtos.user.*;
 import jakarta.jws.WebMethod;
@@ -10,11 +14,12 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class UserSoapAdapter extends BaseSoapAdapter implements IUserController {
+public class UserSoapAdapter extends BaseSoapAdapter implements IUserSoapController {
 
     private final IUserController controller;
 
@@ -29,8 +34,10 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserController 
 
     @Override
     @WebMethod
-    public BaseCustomerDTO registerCustomer(BaseCustomerDTO dto, File imageFile) {
-        return controller.registerCustomer(dto, imageFile);
+    public SoapBaseCustomerDTO registerCustomer(SoapBaseCustomerDTO soapDto, File imageFile) {
+        BaseCustomerDTO domainDto = CustomerSoapMapper.fromSoap(soapDto);
+        BaseCustomerDTO registered = controller.registerCustomer(domainDto, imageFile);
+        return CustomerSoapMapper.toSoap(registered);
     }
 
     @Override
@@ -41,9 +48,37 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserController 
 
     @Override
     @WebMethod
-    public UserDTO updateUser(String nickname, UserDTO user, File imageFile) {
-        return controller.updateUser(nickname, user, imageFile);
+    public UserDTO updateUser(String nickname, UserDTO updatedUserDTO, String imageBase64) {
+        File imageFile = null;
+        try {
+            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
+            return controller.updateUser(nickname, updatedUserDTO, imageFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen base64", e);
+        } finally {
+            if (imageFile != null && imageFile.exists()) {
+                imageFile.delete();
+            }
+        }
     }
+    @Override
+    @WebMethod
+    public UserDTO updateUserC(String nickname, SoapBaseCustomerDTO updatedUserDTO, String imageBase64) {
+        File imageFile = null;
+        try {
+            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
+            BaseCustomerDTO domainDto = CustomerSoapMapper.fromSoap(updatedUserDTO);
+            System.out.println("Imagen procesada para updateUserC: " + (imageFile != null ? imageFile.getAbsolutePath() : "null"));
+            return controller.updateUser(nickname, domainDto, imageFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen base64", e);
+        } finally {
+            if (imageFile != null && imageFile.exists()) {
+                imageFile.delete();
+            }
+        }
+    }
+
 
     @Override
     @WebMethod
@@ -119,8 +154,9 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserController 
 
     @Override
     @WebMethod
-    public BaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname) {
-        return controller.getCustomerSimpleDetailsByNickname(nickname);
+    public SoapBaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname) {
+        BaseCustomerDTO domainDto = controller.getCustomerSimpleDetailsByNickname(nickname);
+        return CustomerSoapMapper.toSoap(domainDto);
     }
 
     @Override
