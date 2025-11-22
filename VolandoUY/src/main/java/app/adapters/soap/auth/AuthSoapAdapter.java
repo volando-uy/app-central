@@ -1,7 +1,10 @@
 package app.adapters.soap.auth;
 
+import app.adapters.dto.auth.SoapLoginResponseDTO;
+import app.adapters.mappers.UserSoapMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import controllers.auth.IAuthController;
+import controllers.auth.IAuthSoapController;
 import domain.dtos.user.LoginResponseDTO;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
@@ -9,7 +12,7 @@ import jakarta.jws.soap.SOAPBinding;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class AuthSoapAdapter extends BaseSoapAdapter implements IAuthController {
+public class AuthSoapAdapter extends BaseSoapAdapter implements IAuthSoapController {
 
     private final IAuthController controller;
 
@@ -24,8 +27,14 @@ public class AuthSoapAdapter extends BaseSoapAdapter implements IAuthController 
 
     @Override
     @WebMethod
-    public LoginResponseDTO login(String nickname, String password) {
-        return controller.login(nickname, password);
+    public SoapLoginResponseDTO login(String nickname, String password) {
+        LoginResponseDTO domainResp = controller.login(nickname, password);
+
+        SoapLoginResponseDTO soapResp = new SoapLoginResponseDTO();
+        soapResp.setToken(domainResp.getToken());
+        soapResp.setUser(UserSoapMapper.toSoap(domainResp.getUser()));
+
+        return soapResp;
     }
 
     @Override

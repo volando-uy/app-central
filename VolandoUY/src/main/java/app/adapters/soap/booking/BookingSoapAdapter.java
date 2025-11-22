@@ -1,7 +1,13 @@
 package app.adapters.soap.booking;
 
+import app.adapters.dto.bookflight.SoapBaseBookFlightDTO;
+import app.adapters.dto.ticket.TicketLuggageArray;
+import app.adapters.dto.ticket.TicketWithLuggage;
+import app.adapters.mappers.BookFlightSoapMapper;
+import app.adapters.mappers.TicketLuggageMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import controllers.booking.IBookingController;
+import controllers.booking.IBookingSoapController;
 import domain.dtos.bookflight.BaseBookFlightDTO;
 import domain.dtos.bookflight.BookFlightDTO;
 import domain.dtos.luggage.LuggageDTO;
@@ -10,12 +16,13 @@ import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class BookingSoapAdapter extends BaseSoapAdapter implements IBookingController {
+public class BookingSoapAdapter extends BaseSoapAdapter implements IBookingSoapController {
 
     private final IBookingController controller;
 
@@ -23,17 +30,29 @@ public class BookingSoapAdapter extends BaseSoapAdapter implements IBookingContr
         this.controller = controller;
     }
 
-    @Override
     protected String getServiceName() {
         return "bookingService";
     }
 
     @Override
     @WebMethod
-    public BaseBookFlightDTO createBooking(BaseBookFlightDTO bookingDTO, Map<BaseTicketDTO, List<LuggageDTO>> tickets, String userNickname, String flightName) {
-        return controller.createBooking(bookingDTO, tickets, userNickname, flightName);
-    }
+    public SoapBaseBookFlightDTO createBooking(SoapBaseBookFlightDTO soapBookingDTO,
+                                               TicketLuggageArray ticketLuggages,
+                                               String userNickname,
+                                               String flightName) {
 
+        // Convert SOAP DTO to domain DTO
+        BaseBookFlightDTO bookingDTO = BookFlightSoapMapper.fromSoap(soapBookingDTO);
+
+        // Convert SOAP luggage structure to map
+        Map<BaseTicketDTO, List<LuggageDTO>> ticketMap = TicketLuggageMapper.toMap(ticketLuggages);
+
+        // Call controller
+        BaseBookFlightDTO result = controller.createBooking(bookingDTO, ticketMap, userNickname, flightName);
+
+        // Convert domain DTO back to SOAP DTO
+        return BookFlightSoapMapper.toSoap(result);
+    }
     @Override
     @WebMethod
     public List<BookFlightDTO> getAllBookFlightsDetails() {

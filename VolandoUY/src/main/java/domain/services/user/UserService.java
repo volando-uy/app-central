@@ -77,7 +77,7 @@ public class UserService implements IUserService {
         // Lo validamos
         ValidatorUtil.validate(customer);
 
-        if (imageFile != null) {
+        if (imageFile != null && imageFile.exists() && imageFile.isFile() && imageFile.length() > 0) {
             String imagePath = ImageProcessor.getCreationPath("customer", customer.getNickname());
             String uploadedImagePath = ImageProcessor.uploadImage(imageFile, imagePath);
             customer.setImage(uploadedImagePath);
