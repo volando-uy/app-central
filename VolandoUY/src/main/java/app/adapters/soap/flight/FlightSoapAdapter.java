@@ -1,7 +1,10 @@
 package app.adapters.soap.flight;
 
+import app.adapters.dto.flights.BaseFlightSoapViewDTO;
+import app.adapters.mappers.FlightSoapMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import controllers.flight.IFlightController;
+import controllers.flight.ISoapFlightController;
 import domain.dtos.flight.BaseFlightDTO;
 import domain.dtos.flight.FlightDTO;
 import jakarta.jws.WebMethod;
@@ -13,7 +16,7 @@ import java.util.List;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class FlightSoapAdapter extends BaseSoapAdapter implements IFlightController {
+public class FlightSoapAdapter extends BaseSoapAdapter implements ISoapFlightController {
 
     private final IFlightController controller;
 
@@ -40,8 +43,11 @@ public class FlightSoapAdapter extends BaseSoapAdapter implements IFlightControl
 
     @Override
     @WebMethod
-    public List<BaseFlightDTO> getAllFlightsSimpleDetails() {
-        return controller.getAllFlightsSimpleDetails();
+    public List<BaseFlightSoapViewDTO> getAllFlightsSimpleDetails() {
+        return controller.getAllFlightsSimpleDetails()
+                .stream()
+                .map(FlightSoapMapper::mapToSoapView)
+                .toList();
     }
 
     @Override
