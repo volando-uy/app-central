@@ -1,7 +1,9 @@
 package app.adapters.soap.flight;
 
-import app.adapters.dto.flights.BaseFlightSoapViewDTO;
+import app.adapters.dto.flights.SoapBaseFlightDTO;
+import app.adapters.dto.flights.SoapFlightDTO;
 import app.adapters.mappers.FlightSoapMapper;
+import app.adapters.mappers.ImageMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import controllers.flight.IFlightController;
 import controllers.flight.ISoapFlightController;
@@ -12,6 +14,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @WebService
@@ -31,58 +34,90 @@ public class FlightSoapAdapter extends BaseSoapAdapter implements ISoapFlightCon
 
     @Override
     @WebMethod
-    public BaseFlightDTO createFlight(BaseFlightDTO flight, String airlineNickname, String flightRouteName, File imageFile) {
-        return controller.createFlight(flight, airlineNickname, flightRouteName, imageFile);
+    public SoapBaseFlightDTO createFlight(SoapBaseFlightDTO flight, String airlineNickname, String flightRouteName, String imageBase64File) {
+        BaseFlightDTO baseFlightDTO = FlightSoapMapper.mapFromSoapBaseFlightDTO(flight);
+        File image=null;
+        try {
+            image = ImageMapper.fromBase64(imageBase64File, "flightImage");
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new RuntimeException("Error decoding image from base64", e);
+        }
+        BaseFlightDTO createdFlight = controller.createFlight(baseFlightDTO, airlineNickname, flightRouteName, image);
+        return FlightSoapMapper.mapToSoapBaseFlightDTO(createdFlight);
+
     }
+
 
     @Override
     @WebMethod
-    public List<FlightDTO> getAllFlightsDetails() {
-        return controller.getAllFlightsDetails();
-    }
-
-    @Override
-    @WebMethod
-    public List<BaseFlightSoapViewDTO> getAllFlightsSimpleDetails() {
-        return controller.getAllFlightsSimpleDetails()
+    public List<SoapFlightDTO> getAllFlightsDetails() {
+        return controller.getAllFlightsDetails()
                 .stream()
-                .map(FlightSoapMapper::mapToSoapView)
+                .map(FlightSoapMapper::mapToSoapFlightDTO)
                 .toList();
     }
 
     @Override
     @WebMethod
-    public FlightDTO getFlightDetailsByName(String name) {
-        return controller.getFlightDetailsByName(name);
+    public List<SoapBaseFlightDTO> getAllFlightsSimpleDetails() {
+        return controller.getAllFlightsSimpleDetails()
+                .stream()
+                .map(FlightSoapMapper::mapToSoapBaseFlightDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public BaseFlightDTO getFlightSimpleDetailsByName(String name) {
-        return controller.getFlightSimpleDetailsByName(name);
+    public SoapFlightDTO getFlightDetailsByName(String name) {
+        FlightDTO flight = controller.getFlightDetailsByName(name);
+        return FlightSoapMapper.mapToSoapFlightDTO(flight);
     }
 
     @Override
     @WebMethod
-    public List<FlightDTO> getAllFlightsDetailsByAirline(String airlineNickname) {
-        return controller.getAllFlightsDetailsByAirline(airlineNickname);
+    public SoapBaseFlightDTO getFlightSimpleDetailsByName(String name) {
+        BaseFlightDTO flight = controller.getFlightSimpleDetailsByName(name);
+        return FlightSoapMapper.mapToSoapBaseFlightDTO(flight);
     }
 
     @Override
     @WebMethod
-    public List<BaseFlightDTO> getAllFlightsSimpleDetailsByAirline(String airlineNickname) {
-        return controller.getAllFlightsSimpleDetailsByAirline(airlineNickname);
+    public List<SoapFlightDTO> getAllFlightsDetailsByAirline(String airlineNickname) {
+        List<FlightDTO> flights = controller.getAllFlightsDetailsByAirline(airlineNickname);
+        return flights.stream()
+                .map(FlightSoapMapper::mapToSoapFlightDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public List<FlightDTO> getAllFlightsDetailsByRouteName(String flightRouteName) {
-        return controller.getAllFlightsDetailsByRouteName(flightRouteName);
+    public List<SoapBaseFlightDTO> getAllFlightsSimpleDetailsByAirline(String airlineNickname) {
+
+        List<BaseFlightDTO> flights = controller.getAllFlightsSimpleDetailsByAirline(airlineNickname);
+        return flights.stream()
+                .map(FlightSoapMapper::mapToSoapBaseFlightDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public List<BaseFlightDTO> getAllFlightsSimpleDetailsByRouteName(String flightRouteName) {
-        return controller.getAllFlightsSimpleDetailsByRouteName(flightRouteName);
+    public List<SoapFlightDTO> getAllFlightsDetailsByRouteName(String flightRouteName) {
+        //Mappear a SoapFlightDTO
+
+        List<FlightDTO> flights = controller.getAllFlightsDetailsByRouteName(flightRouteName);
+        return flights.stream()
+                .map(FlightSoapMapper::mapToSoapFlightDTO)
+                .toList();
+    }
+
+    @Override
+    @WebMethod
+    public List<SoapBaseFlightDTO> getAllFlightsSimpleDetailsByRouteName(String flightRouteName) {
+
+        List<BaseFlightDTO> flights = controller.getAllFlightsSimpleDetailsByRouteName(flightRouteName);
+        return flights.stream()
+                .map(FlightSoapMapper::mapToSoapBaseFlightDTO)
+                .toList();
     }
 }

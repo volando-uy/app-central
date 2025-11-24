@@ -29,4 +29,6 @@ public interface IFlightRouteController extends IFlightRouteBaseController {
 
     List<FlightRouteDTO> getTopFlightRoutesDetailsByVisitCount();
 
+
+
 }

@@ -1,13 +1,11 @@
 package app.adapters.soap.user;
 
-import app.adapters.dto.customer.SoapBaseCustomerDTO;
-import app.adapters.mappers.CustomerSoapMapper;
+import app.adapters.dto.user.*;
 import app.adapters.mappers.ImageMapper;
+import app.adapters.mappers.UserSoapMapper;
 import app.adapters.soap.BaseSoapAdapter;
-import controllers.ticket.ITicketController;
 import controllers.user.IUserController;
 import controllers.user.IUserSoapController;
-import domain.dtos.ticket.TicketDTO;
 import domain.dtos.user.*;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
@@ -34,62 +32,95 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserSoapControl
 
     @Override
     @WebMethod
-    public SoapBaseCustomerDTO registerCustomer(SoapBaseCustomerDTO soapDto, File imageFile) {
-        BaseCustomerDTO domainDto = CustomerSoapMapper.fromSoap(soapDto);
+    public SoapBaseCustomerDTO registerCustomer(SoapBaseCustomerDTO soapDto, String imageFileBase64) {
+        BaseCustomerDTO domainDto = UserSoapMapper.toBaseCustomerDTO(soapDto);
+        File imageFile = null;
+        try {
+            imageFile = ImageMapper.fromBase64(imageFileBase64, ".tmp");
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen base64", e);
+        }
         BaseCustomerDTO registered = controller.registerCustomer(domainDto, imageFile);
-        return CustomerSoapMapper.toSoap(registered);
+        return UserSoapMapper.toSoapBaseCustomerDTO(registered);
     }
 
     @Override
     @WebMethod
-    public BaseAirlineDTO registerAirline(BaseAirlineDTO dto, File imageFile) {
-        return controller.registerAirline(dto, imageFile);
-    }
-
-    @Override
-    @WebMethod
-    public UserDTO updateUser(String nickname, UserDTO updatedUserDTO, String imageBase64) {
+    public SoapBaseAirlineDTO registerAirline(SoapBaseAirlineDTO dto, String imageFileBase64) {
+        BaseAirlineDTO domainDto = UserSoapMapper.toBaseAirlineDTO(dto);
         File imageFile = null;
         try {
-            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
-            return controller.updateUser(nickname, updatedUserDTO, imageFile);
+            imageFile = ImageMapper.fromBase64(imageFileBase64, ".tmp");
         } catch (IOException e) {
             throw new RuntimeException("Error al procesar la imagen base64", e);
-        } finally {
+        }
+        BaseAirlineDTO baseAirlineDTO = controller.registerAirline(domainDto, imageFile);
+        return UserSoapMapper.toSoapBaseAirlineDTO(baseAirlineDTO);
+    }
+
+    @Override
+    @WebMethod
+    public SoapUserDTO updateUser(String nickname, SoapUserDTO updatedUserDTO, String imageBase64) {
+        File imageFile = null;
+        try {
+            System.out.println("Usuario sin mappear para updateUser: " + updatedUserDTO.toString());
+            UserDTO user = UserSoapMapper.toUserDTO(updatedUserDTO);
+            System.out.println("Usuario mappeado para updateUser: " + user.toString());
+            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
+            UserDTO updated = controller.updateUser(nickname, user, imageFile);
+            System.out.println("Usuario actualizado: " + updated.toString());
+            System.out.println("Usuairo actualizado mappeado a SOAP: " + UserSoapMapper.toSoapUserDTO(updated).toString());
+
+            return UserSoapMapper.toSoapUserDTO(updated);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen base64", e);
+        }  catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Error al actualizar el usuario: " + e.getMessage(), e);
+        }
+        finally {
             if (imageFile != null && imageFile.exists()) {
                 imageFile.delete();
             }
         }
     }
+
+//    @Override
+//    @WebMethod
+//    public UserDTO updateUserC(String nickname, SoapBaseCustomerDTO updatedUserDTO, String imageBase64) {
+//        File imageFile = null;
+//        try {
+//            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
+//            BaseCustomerDTO domainDto = CustomerSoapMapper.toBaseCustomerDTO(updatedUserDTO);
+//            System.out.println("Imagen procesada para updateUserC: " + (imageFile != null ? imageFile.getAbsolutePath() : "null"));
+//            return controller.updateUser(nickname, domainDto, imageFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException("Error al procesar la imagen base64", e);
+//        } finally {
+//            if (imageFile != null && imageFile.exists()) {
+//                imageFile.delete();
+//            }
+//        }
+//    }
+
+
     @Override
     @WebMethod
-    public UserDTO updateUserC(String nickname, SoapBaseCustomerDTO updatedUserDTO, String imageBase64) {
-        File imageFile = null;
-        try {
-            imageFile = ImageMapper.fromBase64(imageBase64, ".tmp");
-            BaseCustomerDTO domainDto = CustomerSoapMapper.fromSoap(updatedUserDTO);
-            System.out.println("Imagen procesada para updateUserC: " + (imageFile != null ? imageFile.getAbsolutePath() : "null"));
-            return controller.updateUser(nickname, domainDto, imageFile);
-        } catch (IOException e) {
-            throw new RuntimeException("Error al procesar la imagen base64", e);
-        } finally {
-            if (imageFile != null && imageFile.exists()) {
-                imageFile.delete();
-            }
-        }
+    public List<SoapUserDTO> getAllUsersDetails() {
+        List<UserDTO> userDTOS = controller.getAllUsersDetails();
+        return userDTOS.stream()
+                .map(UserSoapMapper::toSoapUserDTO)
+                .toList();
     }
 
-
     @Override
     @WebMethod
-    public List<UserDTO> getAllUsersDetails() {
-        return controller.getAllUsersDetails();
-    }
+    public List<SoapUserDTO> getAllUsersSimpleDetails() {
 
-    @Override
-    @WebMethod
-    public List<UserDTO> getAllUsersSimpleDetails() {
-        return controller.getAllUsersSimpleDetails();
+        List<UserDTO> users = controller.getAllUsersSimpleDetails();
+        return users.stream()
+                .map(UserSoapMapper::toSoapUserDTO)
+                .toList();
     }
 
     @Override
@@ -106,57 +137,73 @@ public class UserSoapAdapter extends BaseSoapAdapter implements IUserSoapControl
 
     @Override
     @WebMethod
-    public List<CustomerDTO> getAllCustomersDetails() {
-        return controller.getAllCustomersDetails();
+    public List<SoapCustomerDTO> getAllCustomersDetails() {
+        List<CustomerDTO> customerDTOS = controller.getAllCustomersDetails();
+        return customerDTOS.stream()
+                .map(UserSoapMapper::toSoapCustomerDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public List<BaseCustomerDTO> getAllCustomersSimpleDetails() {
-        return controller.getAllCustomersSimpleDetails();
+    public List<SoapBaseCustomerDTO> getAllCustomersSimpleDetails() {
+        List<BaseCustomerDTO> customerDTOS = controller.getAllCustomersSimpleDetails();
+        return customerDTOS.stream()
+                .map(UserSoapMapper::toSoapBaseCustomerDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public List<AirlineDTO> getAllAirlinesDetails() {
-        return controller.getAllAirlinesDetails();
+    public List<SoapAirlineDTO> getAllAirlinesDetails() {
+        List<AirlineDTO> airlines= controller.getAllAirlinesDetails();
+        return airlines.stream()
+                .map(UserSoapMapper::toSoapAirlineDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public List<BaseAirlineDTO> getAllAirlinesSimpleDetails() {
-        return controller.getAllAirlinesSimpleDetails();
+    public List<SoapBaseAirlineDTO> getAllAirlinesSimpleDetails() {
+        List<BaseAirlineDTO> airlineDTOS = controller.getAllAirlinesSimpleDetails();
+        return airlineDTOS.stream()
+                .map(UserSoapMapper::toSoapBaseAirlineDTO)
+                .toList();
     }
 
     @Override
     @WebMethod
-    public UserDTO getUserSimpleDetailsByNickname(String nickname) {
-        return controller.getUserSimpleDetailsByNickname(nickname);
+    public SoapUserDTO getUserSimpleDetailsByNickname(String nickname) {
+        UserDTO userDTO = controller.getUserSimpleDetailsByNickname(nickname);
+        return UserSoapMapper.toSoapUserDTO(userDTO);
     }
 
     @Override
     @WebMethod
-    public AirlineDTO getAirlineDetailsByNickname(String nickname) {
-        return controller.getAirlineDetailsByNickname(nickname);
+    public SoapAirlineDTO getAirlineDetailsByNickname(String nickname) {
+        AirlineDTO airlineDTO = controller.getAirlineDetailsByNickname(nickname);
+        return UserSoapMapper.toSoapAirlineDTO(airlineDTO);
     }
 
     @Override
     @WebMethod
-    public BaseAirlineDTO getAirlineSimpleDetailsByNickname(String nickname) {
-        return controller.getAirlineSimpleDetailsByNickname(nickname);
+    public SoapBaseAirlineDTO getAirlineSimpleDetailsByNickname(String nickname) {
+        BaseAirlineDTO baseAirlineDTO = controller.getAirlineSimpleDetailsByNickname(nickname);
+        return UserSoapMapper.toSoapBaseAirlineDTO(baseAirlineDTO);
     }
 
     @Override
     @WebMethod
-    public CustomerDTO getCustomerDetailsByNickname(String nickname) {
-        return controller.getCustomerDetailsByNickname(nickname);
+    public SoapCustomerDTO getCustomerDetailsByNickname(String nickname) {
+        CustomerDTO customer = controller.getCustomerDetailsByNickname(nickname);
+        return UserSoapMapper.toSoapCustomerDTO(customer);
     }
 
     @Override
     @WebMethod
     public SoapBaseCustomerDTO getCustomerSimpleDetailsByNickname(String nickname) {
         BaseCustomerDTO domainDto = controller.getCustomerSimpleDetailsByNickname(nickname);
-        return CustomerSoapMapper.toSoap(domainDto);
+        return UserSoapMapper.toSoapBaseCustomerDTO(domainDto);
     }
 
     @Override

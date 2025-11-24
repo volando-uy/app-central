@@ -1,6 +1,7 @@
 package domain.dtos.luggage;
 
 import domain.models.luggage.EnumEquipajeBasico;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@XmlRootElement
 public class BaseBasicLuggageDTO extends LuggageDTO {
     private Long id;
     private EnumEquipajeBasico category;
