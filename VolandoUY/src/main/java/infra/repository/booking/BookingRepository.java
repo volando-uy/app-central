@@ -162,7 +162,7 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
     public BookFlight getFullBookingById(Long id) {
         try (EntityManager em = DBConnection.getEntityManager()) {
             try {
-                BookFlight bf = em.createQuery(
+                return em.createQuery(
                                 "SELECT DISTINCT bf FROM BookFlight bf " +
                                         "LEFT JOIN FETCH bf.tickets t " +
                                         "LEFT JOIN FETCH t.seat s " +
@@ -172,8 +172,6 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
                                         "WHERE bf.id = :id", BookFlight.class)
                         .setParameter("id", id)
                         .getSingleResult();
-
-                return bf;
             } catch (NoResultException ex) {
                 return null;
             }
