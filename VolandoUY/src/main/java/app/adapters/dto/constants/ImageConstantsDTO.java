@@ -1,4 +1,4 @@
-package app.adapters.dto.images;
+package app.adapters.dto.constants;
 
 public class ImageConstantsDTO {
     public String imagesPath;

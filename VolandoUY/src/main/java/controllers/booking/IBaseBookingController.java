@@ -10,14 +10,5 @@ import java.util.Map;
 
 public interface IBaseBookingController {
 
-    List<BookFlightDTO> getAllBookFlightsDetails();
-    List<BaseBookFlightDTO> getAllBookFlightsSimpleDetails();
 
-    List<BookFlightDTO> getBookFlightsDetailsByCustomerNickname(String nickname);
-    List<BaseBookFlightDTO> getBookFlightsSimpleDetailsByCustomerNickname(String nickname);
-
-    List<BookFlightDTO> getBookFlightsDetailsByFlightName(String flightName);
-    List<BaseBookFlightDTO> getBookFlightsSimpleDetailsByFlightName(String nickname);
-
-    BookFlightDTO getBookFlightDetailsById(Long id);
 }

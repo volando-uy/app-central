@@ -1,23 +1,22 @@
 package app.adapters.dto.user;
 
-import domain.models.enums.EnumTipoDocumento;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import domain.models.enums.EnumTipoDocumento;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @XmlAccessorType(XmlAccessType.FIELD)
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SoapCustomerDTO extends SoapBaseCustomerDTO {
-    private List<Long> boughtPackagesIds;
-    private List<Long> bookFlightsIds;
-
-    public SoapCustomerDTO(
+@Getter
+@Setter
+public class SoapBaseCustomerDTO extends SoapUserDTO {
+    private String surname;
+    private String citizenship;
+    private String birthDate;
+    private String numDoc;
+    private EnumTipoDocumento docType;
+    public SoapBaseCustomerDTO(
             String nickname,
             String name,
             String mail,
@@ -30,8 +29,12 @@ public class SoapCustomerDTO extends SoapBaseCustomerDTO {
             String numDoc,
             EnumTipoDocumento docType
     ) {
-        super(nickname, name, mail, password, image, userType, surname, citizenship, birthDate, numDoc, docType);
-        this.boughtPackagesIds = new ArrayList<>();
-        this.bookFlightsIds = new ArrayList<>();
+        super(nickname, name, mail, password, image, userType);
+        this.surname = surname;
+        this.citizenship = citizenship;
+        this.birthDate = birthDate;
+        this.numDoc = numDoc;
+        this.docType = docType;
     }
+
 }

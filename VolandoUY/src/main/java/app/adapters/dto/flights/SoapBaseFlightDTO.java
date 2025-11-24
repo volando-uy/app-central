@@ -1,11 +1,15 @@
 package app.adapters.dto.flights;
 
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@XmlType(name = "baseFlightSoapViewDTO")
+@XmlType(name = "soapBaseFlightDTO")
 @Data
-public class BaseFlightSoapViewDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class SoapBaseFlightDTO {
     private String name;
     private String departureTime; // en formato ISO
     private Long duration;

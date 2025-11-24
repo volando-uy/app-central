@@ -32,7 +32,7 @@ public class AuthSoapAdapter extends BaseSoapAdapter implements IAuthSoapControl
 
         SoapLoginResponseDTO soapResp = new SoapLoginResponseDTO();
         soapResp.setToken(domainResp.getToken());
-        soapResp.setUser(UserSoapMapper.toSoap(domainResp.getUser()));
+        soapResp.setUser(UserSoapMapper.toSoapUserDTO(domainResp.getUser()));
 
         return soapResp;
     }

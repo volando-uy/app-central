@@ -6,18 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SoapAirlineDTO extends SoapBaseAirlineDTO{
-    private List<String> flightsNames;
-    private List<String> flightRoutesNames;
-
-    public SoapAirlineDTO(
+public class SoapBaseAirlineDTO extends SoapUserDTO {
+    private String description;
+    private String web;
+    public SoapBaseAirlineDTO(
             String nickname,
             String name,
             String mail,
@@ -27,8 +23,8 @@ public class SoapAirlineDTO extends SoapBaseAirlineDTO{
             String description,
             String web
     ) {
-        super(nickname, name, mail, password, image, userType, description, web);
-        this.flightsNames = new ArrayList<>();
-        this.flightRoutesNames = new ArrayList<>();
+        super(nickname, name, mail, password, image, userType);
+        this.description = description;
+        this.web = web;
     }
 }

@@ -1,6 +1,6 @@
 package app.adapters.soap.images;
 
-import app.adapters.dto.images.ImageConstantsDTO;
+import app.adapters.dto.constants.ImageConstantsDTO;
 import app.adapters.mappers.ImageMapper;
 import app.adapters.soap.BaseSoapAdapter;
 import jakarta.jws.WebMethod;
@@ -24,27 +24,27 @@ public class ImagesSoapAdapter extends BaseSoapAdapter {
     // ------------------------------------------------------------
     //  CONSTANTES DE IMÁGENES
     // ------------------------------------------------------------
-    @WebMethod
-    public ImageConstantsDTO getImageConstants() {
-        ImageConstantsDTO dto = new ImageConstantsDTO();
-
-        dto.imagesPath = Images.IMAGES_PATH;
-        dto.userDefault = Images.USER_DEFAULT;
-        dto.flightDefault = Images.FLIGHT_DEFAULT;
-        dto.flightRouteDefault = Images.FLIGHT_ROUTE_DEFAULT;
-        dto.flightRoutePackageDefault = Images.FLIGHT_ROUTE_PACKAGE_DEFAULT;
-        dto.errorDefault = Images.ERROR_DEFAULT;
-
-        dto.airlinesPath = Images.AIRLINES_PATH;
-        dto.customersPath = Images.CUSTOMERS_PATH;
-        dto.flightsPath = Images.FLIGHTS_PATH;
-        dto.flightRoutesPath = Images.FLIGHT_ROUTES_PATH;
-        dto.flightRoutesPackagesPath = Images.FLIGHT_ROUTES_PACKAGES_PATH;
-
-        dto.formatDefault = Images.FORMAT_DEFAULT;
-
-        return dto;
-    }
+//    @WebMethod
+//    public ImageConstantsDTO getImageConstants() {
+//        ImageConstantsDTO dto = new ImageConstantsDTO();
+//
+//        dto.imagesPath = Images.IMAGES_PATH;
+//        dto.userDefault = Images.USER_DEFAULT;
+//        dto.flightDefault = Images.FLIGHT_DEFAULT;
+//        dto.flightRouteDefault = Images.FLIGHT_ROUTE_DEFAULT;
+//        dto.flightRoutePackageDefault = Images.FLIGHT_ROUTE_PACKAGE_DEFAULT;
+//        dto.errorDefault = Images.ERROR_DEFAULT;
+//
+//        dto.airlinesPath = Images.AIRLINES_PATH;
+//        dto.customersPath = Images.CUSTOMERS_PATH;
+//        dto.flightsPath = Images.FLIGHTS_PATH;
+//        dto.flightRoutesPath = Images.FLIGHT_ROUTES_PATH;
+//        dto.flightRoutesPackagesPath = Images.FLIGHT_ROUTES_PACKAGES_PATH;
+//
+//        dto.formatDefault = Images.FORMAT_DEFAULT;
+//
+//        return dto;
+//    }
 
 
     @WebMethod
