@@ -72,4 +72,5 @@ public class FlightController implements IFlightController {
                 .map(flightDTO -> (BaseFlightDTO) flightDTO)
                 .toList();
     }
+
 }

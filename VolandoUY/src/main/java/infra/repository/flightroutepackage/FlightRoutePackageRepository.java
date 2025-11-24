@@ -1,6 +1,7 @@
 package infra.repository.flightroutepackage;
 
 import app.DBConnection;
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
 import domain.models.flightroute.FlightRoute;
 import domain.models.flightroutepackage.FlightRoutePackage;
 import jakarta.persistence.EntityManager;
@@ -137,6 +138,38 @@ public class FlightRoutePackageRepository  extends AbstractFlightRoutePackageRep
             em.merge(managedFlightRoute);
 
             em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public FlightRoutePackage getFullFlightRoutePackageById(Long id) {
+        try (EntityManager em= DBConnection.getEntityManager()) {
+            FlightRoutePackage frp = em.createQuery("SELECT frp FROM FlightRoutePackage frp LEFT JOIN FETCH frp.flightRoutes WHERE frp.id=:id", FlightRoutePackage.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            // Initialize the attributes
+            if (frp != null) {
+                if (frp.getFlightRoutes() != null)
+                    frp.getFlightRoutes().size(); // Load flightRoutes
+                if (frp.getBuyPackages() != null)
+                    frp.getBuyPackages().size(); // Load buyPackages
+            }
+
+            return frp;
+        }
+    }
+
+    @Override
+    public FlightRoutePackage getFlightRoutePackageById(Long id) {
+        try (EntityManager em= DBConnection.getEntityManager()) {
+            return em.createQuery("SELECT frp FROM FlightRoutePackage frp WHERE frp.id=:id", FlightRoutePackage.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         }
     }
 }

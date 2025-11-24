@@ -67,4 +67,11 @@ public class FlightRoutePackageController implements IFlightRoutePackageControll
                 .map(pack -> (BaseFlightRoutePackageDTO) pack)
                 .toList();
     }
+
+    @Override
+    public FlightRoutePackageDTO getFlightRoutePackageDetailsById(Long id) {
+        FlightRoutePackage flightRoutePackage = packageService.getFlightRoutePackageDetailsById(id);
+        return packageService.getFlightRoutePackageDetailsByName(flightRoutePackage.getName(), true);
+    }
+
 }

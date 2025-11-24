@@ -28,4 +28,6 @@ public interface IFlightRoutePackageController {
     List<String> getAllNotBoughtFlightRoutesPackagesNames();
     void addFlightRouteToPackage(String packageName, String flightRouteName, Integer quantity);
     boolean flightRoutePackageExists(String packageName);
+
+    FlightRoutePackageDTO getFlightRoutePackageDetailsById(Long id);
 }

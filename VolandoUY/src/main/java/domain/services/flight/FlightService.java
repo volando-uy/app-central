@@ -164,6 +164,7 @@ public class FlightService implements IFlightService {
                 .toList();
     }
 
+
     private boolean _flightExists(Flight flight) {
         return flightRepository.existsByName(flight.getName());
     }

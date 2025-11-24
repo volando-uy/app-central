@@ -24,4 +24,5 @@ public interface ISoapFlightController extends IBaseFlightController {
     SoapFlightDTO getFlightDetailsByName(String name);
     List<SoapFlightDTO> getAllFlightsDetails();
     SoapBaseFlightDTO createFlight(SoapBaseFlightDTO flight, String airlineNickname, String flightRouteName, String imageBase64);
+
 }

@@ -89,4 +89,9 @@ public class FlightRoutePackageSoapAdapter extends BaseSoapAdapter implements IF
     public boolean flightRoutePackageExists(String packageName) {
         return controller.flightRoutePackageExists(packageName);
     }
+
+    @Override
+    public FlightRoutePackageDTO getFlightRoutePackageDetailsById(Long id) {
+        return controller.getFlightRoutePackageDetailsById(id);
+    }
 }

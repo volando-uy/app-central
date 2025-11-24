@@ -25,5 +25,8 @@ public class BuyPackageController implements IBuyPackageController {
         return buyPackageService.getBuyPackageDetailsById(id, false);
     }
 
-
+    @Override
+    public String getFlightNameById(Long id) {
+        return buyPackageService.getFlightNameById(id);
+    }
 }
