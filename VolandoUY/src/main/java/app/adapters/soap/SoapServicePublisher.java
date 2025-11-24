@@ -12,6 +12,7 @@ import app.adapters.soap.flight.FlightSoapAdapter;
 import app.adapters.soap.flightroute.FlightRouteSoapAdapter;
 import app.adapters.soap.flightroutepackage.FlightRoutePackageSoapAdapter;
 import app.adapters.soap.images.ImagesSoapAdapter;
+import app.adapters.soap.pdf.SoapPDFAdapter;
 import app.adapters.soap.seat.SeatSoapAdapter;
 import app.adapters.soap.ticket.TicketSoapAdapter;
 import app.adapters.soap.user.UserSoapAdapter;
@@ -37,7 +38,8 @@ public class SoapServicePublisher {
                 new UserSoapAdapter(ControllerFactory.getUserController()),
                 new ImagesSoapAdapter(),
                 new ConstantsSoapAdapter(),
-                new SoapCountriesAdapter()
+                new SoapCountriesAdapter(),
+                new SoapPDFAdapter()
         );
 
         adapters.forEach(BaseSoapAdapter::publish);

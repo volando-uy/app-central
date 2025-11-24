@@ -121,15 +121,22 @@ public class CustomModelMapper extends ModelMapper {
     }
 
     public BasicLuggageDTO mapFullBasicLuggage(BasicLuggage basicLuggage) {
-        BasicLuggageDTO basicLuggageDTO = this.map(basicLuggage, BasicLuggageDTO.class);
-        return basicLuggageDTO;
+        BasicLuggageDTO dto = this.map(basicLuggage, BasicLuggageDTO.class);
+        // Validación defensiva
+        if (dto.getCategory() == null && basicLuggage.getCategory() != null) {
+            dto.setCategory(basicLuggage.getCategory());
+        }
+        return dto;
     }
 
     public ExtraLuggageDTO mapFullExtraLuggage(ExtraLuggage extraLuggage) {
-        ExtraLuggageDTO extraLuggageDTO = this.map(extraLuggage, ExtraLuggageDTO.class);
-        return extraLuggageDTO;
+        ExtraLuggageDTO dto = this.map(extraLuggage, ExtraLuggageDTO.class);
+        // Validación defensiva
+        if (dto.getCategory() == null && extraLuggage.getCategory() != null) {
+            dto.setCategory(extraLuggage.getCategory());
+        }
+        return dto;
     }
-
     public TicketDTO mapFullTicket(Ticket ticket) {
         TicketDTO ticketDTO = this.map(ticket, TicketDTO.class);
         if (ticket.getBasicLuggages() != null) {

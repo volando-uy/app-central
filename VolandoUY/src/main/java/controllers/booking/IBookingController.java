@@ -20,4 +20,6 @@ public interface IBookingController extends IBaseBookingController {
     List<BaseBookFlightDTO> getBookFlightsSimpleDetailsByFlightName(String nickname);
 
     BookFlightDTO getBookFlightDetailsById(Long id);
-}
+    BaseBookFlightDTO getBookFlightSimpleDetailsById(Long id);
+
+    }
