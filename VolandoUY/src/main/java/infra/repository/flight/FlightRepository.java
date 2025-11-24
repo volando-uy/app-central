@@ -110,5 +110,14 @@ public class FlightRepository extends AbstractFlightRepository implements IFligh
         }
     }
 
-
+    @Override
+    public Flight getFlightById(Long id) {
+        try (EntityManager em= DBConnection.getEntityManager()) {
+            return em.createQuery("SELECT f FROM Flight f WHERE f.id=:id", Flight.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
 }

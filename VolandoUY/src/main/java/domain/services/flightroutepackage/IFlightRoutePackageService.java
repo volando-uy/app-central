@@ -25,4 +25,6 @@ public interface IFlightRoutePackageService {
     List<FlightRoutePackageDTO> getAllFlightRoutePackagesDetailsWithFlightRoutes(boolean full);
 
     void setFlightRouteService(IFlightRouteService flightRouteService);
+
+    FlightRoutePackage getFlightRoutePackageDetailsById(Long id);
 }

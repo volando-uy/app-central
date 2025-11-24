@@ -26,4 +26,5 @@ public interface IFlightService {
     void setUserService(IUserService userService);
     void setFlightRouteService(IFlightRouteService flightRouteService);
     void setSeatService(ISeatService seatService);
+
 }

@@ -156,4 +156,14 @@ public class FlightRoutePackageService implements IFlightRoutePackageService {
                 .map(pack -> full ? customModelMapper.mapFullFlightRoutePackage(pack) : customModelMapper.map(pack, FlightRoutePackageDTO.class))
                 .toList();
     }
+
+    @Override
+    public FlightRoutePackage getFlightRoutePackageDetailsById(Long id) {
+        FlightRoutePackage pack = flightRoutePackageRepository.getFlightRoutePackageById(id);
+        if (pack == null) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND_BY_ID, id));
+        }
+
+        return pack;
+    }
 }

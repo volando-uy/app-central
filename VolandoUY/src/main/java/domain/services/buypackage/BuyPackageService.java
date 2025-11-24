@@ -1,5 +1,6 @@
 package domain.services.buypackage;
 
+import app.adapters.dto.flights.SoapFlightDTO;
 import domain.dtos.buypackage.BaseBuyPackageDTO;
 import domain.dtos.buypackage.BuyPackageDTO;
 import domain.models.buypackage.BuyPackage;
@@ -82,6 +83,15 @@ public class BuyPackageService implements IBuyPackageService {
 
         return full ? customModelMapper.mapFullBuyPackage(buyPackage)
                 : customModelMapper.map(buyPackage, BuyPackageDTO.class);
+    }
+
+    @Override
+    public String getFlightNameById(Long id) {
+        BuyPackage buyPackage = buyPackageRepository.getBuyPackageById(id);
+        if (buyPackage == null) {
+            throw new IllegalArgumentException(String.format("No se encontró la compra de paquete con ID %d", id));
+        }
+        return buyPackage.getFlightRoutePackage().getName();
     }
 
 }

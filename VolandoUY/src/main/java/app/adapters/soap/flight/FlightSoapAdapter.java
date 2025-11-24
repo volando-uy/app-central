@@ -120,4 +120,6 @@ public class FlightSoapAdapter extends BaseSoapAdapter implements ISoapFlightCon
                 .map(FlightSoapMapper::mapToSoapBaseFlightDTO)
                 .toList();
     }
+
+
 }

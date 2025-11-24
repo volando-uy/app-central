@@ -15,4 +15,6 @@ public interface IBuyPackageService {
     void setBuyPackageRepository(IBuyPackageRepository buyPackageRepository);
 
     BuyPackageDTO getBuyPackageDetailsById(Long id, boolean full);
+
+    String getFlightNameById(Long id);
 }

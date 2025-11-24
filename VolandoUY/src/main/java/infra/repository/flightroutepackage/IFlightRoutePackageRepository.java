@@ -1,5 +1,6 @@
 package infra.repository.flightroutepackage;
 
+import domain.dtos.flightroutepackage.BaseFlightRoutePackageDTO;
 import domain.models.flightroute.FlightRoute;
 import domain.models.flightroutepackage.FlightRoutePackage;
 import infra.repository.IBaseRepository;
@@ -22,4 +23,8 @@ public interface IFlightRoutePackageRepository extends IBaseRepository<FlightRou
 
 
     List<FlightRoutePackage> findAllFullWithFlightRoutes();
+
+    FlightRoutePackage getFullFlightRoutePackageById(Long id);
+
+    FlightRoutePackage getFlightRoutePackageById(Long id);
 }

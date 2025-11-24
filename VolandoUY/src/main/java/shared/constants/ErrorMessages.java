@@ -53,6 +53,7 @@ public class ErrorMessages {
 
     // ================================Flight errors==============================
     public static final String ERR_FLIGHT_NOT_FOUND = "El vuelo con nombre %s no fue encontrado";
+    public static final String ERR_FLIGHT_NOT_FOUND_BY_ID = "El vuelo con ID %d no fue encontrado";
     public static final String ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND = "El paquete de ruta del vuelo con nombre %s no fue encontrado";
     public static final String ERR_FLIGHT_ROUTE_NOT_FOUND = "La ruta del vuelo con nombre %s no fue encontrada";
     // ================================Fin Flight errors==============================
@@ -85,6 +86,7 @@ public class ErrorMessages {
     // ================================Inicio Tickets==============================
     public static final String ERROR_TICKET_NOT_FOUND = "Ticket no encontrado";
     public static final String ERR_ORIGIN_AND_DESTINATION_ARIPORTS_CANNOT_BE_THE_SAME = "El aeropuerto de origen (%s) no puede ser igual al de destino (%s).";
+    public static final String ERR_FLIGHT_ROUTE_PACKAGE_NOT_FOUND_BY_ID = "El paquete de ruta de vuelo con ID %d no fue encontrado";
 
     // ================================Fin Tickets==============================
 

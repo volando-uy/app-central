@@ -40,4 +40,10 @@ public class BuyPackageSoapAdapter extends BaseSoapAdapter implements IBuyPackag
     public BaseBuyPackageDTO getBuyPackageSimpleDetailsById(Long id) {
         return controller.getBuyPackageSimpleDetailsById(id);
     }
+
+    @Override
+    @WebMethod
+    public String getFlightNameById(Long id) {
+        return controller.getFlightNameById(id);
+    }
 }

@@ -21,4 +21,6 @@ public interface IFlightRepository extends IBaseRepository<Flight> {
     List<Flight> getFlightsByRouteName(String routeName);
 
     void saveFlightWithSeatsAndAddToAirlineAndAddToFlightRoute(Flight flight, Airline airline, FlightRoute flightRoute, List<Seat> seats);
+
+    Flight getFlightById(Long id);
 }
