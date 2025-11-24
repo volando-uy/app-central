@@ -7,6 +7,7 @@ import app.adapters.soap.buypackage.BuyPackageSoapAdapter;
 import app.adapters.soap.category.CategorySoapAdapter;
 import app.adapters.soap.city.CitySoapAdapter;
 import app.adapters.soap.constants.ConstantsSoapAdapter;
+import app.adapters.soap.countries.SoapCountriesAdapter;
 import app.adapters.soap.flight.FlightSoapAdapter;
 import app.adapters.soap.flightroute.FlightRouteSoapAdapter;
 import app.adapters.soap.flightroutepackage.FlightRoutePackageSoapAdapter;
@@ -35,7 +36,8 @@ public class SoapServicePublisher {
                 new TicketSoapAdapter(ControllerFactory.getTicketController()),
                 new UserSoapAdapter(ControllerFactory.getUserController()),
                 new ImagesSoapAdapter(),
-                new ConstantsSoapAdapter()
+                new ConstantsSoapAdapter(),
+                new SoapCountriesAdapter()
         );
 
         adapters.forEach(BaseSoapAdapter::publish);
