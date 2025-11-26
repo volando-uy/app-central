@@ -16,4 +16,5 @@ public class SoapBaseBookFlightDTO {
     private String createdAt;
     private Double totalPrice;
     private EnumTipoAsiento seatType;
+    private boolean isBooked;
 }

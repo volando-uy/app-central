@@ -18,8 +18,8 @@ public class SoapBookFlightDTO extends SoapBaseBookFlightDTO {
     private String customerNickname;
     private List<Long> ticketIds;
 
-    public SoapBookFlightDTO(Long id, String createdAt, Double totalPrice, EnumTipoAsiento seatType) {
-        super(id, createdAt, totalPrice, seatType);
+    public SoapBookFlightDTO(Long id, String createdAt, Double totalPrice, EnumTipoAsiento seatType, boolean isBooked) {
+        super(id, createdAt, totalPrice, seatType, isBooked);
         this.customerNickname = null;
         this.ticketIds = null;
     }

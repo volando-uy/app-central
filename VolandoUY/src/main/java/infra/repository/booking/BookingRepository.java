@@ -255,5 +255,17 @@ public class BookingRepository extends AbstractBookingRepository implements IBoo
         }
     }
 
-
+    @Override
+    public String findCustomerNicknameByBookingId(Long bookingId) {
+        try (EntityManager em = DBConnection.getEntityManager()) {
+            try {
+                return em.createQuery(
+                                "SELECT bf.customer.nickname FROM BookFlight bf WHERE bf.id = :bookingId", String.class)
+                        .setParameter("bookingId", bookingId)
+                        .getSingleResult();
+            } catch (NoResultException ex) {
+                return null;
+            }
+        }
+    }
 }

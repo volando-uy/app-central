@@ -17,4 +17,6 @@ public interface IBookingRepository extends IBaseRepository<BookFlight> {
     List<BookFlight> findFullAll();
     List<BookFlight> findByFlightName(String flightName);
     List<BookFlight> findFullByCustomerNickname(String nickname);
+
+    String findCustomerNicknameByBookingId(Long bookingId);
 }

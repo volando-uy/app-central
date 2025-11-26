@@ -42,7 +42,8 @@ public class BookFlight {
 
     // Tiene muchos tickets
     @OneToMany(mappedBy = "bookFlight")
-    private List<Ticket> tickets =new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
 
+    private boolean isBooked;
 
 }

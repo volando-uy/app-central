@@ -15,6 +15,7 @@ public class BookFlightSoapMapper {
         soapDto.setSeatType(bookFlightDTO.getSeatType());
         soapDto.setCustomerNickname(bookFlightDTO.getCustomerNickname());
         soapDto.setTicketIds(bookFlightDTO.getTicketIds());
+        soapDto.setBooked(bookFlightDTO.isBooked());
         return soapDto;
     }
 
@@ -26,6 +27,7 @@ public class BookFlightSoapMapper {
         dto.setSeatType(soapDto.getSeatType());
         dto.setCustomerNickname(soapDto.getCustomerNickname());
         dto.setTicketIds(soapDto.getTicketIds());
+        dto.setBooked(soapDto.isBooked());
         return dto;
     }
 
@@ -35,6 +37,7 @@ public class BookFlightSoapMapper {
         dto.setCreatedAt(DateTimeMapper.fromSoapLocalDateTime(soapDto.getCreatedAt()));
         dto.setTotalPrice(soapDto.getTotalPrice());
         dto.setSeatType(soapDto.getSeatType());
+        dto.setBooked(soapDto.isBooked());
         return dto;
     }
 
@@ -44,6 +47,7 @@ public class BookFlightSoapMapper {
         soapDto.setCreatedAt(DateTimeMapper.toSoapLocalDateTime(dto.getCreatedAt()));
         soapDto.setTotalPrice(dto.getTotalPrice());
         soapDto.setSeatType(dto.getSeatType());
+        soapDto.setBooked(dto.isBooked());
         return soapDto;
     }
 }

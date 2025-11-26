@@ -20,4 +20,8 @@ public interface IBookingSoapController extends IBaseBookingController{
     List<SoapBaseBookFlightDTO> getBookFlightsSimpleDetailsByFlightName(String nickname);
 
     SoapBookFlightDTO getBookFlightDetailsById(Long id);
+
+    SoapBaseBookFlightDTO completeBooking(Long bookingId, String token);
+    SoapBaseBookFlightDTO cancelBooking(Long bookingId);
+
 }
