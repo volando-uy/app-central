@@ -45,6 +45,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 @WebService
@@ -127,8 +128,8 @@ public class SoapPDFAdapter extends BaseSoapAdapter {
             // Datos generales del paquete
             document.add(new Paragraph("Cliente: " + buyPackage.getCustomerNickname(), bodyFont));
             document.add(new Paragraph("Fecha de compra: " + fechaFormateada, bodyFont));
-            document.add(new Paragraph("Precio total: $" + String.format("%.2f", buyPackage.getTotalPrice()), bodyFont));
-            document.add(new Paragraph("Tipo de asiento: " + flightRoutePackage.getSeatType(), bodyFont));
+            document.add(new Paragraph("Precio total: $" + String.format("%,2f", buyPackage.getTotalPrice()), bodyFont));
+            document.add(new Paragraph("Precio total: $" + String.format(Locale.US, "%.2f", buyPackage.getTotalPrice()), bodyFont));
             document.add(new Paragraph("Descuento aplicado: " + String.format("%.2f", flightRoutePackage.getDiscount()) + "%", bodyFont));
             document.add(Chunk.NEWLINE);
 
@@ -141,8 +142,6 @@ public class SoapPDFAdapter extends BaseSoapAdapter {
                 document.add(new Paragraph("   - Origen: " + route.getOriginAeroCode(), bodyFont));
                 document.add(new Paragraph("   - Destino: " + route.getDestinationAeroCode(), bodyFont));
                 document.add(new Paragraph("   - Precio turista: $" + String.format("%.2f", route.getPriceTouristClass()), bodyFont));
-                document.add(new Paragraph("   - Precio business: $" + String.format("%.2f", route.getPriceBusinessClass()), bodyFont));
-
                 document.add(new Paragraph("   - Aerolínea: " + route.getAirlineNickname(), bodyFont));
                 document.add(Chunk.NEWLINE);
             }
