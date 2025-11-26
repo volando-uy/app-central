@@ -7,6 +7,7 @@ import app.adapters.dto.ticket.TicketWithLuggage;
 import app.adapters.mappers.BookFlightSoapMapper;
 import app.adapters.mappers.TicketLuggageMapper;
 import app.adapters.soap.BaseSoapAdapter;
+import controllers.auth.IAuthController;
 import controllers.booking.IBookingController;
 import controllers.booking.IBookingSoapController;
 import domain.dtos.bookflight.BaseBookFlightDTO;
@@ -16,8 +17,12 @@ import domain.dtos.ticket.BaseTicketDTO;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
+import jakarta.xml.soap.SOAPFactory;
+import jakarta.xml.soap.SOAPFault;
+import jakarta.xml.ws.soap.SOAPFaultException;
 import org.apache.cxf.wsdl11.SOAPBindingUtil;
 
+import javax.xml.namespace.QName;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +32,11 @@ import java.util.Map;
 public class BookingSoapAdapter extends BaseSoapAdapter implements IBookingSoapController {
 
     private final IBookingController controller;
+    private final IAuthController authController;
 
-    public BookingSoapAdapter(IBookingController controller) {
+    public BookingSoapAdapter(IBookingController controller, IAuthController authController) {
         this.controller = controller;
+        this.authController = authController;
     }
 
     protected String getServiceName() {
@@ -118,5 +125,40 @@ public class BookingSoapAdapter extends BaseSoapAdapter implements IBookingSoapC
     public SoapBookFlightDTO getBookFlightDetailsById(Long id) {
         BookFlightDTO bookFlightDTO= controller.getBookFlightDetailsById(id);
         return BookFlightSoapMapper.toSoapBookFlightDTO(bookFlightDTO);
+    }
+
+    @Override
+    @WebMethod
+    public SoapBaseBookFlightDTO completeBooking(Long bookingId,String token) {
+        String nicknameFromToken = authController.getNicknameFromToken(token);
+
+        String nicknameFromBookflight = controller.getCustomerNicknameByBookingId(bookingId);
+
+        if(!nicknameFromToken.equals(nicknameFromBookflight)){
+            throw createSoapFault("El usuario no está autorizado para completar esta reserva.");
+        }
+        if(nicknameFromBookflight == null || nicknameFromBookflight.isEmpty()){
+            throw createSoapFault("La reserva no existe.");
+        }
+
+        BaseBookFlightDTO bookFlightDTO= controller.completeBooking(bookingId);
+        return BookFlightSoapMapper.toSoapBaseBookFlightDTO(bookFlightDTO);
+    }
+
+    @Override
+    @WebMethod
+    public SoapBaseBookFlightDTO cancelBooking(Long bookingId) {
+        BaseBookFlightDTO bookFlightDTO= controller.cancelBooking(bookingId);
+        return BookFlightSoapMapper.toSoapBaseBookFlightDTO(bookFlightDTO);
+    }
+
+    private SOAPFaultException createSoapFault(String message) {
+        try {
+            SOAPFactory factory = SOAPFactory.newInstance();
+            SOAPFault fault = factory.createFault(message, new QName("Server"));
+            return new SOAPFaultException(fault);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear SOAPFaultException", e);
+        }
     }
 }

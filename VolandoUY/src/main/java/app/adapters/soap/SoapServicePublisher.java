@@ -26,7 +26,7 @@ public class SoapServicePublisher {
         List<BaseSoapAdapter> adapters = List.of(
                 new AirportSoapAdapter(ControllerFactory.getAirportController()),
                 new AuthSoapAdapter(ControllerFactory.getAuthController()),
-                new BookingSoapAdapter(ControllerFactory.getBookingController()),
+                new BookingSoapAdapter(ControllerFactory.getBookingController(), ControllerFactory.getAuthController()),
                 new BuyPackageSoapAdapter(ControllerFactory.getBuyPackageController()),
                 new CategorySoapAdapter(ControllerFactory.getCategoryController()),
                 new CitySoapAdapter(ControllerFactory.getCityController()),

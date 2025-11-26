@@ -13,8 +13,9 @@ public class BookFlightDTO extends BaseBookFlightDTO {
     private String customerNickname;
     private List<Long> ticketIds;
 
-    public BookFlightDTO(Long id, LocalDateTime createdAt, Double totalPrice, EnumTipoAsiento seatType) {
-        super(id, createdAt, totalPrice, seatType);
+
+    public BookFlightDTO(Long id, LocalDateTime createdAt, Double totalPrice, EnumTipoAsiento seatType, boolean isBooked) {
+        super(id, createdAt, totalPrice, seatType, isBooked);
         this.customerNickname = null;
         this.ticketIds = null;
     }

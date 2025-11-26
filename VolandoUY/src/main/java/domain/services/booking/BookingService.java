@@ -172,4 +172,38 @@ public class BookingService implements IBookingService {
 
         return full ? customModelMapper.mapFullBookFlight(bf) : customModelMapper.map(bf, BookFlightDTO.class);
     }
+
+    @Override
+    public BaseBookFlightDTO completeBooking(Long bookingId) {
+        BookFlight bf = bookingRepository.findByKey(bookingId);
+
+        if (bf == null) {
+            throw new IllegalArgumentException("No se encontró la reserva con ID: " + bookingId);
+        }
+
+        bf.setBooked(true);
+        bookingRepository.update(bf);
+
+        return customModelMapper.map(bf, BaseBookFlightDTO.class);
+
+    }
+
+    @Override
+    public BaseBookFlightDTO cancelBooking(Long bookingId) {
+        BookFlight bf = bookingRepository.findByKey(bookingId);
+
+        if (bf == null) {
+            throw new IllegalArgumentException("No se encontró la reserva con ID: " + bookingId);
+        }
+
+        bf.setBooked(false);
+        bookingRepository.update(bf);
+
+        return customModelMapper.map(bf, BaseBookFlightDTO.class);
+    }
+
+    @Override
+    public String getCustomerNicknameByBookingId(Long bookingId) {
+        return bookingRepository.findCustomerNicknameByBookingId(bookingId);
+    }
 }

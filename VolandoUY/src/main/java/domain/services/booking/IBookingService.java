@@ -28,4 +28,9 @@ public interface IBookingService {
     void setTicketService(ITicketService ticketService);
     void setUserService(IUserService userService);
     void setBookingRepository(IBookingRepository bookingRepository);
+
+    BaseBookFlightDTO completeBooking(Long bookingId);
+    BaseBookFlightDTO cancelBooking(Long bookingId);
+
+    String getCustomerNicknameByBookingId(Long bookingId);
 }

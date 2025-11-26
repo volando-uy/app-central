@@ -17,4 +17,5 @@ public class BaseBookFlightDTO {
     private LocalDateTime createdAt;
     private Double totalPrice;
     private EnumTipoAsiento seatType;
+    private boolean isBooked;
 }

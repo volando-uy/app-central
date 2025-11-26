@@ -70,4 +70,18 @@ public class BookingController implements IBookingController {
         return bookingService.getBookFlightDetailsById(id, false);
     }
 
+    @Override
+    public BaseBookFlightDTO completeBooking(Long bookingId) {
+        return bookingService.completeBooking(bookingId);
+    }
+
+    @Override
+    public BaseBookFlightDTO cancelBooking(Long bookingId) {
+        return bookingService.cancelBooking(bookingId);
+    }
+
+    @Override
+    public String getCustomerNicknameByBookingId(Long bookingId) {
+        return bookingService.getCustomerNicknameByBookingId(bookingId);
+    }
 }
