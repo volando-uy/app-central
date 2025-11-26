@@ -219,7 +219,7 @@ public class SoapPDFAdapter extends BaseSoapAdapter {
             document.add(new Paragraph("Vuelo: " + flightDTO.getName(), bodyFont));
             document.add(new Paragraph("Aerolínea: " + flightDTO.getAirlineNickname(), bodyFont));
             document.add(new Paragraph("Ruta: " + flightDTO.getFlightRouteName(), bodyFont));
-            document.add(new Paragraph("Salida: " + flightDTO.getDepartureTime(), bodyFont));
+            document.add(new Paragraph("Salida: " + flightDTO.getDepartureTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), bodyFont));
             document.add(new Paragraph("Duración: " + flightDTO.getDuration() + " minutos", bodyFont));
 
             document.add(Chunk.NEWLINE);
