@@ -15,6 +15,7 @@ import org.apache.cxf.transport.http.DestinationRegistry;
 import org.apache.cxf.transport.http.DestinationRegistryImpl;
 import org.apache.cxf.transport.http.HTTPTransportFactory;
 import org.apache.cxf.transport.http.HttpDestinationFactory;
+import org.apache.cxf.transport.http_jetty.JettyHTTPServerEngineFactory;
 import org.apache.cxf.transport.servlet.ServletDestinationFactory;
 import org.apache.cxf.wsdl.WSDLManager;
 import org.apache.cxf.wsdl11.WSDLManagerImpl;
@@ -23,6 +24,8 @@ public abstract class BaseSoapAdapter {
     private final String ip = ConfigProperties.get("soap.ip");
     private final String port = ConfigProperties.get("soap.port");
     private final String path = ConfigProperties.get("soap.path");
+
+
     @WebMethod(exclude = true)
     public void publish() {
         String endpointUrl = getEndpointUrl();
@@ -37,27 +40,25 @@ public abstract class BaseSoapAdapter {
         // Registrar WSDLManager
         try {
             bus.setExtension(new WSDLManagerImpl(), WSDLManager.class);
-        } catch (BusException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         // Registrar SoapBindingFactory
         SoapBindingFactory sbf = new SoapBindingFactory();
-        sbf.setBus(bus); // Este sí tiene setBus
+        sbf.setBus(bus);
         bus.getExtension(BindingFactoryManager.class)
                 .registerBindingFactory("http://schemas.xmlsoap.org/wsdl/soap/", sbf);
 
-        // Crear DestinationRegistry e instanciar la transport factory
-        DestinationRegistry registry = new DestinationRegistryImpl();
-        HTTPTransportFactory transportFactory = new HTTPTransportFactory(registry);
+        // ✅ Jetty servirá las peticiones directamente
+        JettyHTTPServerEngineFactory jettyFactory = bus.getExtension(JettyHTTPServerEngineFactory.class);
+        if (jettyFactory == null) {
+            jettyFactory = new JettyHTTPServerEngineFactory();
+            jettyFactory.setBus(bus);
+            bus.setExtension(jettyFactory, JettyHTTPServerEngineFactory.class);
+        }
 
-        // Registrar como DestinationFactory y HttpDestinationFactory
-        bus.getExtension(DestinationFactoryManager.class)
-                .registerDestinationFactory("http://schemas.xmlsoap.org/soap/http", transportFactory);
-        HttpDestinationFactory proxyFactory = new ServletDestinationFactory();
-        bus.setExtension(proxyFactory, HttpDestinationFactory.class);
-
-        // Publicar servicio
+        // Crear y publicar el servicio SOAP
         JaxWsServerFactoryBean factory = new JaxWsServerFactoryBean();
         factory.setBus(bus);
         factory.setServiceClass(this.getClass());
@@ -68,6 +69,7 @@ public abstract class BaseSoapAdapter {
 
         System.out.printf("Servicio SOAP %s publicado en: %s?wsdl%n", getServiceName(), endpointUrl);
     }
+
 
 
     public String getEndpointUrl() {

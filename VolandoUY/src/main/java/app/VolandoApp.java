@@ -22,20 +22,21 @@ public class VolandoApp {
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
         try {
             System.out.println("SOAP URL: " + ConfigProperties.get("soap.ip") + ":" +
                     ConfigProperties.getInt("soap.port") +
                     ConfigProperties.get("soap.path"));
 
-            SoapServicePublisher.publicarTodos();
+
 
             new DBInitThread().start();
 
+            SoapServicePublisher.publicarTodos();
             SwingUtilities.invokeLater(() -> {
                 try {
-                    new MainFrame(
-                            ControllerFactory.getUserController(),
+                    MainFrame frame = new MainFrame(ControllerFactory.getUserController(),
                             ControllerFactory.getFlightRouteController(),
                             ControllerFactory.getCategoryController(),
                             ControllerFactory.getCityController(),
@@ -45,8 +46,9 @@ public class VolandoApp {
                             ControllerFactory.getBuyPackageController(),
                             ControllerFactory.getTicketController(),
                             ControllerFactory.getSeatController(),
-                            ControllerFactory.getAirportController()
-                    );
+                            ControllerFactory.getAirportController());
+                    frame.setVisible(true);
+                    System.out.println("MainFrame visible.");
                 } catch (Exception e) {
                     logException(e);
                 }
