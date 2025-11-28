@@ -23,6 +23,7 @@ IMAGE_URLS=(
   "user.png|https://static.thenounproject.com/png/4154905-200.png"
   "flight.jpg|https://img.freepik.com/premium-vector/airplane-icon-continuous-one-line-draw-flying-plane-minimalist-vector-design-white-background_533993-9676.jpg"
   "flight_route.jpg|https://img.freepik.com/premium-vector/minimalist-location-pins-vector-continuous-line-drawing-navigation-route-illustration-map-concept_213497-3516.jpg"
+  "flight_route_package.gif|https://www.entornoturistico.com/wp-content/uploads/2016/12/10-mejores-v%C3%ADdeos-promocionales-de-destinos-tur%C3%ADsticos.jpg"
 )
 
 # Download each image and save with the specified file name
@@ -34,7 +35,7 @@ done
 
 # Move downloaded images to the default images directory
 echo "Moving downloaded images to $DEFAULT_IMAGES_DIR ..."
-mv *.png *.jpg "$DEFAULT_IMAGES_DIR"
+mv * "$DEFAULT_IMAGES_DIR"
 
 
 # Clean up temporary directory
