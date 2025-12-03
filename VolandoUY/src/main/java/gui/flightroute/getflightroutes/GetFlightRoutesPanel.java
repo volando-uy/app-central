@@ -9,6 +9,7 @@ import controllers.flightroute.IFlightRouteController;
 import controllers.user.IUserController;
 import domain.dtos.flightroute.FlightRouteDTO;
 import domain.dtos.user.BaseAirlineDTO;
+import domain.models.enums.EnumEstatusRuta;
 import gui.flightroute.details.FlightRouteDetailWindow;
 import shared.utils.GUIUtils;
 import shared.utils.NonEditableTableModel;
@@ -23,32 +24,33 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author AparicioQuian
  */
 public class GetFlightRoutesPanel extends JPanel {
-    private  IFlightRouteController flightRouteController;
-    private  IUserController userController;
+    private IFlightRouteController flightRouteController;
+    private IUserController userController;
     private IFlightController flightController;
     private List<FlightRouteDTO> flightRoutes = new ArrayList<>();
     private boolean areAirlinesLoading = false;
 
     private JPopupMenu flightRoutePopupMenu = new JPopupMenu();
-    JMenuItem confirmItem = new JMenuItem("Confirm");
-    JMenuItem rejectItem = new JMenuItem("Reject");
+    JMenuItem confirmItem = new JMenuItem("Confirmar");
+    JMenuItem rejectItem = new JMenuItem("Rechazar");
+    JMenuItem finalizeItem = new JMenuItem("Finalizar");
 
     // --- Datos auxiliares ---
-    private  List<BaseAirlineDTO> airlines = new ArrayList<>();
-    private static  DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private List<BaseAirlineDTO> airlines = new ArrayList<>();
+    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     public GetFlightRoutesPanel(IFlightRouteController flightRouteController,
                                 IUserController userController,
-                                IFlightController flightController)
-    {
+                                IFlightController flightController) {
         if (flightController == null) throw new IllegalArgumentException("IFlightController es null");
         if (flightRouteController == null) throw new IllegalArgumentException("IFlightRouteController es null");
-        if (userController == null)         throw new IllegalArgumentException("IUserController es null");
+        if (userController == null) throw new IllegalArgumentException("IUserController es null");
         this.flightRouteController = flightRouteController;
         this.userController = userController;
         this.flightController = flightController;
@@ -56,12 +58,16 @@ public class GetFlightRoutesPanel extends JPanel {
         // Add menu items to popup menu
         flightRoutePopupMenu.add(confirmItem);
         flightRoutePopupMenu.add(rejectItem);
+        flightRoutePopupMenu.add(finalizeItem);
 
         initComponents();
         initListeners();
         loadAirlinesIntoCombo();      // llena el combo al iniciar
         clearTable();                 // deja la tabla vacía hasta que elijas
-        try { setBorder(new EtchedBorder(EtchedBorder.LOWERED)); } catch (Exception ignored) {}
+        try {
+            setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        } catch (Exception ignored) {
+        }
     }
 
     private void initListeners() {
@@ -101,10 +107,12 @@ public class GetFlightRoutesPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) showPopup(e);
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.isPopupTrigger()) showPopup(e);
             }
+
             private void showPopup(MouseEvent e) {
                 int row = FlightRouteTable.rowAtPoint(e.getPoint());
                 if (row >= 0 && row < FlightRouteTable.getRowCount()) {
@@ -128,18 +136,38 @@ public class GetFlightRoutesPanel extends JPanel {
             int row = FlightRouteTable.getSelectedRow();
             if (row >= 0) {
                 FlightRouteDTO route = flightRoutes.get(row);
-                flightRouteController.setFlightRouteStatusByName(route.getName(), "Confirmada");
+                flightRouteController.setFlightRouteStatusByName(
+                        route.getName(),
+                        EnumEstatusRuta.CONFIRMADA.name()
+                );
                 loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
+
         rejectItem.addActionListener(e -> {
             int row = FlightRouteTable.getSelectedRow();
             if (row >= 0) {
                 FlightRouteDTO route = flightRoutes.get(row);
-                flightRouteController.setFlightRouteStatusByName(route.getName(), "Confirmada");
+                flightRouteController.setFlightRouteStatusByName(
+                        route.getName(),
+                        EnumEstatusRuta.RECHAZADA.name()
+                );
                 loadFlightRoutesTable(route.getAirlineNickname());
             }
         });
+
+        finalizeItem.addActionListener(e -> {
+            int row = FlightRouteTable.getSelectedRow();
+            if (row >= 0) {
+                FlightRouteDTO route = flightRoutes.get(row);
+                flightRouteController.setFlightRouteStatusByName(
+                        route.getName(),
+                        EnumEstatusRuta.FINALIZADA.name()
+                );
+                loadFlightRoutesTable(route.getAirlineNickname());
+            }
+        });
+
     }
 
     private void loadAirlinesIntoCombo() {
@@ -213,7 +241,7 @@ public class GetFlightRoutesPanel extends JPanel {
 
         for (FlightRouteDTO r : routes) {
             String created = r.getCreatedAt() != null ? r.getCreatedAt().format(DTF) : "";
-            String cats    = r.getCategoriesNames()   != null ? String.join(", ", r.getCategoriesNames())   : "";
+            String cats = r.getCategoriesNames() != null ? String.join(", ", r.getCategoriesNames()) : "";
 
             // nombre bonito de aerolínea: buscamos en la lista ya cargada
             String airlineName = r.getAirlineNickname();
@@ -256,8 +284,13 @@ public class GetFlightRoutesPanel extends JPanel {
         FlightRouteTable.setModel(model);
     }
 
-    private String safe(String s) { return s == null ? "" : s; }
-    private String fmtMoney(Double d) { return d == null ? "" : String.format("$ %.2f", d); }
+    private String safe(String s) {
+        return s == null ? "" : s;
+    }
+
+    private String fmtMoney(Double d) {
+        return d == null ? "" : String.format("$ %.2f", d);
+    }
 
 
     private void initComponents() {
