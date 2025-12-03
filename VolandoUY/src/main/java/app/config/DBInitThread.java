@@ -41,7 +41,7 @@ public class DBInitThread extends Thread {
     public void run() {
         try {
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-//            seed();
+            seed();
             testConnection();
             System.out.println("DB inicializada correctamente.");
         } catch (Exception e) {
@@ -264,7 +264,7 @@ public class DBInitThread extends Thread {
                 baseFlightRouteDTO.setPriceTouristClass(100.0 + Math.random() * 400); // Precio entre 100 y 500
                 baseFlightRouteDTO.setPriceBusinessClass(500.0 + Math.random() * 1000); // Precio entre 500 y 1500
                 baseFlightRouteDTO.setPriceExtraUnitBaggage(50.0 + Math.random() * 150); // Precio entre 50 y 200
-                baseFlightRouteDTO.setVideoURL("https://www.example.com/video/" + baseFlightRouteDTO.getName().replaceAll(" -> ", "_"));
+//                baseFlightRouteDTO.setVideoURL("https://www.example.com/video/" + baseFlightRouteDTO.getName().replaceAll(" -> ", "_"));
 
                 // Seleccionar entre 1 y 3 categorías aleatorias
                 int numCategories = (int) (Math.random() * 3) + 1;
