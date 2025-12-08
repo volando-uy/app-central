@@ -35,3 +35,8 @@ Este módulo es el **corazón backend** del ecosistema VolandoUY. Está basado e
 * Nahuel Martinez
 * Juan Quian
 * Ignacio Suárez
+
+
+---
+
+![VolandoUY](image.png)
