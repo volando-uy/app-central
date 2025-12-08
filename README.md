@@ -1,37 +1,37 @@
-# PA-JavaApp-2025
-### Proyecto de Programación de Aplicaciones 2025
+# 🚀 VolandoUY Central Server –
 
-### Integrantes
-- Jose Hernandez		
-- Nahuel Martinez		
-- Juan Quian
-- Ignacio Suárez
+Este módulo es el **corazón backend** del ecosistema VolandoUY. Está basado en **Clean Architecture**, con capas desacopladas, interfaz Swing embebida y adaptadores SOAP listos para interoperabilidad, aplicando principios **SOLID**.
 
-------------
+---
 
-## Como subir código
-### Primero deberás de crear una **nueva branch**. Se utiliza una branch por cada funcionalidad nueva o arreglo de problemas.
-> **Ejemplo**: branch "conexionBaseDeDatos", sería una branch que añade la funcionalidad a la app de conectarse a la base de datos.
+## 📦 ¿Qué hace este módulo?
 
-### Luego de creada la branch, realiza todos los commits necesarios, intentando que todos sean claros y solo resuelvan una cosa a la vez.
-> **Ejemplos**: "feat: parametros de conexion a base de datos" | "feat: JPA para la conexión" | "docs: como levantar PostgreSQL". Los commits de una misma branch tienen que tener cierta relación, no añadir commits de varias funcionalidades a una misma branch.
+* 🧠 Core de negocio del sistema VolandoUY
+* 🖥️ Admin local vía Swing
+* 🔌 Exposición de endpoints SOAP
+* 🧱 Infraestructura desacoplada con repositorios limpios
+* ✅ Cobertura de casos de uso y tests automatizados con JUnit y Mockito, simulando la Base de Datos
 
-> [!NOTE]
-> Estandar (de prefijos) para nombrar commits:
-- feat: Nueva funcionalidad.
-- fix: Solución de un bug.
-- docs: Cambios en la documentación.
-- style: Cambios en el estilo del código (formateo, identación, etc.).
-- refactor: Cambios en el código que no arreglan un bug o que no añaden una nueva funcionalidad.
-- test: Añadir o corregir testeos.
-- chore: Tareas de rutina, mantenimiento, o de cambios en el proceso de construcción.
+---
 
-### Cuando completes el objetivo por el que fue creada la branch, vas a tener que pushear el código y generar la pull request.
-> En la pull request intenta explicar brevemente que es lo que añade/remueve/cambia de tu branch. Sigo el ejemplo con la "conexionBaseDeDatos", tendría que añadir una descripción tipo: "Conexión con base de datos PostgreSQL, datos de la conexión en las propiedades de la aplicación, conexión utilizando la dependencia de JPA". La pull request necesitará la revisión de otro miembro del grupo antes de poder ser mergeada.
+## 📚 Documentación rápida
 
-> [!IMPORTANT]
-> Antes de ponerte a trabajar en una funcionalidad: Asignate la tarea en el Trello del grupo. Al terminar de trabajar en un problema: Haz referencia al Issue en el nombre de la pull request y cierra el Issue una vez solucionado. 
+| Tema                                     | Archivo                                                               |
+| ---------------------------------------- | --------------------------------------------------------------------- |
+| 📐 Arquitectura & Capas                  | [`docs/architecture.md`](docs/architecture.md)                        |
+| 📁 Carpetas del proyecto                 | [`docs/architecture.md`](docs/architecture.md#estructura-de-carpetas) |
+| 🧬 Repositorios limpios (User, Customer) | [`docs/repositories.md`](docs/repositories.md)                        |
+| 🧠 Mappers y DTOs                        | [`docs/mappers.md`](docs/mappers.md)                                  |
+| 🧪 Testing y casos de uso                | [`docs/usecases.md`](docs/usecases.md)                                |
+| ⚙️ Cómo correr el proyecto               | [`docs/setup.md`](docs/setup.md)                                      |
 
-## Crear un [Issue](https://github.com/dottox/PA-JavaApp-2025/issues)
-En caso de que haya un bug en la aplicación y no lo soluciones al momento, dejar creado un Issue con la plantilla de **bug** detallando el problema. Así puede ser resuelto más adelante.
+> Si querés ir al grano, arrancá con [`docs/setup.md`](docs/setup.md)
 
+---
+
+## 🧑‍💻 Autores
+
+* Jose Hernandez
+* Nahuel Martinez
+* Juan Quian
+* Ignacio Suárez
