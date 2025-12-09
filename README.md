@@ -23,7 +23,9 @@ Este módulo es el **corazón backend** del ecosistema VolandoUY. Está basado e
 | 🧬 Repositorios limpios (User, Customer) | [`docs/repositories.md`](docs/repositories.md)                        |
 | 🧠 Mappers y DTOs                        | [`docs/mappers.md`](docs/mappers.md)                                  |
 | 🧪 Testing y casos de uso                | [`docs/usecases.md`](docs/usecases.md)                                |
+| 🔧 Publicador manual SOAP con CXF 4.1.4  | [`docs/soap_adapter_explained.md`](docs/soap_adapter_explained.md)    |
 | ⚙️ Cómo correr el proyecto               | [`docs/setup.md`](docs/setup.md)                                      |
+
 
 > Si querés ir al grano, arrancá con [`docs/setup.md`](docs/setup.md)
 
